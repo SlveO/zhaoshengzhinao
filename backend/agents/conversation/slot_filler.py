@@ -1,15 +1,5 @@
-"""Extract structured profile information from conversation text."""
-import json
-from langchain_openai import ChatOpenAI
-from config import settings
-from agents.conversation.prompts import SLOT_EXTRACTION_PROMPT
+"""Slot merging and summary utilities — used by the conversation agent."""
 
-llm = ChatOpenAI(
-    model=settings.deepseek_model,
-    api_key=settings.deepseek_api_key,
-    base_url=settings.deepseek_base_url,
-    temperature=0.1,
-)
 
 def merge_slots(existing: dict, update: dict) -> dict:
     """Merge new slot values into existing, preserving confidence scoring."""
@@ -35,15 +25,6 @@ def merge_slots(existing: dict, update: dict) -> dict:
         merged["region_pref"] = list(existing_regions)
     return merged
 
-async def extract_slots(conversation: str, current_slots: dict) -> dict:
-    """Use LLM to extract slot values from the latest student message."""
-    prompt = SLOT_EXTRACTION_PROMPT.format(conversation=conversation, current_slots=json.dumps(current_slots, ensure_ascii=False))
-    response = await llm.ainvoke(prompt)
-    try:
-        update = json.loads(response.content)
-        return merge_slots(current_slots, update)
-    except (json.JSONDecodeError, AttributeError, TypeError):
-        return current_slots
 
 def slots_summary(slots: dict) -> str:
     """Human-readable summary of current slots."""
