@@ -6,15 +6,28 @@ import type { ChatMessage } from '../types'
 
 export function useChat() {
   const { sessionId, setSessionId, addMessage, setStage, updateSlots, showSummary } = useChatStore()
+
   const handleMessage = useCallback((msg: ChatMessage) => {
     if (msg.type === 'thinking') { addMessage(msg); return }
-    if (msg.type === 'message' && msg.role === 'assistant') { addMessage(msg) }
-    if (msg.type === 'stage_change') { setStage(msg.content || '') }
-    if (msg.type === 'profile_update') { updateSlots(msg.value || {}) }
-    if (msg.type === 'summary') { showSummary({ stage: msg.stage || '', content: msg.content || '', profile: msg.profile_snapshot || {} }) }
+    if (msg.type === 'message' && msg.role === 'assistant') {
+      addMessage(msg)
+      if (msg.stage) setStage(msg.stage)
+      return
+    }
+    if (msg.type === 'stage_change') {
+      if (msg.to) setStage(msg.to)
+      return
+    }
+    if (msg.type === 'profile_update') { updateSlots(msg.value || {}); return }
+    if (msg.type === 'summary') { showSummary({ stage: msg.stage || '', content: msg.content || '', profile: msg.profile_snapshot || {} }); return }
   }, [addMessage, setStage, updateSlots, showSummary])
 
-  const { send } = useWebSocket(sessionId, handleMessage)
+  const { send: wsSend } = useWebSocket(sessionId, handleMessage)
+
+  const send = useCallback((content: string) => {
+    addMessage({ type: 'message', role: 'user', content })
+    wsSend(content)
+  }, [wsSend, addMessage])
 
   useEffect(() => {
     if (!sessionId) {

@@ -17,11 +17,12 @@ def merge_slots(existing: dict, update: dict) -> dict:
     for key in ["score", "subjects", "career_vision", "family_influence"]:
         if update.get(key):
             merged[key] = update[key]
-    riasec = merged.get("riasec", {})
-    riasec_update = update.get("riasec_update", {})
-    for dim, val in riasec_update.items():
-        if val is not None:
-            riasec[dim] = round((riasec.get(dim, 5) + val) / 2, 1) if dim in riasec else val
+    riasec = merged.get("riasec", {}) or {}
+    riasec_update = update.get("riasec_update") or {}
+    if isinstance(riasec_update, dict):
+        for dim, val in riasec_update.items():
+            if val is not None:
+                riasec[dim] = round((riasec.get(dim, 5) + val) / 2, 1) if dim in riasec else val
     merged["riasec"] = riasec
     if update.get("values_hint"):
         vals = merged.get("values", [])
@@ -41,7 +42,7 @@ async def extract_slots(conversation: str, current_slots: dict) -> dict:
     try:
         update = json.loads(response.content)
         return merge_slots(current_slots, update)
-    except json.JSONDecodeError:
+    except (json.JSONDecodeError, AttributeError, TypeError):
         return current_slots
 
 def slots_summary(slots: dict) -> str:
@@ -51,7 +52,7 @@ def slots_summary(slots: dict) -> str:
         lines.append(f"分数: {slots['score']}")
     if slots.get("subjects"):
         lines.append(f"选科: {slots['subjects']}")
-    riasec = slots.get("riasec", {})
+    riasec = slots.get("riasec", {}) or {}
     if riasec:
         dim_names = {"R": "动手操作", "I": "研究思考", "A": "艺术创造", "S": "帮助他人", "E": "领导说服", "C": "规范有序"}
         top = sorted(riasec.items(), key=lambda x: x[1], reverse=True)[:2]

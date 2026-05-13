@@ -1,0 +1,277 @@
+<h2>推荐结果页 /recommendations</h2>
+<p class="subtitle">对话完成后跳转至此，顶部画像摘要 + 推荐卡片列表</p>
+
+<div class="mockup">
+  <div class="mockup-header">推荐结果页面布局</div>
+  <div class="mockup-body">
+    <div style="background:#f5f6f8; min-height:600px; font-family:'Microsoft YaHei',sans-serif;">
+
+      <!-- Header -->
+      <div style="background:white; padding:14px 24px; border-bottom:1px solid #e2e4e9; display:flex; align-items:center; justify-content:space-between;">
+        <div style="font-weight:700; font-size:15px; color:#1a1a2e;">&#127891; 高考志愿推荐</div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <span style="font-size:11px; color:#8b919e;">张同学</span>
+          <div style="width:28px;height:28px;border-radius:50%;background:#ff8c42;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;">张</div>
+        </div>
+      </div>
+
+      <div style="max-width:900px; margin:0 auto; padding:20px;">
+
+        <!-- Profile summary bar -->
+        <div style="background:white; border-radius:12px; padding:16px 20px; margin-bottom:20px; display:flex; align-items:center; gap:24px; border:1px solid #e2e4e9; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:20px;">&#128100;</span>
+            <div>
+              <div style="font-size:9px; color:#8b919e;">分数 / 位次</div>
+              <div style="font-weight:700; color:#1a1a2e; font-size:14px;">610 ± 10 / 3200名</div>
+            </div>
+          </div>
+          <div style="width:1px; height:36px; background:#e2e4e9;"></div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:20px;">&#128300;</span>
+            <div>
+              <div style="font-size:9px; color:#8b919e;">兴趣类型</div>
+              <div style="font-weight:700; color:#1a1a2e; font-size:14px;">研究型 (I) + 社会型 (S)</div>
+            </div>
+          </div>
+          <div style="width:1px; height:36px; background:#e2e4e9;"></div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:20px;">&#127759;</span>
+            <div>
+              <div style="font-size:9px; color:#8b919e;">地域偏好</div>
+              <div style="font-weight:700; color:#1a1a2e; font-size:14px;">广东省内优先</div>
+            </div>
+          </div>
+          <a href="/chat" style="margin-left:auto; color:#4f8cf7; font-size:11px;">修改画像 &rarr;</a>
+        </div>
+
+        <!-- Filter bar -->
+        <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
+          <span style="font-size:12px; color:#8b919e;">筛选：</span>
+          <select style="padding:6px 12px; border:1px solid #e2e4e9; border-radius:6px; font-size:11px; background:white;">
+            <option>全部层次</option><option>985</option><option>211</option><option>双一流</option><option>省重点</option>
+          </select>
+          <select style="padding:6px 12px; border:1px solid #e2e4e9; border-radius:6px; font-size:11px; background:white;">
+            <option>全部地区</option><option>广州</option><option>深圳</option><option>珠海</option>
+          </select>
+          <select style="padding:6px 12px; border:1px solid #e2e4e9; border-radius:6px; font-size:11px; background:white;">
+            <option>全部类别</option><option>医学</option><option>理学</option><option>工学</option><option>管理学</option>
+          </select>
+          <span style="margin-left:auto; font-size:11px; color:#8b919e;">共 <strong>12</strong> 条推荐</span>
+        </div>
+
+        <!-- Recommendation cards -->
+        <div style="display:flex; flex-direction:column; gap:12px;">
+
+          <!-- Card 1: 冲 (reach) -->
+          <div style="background:white; border-radius:12px; border:1px solid #e2e4e9; overflow:hidden;">
+            <div style="display:flex;">
+              <!-- Left color bar -->
+              <div style="width:4px; background:#ff6b6b; flex-shrink:0;"></div>
+              <!-- Content -->
+              <div style="flex:1; padding:16px 20px;">
+                <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+                  <div>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                      <h3 style="font-size:15px; font-weight:700; color:#1a1a2e; margin:0;">中山大学</h3>
+                      <span style="background:#fff0f0; color:#e74c3c; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">冲刺</span>
+                      <span style="background:#e8f0fe; color:#4f8cf7; font-size:10px; padding:2px 8px; border-radius:10px;">985 · 双一流</span>
+                    </div>
+                    <div style="margin-top:6px; font-size:13px; color:#1a1a2e; font-weight:600;">临床医学（5+3一体化）</div>
+                    <div style="margin-top:4px; font-size:11px; color:#8b919e;">最低位次 3500 · 广东 · 物理+化学+生物</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-size:22px; font-weight:800; color:#e74c3c;">82%</div>
+                    <div style="font-size:10px; color:#8b919e;">综合匹配</div>
+                  </div>
+                </div>
+                <!-- Matching bars -->
+                <div style="display:flex; gap:16px; margin-top:12px;">
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:#8b919e; margin-bottom:3px;"><span>录取概率</span><span style="color:#f5a623;">58%</span></div>
+                    <div style="height:4px; background:#e2e4e9; border-radius:2px;"><div style="width:58%; height:4px; background:#f5a623; border-radius:2px;"></div></div>
+                  </div>
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:#8b919e; margin-bottom:3px;"><span>兴趣匹配</span><span style="color:#4caf50;">92%</span></div>
+                    <div style="height:4px; background:#e2e4e9; border-radius:2px;"><div style="width:92%; height:4px; background:#4caf50; border-radius:2px;"></div></div>
+                  </div>
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:#8b919e; margin-bottom:3px;"><span>前景评分</span><span style="color:#4f8cf7;">85%</span></div>
+                    <div style="height:4px; background:#e2e4e9; border-radius:2px;"><div style="width:85%; height:4px; background:#4f8cf7; border-radius:2px;"></div></div>
+                  </div>
+                </div>
+                <button style="margin-top:10px; border:none; background:none; color:#4f8cf7; font-size:11px; cursor:pointer; padding:0;">展开查看详细理由 &#9660;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: 稳 (match) - expanded -->
+          <div style="background:white; border-radius:12px; border:1px solid #e2e4e9; overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.06);">
+            <div style="display:flex;">
+              <div style="width:4px; background:#4caf50; flex-shrink:0;"></div>
+              <div style="flex:1; padding:16px 20px;">
+                <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+                  <div>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                      <h3 style="font-size:15px; font-weight:700; color:#1a1a2e; margin:0;">华南理工大学</h3>
+                      <span style="background:#e8f5e9; color:#2e7d32; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">稳妥</span>
+                      <span style="background:#e8f0fe; color:#4f8cf7; font-size:10px; padding:2px 8px; border-radius:10px;">985 · 双一流</span>
+                    </div>
+                    <div style="margin-top:6px; font-size:13px; color:#1a1a2e; font-weight:600;">生物医学工程</div>
+                    <div style="margin-top:4px; font-size:11px; color:#8b919e;">最低位次 5200 · 广东 · 物理+化学</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-size:22px; font-weight:800; color:#4caf50;">91%</div>
+                    <div style="font-size:10px; color:#8b919e;">综合匹配</div>
+                  </div>
+                </div>
+                <div style="display:flex; gap:16px; margin-top:12px;">
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:#8b919e; margin-bottom:3px;"><span>录取概率</span><span style="color:#4caf50;">82%</span></div>
+                    <div style="height:4px; background:#e2e4e9; border-radius:2px;"><div style="width:82%; height:4px; background:#4caf50; border-radius:2px;"></div></div>
+                  </div>
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:#8b919e; margin-bottom:3px;"><span>兴趣匹配</span><span style="color:#4caf50;">88%</span></div>
+                    <div style="height:4px; background:#e2e4e9; border-radius:2px;"><div style="width:88%; height:4px; background:#4caf50; border-radius:2px;"></div></div>
+                  </div>
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:#8b919e; margin-bottom:3px;"><span>前景评分</span><span style="color:#4f8cf7;">78%</span></div>
+                    <div style="height:4px; background:#e2e4e9; border-radius:2px;"><div style="width:78%; height:4px; background:#4f8cf7; border-radius:2px;"></div></div>
+                  </div>
+                </div>
+                <!-- Expanded detail -->
+                <div style="margin-top:14px; background:#f8fafc; border-radius:8px; padding:14px;">
+                  <div style="font-size:10px; color:#8b919e; margin-bottom:10px;">推荐理由 &amp; 数据来源</div>
+                  <div style="display:flex; flex-direction:column; gap:8px;">
+                    <div style="display:flex; gap:8px; align-items:flex-start;">
+                      <span style="font-size:14px; flex-shrink:0;">&#127919;</span>
+                      <div style="font-size:11px; line-height:1.5;">
+                        <strong style="color:#1a1a2e;">分数匹配：</strong>2024年该专业在广东最低录取位次5200名，你的预估位次3200名，录取把握较大
+                        <div style="font-size:9px; color:#8b919e; margin-top:2px;">来源：广东省教育考试院 · 2024年录取数据</div>
+                      </div>
+                    </div>
+                    <div style="display:flex; gap:8px; align-items:flex-start;">
+                      <span style="font-size:14px; flex-shrink:0;">&#128300;</span>
+                      <div style="font-size:11px; line-height:1.5;">
+                        <strong style="color:#1a1a2e;">兴趣匹配：</strong>生物医学工程涉及实验设计、数据分析，与你的研究型(I)兴趣高度契合（RIASEC匹配度 0.88）
+                        <div style="font-size:9px; color:#8b919e; margin-top:2px;">来源：霍兰德职业兴趣理论 · 置信度 0.88</div>
+                      </div>
+                    </div>
+                    <div style="display:flex; gap:8px; align-items:flex-start;">
+                      <span style="font-size:14px; flex-shrink:0;">&#128200;</span>
+                      <div style="font-size:11px; line-height:1.5;">
+                        <strong style="color:#1a1a2e;">就业前景：</strong>生物医学工程为广东省重点发展产业，近3年毕业生就业率96%+，平均起薪12K
+                        <div style="font-size:9px; color:#8b919e; margin-top:2px;">来源：华南理工大学2024年就业质量报告</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button style="margin-top:10px; border:none; background:none; color:#4f8cf7; font-size:11px; cursor:pointer; padding:0;">收起详细理由 &#9650;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: 保 (safety) -->
+          <div style="background:white; border-radius:12px; border:1px solid #e2e4e9; overflow:hidden;">
+            <div style="display:flex;">
+              <div style="width:4px; background:#4f8cf7; flex-shrink:0;"></div>
+              <div style="flex:1; padding:16px 20px;">
+                <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+                  <div>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                      <h3 style="font-size:15px; font-weight:700; color:#1a1a2e; margin:0;">深圳大学</h3>
+                      <span style="background:#e8f0fe; color:#4f8cf7; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">保底</span>
+                      <span style="background:#f5f6f8; color:#666; font-size:10px; padding:2px 8px; border-radius:10px;">省重点</span>
+                    </div>
+                    <div style="margin-top:6px; font-size:13px; color:#1a1a2e; font-weight:600;">生物技术</div>
+                    <div style="margin-top:4px; font-size:11px; color:#8b919e;">最低位次 8500 · 广东 · 物理+化学</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-size:22px; font-weight:800; color:#4f8cf7;">85%</div>
+                    <div style="font-size:10px; color:#8b919e;">综合匹配</div>
+                  </div>
+                </div>
+                <div style="display:flex; gap:16px; margin-top:12px;">
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:#8b919e; margin-bottom:3px;"><span>录取概率</span><span style="color:#4caf50;">95%</span></div>
+                    <div style="height:4px; background:#e2e4e9; border-radius:2px;"><div style="width:95%; height:4px; background:#4caf50; border-radius:2px;"></div></div>
+                  </div>
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:#8b919e; margin-bottom:3px;"><span>兴趣匹配</span><span style="color:#4caf50;">85%</span></div>
+                    <div style="height:4px; background:#e2e4e9; border-radius:2px;"><div style="width:85%; height:4px; background:#4caf50; border-radius:2px;"></div></div>
+                  </div>
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:#8b919e; margin-bottom:3px;"><span>前景评分</span><span style="color:#4f8cf7;">72%</span></div>
+                    <div style="height:4px; background:#e2e4e9; border-radius:2px;"><div style="width:72%; height:4px; background:#4f8cf7; border-radius:2px;"></div></div>
+                  </div>
+                </div>
+                <button style="margin-top:10px; border:none; background:none; color:#4f8cf7; font-size:11px; cursor:pointer; padding:0;">展开查看详细理由 &#9660;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: 稳 (match) -->
+          <div style="background:white; border-radius:12px; border:1px solid #e2e4e9; overflow:hidden;">
+            <div style="display:flex;">
+              <div style="width:4px; background:#4caf50; flex-shrink:0;"></div>
+              <div style="flex:1; padding:16px 20px;">
+                <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+                  <div>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                      <h3 style="font-size:15px; font-weight:700; color:#1a1a2e; margin:0;">暨南大学</h3>
+                      <span style="background:#e8f5e9; color:#2e7d32; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">稳妥</span>
+                      <span style="background:#e8f0fe; color:#4f8cf7; font-size:10px; padding:2px 8px; border-radius:10px;">211 · 双一流</span>
+                    </div>
+                    <div style="margin-top:6px; font-size:13px; color:#1a1a2e; font-weight:600;">药学</div>
+                    <div style="margin-top:4px; font-size:11px; color:#8b919e;">最低位次 6800 · 广东 · 物理+化学</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-size:22px; font-weight:800; color:#4caf50;">87%</div>
+                    <div style="font-size:10px; color:#8b919e;">综合匹配</div>
+                  </div>
+                </div>
+                <div style="display:flex; gap:16px; margin-top:12px;">
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:#8b919e; margin-bottom:3px;"><span>录取概率</span><span style="color:#4caf50;">78%</span></div>
+                    <div style="height:4px; background:#e2e4e9; border-radius:2px;"><div style="width:78%; height:4px; background:#4caf50; border-radius:2px;"></div></div>
+                  </div>
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:#8b919e; margin-bottom:3px;"><span>兴趣匹配</span><span style="color:#4caf50;">84%</span></div>
+                    <div style="height:4px; background:#e2e4e9; border-radius:2px;"><div style="width:84%; height:4px; background:#4caf50; border-radius:2px;"></div></div>
+                  </div>
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:#8b919e; margin-bottom:3px;"><span>前景评分</span><span style="color:#4f8cf7;">80%</span></div>
+                    <div style="height:4px; background:#e2e4e9; border-radius:2px;"><div style="width:80%; height:4px; background:#4f8cf7; border-radius:2px;"></div></div>
+                  </div>
+                </div>
+                <button style="margin-top:10px; border:none; background:none; color:#4f8cf7; font-size:11px; cursor:pointer; padding:0;">展开查看详细理由 &#9660;</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pros-cons" style="margin-top:20px;">
+  <div class="pros">
+    <h4>设计要点</h4>
+    <ul>
+      <li>顶部画像摘要条，快速回顾，"修改画像"可返回 /chat</li>
+      <li>筛选栏：院校层次 / 地区 / 类别 下拉筛选</li>
+      <li>每张卡片左侧色条：红=冲刺 / 绿=稳妥 / 蓝=保底</li>
+      <li>卡片默认折叠，点击"展开详细理由"查看推荐依据和数据来源</li>
+      <li>三条进度条：录取概率 / 兴趣匹配 / 前景评分</li>
+    </ul>
+  </div>
+  <div class="cons">
+    <h4>需要确认</h4>
+    <ul>
+      <li>冲/稳/保的配色可以吗？（红/绿/蓝）</li>
+      <li>卡片默认收起详细理由，点击展开，这个交互 OK 吗？</li>
+      <li>需要做"下载推荐报告"按钮吗？还是 MVP 先不做？</li>
+    </ul>
+  </div>
+</div>

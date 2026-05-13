@@ -13,32 +13,34 @@ llm = ChatOpenAI(
     temperature=0.3,
 )
 
-RANKING_PROMPT = """你是高考志愿填报专家。基于学生画像和候选院校数据，对以下候选进行精排并生成推荐理由。
+RANKING_PROMPT = """你是高考志愿填报专家。下面是真实的候选院校数据，你必须从中选择排序，绝对不能编造或修改院校名和专业名。
 
 ## 学生画像
 {profile}
 
-## 候选院校列表
+## 候选院校列表（只能从这里选！）
 {candidates}
 
-## 要求
-1. 按综合匹配度排序，选出 Top-10
-2. 每个推荐标注：冲刺/稳妥/保底（基于学生位次 vs 录取位次：学生位次明显低于录取位次=冲刺，接近=稳妥，明显高于=保底）
-3. 每条推荐生成 2-3 条理由：分数匹配、兴趣匹配、就业前景
-4. 每条理由附带数据来源引用
+## 严格规则
+1. 从候选列表中选出 Top-10，按综合匹配度排序
+2. college_name 和 major_name 必须与候选列表中完全一致，一个字都不能改
+3. level 必须与候选列表一致
+4. 标注冲刺/稳妥/保底：学生位次明显高于最低位次=保底，位次接近=稳妥，位次明显低于=冲刺
+5. 每条推荐生成 2-3 条理由
+6. 每条理由附带数据来源，source_url 使用候选列表中的来源链接
 
-请直接回复 JSON 数组，不要包含 markdown 代码块标记：
+直接回复 JSON 数组（不要 markdown 标记）：
 [
   {{
     "rank": 1,
-    "college_name": "大学名",
-    "major_name": "专业名",
-    "level": "985/211/双一流/省重点",
+    "college_name": "这里必须是候选列表中的真实院校名",
+    "major_name": "这里必须是候选列表中的真实专业名",
+    "level": "候选列表中的层次",
     "category": "冲刺/稳妥/保底",
     "match_score": 85,
     "reasons": [
-      {{"type": "score_match", "content": "...", "source": "广东省教育考试院2024年录取数据", "source_url": "..."}},
-      {{"type": "interest_match", "content": "...", "source": "霍兰德职业兴趣理论", "confidence": 0.88}}
+      {{"type": "score_match", "content": "分数匹配说明...", "source": "广东省教育考试院2024年录取数据", "source_url": "候选列表中的来源URL"}},
+      {{"type": "interest_match", "content": "兴趣匹配说明...", "source": "霍兰德职业兴趣理论", "confidence": 0.88}}
     ],
     "scores": {{"admission_probability": 58, "interest_match": 92, "career_prospect": 85}}
   }}

@@ -9,6 +9,8 @@ export interface ChatMessage {
   content?: string
   message?: string
   stage?: string
+  from?: string
+  to?: string
   field?: string
   value?: any
   confidence?: number

@@ -1,9 +1,12 @@
-from passlib.context import CryptContext
+import hashlib
+import os
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    salt = os.urandom(32).hex()
+    return f"{salt}:{hashlib.sha256((salt + password).encode()).hexdigest()}"
+
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return pwd_context.verify(plain, hashed)
+    salt, hash_val = hashed.split(":", 1)
+    return hashlib.sha256((salt + plain).encode()).hexdigest() == hash_val
