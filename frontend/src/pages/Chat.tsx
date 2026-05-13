@@ -22,7 +22,9 @@ export default function Chat() {
     if (!container) return
     const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 150
     if (isNearBottom) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+      requestAnimationFrame(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+      })
     }
   }, [messages])
 

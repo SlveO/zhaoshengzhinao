@@ -14,13 +14,14 @@ async def save_dialog_state(session_id: str, state: dict, ttl: int = 1800):
 async def delete_dialog_state(session_id: str):
     await redis.delete(f"dialog:{session_id}")
 
-async def create_session(user_id: str) -> str:
+async def create_session(user_id: str, initial_slots: dict = None) -> str:
     session_id = str(uuid.uuid4())
+    slots = dict(initial_slots) if initial_slots else {}
     state = {
         "session_id": session_id,
         "user_id": user_id,
         "stage": "open",
-        "slots": {},
+        "slots": slots,
         "messages": [],
     }
     await save_dialog_state(session_id, state)

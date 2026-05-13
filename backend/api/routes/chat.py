@@ -143,7 +143,23 @@ async def chat_websocket(ws: WebSocket, session_id: str):
 
 @router.post("/session")
 async def new_session(user: dict = Depends(get_current_user)):
-    sid = await create_session(user["user_id"])
+    from sqlalchemy import select
+    from models import async_session
+    from models.user import User
+
+    initial_slots = {}
+    async with async_session() as db:
+        result = await db.execute(select(User).where(User.id == user["user_id"]))
+        u = result.scalar_one_or_none()
+        if u:
+            if u.score:
+                initial_slots["score"] = u.score
+            if u.subjects:
+                initial_slots["subjects"] = u.subjects
+            if u.region:
+                initial_slots["region_pref"] = [u.region]
+
+    sid = await create_session(user["user_id"], initial_slots)
     return {"session_id": sid}
 
 
