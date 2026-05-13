@@ -16,15 +16,15 @@ export default function Chat() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
-  // Smart auto-scroll: only scroll if user is near the bottom
+  // Auto-scroll: always scroll to bottom when new messages arrive
+  // Uses scrollTop direct assignment (instant) to avoid smooth-scroll
+  // animation conflicts with rapid-fire messages (thinking -> reply)
   useEffect(() => {
     const container = messagesContainerRef.current
     if (!container) return
     const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 150
     if (isNearBottom) {
-      requestAnimationFrame(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-      })
+      container.scrollTop = container.scrollHeight
     }
   }, [messages])
 
@@ -70,7 +70,7 @@ export default function Chat() {
           </span>
         </div>
 
-        <div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-4 py-5 space-y-4">
+        <div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-4 py-5 space-y-4" style={{ minHeight: 0 }}>
           {messages.length === 0 && (
             <div className="flex gap-3 max-w-[80%]">
               <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-xs flex-shrink-0">AI</div>
