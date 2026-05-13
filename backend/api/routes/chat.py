@@ -15,20 +15,34 @@ def _determine_next_stage(slots: dict, current_stage: Stage) -> Stage:
     if idx >= len(STAGE_ORDER) - 1:
         return current_stage
 
+    if current_stage == Stage.CONFIRM:
+        return Stage.DONE  # One turn in confirm = done
+
     riasec = slots.get("riasec") or {}
     values = slots.get("values") or []
     region = slots.get("region_pref") or []
+    score = slots.get("score")
 
     checks = {
-        Stage.OPEN: bool(slots.get("score")),
-        Stage.EXPLORE: (len(riasec) >= 2 or len(values) >= 2) and bool(region),
-        Stage.FOCUS: len(riasec) >= 3 and len(values) >= 2 and bool(region),
-        Stage.CONFIRM: len(riasec) >= 3 and len(values) >= 2 and bool(region),
+        Stage.OPEN: bool(score),
+        Stage.EXPLORE: len(riasec) >= 3 and bool(region),
+        Stage.FOCUS: (len(riasec) >= 3 or len(values) >= 2) and bool(region),
     }
 
     if checks.get(current_stage, False):
         return STAGE_ORDER[idx + 1]
     return current_stage
+
+
+async def _persist_profile(user_id: str, slots: dict):
+    """Save profile to PostgreSQL so recommendations can access it."""
+    try:
+        from services.profile_service import save_profile
+        from models import async_session
+        async with async_session() as db:
+            await save_profile(db, user_id, slots)
+    except Exception:
+        pass  # Non-critical, don't break chat flow
 
 
 @router.websocket("/session/{session_id}")
@@ -97,6 +111,7 @@ async def chat_websocket(ws: WebSocket, session_id: str):
             state_data["slots"] = new_slots
 
             await save_dialog_state(session_id, state_data)
+            await _persist_profile(state_data["user_id"], new_slots)
 
             # Send AI response
             await ws.send_json({
