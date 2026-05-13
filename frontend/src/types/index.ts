@@ -7,6 +7,7 @@ export interface ChatMessage {
   type: string
   role?: string
   content?: string
+  message?: string
   stage?: string
   field?: string
   value?: any
