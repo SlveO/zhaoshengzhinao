@@ -64,10 +64,19 @@ export default function Chat() {
 
       {/* Main chat */}
       <div className="flex-1 flex flex-col bg-white">
-        <div className="px-4 py-2 border-b border-gray-100 text-xs text-muted">
-          正在进行：<span className="text-warning font-semibold ml-1">
-            {stage === 'open' ? '建立信任' : stage === 'explore' ? '深度探索' : stage === 'focus' ? '聚焦澄清' : stage === 'confirm' ? '画像确认' : stage === 'done' ? '已完成' : stage}
-          </span>
+        <div className="px-4 py-2 border-b border-gray-100">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-xs text-muted">
+              第 <span className="text-warning font-semibold">{stage === 'open' ? '1' : stage === 'explore' ? '2' : stage === 'focus' ? '3' : stage === 'confirm' ? '4' : stage === 'done' ? '✓' : '?'}</span> / 4 阶段：
+              <span className="font-semibold ml-1">{stage === 'open' ? '建立信任' : stage === 'explore' ? '深度探索' : stage === 'focus' ? '聚焦澄清' : stage === 'confirm' ? '画像确认' : stage === 'done' ? '已完成' : stage}</span>
+            </span>
+            <span className="text-xs text-muted">{stage === 'done' ? '可查看推荐' : '继续对话完善画像'}</span>
+          </div>
+          <div className="w-full bg-gray-100 rounded-full h-1.5">
+            <div className="bg-primary h-1.5 rounded-full transition-all duration-500" style={{
+              width: stage === 'open' ? '25%' : stage === 'explore' ? '50%' : stage === 'focus' ? '75%' : stage === 'confirm' ? '90%' : stage === 'done' ? '100%' : '10%'
+            }} />
+          </div>
         </div>
 
         <div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-4 py-5 space-y-4" style={{ minHeight: 0 }}>

@@ -36,4 +36,12 @@ def retrieve_candidates(profile: dict, k: int = 30) -> list[dict]:
             filtered.append(item)
         elif not user_subjects:
             filtered.append(item)
-    return filtered[:k]
+    # Diversity: keep at most 3 results per college
+    seen = {}
+    diverse = []
+    for item in filtered:
+        cid = item["metadata"].get("college_id", "unknown")
+        if seen.get(cid, 0) < 3:
+            seen[cid] = seen.get(cid, 0) + 1
+            diverse.append(item)
+    return diverse[:k]
