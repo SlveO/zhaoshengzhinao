@@ -21,5 +21,6 @@ async def init_db():
     from . import recommendation # noqa: F401
     from . import industry      # noqa: F401
     from . import mapping       # noqa: F401
+    from . import recommendation_feedback  # noqa: F401
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

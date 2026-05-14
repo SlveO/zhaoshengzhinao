@@ -1,6 +1,7 @@
 import asyncio
 import json
 import uuid
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from langchain_openai import ChatOpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
@@ -68,8 +69,30 @@ async def generate_recommendations(
         f"- {c['metadata']['college_name']} | {c['metadata']['major_name']} | {c['metadata']['level']} | 最低位次: {c['metadata']['min_rank']} | 最低分数: {c['metadata']['min_score']} | 选科: {c['metadata']['subjects']} | 来源: {c['metadata'].get('source_url', '')}"
         for c in candidates
     )
+    # Query user feedback history for ranking hints
+    from models.recommendation_feedback import RecommendationFeedback
+    feedback_result = await db.execute(
+        select(RecommendationFeedback).where(
+            RecommendationFeedback.user_id == uuid.UUID(user_id)
+        ).order_by(RecommendationFeedback.created_at.desc()).limit(20)
+    )
+    feedbacks = feedback_result.scalars().all()
+
+    feedback_text = ""
+    if feedbacks:
+        liked = [f for f in feedbacks if f.feedback_type == "useful"]
+        disliked = [f for f in feedbacks if f.feedback_type == "not_relevant"]
+        if liked:
+            feedback_text += f"- 之前标记为有用：{', '.join(f'{f.major_name}({f.college_name})' for f in liked[:5])}\n"
+        if disliked:
+            feedback_text += f"- 之前标记为不相关：{', '.join(f'{f.major_name}({f.college_name})' for f in disliked[:5])}\n"
+        if feedback_text:
+            feedback_text = "## 学生历史反馈\n" + feedback_text + "请参考此反馈，提升与\"有用\"类型相似的结果排序，降低与\"不相关\"类型相似的结果。\n"
+
     profile_text = json.dumps(profile, ensure_ascii=False)
     prompt = RANKING_PROMPT.format(profile=profile_text, candidates=candidate_text)
+    if feedback_text:
+        prompt = prompt.replace("## 要求", feedback_text + "## 要求")
 
     # LLM call with retry + timeout
     try:

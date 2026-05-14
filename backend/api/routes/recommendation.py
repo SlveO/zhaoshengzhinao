@@ -1,3 +1,4 @@
+import uuid
 from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -7,6 +8,7 @@ from models.user import User
 from services.profile_service import get_latest_profile
 from services.recommendation_service import generate_recommendations
 from models.recommendation import Recommendation
+from models.recommendation_feedback import RecommendationFeedback
 from schemas.recommendation import RecommendationResponse
 import json as json_module
 import redis.asyncio as aioredis
@@ -66,6 +68,24 @@ async def get_recommendations(
     await _cache_recommendations(user["user_id"], result)
 
     return result
+
+
+@router.post("/feedback")
+async def submit_feedback(
+    body: dict,
+    user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    fb = RecommendationFeedback(
+        id=uuid.uuid4(),
+        user_id=uuid.UUID(user["user_id"]),
+        college_name=body.get("college_name", ""),
+        major_name=body.get("major_name", ""),
+        feedback_type=body.get("feedback_type", "useful"),
+    )
+    db.add(fb)
+    await db.commit()
+    return {"status": "ok"}
 
 
 @router.get("/{rec_id}")
