@@ -29,7 +29,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    volumes: [./backend:/app, ./data:/app/data]
+    volumes: [./backend:/app, ./data:/app/data, hf_cache:/root/.cache/huggingface]
 
   frontend:
     build: { context: ., dockerfile: docker/Dockerfile.frontend }
@@ -38,3 +38,4 @@ services:
 
 volumes:
   pgdata:
+  hf_cache:

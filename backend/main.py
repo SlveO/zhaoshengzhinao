@@ -88,6 +88,8 @@ async def lifespan(app: FastAPI):
     else:
         print("Skipping seed and index (already seeded).")
 
+    # Note: embedding model loads lazily on first recommendation request.
+    # Cached in hf_cache Docker volume so subsequent restarts are instant.
     yield
 
 
