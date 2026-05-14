@@ -8,7 +8,16 @@ from agents.conversation.state import ConversationState
 from agents.conversation.prompts import SYSTEM_PROMPT
 from agents.conversation.slot_filler import slots_summary
 
-llm = ChatOpenAI(model=settings.deepseek_model, api_key=settings.deepseek_api_key, base_url=settings.deepseek_base_url, temperature=0.7)
+_llm = None
+
+def _get_llm():
+    global _llm
+    if _llm is None:
+        _llm = ChatOpenAI(model=settings.deepseek_model, api_key=settings.deepseek_api_key, base_url=settings.deepseek_base_url, temperature=0.7)
+    return _llm
+
+# For backward compatibility (lazy-loaded)
+llm = None
 
 _EMOTION_KW = {
     "焦虑": ["好烦", "担心", "紧张", "不知道怎么办", "压力", "害怕", "考砸", "万一", "怎么办"],
@@ -55,7 +64,7 @@ async def conversation_node(state: ConversationState, blind_spot_hints: list[str
     system_content = _build_system_prompt(state["stage"].value, summary, blind_spot_hints or [], emotion)
     system = SystemMessage(content=system_content)
     msgs = [system] + state["messages"]
-    response = await llm.ainvoke(msgs)
+    response = await _get_llm().ainvoke(msgs)
     return {"messages": [response], "slots": state.get("slots", {})}
 
 
