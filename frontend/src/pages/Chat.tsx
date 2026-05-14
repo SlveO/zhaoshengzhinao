@@ -7,12 +7,51 @@ import SlotProgress from '../components/chat/SlotProgress'
 import ChatBubble from '../components/chat/ChatBubble'
 import ChatInput from '../components/chat/ChatInput'
 import SummaryModal from '../components/chat/SummaryModal'
+import WelcomeModal from '../components/chat/WelcomeModal'
+import api from '../services/api'
 
 export default function Chat() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const { send } = useChat()
+  const [showWelcome, setShowWelcome] = useState(false)
+  const { send, sessionId } = useChat()
   const { stage, messages, slots, summaryPending, summaryData, dismissSummary, updateSlots } = useChatStore()
   const nav = useNavigate()
+
+  // Show welcome modal if no score in slots (first-time user after simplified register)
+  useEffect(() => {
+    if (sessionId && slots && Object.keys(slots).length > 0) {
+      setShowWelcome(false)
+    }
+  }, [slots, sessionId])
+
+  // After session is created, check if we need welcome modal
+  useEffect(() => {
+    if (sessionId && sessionId !== 'mock') {
+      // If slots are empty (first visit after simplified register), show welcome
+      const timer = setTimeout(() => {
+        if (!slots || Object.keys(slots).length === 0) {
+          setShowWelcome(true)
+        }
+      }, 500)
+      return () => clearTimeout(timer)
+    }
+  }, [sessionId])
+
+  const handleWelcomeSubmit = async (data: { score: number; subjects: string; region: string }) => {
+    try {
+      await api.patch('/chat/profile', data)
+      updateSlots({
+        score: data.score,
+        subjects: data.subjects,
+        region_pref: [data.region],
+      })
+      setShowWelcome(false)
+    } catch {
+      // Silently fail, user can still chat
+      setShowWelcome(false)
+    }
+  }
+
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
@@ -108,6 +147,8 @@ export default function Chat() {
           onDismiss={dismissSummary}
         />
       )}
+
+      {showWelcome && <WelcomeModal onSubmit={handleWelcomeSubmit} />}
     </div>
   )
 }

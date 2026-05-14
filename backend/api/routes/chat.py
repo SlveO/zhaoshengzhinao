@@ -9,7 +9,7 @@ from langchain_core.messages import HumanMessage, AIMessage
 
 router = APIRouter()
 
-def _determine_next_stage(slots: dict, current_stage: Stage) -> Stage:
+def _determine_next_stage(slots: dict, current_stage: Stage, open_turns: int = 0) -> Stage:
     """Deterministic stage progression based on slot completeness."""
     idx = STAGE_ORDER.index(current_stage)
     if idx >= len(STAGE_ORDER) - 1:
@@ -24,7 +24,7 @@ def _determine_next_stage(slots: dict, current_stage: Stage) -> Stage:
     score = slots.get("score")
 
     checks = {
-        Stage.OPEN: bool(score),
+        Stage.OPEN: bool(score) and open_turns >= 3,
         Stage.EXPLORE: len(riasec) >= 3 and bool(region),
         Stage.FOCUS: (len(riasec) >= 3 or len(values) >= 2) and bool(region),
     }
@@ -45,6 +45,27 @@ async def _persist_profile(user_id: str, slots: dict):
         pass  # Non-critical, don't break chat flow
 
 
+@router.patch("/profile")
+async def update_user_profile(body: dict, user: dict = Depends(get_current_user)):
+    from sqlalchemy import update
+    from models import async_session
+    from models.user import User
+
+    score = body.get("score", 0)
+    subjects = body.get("subjects", "")
+    region = body.get("region", "")
+
+    async with async_session() as db:
+        await db.execute(
+            update(User).where(User.id == user["user_id"]).values(
+                score=score, subjects=subjects, region=region
+            )
+        )
+        await db.commit()
+
+    return {"status": "ok", "score": score, "subjects": subjects, "region": region}
+
+
 @router.websocket("/session/{session_id}")
 async def chat_websocket(ws: WebSocket, session_id: str):
     await ws.accept()
@@ -53,6 +74,10 @@ async def chat_websocket(ws: WebSocket, session_id: str):
         await ws.send_json({"type": "error", "content": "Session not found"})
         await ws.close()
         return
+
+    # Ensure open_turns exists in state_data
+    if "open_turns" not in state_data:
+        state_data["open_turns"] = 0
 
     # Send initial state sync
     await ws.send_json({
@@ -87,6 +112,12 @@ async def chat_websocket(ws: WebSocket, session_id: str):
             current_stage = Stage(state_data.get("stage", "open"))
             old_slots = state_data.get("slots", {})
 
+            # Count turns in open stage
+            if current_stage == Stage.OPEN:
+                state_data["open_turns"] = state_data.get("open_turns", 0) + 1
+
+            open_turns = state_data.get("open_turns", 0)
+
             initial_state = {
                 "messages": history,
                 "stage": current_stage,
@@ -101,7 +132,7 @@ async def chat_websocket(ws: WebSocket, session_id: str):
             new_slots = result.get("slots", old_slots)
 
             # Deterministic stage progression
-            next_stage = _determine_next_stage(new_slots, current_stage)
+            next_stage = _determine_next_stage(new_slots, current_stage, open_turns)
             stage_changed = next_stage != current_stage and next_stage != Stage.DONE
 
             # Update state
@@ -139,7 +170,7 @@ async def chat_websocket(ws: WebSocket, session_id: str):
                 summary_text = slots_summary(new_slots)
                 await ws.send_json({
                     "type": "summary",
-                    "stage": next_stage.value,
+                    "stage": current_stage.value,
                     "content": summary_text,
                     "profile_snapshot": new_slots,
                 })
