@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from typing import Optional
 from sqlalchemy import Integer, String, DateTime, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
@@ -11,9 +12,10 @@ class AdmissionData(Base):
     college_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False, index=True)
     major_name: Mapped[str] = mapped_column(String(100), nullable=False)
     year: Mapped[int] = mapped_column(Integer, nullable=False)
-    batch: Mapped[str] = mapped_column(String(20))
+    province: Mapped[str] = mapped_column(String(50), default="广东")
+    batch: Mapped[str] = mapped_column(String(50))
     min_score: Mapped[int] = mapped_column(Integer)
-    min_rank: Mapped[int] = mapped_column(Integer)
-    subject_requirements: Mapped[str] = mapped_column(String(100))
+    min_rank: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    subject_requirements: Mapped[str] = mapped_column(String(200))
     source_url: Mapped[str] = mapped_column(String(500), default="")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

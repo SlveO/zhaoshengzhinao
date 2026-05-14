@@ -63,6 +63,7 @@ def export_seed_files(
             ),
             "major_name": a.major_name,
             "year": a.year,
+            "province": a.province,
             "batch": a.batch,
             "min_score": a.min_score,
             "min_rank": a.min_rank,
