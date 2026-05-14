@@ -39,22 +39,39 @@ export default function ProfileSummaryBar({ profile }: { profile: any }) {
   ]
 
   return (
-    <div className="bg-white rounded-xl p-4 border border-border flex items-center gap-6 flex-wrap">
-      {items.map((i) => (
-        <div key={i.label} className="flex items-center gap-2">
-          <span className="text-xl">{i.icon}</span>
-          <div>
-            <div className="text-xs text-muted">{i.label}</div>
-            <div className="font-semibold text-text text-sm">{i.value}</div>
+    <div className="bg-white rounded-xl p-4 border border-border">
+      <div className="flex items-center gap-6 flex-wrap">
+        {items.map((i) => (
+          <div key={i.label} className="flex items-center gap-2">
+            <span className="text-xl">{i.icon}</span>
+            <div>
+              <div className="text-xs text-muted">{i.label}</div>
+              <div className="font-semibold text-text text-sm">{i.value}</div>
+            </div>
           </div>
+        ))}
+        {profile.completeness && (
+          <span className={`ml-auto text-xs px-2 py-0.5 rounded-full font-semibold ${
+            profile.completeness === 'L3' ? 'bg-purple-100 text-purple-700' :
+            profile.completeness === 'L2' ? 'bg-amber-100 text-amber-700' :
+            'bg-gray-100 text-gray-600'
+          }`}>
+            {profile.completeness === 'L3' ? '深度画像' :
+             profile.completeness === 'L2' ? '较完整' : '基础画像'}
+          </span>
+        )}
+        <Link
+          to="/chat"
+          className="text-primary text-xs hover:underline"
+        >
+          修改画像 →
+        </Link>
+      </div>
+      {(profile.completeness === 'L1' || profile.completeness === 'L2') && (
+        <div className="text-xs text-blue-500 mt-1">
+          继续对话完善画像，获取更精准的推荐 →
         </div>
-      ))}
-      <Link
-        to="/chat"
-        className="ml-auto text-primary text-xs hover:underline"
-      >
-        修改画像 →
-      </Link>
+      )}
     </div>
   )
 }

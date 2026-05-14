@@ -33,6 +33,24 @@ export default function SummaryModal({ stage, profile, onConfirm, onModify, onDi
               <button onClick={() => onModify(r.key, profile[r.key])} className="text-primary text-xs hover:underline">修改</button>
             </div>
           ))}
+          {profile.riasec && Object.keys(profile.riasec).length > 0 && (
+            <div className="mt-3">
+              <div className="text-xs font-semibold text-muted mb-2">兴趣倾向 (RIASEC)</div>
+              <div className="grid grid-cols-3 gap-2">
+                {Object.entries(profile.riasec as Record<string, number>).map(([dim, score]) => (
+                  <div key={dim} className="bg-gray-50 rounded-lg p-2 text-center">
+                    <div className="text-sm font-bold">{dim}</div>
+                    <div className="text-lg font-bold text-primary">{score}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {profile.completeness && (
+            <div className="mt-2 text-xs text-muted">
+              画像完整度：<span className="font-bold">{profile.completeness}</span>
+            </div>
+          )}
         </div>
         <div className="flex gap-3">
           <button onClick={onDismiss} className="flex-1 py-2.5 border border-border rounded-lg text-text hover:bg-gray-50 transition text-sm">我再看一下对话</button>
