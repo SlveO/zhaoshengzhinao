@@ -29,7 +29,9 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    volumes: [./backend:/app, ./data:/app/data, hf_cache:/root/.cache/huggingface]
+    volumes: [./backend:/app, ./data:/app/data, ms_cache:/root/.cache/modelscope]
+    environment:
+      - MODELSCOPE_CACHE=/root/.cache/modelscope
 
   frontend:
     build: { context: ., dockerfile: docker/Dockerfile.frontend }
@@ -38,4 +40,4 @@ services:
 
 volumes:
   pgdata:
-  hf_cache:
+  ms_cache:

@@ -1,22 +1,14 @@
 [
-  {"name":"中山大学","code":"10558","type":"综合","level":"985","province":"广东","city":"广州","is_985":true,"is_211":true,"is_double_first":true,"intro":"教育部直属综合性全国重点大学"},
-  {"name":"华南理工大学","code":"10561","type":"理工","level":"985","province":"广东","city":"广州","is_985":true,"is_211":true,"is_double_first":true,"intro":"以工见长，理工结合"},
-  {"name":"暨南大学","code":"10559","type":"综合","level":"211","province":"广东","city":"广州","is_985":false,"is_211":true,"is_double_first":true,"intro":"华侨最高学府"},
-  {"name":"华南师范大学","code":"10574","type":"师范","level":"211","province":"广东","city":"广州","is_985":false,"is_211":true,"is_double_first":true,"intro":"师范教育为特色"},
-  {"name":"深圳大学","code":"10590","type":"综合","level":"省重点","province":"广东","city":"深圳","is_985":false,"is_211":false,"is_double_first":false,"intro":"特区大学"},
-  {"name":"华南农业大学","code":"10564","type":"农林","level":"双一流","province":"广东","city":"广州","is_985":false,"is_211":false,"is_double_first":true,"intro":"农业科学为优势"},
-  {"name":"南方医科大学","code":"12121","type":"医药","level":"省重点","province":"广东","city":"广州","is_985":false,"is_211":false,"is_double_first":false,"intro":"原第一军医大学"},
-  {"name":"广东工业大学","code":"11845","type":"理工","level":"省重点","province":"广东","city":"广州","is_985":false,"is_211":false,"is_double_first":false,"intro":"工科优势突出"},
-  {"name":"广州大学","code":"11078","type":"综合","level":"省重点","province":"广东","city":"广州","is_985":false,"is_211":false,"is_double_first":false,"intro":"综合性大学"},
-  {"name":"汕头大学","code":"10560","type":"综合","level":"省重点","province":"广东","city":"汕头","is_985":false,"is_211":false,"is_double_first":false,"intro":"李嘉诚基金会资助"},
-  {"name":"南方科技大学","code":"14325","type":"理工","level":"双一流","province":"广东","city":"深圳","is_985":false,"is_211":false,"is_double_first":true,"intro":"新型研究型大学"},
-  {"name":"广州医科大学","code":"10570","type":"医药","level":"双一流","province":"广东","city":"广州","is_985":false,"is_211":false,"is_double_first":true,"intro":"呼吸疾病研究为特色"},
-  {"name":"广东外语外贸大学","code":"11846","type":"语言","level":"省重点","province":"广东","city":"广州","is_985":false,"is_211":false,"is_double_first":false,"intro":"外语外贸为特色"},
-  {"name":"广州中医药大学","code":"10572","type":"医药","level":"双一流","province":"广东","city":"广州","is_985":false,"is_211":false,"is_double_first":true,"intro":"中医药研究为特色"},
-  {"name":"东莞理工学院","code":"11819","type":"理工","level":"省重点","province":"广东","city":"东莞","is_985":false,"is_211":false,"is_double_first":false,"intro":"应用型理工科大学"},
-  {"name":"佛山科学技术学院","code":"11847","type":"理工","level":"省重点","province":"广东","city":"佛山","is_985":false,"is_211":false,"is_double_first":false,"intro":"服务地方产业"},
-  {"name":"广东财经大学","code":"10592","type":"财经","level":"省重点","province":"广东","city":"广州","is_985":false,"is_211":false,"is_double_first":false,"intro":"财经类为特色"},
-  {"name":"广东海洋大学","code":"10566","type":"农林","level":"省重点","province":"广东","city":"湛江","is_985":false,"is_211":false,"is_double_first":false,"intro":"海洋科学为特色"},
-  {"name":"五邑大学","code":"11349","type":"综合","level":"省重点","province":"广东","city":"江门","is_985":false,"is_211":false,"is_double_first":false,"intro":"侨乡高校"},
-  {"name":"仲恺农业工程学院","code":"11347","type":"农林","level":"省重点","province":"广东","city":"广州","is_985":false,"is_211":false,"is_double_first":false,"intro":"纪念廖仲恺先生"}
+  {
+    "name": "中山大学",
+    "code": "10558",
+    "type": "综合",
+    "level": "985",
+    "province": "广东",
+    "city": "广州",
+    "is_985": true,
+    "is_211": false,
+    "is_double_first": false,
+    "intro": ""
+  }
 ]
