@@ -87,11 +87,11 @@ class EvidenceAccumulator:
                 hints.append(dim_key)
         return hints
 
-    def set_engagement(self, trust_level: str, willingness: float, indicators: list[str]):
+    def set_engagement(self, trust_level: str = "low", willingness_to_share: float = 0.0, indicators: list[str] | None = None):
         self._evidence["engagement"] = {
             "trust_level": trust_level,
-            "willingness_to_share": willingness,
-            "indicators": indicators,
+            "willingness_to_share": willingness_to_share,
+            "indicators": indicators or [],
         }
 
     def set_values(self, ranked: list[str]):
