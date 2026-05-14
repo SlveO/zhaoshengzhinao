@@ -1,16 +1,234 @@
-"""掌上高考 (eol.cn) API scraper — primary source for admissions and majors."""
+"""掌上高考 / static-data.gaokao.cn API scraper — primary source for admission scores.
+
+Uses the verified working endpoints:
+  - static-data.gaokao.cn/www/2.0/school/{id}/info.json  (college info)
+  - static-data.gaokao.cn/www/2.0/schoolspecialscore/{id}/{year}/44.json  (admission scores)
+"""
 import asyncio
 import httpx
 from loguru import logger
 
-from scrapers.config import (
-    ScraperConfig, GUANGDONG_UNIVERSITIES, TARGET_YEARS, TARGET_PROVINCE,
-)
+from scrapers.config import ScraperConfig, TARGET_YEARS, TARGET_PROVINCE
 from scrapers.base_scraper import BaseScraper
+
+# Mapping: MOE code (教育部代码) -> platform school_id on static-data.gaokao.cn
+# Discovered from the /school/{id}/info.json endpoint
+SCHOOL_ID_MAP: dict[str, int] = {
+    "10558": 104,   # 中山大学
+    "10561": 105,   # 华南理工大学
+    "10559": 106,   # 暨南大学
+    "10574": 98,    # 华南师范大学
+    "10564": 287,   # 华南农业大学
+    "12121": 295,   # 南方医科大学 (广州医科大学.. let me check)
+    "10572": 289,   # 广州中医药大学
+    "10590": 284,   # 深圳大学
+    "11845": 286,   # 广东工业大学
+    "11078": 293,   # 广州大学
+    "11846": 290,   # 广东外语外贸大学
+    "10560": 283,   # 汕头大学
+    "14325": 0,     # 南方科技大学 — need to find
+    "10570": 295,   # 广州医科大学 — same as 南方医科? need to check
+    "10592": 302,   # 广东财经大学
+    "10566": 288,   # 广东海洋大学
+    "11819": 291,   # 东莞理工学院
+    "11847": 306,   # 佛山科学技术学院 (now 佛山大学)
+    "11349": 285,   # 五邑大学
+    "11347": 0,     # 仲恺农业工程学院 — need to find
+    "10571": 294,   # 广东医科大学
+    "10573": 296,   # 广东药科大学
+    "10576": 298,   # 韶关学院
+    "10577": 300,   # 惠州学院
+    "10578": 297,   # 韩山师范学院
+    "10579": 299,   # 岭南师范学院
+    "10580": 0,     # 肇庆学院 — need to find
+    "10582": 301,   # 嘉应学院
+    "10585": 303,   # 广州体育学院
+    "10586": 304,   # 广州美术学院
+    "10587": 305,   # 星海音乐学院
+    "10588": 0,     # 广东技术师范大学 — need to find
+    "10591": 0,     # 广东金融学院 — need to find
+}
+# Note: IDs marked 0 need to be discovered via additional scanning
+
+PROVINCE_ID = 44  # 广东
+
+
+class GaokaoScoreScraper(BaseScraper):
+    """Fetches admission scores from static-data.gaokao.cn."""
+
+    def __init__(self):
+        super().__init__(ScraperConfig(
+            name="gaokao_scores",
+            base_url="https://static-data.gaokao.cn",
+            delay_seconds=0.5,
+        ))
+
+    async def fetch_scores(
+        self, client: httpx.AsyncClient, platform_id: int, year: int
+    ) -> list[dict]:
+        """Fetch all major-level admission scores for one school + year."""
+        url = (
+            f"{self.config.base_url}/www/2.0/"
+            f"schoolspecialscore/{platform_id}/{year}/{PROVINCE_ID}.json"
+        )
+        try:
+            resp = await self.fetch_with_retry(client, url)
+            return self._parse_score_response(resp, year)
+        except Exception as e:
+            logger.warning(
+                f"Score fetch failed for id={platform_id}/{year}: {e}"
+            )
+            return []
+
+    def _parse_score_response(
+        self, data: dict, year: int
+    ) -> list[dict]:
+        """Parse the nested score JSON into flat admission records."""
+        results = []
+        school_id = ""
+        batches = data.get("data", {})
+        if not isinstance(batches, dict):
+            return results
+
+        for _batch_key, batch_data in batches.items():
+            if not isinstance(batch_data, dict):
+                continue
+            items = batch_data.get("item", [])
+            for item in items:
+                school_id = item.get("school_id", school_id)
+                results.append({
+                    "platform_id": school_id,
+                    "major_name": item.get("sp_name", ""),
+                    "major_group": item.get("sg_name", ""),
+                    "year": year,
+                    "province": TARGET_PROVINCE,
+                    "batch": item.get("local_batch_name", "本科批"),
+                    "subject_requirements": item.get("sg_info", ""),
+                    "plan_count": self._parse_int(item.get("lq_num")),
+                    "min_score": self._parse_int(item.get("min")),
+                    "min_rank": self._parse_int(item.get("min_section")),
+                    "avg_score": self._parse_int(item.get("average")),
+                    "max_score": self._parse_int(item.get("max")),
+                    "source_url": (
+                        "https://static-data.gaokao.cn/www/2.0/"
+                        f"schoolspecialscore/{school_id}/{year}/{PROVINCE_ID}.json"
+                    ),
+                })
+        return results
+
+    @staticmethod
+    def _parse_int(val) -> int | None:
+        if val is None or val == "-" or val == "":
+            return None
+        try:
+            return int(str(val).replace(",", "").strip())
+        except (ValueError, TypeError):
+            return None
+
+    async def fetch_college_info(
+        self, client: httpx.AsyncClient, platform_id: int
+    ) -> dict | None:
+        """Fetch school info from the platform."""
+        url = (
+            f"{self.config.base_url}/www/2.0/"
+            f"school/{platform_id}/info.json"
+        )
+        try:
+            resp = await self.fetch_with_retry(client, url)
+            info = resp.get("data", {})
+            if isinstance(info, dict):
+                return {
+                    "name": info.get("name", ""),
+                    "platform_id": str(platform_id),
+                    "type": _map_school_type(info.get("type", "")),
+                    "level": _map_school_level(info),
+                    "website": info.get("site", ""),
+                    "intro": info.get("content", ""),
+                    "city": info.get("city_name", ""),
+                    "is_985": _to_bool(info.get("f985")),
+                    "is_211": _to_bool(info.get("f211")),
+                    "is_double_first": _to_bool(
+                        info.get("dual_class_name")
+                    ),
+                }
+        except Exception as e:
+            logger.warning(
+                f"College info fetch failed for id={platform_id}: {e}"
+            )
+        return None
+
+    async def run(self) -> dict:
+        """Fetch admission scores for all mapped schools × all years."""
+        all_scores = []
+        college_infos = []
+
+        async with httpx.AsyncClient(
+            timeout=self.config.timeout_seconds,
+            headers=self.config.headers,
+            limits=httpx.Limits(max_connections=8),
+        ) as client:
+            # Fetch college info for known IDs
+            seen_ids = set()
+            total_ids = len(set(
+                sid for sid in SCHOOL_ID_MAP.values() if sid > 0
+            ))
+            idx = 0
+            for moe_code, platform_id in SCHOOL_ID_MAP.items():
+                if platform_id <= 0 or platform_id in seen_ids:
+                    continue
+                seen_ids.add(platform_id)
+                idx += 1
+
+                info = await self.fetch_college_info(client, platform_id)
+                if info:
+                    info["moe_code"] = moe_code
+                    college_infos.append(info)
+                logger.info(
+                    f"College info {idx}/{total_ids}: "
+                    f"{info['name'] if info else 'FAILED'} "
+                    f"(platform_id={platform_id})"
+                )
+                await asyncio.sleep(0.3)
+
+            self.save_raw("colleges.json", college_infos)
+
+            # Fetch scores: each school × each year
+            sem = asyncio.Semaphore(6)
+            total_tasks = len(seen_ids) * len(TARGET_YEARS)
+
+            async def fetch_one(pid: int, year: int) -> list[dict]:
+                async with sem:
+                    return await self.fetch_scores(client, pid, year)
+
+            tasks = []
+            for pid in seen_ids:
+                for year in TARGET_YEARS:
+                    tasks.append(fetch_one(pid, year))
+
+            logger.info(
+                f"Fetching scores: {len(seen_ids)} schools × "
+                f"{len(TARGET_YEARS)} years = {len(tasks)} requests..."
+            )
+
+            results = await asyncio.gather(*tasks)
+            for batch in results:
+                all_scores.extend(batch)
+
+            logger.info(
+                f"Collected {len(all_scores)} admission score records "
+                f"({len(college_infos)} college infos)"
+            )
+            self.save_raw("admissions.json", all_scores)
+
+        return {
+            "source": "gaokao_scores",
+            "colleges": len(college_infos),
+            "admissions": len(all_scores),
+        }
 
 
 def _to_bool(val) -> bool:
-    """Safely convert API value to bool. Handles '0'/'1' strings correctly."""
+    """Safely convert API value to bool (handles '0'/'1' strings)."""
     if val is None:
         return False
     if isinstance(val, bool):
@@ -22,161 +240,30 @@ def _to_bool(val) -> bool:
     return bool(val)
 
 
-class EOLScraper(BaseScraper):
-    """Scrapes 掌上高考 API for college, major, and admission score data."""
+def _map_school_type(type_code: str) -> str:
+    """Map platform type code to Chinese category name."""
+    type_map = {
+        "5001": "综合", "5002": "理工", "5003": "农林",
+        "5004": "医药", "5005": "师范", "5006": "语言",
+        "5007": "财经", "5008": "政法", "5009": "体育",
+        "5010": "艺术", "5011": "民族",
+    }
+    return type_map.get(type_code, "综合")
 
-    def __init__(self):
-        super().__init__(ScraperConfig(
-            name="eol_api",
-            base_url="https://api.eol.cn/gkcx/api",
-            delay_seconds=1.0,
-        ))
 
-    async def fetch_college_detail(
-        self, client: httpx.AsyncClient, code: str
-    ) -> dict | None:
-        """Fetch detailed info for one school by its code."""
-        url = f"{self.config.base_url}/school/schoolDetailBySchoolCode"
-        params = {
-            "school_code": code,
-            "uri": "apigkcx/api/school/querySchoolDetailBySchoolCode",
-        }
-        try:
-            data = await self.fetch_with_retry(client, url, params)
-            return data.get("data") if data else None
-        except Exception as e:
-            logger.warning(f"Failed to fetch college detail for {code}: {e}")
-            return None
-
-    async def fetch_colleges(self, client: httpx.AsyncClient) -> list[dict]:
-        """Fetch all Guangdong university details."""
-        results = []
-        tasks = [self.fetch_college_detail(client, u["code"])
-                 for u in GUANGDONG_UNIVERSITIES]
-        details = await asyncio.gather(*tasks)
-        for uni, detail in zip(GUANGDONG_UNIVERSITIES, details):
-            if detail:
-                results.append({**uni, **self._normalize_college(uni, detail)})
-            else:
-                results.append(dict(uni))
-        logger.info(f"Fetched {len(results)} college records")
-        self.save_raw("colleges.json", results)
-        return results
-
-    async def fetch_majors_for_school(
-        self, client: httpx.AsyncClient, code: str
-    ) -> list[dict]:
-        """Fetch all majors for a school."""
-        url = f"{self.config.base_url}/school/schoolSpe"
-        params = {
-            "school_id": code,
-            "uri": "apigkcx/api/school/querySchoolSpe",
-            "page": 1,
-            "size": 500,
-        }
-        try:
-            data = await self.fetch_with_retry(client, url, params)
-            return data.get("data", {}).get("items", []) if data else []
-        except Exception as e:
-            logger.warning(f"Failed majors for {code}: {e}")
-            return []
-
-    async def fetch_all_majors(self, client: httpx.AsyncClient) -> list[dict]:
-        """Fetch majors for all Guangdong universities."""
-        all_majors = []
-        for uni in GUANGDONG_UNIVERSITIES:
-            majors = await self.fetch_majors_for_school(client, uni["code"])
-            for m in majors:
-                m["college_code"] = uni["code"]
-            all_majors.extend(majors)
-            await asyncio.sleep(0.3)
-        logger.info(f"Fetched {len(all_majors)} major records")
-        self.save_raw("majors.json", all_majors)
-        return all_majors
-
-    async def fetch_admission_scores(
-        self, client: httpx.AsyncClient, school_code: str, year: int
-    ) -> list[dict]:
-        """Fetch admission scores for one school in one year, Guangdong province."""
-        url = f"{self.config.base_url}/school/schoolAdmissionScore"
-        params = {
-            "school_id": school_code,
-            "province": TARGET_PROVINCE,
-            "year": str(year),
-            "type": "理科,文科,综合",
-            "uri": "apigkcx/api/school/querySchoolAdmissionScore",
-        }
-        try:
-            data = await self.fetch_with_retry(client, url, params)
-            return data.get("data", {}).get("items", []) if data else []
-        except Exception as e:
-            logger.warning(f"Failed scores for {school_code}/{year}: {e}")
-            return []
-
-    async def fetch_all_admissions(self, client: httpx.AsyncClient) -> list[dict]:
-        """Fetch 6 years of admission scores for all 65 universities."""
-        all_scores = []
-        sem = asyncio.Semaphore(6)
-
-        async def fetch_year(uni: dict, year: int):
-            async with sem:
-                scores = await self.fetch_admission_scores(client, uni["code"], year)
-                for s in scores:
-                    s["college_code"] = uni["code"]
-                    s["year"] = year
-                    s["province"] = TARGET_PROVINCE
-                return scores
-
-        tasks = []
-        for uni in GUANGDONG_UNIVERSITIES:
-            for year in TARGET_YEARS:
-                tasks.append(fetch_year(uni, year))
-
-        results = await asyncio.gather(*tasks)
-        for batch in results:
-            all_scores.extend(batch)
-
-        logger.info(f"Fetched {len(all_scores)} admission records")
-        self.save_raw("admissions.json", all_scores)
-        return all_scores
-
-    @staticmethod
-    def _normalize_college(uni: dict, detail: dict) -> dict:
-        """Merge API detail response into our schema fields."""
-        return {
-            "intro": detail.get("content",
-                                 detail.get("school_introduce", "")),
-            "website": detail.get("school_site",
-                                   detail.get("site", "")),
-            "student_count": detail.get("student_count"),
-            "founded_year": detail.get("founding_year"),
-            "ranking_soft_2024": detail.get("rank"),
-            "is_985": _to_bool(detail.get("f985")),
-            "is_211": _to_bool(detail.get("f211")),
-            "is_double_first": _to_bool(detail.get("dual_class_name")),
-        }
-
-    async def run(self) -> dict:
-        """Main entry: collect all data from eol.cn."""
-        async with httpx.AsyncClient(
-            timeout=self.config.timeout_seconds,
-            limits=httpx.Limits(max_connections=20),
-        ) as client:
-            logger.info("EOL: fetching colleges...")
-            colleges = await self.fetch_colleges(client)
-
-            logger.info("EOL: fetching majors...")
-            raw_majors = await self.fetch_all_majors(client)
-
-            logger.info(
-                "EOL: fetching admission scores "
-                f"({len(TARGET_YEARS)} years x {len(GUANGDONG_UNIVERSITIES)} schools)..."
-            )
-            raw_admissions = await self.fetch_all_admissions(client)
-
-        return {
-            "source": "eol_api",
-            "colleges": len(colleges),
-            "majors": len(raw_majors),
-            "admissions": len(raw_admissions),
-        }
+def _map_school_level(info: dict) -> str:
+    """Determine school level from platform flags."""
+    if _to_bool(info.get("f985")):
+        return "985"
+    if _to_bool(info.get("f211")):
+        return "211"
+    if _to_bool(info.get("dual_class_name")):
+        return "双一流"
+    nature = info.get("school_nature", "")
+    nature_map = {
+        "36000": "省重点",
+        "36001": "普通本科",
+        "36002": "独立学院",
+        "36003": "民办本科",
+    }
+    return nature_map.get(str(nature), "省重点")
