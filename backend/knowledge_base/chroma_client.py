@@ -5,9 +5,15 @@ from knowledge_base.embeddings import embedding_model
 client = chromadb.PersistentClient(path=settings.chroma_persist_dir)
 collection = client.get_or_create_collection(name="colleges_majors")
 
+def _sanitize_meta(meta: dict) -> dict:
+    """Replace None values with empty string — ChromaDB 0.5.x rejects None."""
+    return {k: (v if v is not None else "") for k, v in meta.items()}
+
+
 def index_documents(docs: list[str], metadatas: list[dict], ids: list[str]):
     embeddings = embedding_model.embed_documents(docs)
-    collection.add(ids=ids, embeddings=embeddings, documents=docs, metadatas=metadatas)
+    clean_metas = [_sanitize_meta(m) for m in metadatas]
+    collection.add(ids=ids, embeddings=embeddings, documents=docs, metadatas=clean_metas)
 
 def search_similar(query: str, k: int = 30) -> list[dict]:
     q_emb = embedding_model.embed_query(query)
