@@ -9,6 +9,19 @@ from scrapers.config import (
 from scrapers.base_scraper import BaseScraper
 
 
+def _to_bool(val) -> bool:
+    """Safely convert API value to bool. Handles '0'/'1' strings correctly."""
+    if val is None:
+        return False
+    if isinstance(val, bool):
+        return val
+    if isinstance(val, str):
+        return val.strip() in ("1", "true", "True", "是", "yes")
+    if isinstance(val, (int, float)):
+        return bool(int(val))
+    return bool(val)
+
+
 class EOLScraper(BaseScraper):
     """Scrapes 掌上高考 API for college, major, and admission score data."""
 
@@ -138,9 +151,9 @@ class EOLScraper(BaseScraper):
             "student_count": detail.get("student_count"),
             "founded_year": detail.get("founding_year"),
             "ranking_soft_2024": detail.get("rank"),
-            "is_985": bool(detail.get("f985")),
-            "is_211": bool(detail.get("f211")),
-            "is_double_first": bool(detail.get("dual_class_name")),
+            "is_985": _to_bool(detail.get("f985")),
+            "is_211": _to_bool(detail.get("f211")),
+            "is_double_first": _to_bool(detail.get("dual_class_name")),
         }
 
     async def run(self) -> dict:

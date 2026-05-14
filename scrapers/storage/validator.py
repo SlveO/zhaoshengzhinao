@@ -30,11 +30,11 @@ def validate_admissions(data: list[dict]) -> tuple[list[dict], list[str]]:
     valid, errors = [], []
     for i, item in enumerate(data):
         errs = []
-        score = item.get("min_score", -1)
-        if not (0 <= score <= 750):
+        score = item.get("min_score")
+        if score is None or not (0 <= score <= 750):
             errs.append(f"row {i}: invalid min_score {score}")
-        year = item.get("year", -1)
-        if not (2020 <= year <= 2025):
+        year = item.get("year")
+        if year is None or not (2020 <= year <= 2025):
             errs.append(f"row {i}: invalid year {year}")
         if not item.get("college_code"):
             errs.append(f"row {i}: missing college_code")
@@ -70,15 +70,17 @@ def validate_employment(data: list[dict]) -> tuple[list[dict], list[str]]:
 def validate_industries(data: list[dict]) -> tuple[list[dict], list[str]]:
     """Validate industry records."""
     valid, errors = [], []
-    names_seen = set()
+    keys_seen = set()
     for i, item in enumerate(data):
         errs = []
         name = item.get("industry_name", "")
+        year = item.get("year")
         if not name:
             errs.append(f"row {i}: missing industry_name")
-        if name in names_seen:
-            errs.append(f"row {i}: duplicate industry '{name}'")
-        names_seen.add(name)
+        key = (name, year)
+        if key in keys_seen:
+            errs.append(f"row {i}: duplicate industry '{name}' for year {year}")
+        keys_seen.add(key)
         if errs:
             errors.extend(errs)
         else:

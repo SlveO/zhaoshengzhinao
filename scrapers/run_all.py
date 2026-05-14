@@ -54,93 +54,112 @@ async def main():
     reports = scrapers[2]
     industry = scrapers[3]
 
-    # Load colleges from EOL raw data
-    raw_colleges = eol.load_raw("colleges.json") or []
-    colleges = [College(**c) for c in raw_colleges if c.get("code")]
+    colleges, majors, admissions = [], [], []
+    employment, industries, mappings = [], [], []
 
-    # Load admissions from EOL
-    raw_admissions = eol.load_raw("admissions.json") or []
-    admissions = []
-    for a in raw_admissions:
-        try:
-            admissions.append(Admission(**a))
-        except Exception as e:
-            logger.debug(f"Skip invalid admission: {e}")
+    try:
+        # Load colleges from EOL raw data
+        raw_colleges = eol.load_raw("colleges.json") or []
+        for c in raw_colleges:
+            if not c.get("code"):
+                continue
+            try:
+                colleges.append(College(**c))
+            except Exception as e:
+                logger.warning(f"Skip invalid college {c.get('name','?')}: {e}")
 
-    # Load majors from EOL + Sunshine
-    raw_majors = eol.load_raw("majors.json") or []
-    raw_majors_sun = sunshine.load_raw("major_catalog.json") or []
-    all_raw_majors = raw_majors + raw_majors_sun
-    majors = []
-    seen = set()
-    for m in all_raw_majors:
-        key = (m.get("college_code"), m.get("major_name"))
-        if key in seen:
-            continue
-        seen.add(key)
-        try:
-            majors.append(Major(**m))
-        except Exception:
-            pass
+        # Load admissions from EOL
+        raw_admissions = eol.load_raw("admissions.json") or []
+        for a in raw_admissions:
+            try:
+                admissions.append(Admission(**a))
+            except Exception as e:
+                logger.warning(f"Skip invalid admission: {e}")
 
-    # Load employment
-    raw_employment = reports.load_raw("employment.json") or []
-    employment = []
-    for e in raw_employment:
-        try:
-            employment.append(Employment(**e))
-        except Exception:
-            pass
+        # Load majors from EOL + Sunshine
+        raw_majors = eol.load_raw("majors.json") or []
+        raw_majors_sun = sunshine.load_raw("major_catalog.json") or []
+        all_raw_majors = raw_majors + raw_majors_sun
+        seen = set()
+        for m in all_raw_majors:
+            key = (m.get("college_code"), m.get("major_name"))
+            if key in seen:
+                continue
+            seen.add(key)
+            try:
+                majors.append(Major(**m))
+            except Exception:
+                pass
 
-    # Load industries and mappings
-    raw_industries = industry.load_raw("industries.json") or []
-    industries = [Industry(**i) for i in raw_industries]
-    raw_mappings = (
-        industry.load_raw("major_industry_mapping.json") or []
-    )
-    mappings = [MajorIndustryMapping(**m) for m in raw_mappings]
+        # Load employment
+        raw_employment = reports.load_raw("employment.json") or []
+        for e in raw_employment:
+            try:
+                employment.append(Employment(**e))
+            except Exception:
+                pass
 
-    logger.info(
-        f"Data summary: {len(colleges)} colleges, "
-        f"{len(majors)} majors, {len(admissions)} admissions, "
-        f"{len(employment)} employment, {len(industries)} industries, "
-        f"{len(mappings)} mappings"
-    )
+        # Load industries and mappings
+        raw_industries = industry.load_raw("industries.json") or []
+        for i in raw_industries:
+            try:
+                industries.append(Industry(**i))
+            except Exception as e:
+                logger.warning(f"Skip invalid industry: {e}")
 
-    # Stage 3: Validate
-    logger.info("\n" + "=" * 60)
-    logger.info("Stage 3: Validation")
-    logger.info("=" * 60)
+        raw_mappings = (
+            industry.load_raw("major_industry_mapping.json") or []
+        )
+        for m in raw_mappings:
+            try:
+                mappings.append(MajorIndustryMapping(**m))
+            except Exception as e:
+                logger.warning(f"Skip invalid mapping: {e}")
 
-    ok = run_all_validations(
-        [c.model_dump() for c in colleges],
-        [a.model_dump() for a in admissions],
-        [e.model_dump() for e in employment],
-        [i.model_dump() for i in industries],
-    )
+        logger.info(
+            f"Data summary: {len(colleges)} colleges, "
+            f"{len(majors)} majors, {len(admissions)} admissions, "
+            f"{len(employment)} employment, {len(industries)} industries, "
+            f"{len(mappings)} mappings"
+        )
 
-    if not ok:
-        logger.error("Validation failed — check logs for details")
-        logger.warning("Continuing with export anyway (with warnings)")
+        # Stage 3: Validate
+        logger.info("\n" + "=" * 60)
+        logger.info("Stage 3: Validation")
+        logger.info("=" * 60)
 
-    # Stage 4: Export
-    logger.info("\n" + "=" * 60)
-    logger.info("Stage 4: Exporting to seed/ and approved/")
-    logger.info("=" * 60)
+        ok = run_all_validations(
+            [c.model_dump() for c in colleges],
+            [a.model_dump() for a in admissions],
+            [e.model_dump() for e in employment],
+            [i.model_dump() for i in industries],
+        )
 
-    export_full_data(
-        colleges, majors, admissions, employment, industries, mappings
-    )
+        if not ok:
+            logger.error("Validation failed — check logs for details")
+            logger.warning("Continuing with export anyway (with warnings)")
 
-    logger.info("\n" + "=" * 60)
-    logger.info("Pipeline complete!")
-    logger.info("  Seed: data/seed/schools.json + data/seed/scores.json")
-    logger.info("  Full: data/approved/ (6 files)")
-    logger.info("=" * 60)
+        # Stage 4: Export
+        logger.info("\n" + "=" * 60)
+        logger.info("Stage 4: Exporting to seed/ and approved/")
+        logger.info("=" * 60)
 
-    # Clean up scrapers
-    for s in scrapers:
-        await s.close()
+        export_full_data(
+            colleges, majors, admissions, employment, industries, mappings
+        )
+
+        logger.info("\n" + "=" * 60)
+        logger.info("Pipeline complete!")
+        logger.info("  Seed: data/seed/schools.json + data/seed/scores.json")
+        logger.info("  Full: data/approved/ (6 files)")
+        logger.info("=" * 60)
+
+    except Exception as e:
+        logger.error(f"Pipeline crashed: {e}", exc_info=True)
+    finally:
+        # Always clean up scrapers to release log handlers
+        for s in scrapers:
+            await s.close()
 
 
 if __name__ == "__main__":
