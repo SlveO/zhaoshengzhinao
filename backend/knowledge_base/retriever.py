@@ -26,15 +26,15 @@ def build_query_text(profile: dict) -> str:
 
 def retrieve_candidates(profile: dict, k: int = 30) -> list[dict]:
     query = build_query_text(profile)
-    candidates = search_similar(query, k=k)
-    user_subjects = set((profile.get("subjects", "") or "").replace("+", " ").split())
+    candidates = search_similar(query, k=max(k * 3, 100))
+    raw = (profile.get("subjects", "") or "").replace("+", " ").split()
+    user_subjects = {s for s in raw if s}
     filtered = []
     for item in candidates:
         meta = item["metadata"]
-        req = set((meta.get("subjects", "") or "").replace("+", " ").split())
+        raw_req = (meta.get("subjects", "") or "").replace("+", " ").split()
+        req = {s for s in raw_req if s}
         if not user_subjects or not req or req == {"不限"} or user_subjects & req:
-            filtered.append(item)
-        elif not user_subjects:
             filtered.append(item)
     # Diversity: keep at most 3 results per college
     seen = {}
