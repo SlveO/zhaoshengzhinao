@@ -75,7 +75,7 @@ async def collect_schools(school_map: dict, label: str):
             speed = done[0] / (time.time() - t0) if time.time() - t0 > 0 else 0
             eta = (total - done[0]) / speed if speed > 0 else 0
             print(f"  [{label}] {done[0]}/{total} ({pct:.0f}%) {len(all_records)} records eta={eta/60:.0f}m", flush=True)
-        return []
+        return result
 
     tasks = []
     for pid, (name, code_id) in school_map.items():
