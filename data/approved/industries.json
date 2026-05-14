@@ -1,0 +1,3488 @@
+[
+  {
+    "industry_name": "信息传输、软件和信息技术服务业",
+    "industry_code": "I63-65",
+    "year": 2020,
+    "avg_annual_salary": 231810.0,
+    "salary_growth_rate": 0.09,
+    "employment_demand_index": 4.5,
+    "industry_growth_rate": 0.12,
+    "entry_difficulty": "中等",
+    "popular_positions": [
+      {
+        "name": "软件开发工程师",
+        "avg_salary": 18000,
+        "demand": "高"
+      },
+      {
+        "name": "算法工程师",
+        "avg_salary": 25000,
+        "demand": "高"
+      },
+      {
+        "name": "数据分析师",
+        "avg_salary": 15000,
+        "demand": "高"
+      },
+      {
+        "name": "产品经理",
+        "avg_salary": 16000,
+        "demand": "中"
+      },
+      {
+        "name": "网络安全工程师",
+        "avg_salary": 20000,
+        "demand": "高"
+      }
+    ],
+    "career_path": "初级工程师 → 高级工程师 → 技术专家/架构师 → 技术总监",
+    "pros": [
+      "薪资水平领先",
+      "岗位需求大",
+      "远程办公友好",
+      "技术成长快"
+    ],
+    "cons": [
+      "加班文化普遍",
+      "技术迭代快需持续学习",
+      "35岁职业瓶颈",
+      "竞争激烈"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "互联网行业前3年成长迅速，薪资涨幅大。跳槽涨薪快...",
+        "sentiment": "neutral"
+      }
+    ],
+    "related_majors": [
+      "计算机科学与技术",
+      "软件工程",
+      "人工智能",
+      "数据科学与大数据技术",
+      "网络工程",
+      "信息安全",
+      "物联网工程",
+      "数字媒体技术"
+    ],
+    "outlook": "AI/云计算/信息安全驱动增长，但初级开发岗位供给过剩，建议深耕细分方向",
+    "source": "国家统计局2020年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "制造业",
+    "industry_code": "C",
+    "year": 2020,
+    "avg_annual_salary": 112306.0,
+    "salary_growth_rate": 0.06,
+    "employment_demand_index": 3.8,
+    "industry_growth_rate": 0.06,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "机械工程师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "电气工程师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "工艺工程师",
+        "avg_salary": 11000,
+        "demand": "中"
+      },
+      {
+        "name": "质量管理工程师",
+        "avg_salary": 9000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "技术员 → 工程师 → 高级工程师 → 技术经理/厂长",
+    "pros": [
+      "就业稳定",
+      "行业天花板高",
+      "积累型职业",
+      "珠三角制造业集聚"
+    ],
+    "cons": [
+      "起薪偏低",
+      "晋升速度慢",
+      "部分岗位工作环境差"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "制造业工程师前几年收入不高，但经验积累后价值上升...",
+        "sentiment": "positive"
+      }
+    ],
+    "related_majors": [
+      "机械设计制造及其自动化",
+      "电气工程及其自动化",
+      "自动化",
+      "材料科学与工程",
+      "工业工程",
+      "车辆工程",
+      "测控技术与仪器"
+    ],
+    "outlook": "智能制造转型带来新机会，自动化/机器人方向薪资增长快",
+    "source": "国家统计局2020年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "金融业",
+    "industry_code": "J",
+    "year": 2020,
+    "avg_annual_salary": 197383.0,
+    "salary_growth_rate": 0.07,
+    "employment_demand_index": 3.5,
+    "industry_growth_rate": 0.05,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "投资分析师",
+        "avg_salary": 15000,
+        "demand": "中"
+      },
+      {
+        "name": "风控专员",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "理财顾问",
+        "avg_salary": 13000,
+        "demand": "中"
+      },
+      {
+        "name": "审计师",
+        "avg_salary": 11000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "分析师 → 高级分析师 → 经理/VP → 总监",
+    "pros": [
+      "薪资高",
+      "社会地位高",
+      "职业发展通道清晰"
+    ],
+    "cons": [
+      "工作压力大",
+      "入行门槛高",
+      "一线城市聚集",
+      "周期性波动"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "金融行业收入天花板高但强度大，头部机构竞争激烈...",
+        "sentiment": "neutral"
+      }
+    ],
+    "related_majors": [
+      "金融学",
+      "经济学",
+      "会计学",
+      "财务管理",
+      "保险学",
+      "投资学",
+      "金融工程",
+      "国际经济与贸易"
+    ],
+    "outlook": "金融科技方向需求增加，传统岗位受AI替代压力增大",
+    "source": "国家统计局2020年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "教育",
+    "industry_code": "P",
+    "year": 2020,
+    "avg_annual_salary": 123982.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.0,
+    "industry_growth_rate": 0.03,
+    "entry_difficulty": "中等",
+    "popular_positions": [
+      {
+        "name": "中小学教师",
+        "avg_salary": 8000,
+        "demand": "高"
+      },
+      {
+        "name": "高校教师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "培训讲师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "教育产品经理",
+        "avg_salary": 15000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "教师 → 骨干教师 → 学科带头人 → 教学管理者",
+    "pros": [
+      "寒暑假",
+      "工作稳定",
+      "社会尊重",
+      "有编制"
+    ],
+    "cons": [
+      "起薪偏低",
+      "非编待遇差",
+      "考核压力增大",
+      "课外负担重"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "公立学校稳定但薪资涨幅有限，培训机构收入高但不稳定...",
+        "sentiment": "mixed"
+      }
+    ],
+    "related_majors": [
+      "教育学",
+      "汉语言文学(师范)",
+      "数学与应用数学(师范)",
+      "英语(师范)",
+      "物理学(师范)",
+      "化学(师范)",
+      "历史学(师范)"
+    ],
+    "outlook": "人口下降长期看空K12需求，但高等教育/职业教育仍有增长",
+    "source": "国家统计局2020年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "卫生和社会工作",
+    "industry_code": "Q",
+    "year": 2020,
+    "avg_annual_salary": 127089.0,
+    "salary_growth_rate": 0.07,
+    "employment_demand_index": 4.0,
+    "industry_growth_rate": 0.08,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "临床医生",
+        "avg_salary": 12000,
+        "demand": "高"
+      },
+      {
+        "name": "护士",
+        "avg_salary": 8000,
+        "demand": "高"
+      },
+      {
+        "name": "药剂师",
+        "avg_salary": 9000,
+        "demand": "中"
+      },
+      {
+        "name": "医学检验师",
+        "avg_salary": 8500,
+        "demand": "中"
+      }
+    ],
+    "career_path": "住院医师 → 主治医师 → 副主任医师 → 主任医师",
+    "pros": [
+      "职业稳定",
+      "社会地位高",
+      "越老越吃香",
+      "需求刚性"
+    ],
+    "cons": [
+      "培养周期长(5+3+X年)",
+      "工作强度大",
+      "医患关系紧张",
+      "夜班频繁"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "医生前期投入大、收入不高，但35岁后开始回报...",
+        "sentiment": "mixed"
+      }
+    ],
+    "related_majors": [
+      "临床医学",
+      "口腔医学",
+      "麻醉学",
+      "护理学",
+      "药学",
+      "中药学",
+      "预防医学",
+      "中医学",
+      "针灸推拿学"
+    ],
+    "outlook": "老龄化推动医疗需求增长，口腔/眼科/康复等方向前景好",
+    "source": "国家统计局2020年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "建筑业",
+    "industry_code": "E",
+    "year": 2020,
+    "avg_annual_salary": 93116.0,
+    "salary_growth_rate": 0.03,
+    "employment_demand_index": 2.5,
+    "industry_growth_rate": 0.02,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "土木工程师",
+        "avg_salary": 9000,
+        "demand": "低"
+      },
+      {
+        "name": "建筑设计师",
+        "avg_salary": 11000,
+        "demand": "中"
+      },
+      {
+        "name": "造价工程师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "项目经理",
+        "avg_salary": 15000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "技术员 → 工程师 → 项目经理 → 项目总监",
+    "pros": [
+      "项目经验值钱",
+      "证书含金量高",
+      "积累型职业"
+    ],
+    "cons": [
+      "行业下行",
+      "项目不稳定",
+      "需要驻场出差",
+      "工作环境艰苦"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "房地产下行周期，建筑行业就业压力大...",
+        "sentiment": "negative"
+      }
+    ],
+    "related_majors": [
+      "建筑学",
+      "土木工程",
+      "城乡规划",
+      "给排水科学与工程",
+      "工程管理",
+      "工程造价"
+    ],
+    "outlook": "房建市场萎缩，基础设施/市政/城市更新方向尚有需求",
+    "source": "国家统计局2020年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "交通运输、仓储和邮政业",
+    "industry_code": "G",
+    "year": 2020,
+    "avg_annual_salary": 115016.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.2,
+    "industry_growth_rate": 0.05,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "物流管理师",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "供应链分析师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "交通规划师",
+        "avg_salary": 11000,
+        "demand": "低"
+      }
+    ],
+    "career_path": "专员 → 主管 → 经理 → 总监",
+    "pros": [
+      "电商驱动需求",
+      "入门门槛低",
+      "供应链管理有发展"
+    ],
+    "cons": [
+      "基层薪酬偏低",
+      "工作时间不规律",
+      "体力劳动比例大"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "交通运输",
+      "物流管理",
+      "供应链管理",
+      "海事管理",
+      "交通工程"
+    ],
+    "outlook": "跨境电商物流/智慧物流方向需求增长",
+    "source": "国家统计局2020年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "科学研究和技术服务业",
+    "industry_code": "M",
+    "year": 2020,
+    "avg_annual_salary": 179033.0,
+    "salary_growth_rate": 0.08,
+    "employment_demand_index": 3.8,
+    "industry_growth_rate": 0.1,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "研发工程师",
+        "avg_salary": 15000,
+        "demand": "高"
+      },
+      {
+        "name": "实验研究员",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "技术咨询师",
+        "avg_salary": 13000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "助理研究员 → 研究员 → 高级研究员 → 首席科学家",
+    "pros": [
+      "技术含量高",
+      "成长空间大",
+      "政策支持"
+    ],
+    "cons": [
+      "学历门槛高(硕士起步)",
+      "研发周期长",
+      "成果不确定性"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "数学与应用数学",
+      "物理学",
+      "化学",
+      "生物科学",
+      "材料科学与工程",
+      "电子信息工程",
+      "生物医学工程"
+    ],
+    "outlook": "国家战略导向，基础研究/应用研究投入持续增加",
+    "source": "国家统计局2020年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "租赁和商务服务业",
+    "industry_code": "L",
+    "year": 2020,
+    "avg_annual_salary": 110756.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.5,
+    "industry_growth_rate": 0.06,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "HR",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "市场营销",
+        "avg_salary": 9000,
+        "demand": "中"
+      },
+      {
+        "name": "管理咨询",
+        "avg_salary": 14000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "专员 → 主管 → 经理 → 总监",
+    "pros": [
+      "入行门槛低",
+      "转行灵活",
+      "大公司平台好"
+    ],
+    "cons": [
+      "可替代性强",
+      "薪资天花板低",
+      "经济周期敏感"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "工商管理",
+      "市场营销",
+      "人力资源管理",
+      "行政管理",
+      "电子商务",
+      "旅游管理"
+    ],
+    "outlook": "数字化转型带来新岗位，传统行政/HR职能被AI替代风险高",
+    "source": "国家统计局2020年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "农林牧渔业",
+    "industry_code": "A",
+    "year": 2020,
+    "avg_annual_salary": 66160.0,
+    "salary_growth_rate": 0.04,
+    "employment_demand_index": 2.5,
+    "industry_growth_rate": 0.04,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "农艺师",
+        "avg_salary": 7000,
+        "demand": "低"
+      },
+      {
+        "name": "兽医",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "水产养殖技术员",
+        "avg_salary": 7000,
+        "demand": "低"
+      }
+    ],
+    "career_path": "技术员 → 农艺师/兽医师 → 技术主管 → 场长/经理",
+    "pros": [
+      "竞争压力小",
+      "政策扶持",
+      "现代农业有技术含量"
+    ],
+    "cons": [
+      "薪资偏低",
+      "工作地点偏远",
+      "社会认知度低"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "农学",
+      "园艺",
+      "植物保护",
+      "动物科学",
+      "动物医学",
+      "水产养殖学",
+      "园林",
+      "农业资源与环境"
+    ],
+    "outlook": "智慧农业/生物育种方向有政策红利，传统方向薪资增长缓慢",
+    "source": "国家统计局2020年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "信息传输、软件和信息技术服务业",
+    "industry_code": "I63-65",
+    "year": 2021,
+    "avg_annual_salary": 231810.0,
+    "salary_growth_rate": 0.09,
+    "employment_demand_index": 4.5,
+    "industry_growth_rate": 0.12,
+    "entry_difficulty": "中等",
+    "popular_positions": [
+      {
+        "name": "软件开发工程师",
+        "avg_salary": 18000,
+        "demand": "高"
+      },
+      {
+        "name": "算法工程师",
+        "avg_salary": 25000,
+        "demand": "高"
+      },
+      {
+        "name": "数据分析师",
+        "avg_salary": 15000,
+        "demand": "高"
+      },
+      {
+        "name": "产品经理",
+        "avg_salary": 16000,
+        "demand": "中"
+      },
+      {
+        "name": "网络安全工程师",
+        "avg_salary": 20000,
+        "demand": "高"
+      }
+    ],
+    "career_path": "初级工程师 → 高级工程师 → 技术专家/架构师 → 技术总监",
+    "pros": [
+      "薪资水平领先",
+      "岗位需求大",
+      "远程办公友好",
+      "技术成长快"
+    ],
+    "cons": [
+      "加班文化普遍",
+      "技术迭代快需持续学习",
+      "35岁职业瓶颈",
+      "竞争激烈"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "互联网行业前3年成长迅速，薪资涨幅大。跳槽涨薪快...",
+        "sentiment": "neutral"
+      }
+    ],
+    "related_majors": [
+      "计算机科学与技术",
+      "软件工程",
+      "人工智能",
+      "数据科学与大数据技术",
+      "网络工程",
+      "信息安全",
+      "物联网工程",
+      "数字媒体技术"
+    ],
+    "outlook": "AI/云计算/信息安全驱动增长，但初级开发岗位供给过剩，建议深耕细分方向",
+    "source": "国家统计局2021年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "制造业",
+    "industry_code": "C",
+    "year": 2021,
+    "avg_annual_salary": 112306.0,
+    "salary_growth_rate": 0.06,
+    "employment_demand_index": 3.8,
+    "industry_growth_rate": 0.06,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "机械工程师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "电气工程师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "工艺工程师",
+        "avg_salary": 11000,
+        "demand": "中"
+      },
+      {
+        "name": "质量管理工程师",
+        "avg_salary": 9000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "技术员 → 工程师 → 高级工程师 → 技术经理/厂长",
+    "pros": [
+      "就业稳定",
+      "行业天花板高",
+      "积累型职业",
+      "珠三角制造业集聚"
+    ],
+    "cons": [
+      "起薪偏低",
+      "晋升速度慢",
+      "部分岗位工作环境差"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "制造业工程师前几年收入不高，但经验积累后价值上升...",
+        "sentiment": "positive"
+      }
+    ],
+    "related_majors": [
+      "机械设计制造及其自动化",
+      "电气工程及其自动化",
+      "自动化",
+      "材料科学与工程",
+      "工业工程",
+      "车辆工程",
+      "测控技术与仪器"
+    ],
+    "outlook": "智能制造转型带来新机会，自动化/机器人方向薪资增长快",
+    "source": "国家统计局2021年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "金融业",
+    "industry_code": "J",
+    "year": 2021,
+    "avg_annual_salary": 197383.0,
+    "salary_growth_rate": 0.07,
+    "employment_demand_index": 3.5,
+    "industry_growth_rate": 0.05,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "投资分析师",
+        "avg_salary": 15000,
+        "demand": "中"
+      },
+      {
+        "name": "风控专员",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "理财顾问",
+        "avg_salary": 13000,
+        "demand": "中"
+      },
+      {
+        "name": "审计师",
+        "avg_salary": 11000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "分析师 → 高级分析师 → 经理/VP → 总监",
+    "pros": [
+      "薪资高",
+      "社会地位高",
+      "职业发展通道清晰"
+    ],
+    "cons": [
+      "工作压力大",
+      "入行门槛高",
+      "一线城市聚集",
+      "周期性波动"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "金融行业收入天花板高但强度大，头部机构竞争激烈...",
+        "sentiment": "neutral"
+      }
+    ],
+    "related_majors": [
+      "金融学",
+      "经济学",
+      "会计学",
+      "财务管理",
+      "保险学",
+      "投资学",
+      "金融工程",
+      "国际经济与贸易"
+    ],
+    "outlook": "金融科技方向需求增加，传统岗位受AI替代压力增大",
+    "source": "国家统计局2021年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "教育",
+    "industry_code": "P",
+    "year": 2021,
+    "avg_annual_salary": 123982.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.0,
+    "industry_growth_rate": 0.03,
+    "entry_difficulty": "中等",
+    "popular_positions": [
+      {
+        "name": "中小学教师",
+        "avg_salary": 8000,
+        "demand": "高"
+      },
+      {
+        "name": "高校教师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "培训讲师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "教育产品经理",
+        "avg_salary": 15000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "教师 → 骨干教师 → 学科带头人 → 教学管理者",
+    "pros": [
+      "寒暑假",
+      "工作稳定",
+      "社会尊重",
+      "有编制"
+    ],
+    "cons": [
+      "起薪偏低",
+      "非编待遇差",
+      "考核压力增大",
+      "课外负担重"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "公立学校稳定但薪资涨幅有限，培训机构收入高但不稳定...",
+        "sentiment": "mixed"
+      }
+    ],
+    "related_majors": [
+      "教育学",
+      "汉语言文学(师范)",
+      "数学与应用数学(师范)",
+      "英语(师范)",
+      "物理学(师范)",
+      "化学(师范)",
+      "历史学(师范)"
+    ],
+    "outlook": "人口下降长期看空K12需求，但高等教育/职业教育仍有增长",
+    "source": "国家统计局2021年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "卫生和社会工作",
+    "industry_code": "Q",
+    "year": 2021,
+    "avg_annual_salary": 127089.0,
+    "salary_growth_rate": 0.07,
+    "employment_demand_index": 4.0,
+    "industry_growth_rate": 0.08,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "临床医生",
+        "avg_salary": 12000,
+        "demand": "高"
+      },
+      {
+        "name": "护士",
+        "avg_salary": 8000,
+        "demand": "高"
+      },
+      {
+        "name": "药剂师",
+        "avg_salary": 9000,
+        "demand": "中"
+      },
+      {
+        "name": "医学检验师",
+        "avg_salary": 8500,
+        "demand": "中"
+      }
+    ],
+    "career_path": "住院医师 → 主治医师 → 副主任医师 → 主任医师",
+    "pros": [
+      "职业稳定",
+      "社会地位高",
+      "越老越吃香",
+      "需求刚性"
+    ],
+    "cons": [
+      "培养周期长(5+3+X年)",
+      "工作强度大",
+      "医患关系紧张",
+      "夜班频繁"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "医生前期投入大、收入不高，但35岁后开始回报...",
+        "sentiment": "mixed"
+      }
+    ],
+    "related_majors": [
+      "临床医学",
+      "口腔医学",
+      "麻醉学",
+      "护理学",
+      "药学",
+      "中药学",
+      "预防医学",
+      "中医学",
+      "针灸推拿学"
+    ],
+    "outlook": "老龄化推动医疗需求增长，口腔/眼科/康复等方向前景好",
+    "source": "国家统计局2021年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "建筑业",
+    "industry_code": "E",
+    "year": 2021,
+    "avg_annual_salary": 93116.0,
+    "salary_growth_rate": 0.03,
+    "employment_demand_index": 2.5,
+    "industry_growth_rate": 0.02,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "土木工程师",
+        "avg_salary": 9000,
+        "demand": "低"
+      },
+      {
+        "name": "建筑设计师",
+        "avg_salary": 11000,
+        "demand": "中"
+      },
+      {
+        "name": "造价工程师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "项目经理",
+        "avg_salary": 15000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "技术员 → 工程师 → 项目经理 → 项目总监",
+    "pros": [
+      "项目经验值钱",
+      "证书含金量高",
+      "积累型职业"
+    ],
+    "cons": [
+      "行业下行",
+      "项目不稳定",
+      "需要驻场出差",
+      "工作环境艰苦"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "房地产下行周期，建筑行业就业压力大...",
+        "sentiment": "negative"
+      }
+    ],
+    "related_majors": [
+      "建筑学",
+      "土木工程",
+      "城乡规划",
+      "给排水科学与工程",
+      "工程管理",
+      "工程造价"
+    ],
+    "outlook": "房建市场萎缩，基础设施/市政/城市更新方向尚有需求",
+    "source": "国家统计局2021年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "交通运输、仓储和邮政业",
+    "industry_code": "G",
+    "year": 2021,
+    "avg_annual_salary": 115016.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.2,
+    "industry_growth_rate": 0.05,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "物流管理师",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "供应链分析师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "交通规划师",
+        "avg_salary": 11000,
+        "demand": "低"
+      }
+    ],
+    "career_path": "专员 → 主管 → 经理 → 总监",
+    "pros": [
+      "电商驱动需求",
+      "入门门槛低",
+      "供应链管理有发展"
+    ],
+    "cons": [
+      "基层薪酬偏低",
+      "工作时间不规律",
+      "体力劳动比例大"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "交通运输",
+      "物流管理",
+      "供应链管理",
+      "海事管理",
+      "交通工程"
+    ],
+    "outlook": "跨境电商物流/智慧物流方向需求增长",
+    "source": "国家统计局2021年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "科学研究和技术服务业",
+    "industry_code": "M",
+    "year": 2021,
+    "avg_annual_salary": 179033.0,
+    "salary_growth_rate": 0.08,
+    "employment_demand_index": 3.8,
+    "industry_growth_rate": 0.1,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "研发工程师",
+        "avg_salary": 15000,
+        "demand": "高"
+      },
+      {
+        "name": "实验研究员",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "技术咨询师",
+        "avg_salary": 13000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "助理研究员 → 研究员 → 高级研究员 → 首席科学家",
+    "pros": [
+      "技术含量高",
+      "成长空间大",
+      "政策支持"
+    ],
+    "cons": [
+      "学历门槛高(硕士起步)",
+      "研发周期长",
+      "成果不确定性"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "数学与应用数学",
+      "物理学",
+      "化学",
+      "生物科学",
+      "材料科学与工程",
+      "电子信息工程",
+      "生物医学工程"
+    ],
+    "outlook": "国家战略导向，基础研究/应用研究投入持续增加",
+    "source": "国家统计局2021年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "租赁和商务服务业",
+    "industry_code": "L",
+    "year": 2021,
+    "avg_annual_salary": 110756.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.5,
+    "industry_growth_rate": 0.06,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "HR",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "市场营销",
+        "avg_salary": 9000,
+        "demand": "中"
+      },
+      {
+        "name": "管理咨询",
+        "avg_salary": 14000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "专员 → 主管 → 经理 → 总监",
+    "pros": [
+      "入行门槛低",
+      "转行灵活",
+      "大公司平台好"
+    ],
+    "cons": [
+      "可替代性强",
+      "薪资天花板低",
+      "经济周期敏感"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "工商管理",
+      "市场营销",
+      "人力资源管理",
+      "行政管理",
+      "电子商务",
+      "旅游管理"
+    ],
+    "outlook": "数字化转型带来新岗位，传统行政/HR职能被AI替代风险高",
+    "source": "国家统计局2021年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "农林牧渔业",
+    "industry_code": "A",
+    "year": 2021,
+    "avg_annual_salary": 66160.0,
+    "salary_growth_rate": 0.04,
+    "employment_demand_index": 2.5,
+    "industry_growth_rate": 0.04,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "农艺师",
+        "avg_salary": 7000,
+        "demand": "低"
+      },
+      {
+        "name": "兽医",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "水产养殖技术员",
+        "avg_salary": 7000,
+        "demand": "低"
+      }
+    ],
+    "career_path": "技术员 → 农艺师/兽医师 → 技术主管 → 场长/经理",
+    "pros": [
+      "竞争压力小",
+      "政策扶持",
+      "现代农业有技术含量"
+    ],
+    "cons": [
+      "薪资偏低",
+      "工作地点偏远",
+      "社会认知度低"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "农学",
+      "园艺",
+      "植物保护",
+      "动物科学",
+      "动物医学",
+      "水产养殖学",
+      "园林",
+      "农业资源与环境"
+    ],
+    "outlook": "智慧农业/生物育种方向有政策红利，传统方向薪资增长缓慢",
+    "source": "国家统计局2021年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "信息传输、软件和信息技术服务业",
+    "industry_code": "I63-65",
+    "year": 2022,
+    "avg_annual_salary": 231810.0,
+    "salary_growth_rate": 0.09,
+    "employment_demand_index": 4.5,
+    "industry_growth_rate": 0.12,
+    "entry_difficulty": "中等",
+    "popular_positions": [
+      {
+        "name": "软件开发工程师",
+        "avg_salary": 18000,
+        "demand": "高"
+      },
+      {
+        "name": "算法工程师",
+        "avg_salary": 25000,
+        "demand": "高"
+      },
+      {
+        "name": "数据分析师",
+        "avg_salary": 15000,
+        "demand": "高"
+      },
+      {
+        "name": "产品经理",
+        "avg_salary": 16000,
+        "demand": "中"
+      },
+      {
+        "name": "网络安全工程师",
+        "avg_salary": 20000,
+        "demand": "高"
+      }
+    ],
+    "career_path": "初级工程师 → 高级工程师 → 技术专家/架构师 → 技术总监",
+    "pros": [
+      "薪资水平领先",
+      "岗位需求大",
+      "远程办公友好",
+      "技术成长快"
+    ],
+    "cons": [
+      "加班文化普遍",
+      "技术迭代快需持续学习",
+      "35岁职业瓶颈",
+      "竞争激烈"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "互联网行业前3年成长迅速，薪资涨幅大。跳槽涨薪快...",
+        "sentiment": "neutral"
+      }
+    ],
+    "related_majors": [
+      "计算机科学与技术",
+      "软件工程",
+      "人工智能",
+      "数据科学与大数据技术",
+      "网络工程",
+      "信息安全",
+      "物联网工程",
+      "数字媒体技术"
+    ],
+    "outlook": "AI/云计算/信息安全驱动增长，但初级开发岗位供给过剩，建议深耕细分方向",
+    "source": "国家统计局2022年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "制造业",
+    "industry_code": "C",
+    "year": 2022,
+    "avg_annual_salary": 112306.0,
+    "salary_growth_rate": 0.06,
+    "employment_demand_index": 3.8,
+    "industry_growth_rate": 0.06,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "机械工程师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "电气工程师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "工艺工程师",
+        "avg_salary": 11000,
+        "demand": "中"
+      },
+      {
+        "name": "质量管理工程师",
+        "avg_salary": 9000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "技术员 → 工程师 → 高级工程师 → 技术经理/厂长",
+    "pros": [
+      "就业稳定",
+      "行业天花板高",
+      "积累型职业",
+      "珠三角制造业集聚"
+    ],
+    "cons": [
+      "起薪偏低",
+      "晋升速度慢",
+      "部分岗位工作环境差"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "制造业工程师前几年收入不高，但经验积累后价值上升...",
+        "sentiment": "positive"
+      }
+    ],
+    "related_majors": [
+      "机械设计制造及其自动化",
+      "电气工程及其自动化",
+      "自动化",
+      "材料科学与工程",
+      "工业工程",
+      "车辆工程",
+      "测控技术与仪器"
+    ],
+    "outlook": "智能制造转型带来新机会，自动化/机器人方向薪资增长快",
+    "source": "国家统计局2022年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "金融业",
+    "industry_code": "J",
+    "year": 2022,
+    "avg_annual_salary": 197383.0,
+    "salary_growth_rate": 0.07,
+    "employment_demand_index": 3.5,
+    "industry_growth_rate": 0.05,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "投资分析师",
+        "avg_salary": 15000,
+        "demand": "中"
+      },
+      {
+        "name": "风控专员",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "理财顾问",
+        "avg_salary": 13000,
+        "demand": "中"
+      },
+      {
+        "name": "审计师",
+        "avg_salary": 11000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "分析师 → 高级分析师 → 经理/VP → 总监",
+    "pros": [
+      "薪资高",
+      "社会地位高",
+      "职业发展通道清晰"
+    ],
+    "cons": [
+      "工作压力大",
+      "入行门槛高",
+      "一线城市聚集",
+      "周期性波动"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "金融行业收入天花板高但强度大，头部机构竞争激烈...",
+        "sentiment": "neutral"
+      }
+    ],
+    "related_majors": [
+      "金融学",
+      "经济学",
+      "会计学",
+      "财务管理",
+      "保险学",
+      "投资学",
+      "金融工程",
+      "国际经济与贸易"
+    ],
+    "outlook": "金融科技方向需求增加，传统岗位受AI替代压力增大",
+    "source": "国家统计局2022年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "教育",
+    "industry_code": "P",
+    "year": 2022,
+    "avg_annual_salary": 123982.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.0,
+    "industry_growth_rate": 0.03,
+    "entry_difficulty": "中等",
+    "popular_positions": [
+      {
+        "name": "中小学教师",
+        "avg_salary": 8000,
+        "demand": "高"
+      },
+      {
+        "name": "高校教师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "培训讲师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "教育产品经理",
+        "avg_salary": 15000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "教师 → 骨干教师 → 学科带头人 → 教学管理者",
+    "pros": [
+      "寒暑假",
+      "工作稳定",
+      "社会尊重",
+      "有编制"
+    ],
+    "cons": [
+      "起薪偏低",
+      "非编待遇差",
+      "考核压力增大",
+      "课外负担重"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "公立学校稳定但薪资涨幅有限，培训机构收入高但不稳定...",
+        "sentiment": "mixed"
+      }
+    ],
+    "related_majors": [
+      "教育学",
+      "汉语言文学(师范)",
+      "数学与应用数学(师范)",
+      "英语(师范)",
+      "物理学(师范)",
+      "化学(师范)",
+      "历史学(师范)"
+    ],
+    "outlook": "人口下降长期看空K12需求，但高等教育/职业教育仍有增长",
+    "source": "国家统计局2022年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "卫生和社会工作",
+    "industry_code": "Q",
+    "year": 2022,
+    "avg_annual_salary": 127089.0,
+    "salary_growth_rate": 0.07,
+    "employment_demand_index": 4.0,
+    "industry_growth_rate": 0.08,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "临床医生",
+        "avg_salary": 12000,
+        "demand": "高"
+      },
+      {
+        "name": "护士",
+        "avg_salary": 8000,
+        "demand": "高"
+      },
+      {
+        "name": "药剂师",
+        "avg_salary": 9000,
+        "demand": "中"
+      },
+      {
+        "name": "医学检验师",
+        "avg_salary": 8500,
+        "demand": "中"
+      }
+    ],
+    "career_path": "住院医师 → 主治医师 → 副主任医师 → 主任医师",
+    "pros": [
+      "职业稳定",
+      "社会地位高",
+      "越老越吃香",
+      "需求刚性"
+    ],
+    "cons": [
+      "培养周期长(5+3+X年)",
+      "工作强度大",
+      "医患关系紧张",
+      "夜班频繁"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "医生前期投入大、收入不高，但35岁后开始回报...",
+        "sentiment": "mixed"
+      }
+    ],
+    "related_majors": [
+      "临床医学",
+      "口腔医学",
+      "麻醉学",
+      "护理学",
+      "药学",
+      "中药学",
+      "预防医学",
+      "中医学",
+      "针灸推拿学"
+    ],
+    "outlook": "老龄化推动医疗需求增长，口腔/眼科/康复等方向前景好",
+    "source": "国家统计局2022年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "建筑业",
+    "industry_code": "E",
+    "year": 2022,
+    "avg_annual_salary": 93116.0,
+    "salary_growth_rate": 0.03,
+    "employment_demand_index": 2.5,
+    "industry_growth_rate": 0.02,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "土木工程师",
+        "avg_salary": 9000,
+        "demand": "低"
+      },
+      {
+        "name": "建筑设计师",
+        "avg_salary": 11000,
+        "demand": "中"
+      },
+      {
+        "name": "造价工程师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "项目经理",
+        "avg_salary": 15000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "技术员 → 工程师 → 项目经理 → 项目总监",
+    "pros": [
+      "项目经验值钱",
+      "证书含金量高",
+      "积累型职业"
+    ],
+    "cons": [
+      "行业下行",
+      "项目不稳定",
+      "需要驻场出差",
+      "工作环境艰苦"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "房地产下行周期，建筑行业就业压力大...",
+        "sentiment": "negative"
+      }
+    ],
+    "related_majors": [
+      "建筑学",
+      "土木工程",
+      "城乡规划",
+      "给排水科学与工程",
+      "工程管理",
+      "工程造价"
+    ],
+    "outlook": "房建市场萎缩，基础设施/市政/城市更新方向尚有需求",
+    "source": "国家统计局2022年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "交通运输、仓储和邮政业",
+    "industry_code": "G",
+    "year": 2022,
+    "avg_annual_salary": 115016.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.2,
+    "industry_growth_rate": 0.05,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "物流管理师",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "供应链分析师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "交通规划师",
+        "avg_salary": 11000,
+        "demand": "低"
+      }
+    ],
+    "career_path": "专员 → 主管 → 经理 → 总监",
+    "pros": [
+      "电商驱动需求",
+      "入门门槛低",
+      "供应链管理有发展"
+    ],
+    "cons": [
+      "基层薪酬偏低",
+      "工作时间不规律",
+      "体力劳动比例大"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "交通运输",
+      "物流管理",
+      "供应链管理",
+      "海事管理",
+      "交通工程"
+    ],
+    "outlook": "跨境电商物流/智慧物流方向需求增长",
+    "source": "国家统计局2022年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "科学研究和技术服务业",
+    "industry_code": "M",
+    "year": 2022,
+    "avg_annual_salary": 179033.0,
+    "salary_growth_rate": 0.08,
+    "employment_demand_index": 3.8,
+    "industry_growth_rate": 0.1,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "研发工程师",
+        "avg_salary": 15000,
+        "demand": "高"
+      },
+      {
+        "name": "实验研究员",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "技术咨询师",
+        "avg_salary": 13000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "助理研究员 → 研究员 → 高级研究员 → 首席科学家",
+    "pros": [
+      "技术含量高",
+      "成长空间大",
+      "政策支持"
+    ],
+    "cons": [
+      "学历门槛高(硕士起步)",
+      "研发周期长",
+      "成果不确定性"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "数学与应用数学",
+      "物理学",
+      "化学",
+      "生物科学",
+      "材料科学与工程",
+      "电子信息工程",
+      "生物医学工程"
+    ],
+    "outlook": "国家战略导向，基础研究/应用研究投入持续增加",
+    "source": "国家统计局2022年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "租赁和商务服务业",
+    "industry_code": "L",
+    "year": 2022,
+    "avg_annual_salary": 110756.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.5,
+    "industry_growth_rate": 0.06,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "HR",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "市场营销",
+        "avg_salary": 9000,
+        "demand": "中"
+      },
+      {
+        "name": "管理咨询",
+        "avg_salary": 14000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "专员 → 主管 → 经理 → 总监",
+    "pros": [
+      "入行门槛低",
+      "转行灵活",
+      "大公司平台好"
+    ],
+    "cons": [
+      "可替代性强",
+      "薪资天花板低",
+      "经济周期敏感"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "工商管理",
+      "市场营销",
+      "人力资源管理",
+      "行政管理",
+      "电子商务",
+      "旅游管理"
+    ],
+    "outlook": "数字化转型带来新岗位，传统行政/HR职能被AI替代风险高",
+    "source": "国家统计局2022年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "农林牧渔业",
+    "industry_code": "A",
+    "year": 2022,
+    "avg_annual_salary": 66160.0,
+    "salary_growth_rate": 0.04,
+    "employment_demand_index": 2.5,
+    "industry_growth_rate": 0.04,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "农艺师",
+        "avg_salary": 7000,
+        "demand": "低"
+      },
+      {
+        "name": "兽医",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "水产养殖技术员",
+        "avg_salary": 7000,
+        "demand": "低"
+      }
+    ],
+    "career_path": "技术员 → 农艺师/兽医师 → 技术主管 → 场长/经理",
+    "pros": [
+      "竞争压力小",
+      "政策扶持",
+      "现代农业有技术含量"
+    ],
+    "cons": [
+      "薪资偏低",
+      "工作地点偏远",
+      "社会认知度低"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "农学",
+      "园艺",
+      "植物保护",
+      "动物科学",
+      "动物医学",
+      "水产养殖学",
+      "园林",
+      "农业资源与环境"
+    ],
+    "outlook": "智慧农业/生物育种方向有政策红利，传统方向薪资增长缓慢",
+    "source": "国家统计局2022年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "信息传输、软件和信息技术服务业",
+    "industry_code": "I63-65",
+    "year": 2023,
+    "avg_annual_salary": 231810.0,
+    "salary_growth_rate": 0.09,
+    "employment_demand_index": 4.5,
+    "industry_growth_rate": 0.12,
+    "entry_difficulty": "中等",
+    "popular_positions": [
+      {
+        "name": "软件开发工程师",
+        "avg_salary": 18000,
+        "demand": "高"
+      },
+      {
+        "name": "算法工程师",
+        "avg_salary": 25000,
+        "demand": "高"
+      },
+      {
+        "name": "数据分析师",
+        "avg_salary": 15000,
+        "demand": "高"
+      },
+      {
+        "name": "产品经理",
+        "avg_salary": 16000,
+        "demand": "中"
+      },
+      {
+        "name": "网络安全工程师",
+        "avg_salary": 20000,
+        "demand": "高"
+      }
+    ],
+    "career_path": "初级工程师 → 高级工程师 → 技术专家/架构师 → 技术总监",
+    "pros": [
+      "薪资水平领先",
+      "岗位需求大",
+      "远程办公友好",
+      "技术成长快"
+    ],
+    "cons": [
+      "加班文化普遍",
+      "技术迭代快需持续学习",
+      "35岁职业瓶颈",
+      "竞争激烈"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "互联网行业前3年成长迅速，薪资涨幅大。跳槽涨薪快...",
+        "sentiment": "neutral"
+      }
+    ],
+    "related_majors": [
+      "计算机科学与技术",
+      "软件工程",
+      "人工智能",
+      "数据科学与大数据技术",
+      "网络工程",
+      "信息安全",
+      "物联网工程",
+      "数字媒体技术"
+    ],
+    "outlook": "AI/云计算/信息安全驱动增长，但初级开发岗位供给过剩，建议深耕细分方向",
+    "source": "国家统计局2023年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "制造业",
+    "industry_code": "C",
+    "year": 2023,
+    "avg_annual_salary": 112306.0,
+    "salary_growth_rate": 0.06,
+    "employment_demand_index": 3.8,
+    "industry_growth_rate": 0.06,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "机械工程师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "电气工程师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "工艺工程师",
+        "avg_salary": 11000,
+        "demand": "中"
+      },
+      {
+        "name": "质量管理工程师",
+        "avg_salary": 9000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "技术员 → 工程师 → 高级工程师 → 技术经理/厂长",
+    "pros": [
+      "就业稳定",
+      "行业天花板高",
+      "积累型职业",
+      "珠三角制造业集聚"
+    ],
+    "cons": [
+      "起薪偏低",
+      "晋升速度慢",
+      "部分岗位工作环境差"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "制造业工程师前几年收入不高，但经验积累后价值上升...",
+        "sentiment": "positive"
+      }
+    ],
+    "related_majors": [
+      "机械设计制造及其自动化",
+      "电气工程及其自动化",
+      "自动化",
+      "材料科学与工程",
+      "工业工程",
+      "车辆工程",
+      "测控技术与仪器"
+    ],
+    "outlook": "智能制造转型带来新机会，自动化/机器人方向薪资增长快",
+    "source": "国家统计局2023年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "金融业",
+    "industry_code": "J",
+    "year": 2023,
+    "avg_annual_salary": 197383.0,
+    "salary_growth_rate": 0.07,
+    "employment_demand_index": 3.5,
+    "industry_growth_rate": 0.05,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "投资分析师",
+        "avg_salary": 15000,
+        "demand": "中"
+      },
+      {
+        "name": "风控专员",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "理财顾问",
+        "avg_salary": 13000,
+        "demand": "中"
+      },
+      {
+        "name": "审计师",
+        "avg_salary": 11000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "分析师 → 高级分析师 → 经理/VP → 总监",
+    "pros": [
+      "薪资高",
+      "社会地位高",
+      "职业发展通道清晰"
+    ],
+    "cons": [
+      "工作压力大",
+      "入行门槛高",
+      "一线城市聚集",
+      "周期性波动"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "金融行业收入天花板高但强度大，头部机构竞争激烈...",
+        "sentiment": "neutral"
+      }
+    ],
+    "related_majors": [
+      "金融学",
+      "经济学",
+      "会计学",
+      "财务管理",
+      "保险学",
+      "投资学",
+      "金融工程",
+      "国际经济与贸易"
+    ],
+    "outlook": "金融科技方向需求增加，传统岗位受AI替代压力增大",
+    "source": "国家统计局2023年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "教育",
+    "industry_code": "P",
+    "year": 2023,
+    "avg_annual_salary": 123982.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.0,
+    "industry_growth_rate": 0.03,
+    "entry_difficulty": "中等",
+    "popular_positions": [
+      {
+        "name": "中小学教师",
+        "avg_salary": 8000,
+        "demand": "高"
+      },
+      {
+        "name": "高校教师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "培训讲师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "教育产品经理",
+        "avg_salary": 15000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "教师 → 骨干教师 → 学科带头人 → 教学管理者",
+    "pros": [
+      "寒暑假",
+      "工作稳定",
+      "社会尊重",
+      "有编制"
+    ],
+    "cons": [
+      "起薪偏低",
+      "非编待遇差",
+      "考核压力增大",
+      "课外负担重"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "公立学校稳定但薪资涨幅有限，培训机构收入高但不稳定...",
+        "sentiment": "mixed"
+      }
+    ],
+    "related_majors": [
+      "教育学",
+      "汉语言文学(师范)",
+      "数学与应用数学(师范)",
+      "英语(师范)",
+      "物理学(师范)",
+      "化学(师范)",
+      "历史学(师范)"
+    ],
+    "outlook": "人口下降长期看空K12需求，但高等教育/职业教育仍有增长",
+    "source": "国家统计局2023年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "卫生和社会工作",
+    "industry_code": "Q",
+    "year": 2023,
+    "avg_annual_salary": 127089.0,
+    "salary_growth_rate": 0.07,
+    "employment_demand_index": 4.0,
+    "industry_growth_rate": 0.08,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "临床医生",
+        "avg_salary": 12000,
+        "demand": "高"
+      },
+      {
+        "name": "护士",
+        "avg_salary": 8000,
+        "demand": "高"
+      },
+      {
+        "name": "药剂师",
+        "avg_salary": 9000,
+        "demand": "中"
+      },
+      {
+        "name": "医学检验师",
+        "avg_salary": 8500,
+        "demand": "中"
+      }
+    ],
+    "career_path": "住院医师 → 主治医师 → 副主任医师 → 主任医师",
+    "pros": [
+      "职业稳定",
+      "社会地位高",
+      "越老越吃香",
+      "需求刚性"
+    ],
+    "cons": [
+      "培养周期长(5+3+X年)",
+      "工作强度大",
+      "医患关系紧张",
+      "夜班频繁"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "医生前期投入大、收入不高，但35岁后开始回报...",
+        "sentiment": "mixed"
+      }
+    ],
+    "related_majors": [
+      "临床医学",
+      "口腔医学",
+      "麻醉学",
+      "护理学",
+      "药学",
+      "中药学",
+      "预防医学",
+      "中医学",
+      "针灸推拿学"
+    ],
+    "outlook": "老龄化推动医疗需求增长，口腔/眼科/康复等方向前景好",
+    "source": "国家统计局2023年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "建筑业",
+    "industry_code": "E",
+    "year": 2023,
+    "avg_annual_salary": 93116.0,
+    "salary_growth_rate": 0.03,
+    "employment_demand_index": 2.5,
+    "industry_growth_rate": 0.02,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "土木工程师",
+        "avg_salary": 9000,
+        "demand": "低"
+      },
+      {
+        "name": "建筑设计师",
+        "avg_salary": 11000,
+        "demand": "中"
+      },
+      {
+        "name": "造价工程师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "项目经理",
+        "avg_salary": 15000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "技术员 → 工程师 → 项目经理 → 项目总监",
+    "pros": [
+      "项目经验值钱",
+      "证书含金量高",
+      "积累型职业"
+    ],
+    "cons": [
+      "行业下行",
+      "项目不稳定",
+      "需要驻场出差",
+      "工作环境艰苦"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "房地产下行周期，建筑行业就业压力大...",
+        "sentiment": "negative"
+      }
+    ],
+    "related_majors": [
+      "建筑学",
+      "土木工程",
+      "城乡规划",
+      "给排水科学与工程",
+      "工程管理",
+      "工程造价"
+    ],
+    "outlook": "房建市场萎缩，基础设施/市政/城市更新方向尚有需求",
+    "source": "国家统计局2023年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "交通运输、仓储和邮政业",
+    "industry_code": "G",
+    "year": 2023,
+    "avg_annual_salary": 115016.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.2,
+    "industry_growth_rate": 0.05,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "物流管理师",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "供应链分析师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "交通规划师",
+        "avg_salary": 11000,
+        "demand": "低"
+      }
+    ],
+    "career_path": "专员 → 主管 → 经理 → 总监",
+    "pros": [
+      "电商驱动需求",
+      "入门门槛低",
+      "供应链管理有发展"
+    ],
+    "cons": [
+      "基层薪酬偏低",
+      "工作时间不规律",
+      "体力劳动比例大"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "交通运输",
+      "物流管理",
+      "供应链管理",
+      "海事管理",
+      "交通工程"
+    ],
+    "outlook": "跨境电商物流/智慧物流方向需求增长",
+    "source": "国家统计局2023年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "科学研究和技术服务业",
+    "industry_code": "M",
+    "year": 2023,
+    "avg_annual_salary": 179033.0,
+    "salary_growth_rate": 0.08,
+    "employment_demand_index": 3.8,
+    "industry_growth_rate": 0.1,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "研发工程师",
+        "avg_salary": 15000,
+        "demand": "高"
+      },
+      {
+        "name": "实验研究员",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "技术咨询师",
+        "avg_salary": 13000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "助理研究员 → 研究员 → 高级研究员 → 首席科学家",
+    "pros": [
+      "技术含量高",
+      "成长空间大",
+      "政策支持"
+    ],
+    "cons": [
+      "学历门槛高(硕士起步)",
+      "研发周期长",
+      "成果不确定性"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "数学与应用数学",
+      "物理学",
+      "化学",
+      "生物科学",
+      "材料科学与工程",
+      "电子信息工程",
+      "生物医学工程"
+    ],
+    "outlook": "国家战略导向，基础研究/应用研究投入持续增加",
+    "source": "国家统计局2023年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "租赁和商务服务业",
+    "industry_code": "L",
+    "year": 2023,
+    "avg_annual_salary": 110756.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.5,
+    "industry_growth_rate": 0.06,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "HR",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "市场营销",
+        "avg_salary": 9000,
+        "demand": "中"
+      },
+      {
+        "name": "管理咨询",
+        "avg_salary": 14000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "专员 → 主管 → 经理 → 总监",
+    "pros": [
+      "入行门槛低",
+      "转行灵活",
+      "大公司平台好"
+    ],
+    "cons": [
+      "可替代性强",
+      "薪资天花板低",
+      "经济周期敏感"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "工商管理",
+      "市场营销",
+      "人力资源管理",
+      "行政管理",
+      "电子商务",
+      "旅游管理"
+    ],
+    "outlook": "数字化转型带来新岗位，传统行政/HR职能被AI替代风险高",
+    "source": "国家统计局2023年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "农林牧渔业",
+    "industry_code": "A",
+    "year": 2023,
+    "avg_annual_salary": 66160.0,
+    "salary_growth_rate": 0.04,
+    "employment_demand_index": 2.5,
+    "industry_growth_rate": 0.04,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "农艺师",
+        "avg_salary": 7000,
+        "demand": "低"
+      },
+      {
+        "name": "兽医",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "水产养殖技术员",
+        "avg_salary": 7000,
+        "demand": "低"
+      }
+    ],
+    "career_path": "技术员 → 农艺师/兽医师 → 技术主管 → 场长/经理",
+    "pros": [
+      "竞争压力小",
+      "政策扶持",
+      "现代农业有技术含量"
+    ],
+    "cons": [
+      "薪资偏低",
+      "工作地点偏远",
+      "社会认知度低"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "农学",
+      "园艺",
+      "植物保护",
+      "动物科学",
+      "动物医学",
+      "水产养殖学",
+      "园林",
+      "农业资源与环境"
+    ],
+    "outlook": "智慧农业/生物育种方向有政策红利，传统方向薪资增长缓慢",
+    "source": "国家统计局2023年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "信息传输、软件和信息技术服务业",
+    "industry_code": "I63-65",
+    "year": 2024,
+    "avg_annual_salary": 231810.0,
+    "salary_growth_rate": 0.09,
+    "employment_demand_index": 4.5,
+    "industry_growth_rate": 0.12,
+    "entry_difficulty": "中等",
+    "popular_positions": [
+      {
+        "name": "软件开发工程师",
+        "avg_salary": 18000,
+        "demand": "高"
+      },
+      {
+        "name": "算法工程师",
+        "avg_salary": 25000,
+        "demand": "高"
+      },
+      {
+        "name": "数据分析师",
+        "avg_salary": 15000,
+        "demand": "高"
+      },
+      {
+        "name": "产品经理",
+        "avg_salary": 16000,
+        "demand": "中"
+      },
+      {
+        "name": "网络安全工程师",
+        "avg_salary": 20000,
+        "demand": "高"
+      }
+    ],
+    "career_path": "初级工程师 → 高级工程师 → 技术专家/架构师 → 技术总监",
+    "pros": [
+      "薪资水平领先",
+      "岗位需求大",
+      "远程办公友好",
+      "技术成长快"
+    ],
+    "cons": [
+      "加班文化普遍",
+      "技术迭代快需持续学习",
+      "35岁职业瓶颈",
+      "竞争激烈"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "互联网行业前3年成长迅速，薪资涨幅大。跳槽涨薪快...",
+        "sentiment": "neutral"
+      }
+    ],
+    "related_majors": [
+      "计算机科学与技术",
+      "软件工程",
+      "人工智能",
+      "数据科学与大数据技术",
+      "网络工程",
+      "信息安全",
+      "物联网工程",
+      "数字媒体技术"
+    ],
+    "outlook": "AI/云计算/信息安全驱动增长，但初级开发岗位供给过剩，建议深耕细分方向",
+    "source": "国家统计局2024年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "制造业",
+    "industry_code": "C",
+    "year": 2024,
+    "avg_annual_salary": 112306.0,
+    "salary_growth_rate": 0.06,
+    "employment_demand_index": 3.8,
+    "industry_growth_rate": 0.06,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "机械工程师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "电气工程师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "工艺工程师",
+        "avg_salary": 11000,
+        "demand": "中"
+      },
+      {
+        "name": "质量管理工程师",
+        "avg_salary": 9000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "技术员 → 工程师 → 高级工程师 → 技术经理/厂长",
+    "pros": [
+      "就业稳定",
+      "行业天花板高",
+      "积累型职业",
+      "珠三角制造业集聚"
+    ],
+    "cons": [
+      "起薪偏低",
+      "晋升速度慢",
+      "部分岗位工作环境差"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "制造业工程师前几年收入不高，但经验积累后价值上升...",
+        "sentiment": "positive"
+      }
+    ],
+    "related_majors": [
+      "机械设计制造及其自动化",
+      "电气工程及其自动化",
+      "自动化",
+      "材料科学与工程",
+      "工业工程",
+      "车辆工程",
+      "测控技术与仪器"
+    ],
+    "outlook": "智能制造转型带来新机会，自动化/机器人方向薪资增长快",
+    "source": "国家统计局2024年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "金融业",
+    "industry_code": "J",
+    "year": 2024,
+    "avg_annual_salary": 197383.0,
+    "salary_growth_rate": 0.07,
+    "employment_demand_index": 3.5,
+    "industry_growth_rate": 0.05,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "投资分析师",
+        "avg_salary": 15000,
+        "demand": "中"
+      },
+      {
+        "name": "风控专员",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "理财顾问",
+        "avg_salary": 13000,
+        "demand": "中"
+      },
+      {
+        "name": "审计师",
+        "avg_salary": 11000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "分析师 → 高级分析师 → 经理/VP → 总监",
+    "pros": [
+      "薪资高",
+      "社会地位高",
+      "职业发展通道清晰"
+    ],
+    "cons": [
+      "工作压力大",
+      "入行门槛高",
+      "一线城市聚集",
+      "周期性波动"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "金融行业收入天花板高但强度大，头部机构竞争激烈...",
+        "sentiment": "neutral"
+      }
+    ],
+    "related_majors": [
+      "金融学",
+      "经济学",
+      "会计学",
+      "财务管理",
+      "保险学",
+      "投资学",
+      "金融工程",
+      "国际经济与贸易"
+    ],
+    "outlook": "金融科技方向需求增加，传统岗位受AI替代压力增大",
+    "source": "国家统计局2024年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "教育",
+    "industry_code": "P",
+    "year": 2024,
+    "avg_annual_salary": 123982.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.0,
+    "industry_growth_rate": 0.03,
+    "entry_difficulty": "中等",
+    "popular_positions": [
+      {
+        "name": "中小学教师",
+        "avg_salary": 8000,
+        "demand": "高"
+      },
+      {
+        "name": "高校教师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "培训讲师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "教育产品经理",
+        "avg_salary": 15000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "教师 → 骨干教师 → 学科带头人 → 教学管理者",
+    "pros": [
+      "寒暑假",
+      "工作稳定",
+      "社会尊重",
+      "有编制"
+    ],
+    "cons": [
+      "起薪偏低",
+      "非编待遇差",
+      "考核压力增大",
+      "课外负担重"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "公立学校稳定但薪资涨幅有限，培训机构收入高但不稳定...",
+        "sentiment": "mixed"
+      }
+    ],
+    "related_majors": [
+      "教育学",
+      "汉语言文学(师范)",
+      "数学与应用数学(师范)",
+      "英语(师范)",
+      "物理学(师范)",
+      "化学(师范)",
+      "历史学(师范)"
+    ],
+    "outlook": "人口下降长期看空K12需求，但高等教育/职业教育仍有增长",
+    "source": "国家统计局2024年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "卫生和社会工作",
+    "industry_code": "Q",
+    "year": 2024,
+    "avg_annual_salary": 127089.0,
+    "salary_growth_rate": 0.07,
+    "employment_demand_index": 4.0,
+    "industry_growth_rate": 0.08,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "临床医生",
+        "avg_salary": 12000,
+        "demand": "高"
+      },
+      {
+        "name": "护士",
+        "avg_salary": 8000,
+        "demand": "高"
+      },
+      {
+        "name": "药剂师",
+        "avg_salary": 9000,
+        "demand": "中"
+      },
+      {
+        "name": "医学检验师",
+        "avg_salary": 8500,
+        "demand": "中"
+      }
+    ],
+    "career_path": "住院医师 → 主治医师 → 副主任医师 → 主任医师",
+    "pros": [
+      "职业稳定",
+      "社会地位高",
+      "越老越吃香",
+      "需求刚性"
+    ],
+    "cons": [
+      "培养周期长(5+3+X年)",
+      "工作强度大",
+      "医患关系紧张",
+      "夜班频繁"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "医生前期投入大、收入不高，但35岁后开始回报...",
+        "sentiment": "mixed"
+      }
+    ],
+    "related_majors": [
+      "临床医学",
+      "口腔医学",
+      "麻醉学",
+      "护理学",
+      "药学",
+      "中药学",
+      "预防医学",
+      "中医学",
+      "针灸推拿学"
+    ],
+    "outlook": "老龄化推动医疗需求增长，口腔/眼科/康复等方向前景好",
+    "source": "国家统计局2024年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "建筑业",
+    "industry_code": "E",
+    "year": 2024,
+    "avg_annual_salary": 93116.0,
+    "salary_growth_rate": 0.03,
+    "employment_demand_index": 2.5,
+    "industry_growth_rate": 0.02,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "土木工程师",
+        "avg_salary": 9000,
+        "demand": "低"
+      },
+      {
+        "name": "建筑设计师",
+        "avg_salary": 11000,
+        "demand": "中"
+      },
+      {
+        "name": "造价工程师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "项目经理",
+        "avg_salary": 15000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "技术员 → 工程师 → 项目经理 → 项目总监",
+    "pros": [
+      "项目经验值钱",
+      "证书含金量高",
+      "积累型职业"
+    ],
+    "cons": [
+      "行业下行",
+      "项目不稳定",
+      "需要驻场出差",
+      "工作环境艰苦"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "房地产下行周期，建筑行业就业压力大...",
+        "sentiment": "negative"
+      }
+    ],
+    "related_majors": [
+      "建筑学",
+      "土木工程",
+      "城乡规划",
+      "给排水科学与工程",
+      "工程管理",
+      "工程造价"
+    ],
+    "outlook": "房建市场萎缩，基础设施/市政/城市更新方向尚有需求",
+    "source": "国家统计局2024年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "交通运输、仓储和邮政业",
+    "industry_code": "G",
+    "year": 2024,
+    "avg_annual_salary": 115016.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.2,
+    "industry_growth_rate": 0.05,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "物流管理师",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "供应链分析师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "交通规划师",
+        "avg_salary": 11000,
+        "demand": "低"
+      }
+    ],
+    "career_path": "专员 → 主管 → 经理 → 总监",
+    "pros": [
+      "电商驱动需求",
+      "入门门槛低",
+      "供应链管理有发展"
+    ],
+    "cons": [
+      "基层薪酬偏低",
+      "工作时间不规律",
+      "体力劳动比例大"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "交通运输",
+      "物流管理",
+      "供应链管理",
+      "海事管理",
+      "交通工程"
+    ],
+    "outlook": "跨境电商物流/智慧物流方向需求增长",
+    "source": "国家统计局2024年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "科学研究和技术服务业",
+    "industry_code": "M",
+    "year": 2024,
+    "avg_annual_salary": 179033.0,
+    "salary_growth_rate": 0.08,
+    "employment_demand_index": 3.8,
+    "industry_growth_rate": 0.1,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "研发工程师",
+        "avg_salary": 15000,
+        "demand": "高"
+      },
+      {
+        "name": "实验研究员",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "技术咨询师",
+        "avg_salary": 13000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "助理研究员 → 研究员 → 高级研究员 → 首席科学家",
+    "pros": [
+      "技术含量高",
+      "成长空间大",
+      "政策支持"
+    ],
+    "cons": [
+      "学历门槛高(硕士起步)",
+      "研发周期长",
+      "成果不确定性"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "数学与应用数学",
+      "物理学",
+      "化学",
+      "生物科学",
+      "材料科学与工程",
+      "电子信息工程",
+      "生物医学工程"
+    ],
+    "outlook": "国家战略导向，基础研究/应用研究投入持续增加",
+    "source": "国家统计局2024年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "租赁和商务服务业",
+    "industry_code": "L",
+    "year": 2024,
+    "avg_annual_salary": 110756.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.5,
+    "industry_growth_rate": 0.06,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "HR",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "市场营销",
+        "avg_salary": 9000,
+        "demand": "中"
+      },
+      {
+        "name": "管理咨询",
+        "avg_salary": 14000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "专员 → 主管 → 经理 → 总监",
+    "pros": [
+      "入行门槛低",
+      "转行灵活",
+      "大公司平台好"
+    ],
+    "cons": [
+      "可替代性强",
+      "薪资天花板低",
+      "经济周期敏感"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "工商管理",
+      "市场营销",
+      "人力资源管理",
+      "行政管理",
+      "电子商务",
+      "旅游管理"
+    ],
+    "outlook": "数字化转型带来新岗位，传统行政/HR职能被AI替代风险高",
+    "source": "国家统计局2024年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "农林牧渔业",
+    "industry_code": "A",
+    "year": 2024,
+    "avg_annual_salary": 66160.0,
+    "salary_growth_rate": 0.04,
+    "employment_demand_index": 2.5,
+    "industry_growth_rate": 0.04,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "农艺师",
+        "avg_salary": 7000,
+        "demand": "低"
+      },
+      {
+        "name": "兽医",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "水产养殖技术员",
+        "avg_salary": 7000,
+        "demand": "低"
+      }
+    ],
+    "career_path": "技术员 → 农艺师/兽医师 → 技术主管 → 场长/经理",
+    "pros": [
+      "竞争压力小",
+      "政策扶持",
+      "现代农业有技术含量"
+    ],
+    "cons": [
+      "薪资偏低",
+      "工作地点偏远",
+      "社会认知度低"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "农学",
+      "园艺",
+      "植物保护",
+      "动物科学",
+      "动物医学",
+      "水产养殖学",
+      "园林",
+      "农业资源与环境"
+    ],
+    "outlook": "智慧农业/生物育种方向有政策红利，传统方向薪资增长缓慢",
+    "source": "国家统计局2024年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "信息传输、软件和信息技术服务业",
+    "industry_code": "I63-65",
+    "year": 2025,
+    "avg_annual_salary": 231810.0,
+    "salary_growth_rate": 0.09,
+    "employment_demand_index": 4.5,
+    "industry_growth_rate": 0.12,
+    "entry_difficulty": "中等",
+    "popular_positions": [
+      {
+        "name": "软件开发工程师",
+        "avg_salary": 18000,
+        "demand": "高"
+      },
+      {
+        "name": "算法工程师",
+        "avg_salary": 25000,
+        "demand": "高"
+      },
+      {
+        "name": "数据分析师",
+        "avg_salary": 15000,
+        "demand": "高"
+      },
+      {
+        "name": "产品经理",
+        "avg_salary": 16000,
+        "demand": "中"
+      },
+      {
+        "name": "网络安全工程师",
+        "avg_salary": 20000,
+        "demand": "高"
+      }
+    ],
+    "career_path": "初级工程师 → 高级工程师 → 技术专家/架构师 → 技术总监",
+    "pros": [
+      "薪资水平领先",
+      "岗位需求大",
+      "远程办公友好",
+      "技术成长快"
+    ],
+    "cons": [
+      "加班文化普遍",
+      "技术迭代快需持续学习",
+      "35岁职业瓶颈",
+      "竞争激烈"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "互联网行业前3年成长迅速，薪资涨幅大。跳槽涨薪快...",
+        "sentiment": "neutral"
+      }
+    ],
+    "related_majors": [
+      "计算机科学与技术",
+      "软件工程",
+      "人工智能",
+      "数据科学与大数据技术",
+      "网络工程",
+      "信息安全",
+      "物联网工程",
+      "数字媒体技术"
+    ],
+    "outlook": "AI/云计算/信息安全驱动增长，但初级开发岗位供给过剩，建议深耕细分方向",
+    "source": "国家统计局2025年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "制造业",
+    "industry_code": "C",
+    "year": 2025,
+    "avg_annual_salary": 112306.0,
+    "salary_growth_rate": 0.06,
+    "employment_demand_index": 3.8,
+    "industry_growth_rate": 0.06,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "机械工程师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "电气工程师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "工艺工程师",
+        "avg_salary": 11000,
+        "demand": "中"
+      },
+      {
+        "name": "质量管理工程师",
+        "avg_salary": 9000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "技术员 → 工程师 → 高级工程师 → 技术经理/厂长",
+    "pros": [
+      "就业稳定",
+      "行业天花板高",
+      "积累型职业",
+      "珠三角制造业集聚"
+    ],
+    "cons": [
+      "起薪偏低",
+      "晋升速度慢",
+      "部分岗位工作环境差"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "制造业工程师前几年收入不高，但经验积累后价值上升...",
+        "sentiment": "positive"
+      }
+    ],
+    "related_majors": [
+      "机械设计制造及其自动化",
+      "电气工程及其自动化",
+      "自动化",
+      "材料科学与工程",
+      "工业工程",
+      "车辆工程",
+      "测控技术与仪器"
+    ],
+    "outlook": "智能制造转型带来新机会，自动化/机器人方向薪资增长快",
+    "source": "国家统计局2025年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "金融业",
+    "industry_code": "J",
+    "year": 2025,
+    "avg_annual_salary": 197383.0,
+    "salary_growth_rate": 0.07,
+    "employment_demand_index": 3.5,
+    "industry_growth_rate": 0.05,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "投资分析师",
+        "avg_salary": 15000,
+        "demand": "中"
+      },
+      {
+        "name": "风控专员",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "理财顾问",
+        "avg_salary": 13000,
+        "demand": "中"
+      },
+      {
+        "name": "审计师",
+        "avg_salary": 11000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "分析师 → 高级分析师 → 经理/VP → 总监",
+    "pros": [
+      "薪资高",
+      "社会地位高",
+      "职业发展通道清晰"
+    ],
+    "cons": [
+      "工作压力大",
+      "入行门槛高",
+      "一线城市聚集",
+      "周期性波动"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "金融行业收入天花板高但强度大，头部机构竞争激烈...",
+        "sentiment": "neutral"
+      }
+    ],
+    "related_majors": [
+      "金融学",
+      "经济学",
+      "会计学",
+      "财务管理",
+      "保险学",
+      "投资学",
+      "金融工程",
+      "国际经济与贸易"
+    ],
+    "outlook": "金融科技方向需求增加，传统岗位受AI替代压力增大",
+    "source": "国家统计局2025年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "教育",
+    "industry_code": "P",
+    "year": 2025,
+    "avg_annual_salary": 123982.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.0,
+    "industry_growth_rate": 0.03,
+    "entry_difficulty": "中等",
+    "popular_positions": [
+      {
+        "name": "中小学教师",
+        "avg_salary": 8000,
+        "demand": "高"
+      },
+      {
+        "name": "高校教师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "培训讲师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "教育产品经理",
+        "avg_salary": 15000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "教师 → 骨干教师 → 学科带头人 → 教学管理者",
+    "pros": [
+      "寒暑假",
+      "工作稳定",
+      "社会尊重",
+      "有编制"
+    ],
+    "cons": [
+      "起薪偏低",
+      "非编待遇差",
+      "考核压力增大",
+      "课外负担重"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "公立学校稳定但薪资涨幅有限，培训机构收入高但不稳定...",
+        "sentiment": "mixed"
+      }
+    ],
+    "related_majors": [
+      "教育学",
+      "汉语言文学(师范)",
+      "数学与应用数学(师范)",
+      "英语(师范)",
+      "物理学(师范)",
+      "化学(师范)",
+      "历史学(师范)"
+    ],
+    "outlook": "人口下降长期看空K12需求，但高等教育/职业教育仍有增长",
+    "source": "国家统计局2025年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "卫生和社会工作",
+    "industry_code": "Q",
+    "year": 2025,
+    "avg_annual_salary": 127089.0,
+    "salary_growth_rate": 0.07,
+    "employment_demand_index": 4.0,
+    "industry_growth_rate": 0.08,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "临床医生",
+        "avg_salary": 12000,
+        "demand": "高"
+      },
+      {
+        "name": "护士",
+        "avg_salary": 8000,
+        "demand": "高"
+      },
+      {
+        "name": "药剂师",
+        "avg_salary": 9000,
+        "demand": "中"
+      },
+      {
+        "name": "医学检验师",
+        "avg_salary": 8500,
+        "demand": "中"
+      }
+    ],
+    "career_path": "住院医师 → 主治医师 → 副主任医师 → 主任医师",
+    "pros": [
+      "职业稳定",
+      "社会地位高",
+      "越老越吃香",
+      "需求刚性"
+    ],
+    "cons": [
+      "培养周期长(5+3+X年)",
+      "工作强度大",
+      "医患关系紧张",
+      "夜班频繁"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "医生前期投入大、收入不高，但35岁后开始回报...",
+        "sentiment": "mixed"
+      }
+    ],
+    "related_majors": [
+      "临床医学",
+      "口腔医学",
+      "麻醉学",
+      "护理学",
+      "药学",
+      "中药学",
+      "预防医学",
+      "中医学",
+      "针灸推拿学"
+    ],
+    "outlook": "老龄化推动医疗需求增长，口腔/眼科/康复等方向前景好",
+    "source": "国家统计局2025年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "建筑业",
+    "industry_code": "E",
+    "year": 2025,
+    "avg_annual_salary": 93116.0,
+    "salary_growth_rate": 0.03,
+    "employment_demand_index": 2.5,
+    "industry_growth_rate": 0.02,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "土木工程师",
+        "avg_salary": 9000,
+        "demand": "低"
+      },
+      {
+        "name": "建筑设计师",
+        "avg_salary": 11000,
+        "demand": "中"
+      },
+      {
+        "name": "造价工程师",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "项目经理",
+        "avg_salary": 15000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "技术员 → 工程师 → 项目经理 → 项目总监",
+    "pros": [
+      "项目经验值钱",
+      "证书含金量高",
+      "积累型职业"
+    ],
+    "cons": [
+      "行业下行",
+      "项目不稳定",
+      "需要驻场出差",
+      "工作环境艰苦"
+    ],
+    "insider_reviews": [
+      {
+        "source": "知乎",
+        "summary": "房地产下行周期，建筑行业就业压力大...",
+        "sentiment": "negative"
+      }
+    ],
+    "related_majors": [
+      "建筑学",
+      "土木工程",
+      "城乡规划",
+      "给排水科学与工程",
+      "工程管理",
+      "工程造价"
+    ],
+    "outlook": "房建市场萎缩，基础设施/市政/城市更新方向尚有需求",
+    "source": "国家统计局2025年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "交通运输、仓储和邮政业",
+    "industry_code": "G",
+    "year": 2025,
+    "avg_annual_salary": 115016.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.2,
+    "industry_growth_rate": 0.05,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "物流管理师",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "供应链分析师",
+        "avg_salary": 12000,
+        "demand": "中"
+      },
+      {
+        "name": "交通规划师",
+        "avg_salary": 11000,
+        "demand": "低"
+      }
+    ],
+    "career_path": "专员 → 主管 → 经理 → 总监",
+    "pros": [
+      "电商驱动需求",
+      "入门门槛低",
+      "供应链管理有发展"
+    ],
+    "cons": [
+      "基层薪酬偏低",
+      "工作时间不规律",
+      "体力劳动比例大"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "交通运输",
+      "物流管理",
+      "供应链管理",
+      "海事管理",
+      "交通工程"
+    ],
+    "outlook": "跨境电商物流/智慧物流方向需求增长",
+    "source": "国家统计局2025年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "科学研究和技术服务业",
+    "industry_code": "M",
+    "year": 2025,
+    "avg_annual_salary": 179033.0,
+    "salary_growth_rate": 0.08,
+    "employment_demand_index": 3.8,
+    "industry_growth_rate": 0.1,
+    "entry_difficulty": "较高",
+    "popular_positions": [
+      {
+        "name": "研发工程师",
+        "avg_salary": 15000,
+        "demand": "高"
+      },
+      {
+        "name": "实验研究员",
+        "avg_salary": 10000,
+        "demand": "中"
+      },
+      {
+        "name": "技术咨询师",
+        "avg_salary": 13000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "助理研究员 → 研究员 → 高级研究员 → 首席科学家",
+    "pros": [
+      "技术含量高",
+      "成长空间大",
+      "政策支持"
+    ],
+    "cons": [
+      "学历门槛高(硕士起步)",
+      "研发周期长",
+      "成果不确定性"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "数学与应用数学",
+      "物理学",
+      "化学",
+      "生物科学",
+      "材料科学与工程",
+      "电子信息工程",
+      "生物医学工程"
+    ],
+    "outlook": "国家战略导向，基础研究/应用研究投入持续增加",
+    "source": "国家统计局2025年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "租赁和商务服务业",
+    "industry_code": "L",
+    "year": 2025,
+    "avg_annual_salary": 110756.0,
+    "salary_growth_rate": 0.05,
+    "employment_demand_index": 3.5,
+    "industry_growth_rate": 0.06,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "HR",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "市场营销",
+        "avg_salary": 9000,
+        "demand": "中"
+      },
+      {
+        "name": "管理咨询",
+        "avg_salary": 14000,
+        "demand": "中"
+      }
+    ],
+    "career_path": "专员 → 主管 → 经理 → 总监",
+    "pros": [
+      "入行门槛低",
+      "转行灵活",
+      "大公司平台好"
+    ],
+    "cons": [
+      "可替代性强",
+      "薪资天花板低",
+      "经济周期敏感"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "工商管理",
+      "市场营销",
+      "人力资源管理",
+      "行政管理",
+      "电子商务",
+      "旅游管理"
+    ],
+    "outlook": "数字化转型带来新岗位，传统行政/HR职能被AI替代风险高",
+    "source": "国家统计局2025年平均工资数据 + 行业调研报告"
+  },
+  {
+    "industry_name": "农林牧渔业",
+    "industry_code": "A",
+    "year": 2025,
+    "avg_annual_salary": 66160.0,
+    "salary_growth_rate": 0.04,
+    "employment_demand_index": 2.5,
+    "industry_growth_rate": 0.04,
+    "entry_difficulty": "低",
+    "popular_positions": [
+      {
+        "name": "农艺师",
+        "avg_salary": 7000,
+        "demand": "低"
+      },
+      {
+        "name": "兽医",
+        "avg_salary": 8000,
+        "demand": "中"
+      },
+      {
+        "name": "水产养殖技术员",
+        "avg_salary": 7000,
+        "demand": "低"
+      }
+    ],
+    "career_path": "技术员 → 农艺师/兽医师 → 技术主管 → 场长/经理",
+    "pros": [
+      "竞争压力小",
+      "政策扶持",
+      "现代农业有技术含量"
+    ],
+    "cons": [
+      "薪资偏低",
+      "工作地点偏远",
+      "社会认知度低"
+    ],
+    "insider_reviews": [],
+    "related_majors": [
+      "农学",
+      "园艺",
+      "植物保护",
+      "动物科学",
+      "动物医学",
+      "水产养殖学",
+      "园林",
+      "农业资源与环境"
+    ],
+    "outlook": "智慧农业/生物育种方向有政策红利，传统方向薪资增长缓慢",
+    "source": "国家统计局2025年平均工资数据 + 行业调研报告"
+  }
+]
