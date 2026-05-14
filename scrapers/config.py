@@ -1,0 +1,105 @@
+"""Global configuration for all scrapers."""
+from pathlib import Path
+from dataclasses import dataclass, field
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DATA_RAW = PROJECT_ROOT / "data" / "raw"
+DATA_PROCESSED = PROJECT_ROOT / "data" / "processed"
+DATA_CLEANED = PROJECT_ROOT / "data" / "cleaned"
+DATA_APPROVED = PROJECT_ROOT / "data" / "approved"
+DATA_SEED = PROJECT_ROOT / "data" / "seed"
+LOG_DIR = PROJECT_ROOT / "data" / "logs"
+
+for d in [DATA_RAW, DATA_PROCESSED, DATA_CLEANED, DATA_APPROVED, DATA_SEED, LOG_DIR]:
+    d.mkdir(parents=True, exist_ok=True)
+
+
+@dataclass
+class ScraperConfig:
+    """Per-scraper configuration."""
+    name: str
+    base_url: str
+    delay_seconds: float = 1.5       # polite delay between requests
+    max_retries: int = 3
+    timeout_seconds: int = 30
+    user_agent: str = (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    )
+    headers: dict = field(default_factory=lambda: {
+        "Accept": "text/html,application/json,application/xhtml+xml",
+        "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+    })
+
+
+# Known Guangdong undergraduate universities (教育部院校代码)
+GUANGDONG_UNIVERSITIES: list[dict] = [
+    {"code": "10558", "name": "中山大学", "city": "广州", "type": "综合", "level": "985"},
+    {"code": "10561", "name": "华南理工大学", "city": "广州", "type": "理工", "level": "985"},
+    {"code": "10559", "name": "暨南大学", "city": "广州", "type": "综合", "level": "211"},
+    {"code": "10574", "name": "华南师范大学", "city": "广州", "type": "师范", "level": "211"},
+    {"code": "10564", "name": "华南农业大学", "city": "广州", "type": "农林", "level": "双一流"},
+    {"code": "12121", "name": "南方医科大学", "city": "广州", "type": "医药", "level": "省重点"},
+    {"code": "10572", "name": "广州中医药大学", "city": "广州", "type": "医药", "level": "双一流"},
+    {"code": "10590", "name": "深圳大学", "city": "深圳", "type": "综合", "level": "省重点"},
+    {"code": "11845", "name": "广东工业大学", "city": "广州", "type": "理工", "level": "省重点"},
+    {"code": "11078", "name": "广州大学", "city": "广州", "type": "综合", "level": "省重点"},
+    {"code": "11846", "name": "广东外语外贸大学", "city": "广州", "type": "语言", "level": "省重点"},
+    {"code": "10560", "name": "汕头大学", "city": "汕头", "type": "综合", "level": "省重点"},
+    {"code": "14325", "name": "南方科技大学", "city": "深圳", "type": "理工", "level": "双一流"},
+    {"code": "10570", "name": "广州医科大学", "city": "广州", "type": "医药", "level": "双一流"},
+    {"code": "10592", "name": "广东财经大学", "city": "广州", "type": "财经", "level": "省重点"},
+    {"code": "10566", "name": "广东海洋大学", "city": "湛江", "type": "农林", "level": "省重点"},
+    {"code": "11819", "name": "东莞理工学院", "city": "东莞", "type": "理工", "level": "省重点"},
+    {"code": "11847", "name": "佛山科学技术学院", "city": "佛山", "type": "理工", "level": "省重点"},
+    {"code": "11349", "name": "五邑大学", "city": "江门", "type": "综合", "level": "省重点"},
+    {"code": "11347", "name": "仲恺农业工程学院", "city": "广州", "type": "农林", "level": "省重点"},
+    {"code": "10571", "name": "广东医科大学", "city": "湛江", "type": "医药", "level": "省重点"},
+    {"code": "10573", "name": "广东药科大学", "city": "广州", "type": "医药", "level": "省重点"},
+    {"code": "10576", "name": "韶关学院", "city": "韶关", "type": "综合", "level": "普通本科"},
+    {"code": "10577", "name": "惠州学院", "city": "惠州", "type": "综合", "level": "普通本科"},
+    {"code": "10578", "name": "韩山师范学院", "city": "潮州", "type": "师范", "level": "普通本科"},
+    {"code": "10579", "name": "岭南师范学院", "city": "湛江", "type": "师范", "level": "普通本科"},
+    {"code": "10580", "name": "肇庆学院", "city": "肇庆", "type": "综合", "level": "普通本科"},
+    {"code": "10582", "name": "嘉应学院", "city": "梅州", "type": "综合", "level": "普通本科"},
+    {"code": "10585", "name": "广州体育学院", "city": "广州", "type": "体育", "level": "省重点"},
+    {"code": "10586", "name": "广州美术学院", "city": "广州", "type": "艺术", "level": "省重点"},
+    {"code": "10587", "name": "星海音乐学院", "city": "广州", "type": "艺术", "level": "省重点"},
+    {"code": "10588", "name": "广东技术师范大学", "city": "广州", "type": "师范", "level": "省重点"},
+    {"code": "10591", "name": "广东金融学院", "city": "广州", "type": "财经", "level": "普通本科"},
+    {"code": "11540", "name": "广东警官学院", "city": "广州", "type": "政法", "level": "普通本科"},
+    {"code": "11656", "name": "广东石油化工学院", "city": "茂名", "type": "理工", "level": "普通本科"},
+    {"code": "11848", "name": "北京师范大学-香港浸会大学联合国际学院", "city": "珠海", "type": "综合", "level": "中外合作"},
+    {"code": "11852", "name": "广东理工学院", "city": "肇庆", "type": "理工", "level": "民办本科"},
+    {"code": "12059", "name": "广东培正学院", "city": "广州", "type": "综合", "level": "民办本科"},
+    {"code": "13656", "name": "广州华立学院", "city": "广州", "type": "综合", "level": "民办本科"},
+    {"code": "13657", "name": "广州商学院", "city": "广州", "type": "财经", "level": "民办本科"},
+    {"code": "13667", "name": "广东白云学院", "city": "广州", "type": "综合", "level": "民办本科"},
+    {"code": "13675", "name": "北京理工大学珠海学院", "city": "珠海", "type": "理工", "level": "独立学院"},
+    {"code": "13684", "name": "珠海科技学院", "city": "珠海", "type": "综合", "level": "民办本科"},
+    {"code": "13714", "name": "广州工商学院", "city": "佛山", "type": "财经", "level": "民办本科"},
+    {"code": "13718", "name": "广州理工学院", "city": "广州", "type": "理工", "level": "民办本科"},
+    {"code": "13719", "name": "广东科技学院", "city": "东莞", "type": "理工", "level": "民办本科"},
+    {"code": "13720", "name": "广州新华学院", "city": "广州", "type": "综合", "level": "独立学院"},
+    {"code": "13721", "name": "广州城市理工学院", "city": "广州", "type": "理工", "level": "民办本科"},
+    {"code": "13844", "name": "东莞城市学院", "city": "东莞", "type": "综合", "level": "民办本科"},
+    {"code": "13902", "name": "广州南方学院", "city": "广州", "type": "综合", "level": "民办本科"},
+    {"code": "14278", "name": "广东第二师范学院", "city": "广州", "type": "师范", "level": "普通本科"},
+    {"code": "14390", "name": "广州航海学院", "city": "广州", "type": "理工", "level": "普通本科"},
+    {"code": "16148", "name": "华南农业大学珠江学院", "city": "广州", "type": "农林", "level": "独立学院"},
+    {"code": "16401", "name": "深圳技术大学", "city": "深圳", "type": "理工", "level": "普通本科"},
+    {"code": "18173", "name": "广东以色列理工学院", "city": "汕头", "type": "理工", "level": "中外合作"},
+    {"code": "18272", "name": "香港中文大学(深圳)", "city": "深圳", "type": "综合", "level": "中外合作"},
+    {"code": "18303", "name": "南方科技大学伦敦国王学院医学院", "city": "深圳", "type": "医药", "level": "中外合作"},
+    {"code": "18327", "name": "广东东软学院", "city": "佛山", "type": "理工", "level": "民办本科"},
+    {"code": "18398", "name": "香港科技大学(广州)", "city": "广州", "type": "理工", "level": "中外合作"},
+    {"code": "18405", "name": "广州软件学院", "city": "广州", "type": "理工", "level": "民办本科"},
+    {"code": "18593", "name": "香港城市大学(东莞)", "city": "东莞", "type": "综合", "level": "中外合作"},
+    {"code": "18894", "name": "广东工商职业技术大学", "city": "肇庆", "type": "综合", "level": "民办本科"},
+    {"code": "19032", "name": "广州应用科技学院", "city": "广州", "type": "综合", "level": "民办本科"},
+    {"code": "19305", "name": "深圳理工大学", "city": "深圳", "type": "理工", "level": "普通本科"},
+    {"code": "19565", "name": "湛江科技学院", "city": "湛江", "type": "综合", "level": "民办本科"},
+]
+
+TARGET_YEARS = [2020, 2021, 2022, 2023, 2024, 2025]
+TARGET_PROVINCE = "广东"
