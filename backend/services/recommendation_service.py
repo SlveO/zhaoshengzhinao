@@ -53,6 +53,24 @@ RANKING_PROMPT = """你是高考志愿填报专家。下面是真实的候选院
 ]
 """
 
+L1_PROMPT_ADDON = """
+## 匹配策略（基础推荐）
+学生画像信息有限（仅分数+选科）。请主要依据位次匹配进行排序。
+在理由中建议学生继续对话以获取更精准的推荐。
+"""
+
+L2_PROMPT_ADDON = """
+## 匹配策略（较完整推荐）
+学生画像包含：分数+选科+地域偏好+部分兴趣倾向。
+权重分配：60% 位次匹配 + 25% 兴趣倾向 + 15% 地域偏好。
+"""
+
+L3_PROMPT_ADDON = """
+## 匹配策略（深度个性化推荐）
+学生画像包含：分数+选科+地域偏好+深度兴趣倾向+价值观排序。
+权重分配：40% 位次匹配 + 35% 兴趣倾向 + 15% 价值观 + 10% 地域偏好。
+"""
+
 
 @retry(
     stop=stop_after_attempt(3),
@@ -62,6 +80,15 @@ RANKING_PROMPT = """你是高考志愿填报专家。下面是真实的候选院
 )
 async def _call_llm_with_retry(prompt: str):
     return await llm.ainvoke(prompt)
+
+
+def _get_adaptive_prompt(profile: dict) -> str:
+    completeness = profile.get("completeness", "L1")
+    if completeness == "L3":
+        return RANKING_PROMPT + L3_PROMPT_ADDON
+    elif completeness == "L2":
+        return RANKING_PROMPT + L2_PROMPT_ADDON
+    return RANKING_PROMPT + L1_PROMPT_ADDON
 
 
 async def generate_recommendations(
@@ -143,7 +170,8 @@ async def generate_recommendations(
             feedback_text = "## 学生历史反馈\n" + feedback_text + "请参考此反馈，提升与\"有用\"类型相似的结果排序，降低与\"不相关\"类型相似的结果。\n"
 
     profile_text = json.dumps(profile, ensure_ascii=False)
-    prompt = RANKING_PROMPT.format(
+    prompt_template = _get_adaptive_prompt(profile)
+    prompt = prompt_template.format(
         profile=profile_text,
         candidates=candidate_text,
         industry_data=industry_text,
