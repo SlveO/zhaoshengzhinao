@@ -29,11 +29,16 @@ export function useChat() {
     wsSend(content)
   }, [wsSend, addMessage])
 
-  useEffect(() => {
-    if (!sessionId) {
-      api.post('/chat/session').then((r) => setSessionId(r.data.session_id)).catch(() => setSessionId('mock'))
+  const createSession = useCallback(async () => {
+    try {
+      const r = await api.post('/chat/session')
+      setSessionId(r.data.session_id)
+      return r.data.session_id
+    } catch {
+      setSessionId('mock')
+      return null
     }
-  }, [sessionId, setSessionId])
+  }, [setSessionId])
 
-  return { send, sessionId }
+  return { send, sessionId, createSession }
 }

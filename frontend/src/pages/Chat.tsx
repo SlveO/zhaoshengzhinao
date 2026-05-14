@@ -12,30 +12,31 @@ import api from '../services/api'
 
 export default function Chat() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [showWelcome, setShowWelcome] = useState(false)
-  const { send, sessionId } = useChat()
+  const [showWelcome, setShowWelcome] = useState(true)
+  const { send, sessionId, createSession } = useChat()
   const { stage, messages, slots, summaryPending, summaryData, dismissSummary, updateSlots } = useChatStore()
   const nav = useNavigate()
 
-  // Show welcome modal if no score in slots (first-time user after simplified register)
+  // On mount: check if user already has profile data (returning user)
   useEffect(() => {
-    if (sessionId && slots && Object.keys(slots).length > 0) {
-      setShowWelcome(false)
-    }
-  }, [slots, sessionId])
-
-  // After session is created, check if we need welcome modal
-  useEffect(() => {
-    if (sessionId && sessionId !== 'mock') {
-      // If slots are empty (first visit after simplified register), show welcome
-      const timer = setTimeout(() => {
-        if (!slots || Object.keys(slots).length === 0) {
-          setShowWelcome(true)
+    (async () => {
+      try {
+        const { data } = await api.get('/profile')
+        const profile = data?.profile || data
+        if (profile && (profile.score || profile.subjects || (profile.region_pref && profile.region_pref.length > 0))) {
+          updateSlots({
+            score: profile.score,
+            subjects: profile.subjects,
+            region_pref: profile.region_pref,
+          })
+          setShowWelcome(false)
+          createSession()
         }
-      }, 500)
-      return () => clearTimeout(timer)
-    }
-  }, [sessionId])
+      } catch {
+        // New user or error — show welcome
+      }
+    })()
+  }, [])
 
   const handleWelcomeSubmit = async (data: { score: number; subjects: string; region: string }) => {
     try {
@@ -46,8 +47,8 @@ export default function Chat() {
         region_pref: [data.region],
       })
       setShowWelcome(false)
+      await createSession()
     } catch {
-      // Silently fail, user can still chat
       setShowWelcome(false)
     }
   }

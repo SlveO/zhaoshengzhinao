@@ -3,10 +3,9 @@ import type { ProfileSlot } from '../../types'
 export default function SlotProgress({ slots }: { slots: ProfileSlot }) {
   const items = [
     { key: 'score', label: '分数 / 选科', done: !!slots.score },
-    { key: 'batch', label: '目标批次', done: true },
+    { key: 'region_pref', label: '地域偏好', done: (slots.region_pref || []).length > 0 },
     { key: 'riasec', label: '兴趣倾向', done: Object.keys(slots.riasec || {}).length > 0 },
     { key: 'values', label: '价值观排序', done: (slots.values || []).length > 0 },
-    { key: 'region_pref', label: '地域偏好', done: (slots.region_pref || []).length > 0 },
   ]
   const done = items.filter((i) => i.done).length
   const pct = Math.round((done / items.length) * 100)
