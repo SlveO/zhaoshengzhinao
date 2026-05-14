@@ -7,40 +7,26 @@ from typing import Any, Optional
 import httpx
 from loguru import logger
 from tenacity import (
-    retry, stop_after_attempt, wait_exponential, retry_if_exception
+    stop_after_attempt, wait_exponential, retry_if_exception, RetryError,
 )
+from tenacity._asyncio import AsyncRetrying
 
 from scrapers.config import DATA_RAW, ScraperConfig
-
-
-class ScrapingError(Exception):
-    """Raised when a scrape fails after all retries."""
 
 
 def _is_retryable(exc: BaseException) -> bool:
     """Only retry on transient errors: timeouts, transport issues, 429, 5xx."""
     if isinstance(exc, httpx.TimeoutException):
         return True
-    if isinstance(exc, httpx.HTTPStatusError):
-        return exc.response.status_code in (429, 500, 502, 503, 504)
     if isinstance(exc, httpx.TransportError):
         return True
+    if isinstance(exc, httpx.HTTPStatusError):
+        return exc.response.status_code in (429, 500, 502, 503, 504)
     return False
 
 
-# Module-level log handler — one handler total, not one per instance
-_log_handler_id: int | None = None
-
-
-def _ensure_log_handler(log_path: str):
-    global _log_handler_id
-    if _log_handler_id is None:
-        _log_handler_id = logger.add(
-            log_path,
-            rotation="10 MB",
-            retention="7 days",
-            level="INFO",
-        )
+class ScrapingError(Exception):
+    """Raised when a scrape fails after all retries."""
 
 
 class BaseScraper:
@@ -52,7 +38,12 @@ class BaseScraper:
         self._lock = asyncio.Lock()
         self.raw_dir = DATA_RAW / config.name
         self.raw_dir.mkdir(parents=True, exist_ok=True)
-        _ensure_log_handler(str(self.raw_dir / "scraper.log"))
+        self._log_handler_id = logger.add(
+            self.raw_dir / "scraper.log",
+            rotation="10 MB",
+            retention="7 days",
+            level="INFO",
+        )
 
     async def _rate_limit(self):
         """Ensure minimum delay between requests."""
@@ -79,11 +70,6 @@ class BaseScraper:
         resp.raise_for_status()
         return resp.json() if expect_json else resp.text
 
-    @retry(
-        stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=2, min=2, max=30),
-        retry=retry_if_exception(_is_retryable),
-    )
     async def fetch_with_retry(
         self,
         client: httpx.AsyncClient,
@@ -91,9 +77,25 @@ class BaseScraper:
         params: Optional[dict] = None,
         expect_json: bool = True,
     ) -> Any:
-        """Fetch with automatic retry on transient network errors."""
+        """Fetch with automatic retry on transient network errors.
+
+        Uses config.max_retries for attempt count. Only retries on
+        retryable exceptions (see _is_retryable); 4xx errors propagate
+        immediately without retry.
+        """
         try:
-            return await self._fetch(client, url, params, expect_json)
+            async for attempt in AsyncRetrying(
+                stop=stop_after_attempt(self.config.max_retries),
+                wait=wait_exponential(multiplier=2, min=2, max=30),
+                retry=retry_if_exception(_is_retryable),
+            ):
+                with attempt:
+                    return await self._fetch(client, url, params, expect_json)
+        except RetryError as e:
+            logger.error(
+                f"Fetch failed for {url} after {self.config.max_retries} retries: {e}"
+            )
+            raise ScrapingError(f"Failed to fetch {url}: {e}") from e
         except Exception as e:
             logger.error(f"Fetch failed for {url}: {e}")
             raise ScrapingError(f"Failed to fetch {url}: {e}") from e
@@ -118,9 +120,9 @@ class BaseScraper:
         with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
 
-    async def close(self):
-        """Clean up resources. Subclasses should call super().close()."""
-        pass
+    async def close(self) -> None:
+        """Release resources: remove the log handler added in __init__."""
+        logger.remove(self._log_handler_id)
 
     async def run(self) -> dict:
         """Override in subclasses. Returns summary dict."""
