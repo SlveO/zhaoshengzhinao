@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { Recommendation } from '../../types'
+import { recApi } from '../../services/recommendation'
 
 const barColors: Record<string, string> = {
   admission_probability: 'bg-warning',
@@ -26,6 +27,7 @@ const categoryStyle: Record<
 
 export default function RecommendationCard({ rec }: { rec: Recommendation }) {
   const [open, setOpen] = useState(false)
+  const [feedback, setFeedback] = useState<string | null>(null)
   const cs = categoryStyle[rec.category] || categoryStyle['稳妥']
 
   return (
@@ -114,6 +116,29 @@ export default function RecommendationCard({ rec }: { rec: Recommendation }) {
                 ))}
               </div>
             </div>
+          )}
+          {/* Feedback buttons */}
+          {!feedback && (
+            <div className="flex gap-2 mt-3 pt-3 border-t border-gray-100">
+              <button
+                onClick={() => { recApi.submitFeedback(rec.college_name, rec.major_name, 'useful'); setFeedback('useful') }}
+                className="text-xs px-3 py-1 rounded-full bg-green-50 text-green-600 hover:bg-green-100 transition"
+              >
+                👍 有用
+              </button>
+              <button
+                onClick={() => { recApi.submitFeedback(rec.college_name, rec.major_name, 'not_relevant'); setFeedback('not_relevant') }}
+                className="text-xs px-3 py-1 rounded-full bg-gray-50 text-gray-500 hover:bg-gray-100 transition"
+              >
+                👎 不相关
+              </button>
+            </div>
+          )}
+          {feedback === 'useful' && (
+            <div className="text-xs text-green-600 mt-2">已标记为有用</div>
+          )}
+          {feedback === 'not_relevant' && (
+            <div className="text-xs text-gray-400 mt-2">已标记为不相关</div>
           )}
         </div>
       </div>
