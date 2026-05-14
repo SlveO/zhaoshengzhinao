@@ -1,33 +1,43 @@
-"""Slot merging and summary utilities — used by the conversation agent."""
+"""Backwards-compatible wrapper — delegates to EvidenceAccumulator."""
+from agents.conversation.evidence_accumulator import EvidenceAccumulator
 
 
 def merge_slots(existing: dict, update: dict) -> dict:
-    """Merge new slot values into existing, preserving confidence scoring."""
-    merged = dict(existing)
-    for key in ["score", "subjects", "career_vision", "family_influence"]:
-        if update.get(key):
-            merged[key] = update[key]
-    riasec = merged.get("riasec", {}) or {}
+    """DEPRECATED: Used only for old code paths. New code should use EvidenceAccumulator directly."""
+    acc = EvidenceAccumulator.from_dict(existing) if existing else EvidenceAccumulator()
     riasec_update = update.get("riasec_update") or {}
     if isinstance(riasec_update, dict):
         for dim, val in riasec_update.items():
-            if val is not None:
-                riasec[dim] = round((riasec.get(dim, 5) + val) / 2, 1) if dim in riasec else val
-    merged["riasec"] = riasec
+            key = f"riasec_{dim}"
+            if val is not None and key in acc.to_dict():
+                acc.add_evidence(key, 0, "", int(val), "keyword fallback", 0.3)
     if update.get("values_hint"):
-        vals = merged.get("values", [])
-        if update["values_hint"] not in vals:
-            vals.append(update["values_hint"])
-        merged["values"] = vals
+        existing_vals = acc.to_dict().get("values", {}).get("ranked", [])
+        if update["values_hint"] not in existing_vals:
+            existing_vals.append(update["values_hint"])
+        acc.set_values(existing_vals)
     if update.get("region_pref"):
-        existing_regions = set(merged.get("region_pref", []))
+        existing_regions = set(acc.to_dict().get("region_pref", {}).get("regions", []))
         existing_regions.update(update["region_pref"])
-        merged["region_pref"] = list(existing_regions)
-    return merged
+        acc.to_dict()["region_pref"]["regions"] = list(existing_regions)
+    if update.get("score"):
+        acc.seed_basics(score=update["score"])
+    if update.get("subjects"):
+        acc.seed_basics(subjects=update["subjects"])
+    snap = acc.export_snapshot()
+    # Flatten to old slot format for backwards compat
+    slots = {
+        "score": snap.get("score"),
+        "subjects": snap.get("subjects"),
+        "region_pref": snap.get("region_pref", []),
+        "riasec": snap.get("riasec", {}),
+        "values": snap.get("values", []),
+    }
+    return slots
 
 
 def slots_summary(slots: dict) -> str:
-    """Human-readable summary of current slots."""
+    """Human-readable summary of current profile."""
     lines = []
     if slots.get("score"):
         lines.append(f"分数: {slots['score']}")
