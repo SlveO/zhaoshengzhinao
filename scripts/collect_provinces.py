@@ -67,6 +67,8 @@ async def collect_schools(school_map: dict, label: str):
                 pass
             return []
 
+    async def tracked_fetch(pid, name, year, prov_id, prov_name):
+        result = await fetch_one(pid, name, year, prov_id, prov_name)
         done[0] += 1
         if done[0] % 500 == 0:
             pct = done[0] / total * 100
@@ -79,7 +81,7 @@ async def collect_schools(school_map: dict, label: str):
     for pid, (name, code_id) in school_map.items():
         for year in YEARS:
             for prov_id, prov_name in PROVINCES.items():
-                tasks.append(fetch_one(pid, name, year, prov_id, prov_name))
+                tasks.append(tracked_fetch(pid, name, year, prov_id, prov_name))
 
     print(f"[{label}] {len(school_map)} schools x {len(PROVINCES)} provinces x {len(YEARS)} years = {len(tasks)} requests", flush=True)
     t0 = time.time()
