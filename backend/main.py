@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
-from api.routes import auth, chat, profile, recommendation, college
+from api.routes import auth, chat, profile, recommendation, college, industry
 from models import init_db, async_session
 from models.college import College
 from models.admission import AdmissionData
@@ -108,6 +108,7 @@ app.include_router(chat.router, prefix="/api/v1/chat", tags=["chat"])
 app.include_router(profile.router, prefix="/api/v1/profile", tags=["profile"])
 app.include_router(recommendation.router, prefix="/api/v1/recommendations", tags=["recommendations"])
 app.include_router(college.router, prefix="/api/v1/colleges", tags=["colleges"])
+app.include_router(industry.router, prefix="/api/v1", tags=["industry"])
 
 
 @app.get("/api/health")
