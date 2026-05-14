@@ -53,7 +53,7 @@ async def index():
 
         if docs:
             print(f"Indexing {len(docs)} documents in batches...")
-            BATCH = 5000
+            BATCH = 2000
             for i in range(0, len(docs), BATCH):
                 index_documents(
                     docs[i:i+BATCH],
