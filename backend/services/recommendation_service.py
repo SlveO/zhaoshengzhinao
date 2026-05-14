@@ -1,7 +1,9 @@
+import asyncio
 import json
 import uuid
 from sqlalchemy.ext.asyncio import AsyncSession
 from langchain_openai import ChatOpenAI
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 from config import settings
 from knowledge_base.retriever import retrieve_candidates
 from models.recommendation import Recommendation
@@ -48,6 +50,16 @@ RANKING_PROMPT = """你是高考志愿填报专家。下面是真实的候选院
 """
 
 
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=1, max=8),
+    retry=retry_if_exception_type((Exception,)),
+    reraise=True,
+)
+async def _call_llm_with_retry(prompt: str):
+    return await llm.ainvoke(prompt)
+
+
 async def generate_recommendations(
     user_id: str, profile: dict, db: AsyncSession
 ) -> list[dict]:
@@ -58,14 +70,20 @@ async def generate_recommendations(
     )
     profile_text = json.dumps(profile, ensure_ascii=False)
     prompt = RANKING_PROMPT.format(profile=profile_text, candidates=candidate_text)
-    response = await llm.ainvoke(prompt)
+
+    # LLM call with retry + timeout
     try:
+        response = await asyncio.wait_for(
+            _call_llm_with_retry(prompt),
+            timeout=30,
+        )
         content = response.content.strip()
         if content.startswith("```"):
             content = content.split("\n", 1)[1].rsplit("\n```", 1)[0]
         recommendations = json.loads(content)
-    except (json.JSONDecodeError, AttributeError):
+    except (asyncio.TimeoutError, json.JSONDecodeError, Exception):
         recommendations = []
+        print(f"Recommendation generation failed or timed out for user {user_id}")
 
     rec = Recommendation(
         id=uuid.uuid4(),
