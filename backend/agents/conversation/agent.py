@@ -30,6 +30,29 @@ _VALUES_KW = {
 }
 _REGIONS = ['广东', '广州', '深圳', '北京', '上海', '浙江', '江苏', '四川', '湖北', '珠海', '东莞', '佛山', '汕头']
 
+_EMOTION_KW = {
+    "焦虑": ["好烦", "担心", "紧张", "不知道怎么办", "压力", "害怕", "考砸", "万一", "怎么办"],
+    "迷茫": ["不知道", "随便", "都行", "没什么想法", "无所谓", "不清楚", "不太了解", "没想过"],
+    "确定": ["就想学", "一定要", "必须", "确定了", "肯定是", "就是喜欢", "非它不可"],
+    "烦躁": ["别问了", "不想说", "烦死了", "随便吧", "不想聊", "就这样吧"],
+    "兴奋": ["特别喜欢", "超级喜欢", "太棒了", "好期待", "梦想", "真的很喜欢"],
+}
+
+_EMOTION_HINTS = {
+    "焦虑": "该学生表现出焦虑情绪，请先简短安抚（1句话），再温和提问。",
+    "迷茫": "该学生比较迷茫，请用具体的例子或场景来引导，避免开放式提问。",
+    "确定": "该学生目标明确，可直接追问动机来源，深度挖掘为什么喜欢。",
+    "烦躁": "该学生有些不耐烦，请简短回复表示理解，给对方空间，不要追问。",
+    "兴奋": "该学生表现出兴奋，请鼓励ta多说，追问更多细节和感受。",
+}
+
+
+def _detect_emotion(user_msg: str) -> str | None:
+    for emotion, keywords in _EMOTION_KW.items():
+        if any(kw in user_msg for kw in keywords):
+            return emotion
+    return None
+
 
 def _fallback_extract(user_msg: str) -> dict:
     """Simple keyword-based slot extraction from user message."""
@@ -83,15 +106,24 @@ def _parse_response(text: str, current_slots: dict, user_msg: str) -> tuple[str,
 async def conversation_node(state: ConversationState) -> dict:
     """Generate AI response and extract slots in a single LLM call."""
     summary = slots_summary(state["slots"])
-    system = SystemMessage(content=SYSTEM_PROMPT.format(stage=state["stage"].value, slots_summary=summary))
-    msgs = [system] + state["messages"]
 
-    # Extract last user message for fallback slot extraction
+    # Extract last user message for fallback slot extraction and emotion detection
     last_user = ""
     for m in reversed(state["messages"]):
         if isinstance(m, HumanMessage):
             last_user = m.content
             break
+
+    system_content = SYSTEM_PROMPT.format(stage=state["stage"].value, slots_summary=summary)
+
+    # Detect emotion and adjust prompt
+    emotion = _detect_emotion(last_user)
+    if emotion:
+        hint = _EMOTION_HINTS[emotion]
+        system_content += f"\n\n## 情绪提示\n{hint}"
+
+    system = SystemMessage(content=system_content)
+    msgs = [system] + state["messages"]
 
     response = await llm.ainvoke(msgs)
     clean_text, new_slots, _ = _parse_response(response.content, state["slots"], last_user)
