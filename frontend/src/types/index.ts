@@ -32,6 +32,7 @@ export interface Recommendation {
   college_name: string
   major_name: string
   level: string
+  city?: string
   category: string
   match_score: number
   reasons: Reason[]

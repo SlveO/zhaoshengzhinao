@@ -26,11 +26,10 @@ RANKING_PROMPT = """你是高考志愿填报专家。下面是真实的候选院
 
 ## 严格规则
 1. 从候选列表中选出 Top-10，按综合匹配度排序
-2. college_name 和 major_name 必须与候选列表中完全一致，一个字都不能改
-3. level 必须与候选列表一致
-4. 标注冲刺/稳妥/保底：学生位次明显高于最低位次=保底，位次接近=稳妥，位次明显低于=冲刺
-5. 每条推荐生成 2-3 条理由
-6. 每条理由附带数据来源，source_url 使用候选列表中的来源链接
+2. college_name, major_name, level, city 必须与候选列表完全一致，一个字都不能改
+3. 标注冲刺/稳妥/保底：学生位次明显高于最低位次=保底，位次接近=稳妥，位次明显低于=冲刺
+4. 每条推荐生成 2-3 条理由
+5. 每条理由附带数据来源，source_url 使用候选列表中的来源链接
 
 直接回复 JSON 数组（不要 markdown 标记）：
 [
@@ -39,6 +38,7 @@ RANKING_PROMPT = """你是高考志愿填报专家。下面是真实的候选院
     "college_name": "这里必须是候选列表中的真实院校名",
     "major_name": "这里必须是候选列表中的真实专业名",
     "level": "候选列表中的层次",
+    "city": "院校所在城市",
     "category": "冲刺/稳妥/保底",
     "match_score": 85,
     "reasons": [
@@ -66,7 +66,7 @@ async def generate_recommendations(
 ) -> list[dict]:
     candidates = retrieve_candidates(profile, k=30)
     candidate_text = "\n".join(
-        f"- {c['metadata']['college_name']} | {c['metadata']['major_name']} | {c['metadata']['level']} | 最低位次: {c['metadata']['min_rank']} | 最低分数: {c['metadata']['min_score']} | 选科: {c['metadata']['subjects']} | 来源: {c['metadata'].get('source_url', '')}"
+        f"- {c['metadata']['college_name']} | {c['metadata']['major_name']} | {c['metadata']['level']} | {c['metadata'].get('city', '')} | 最低位次: {c['metadata']['min_rank']} | 最低分数: {c['metadata']['min_score']} | 选科: {c['metadata']['subjects']} | 来源: {c['metadata'].get('source_url', '')}"
         for c in candidates
     )
     # Query user feedback history for ranking hints

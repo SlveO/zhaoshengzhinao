@@ -21,8 +21,7 @@ export default function Recommendations() {
 
   const filtered = recommendations.filter((r) => {
     if (filters.level && r.level !== filters.level) return false
-    if (filters.city && !r.college_name.includes(filters.city) && !r.college_name.includes(filters.city.replace('市', '')))
-      return false
+    if (filters.city && r.city !== filters.city) return false
     if (filters.category && r.category !== filters.category) return false
     return true
   })
