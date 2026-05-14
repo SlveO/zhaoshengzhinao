@@ -23,8 +23,34 @@ export interface ProfileSlot {
   riasec?: Record<string, number>
   values?: string[]
   region_pref?: string[]
-  career_vision?: string
-  family_influence?: string
+  completeness?: string   // L1/L2/L3/L4
+  engagement?: {
+    trust_level: string
+    willingness_to_share: number
+    indicators: string[]
+  }
+}
+
+export interface EvidenceItem {
+  id: string
+  dimension: string
+  source_turn: number
+  user_quote: string
+  inferred_value: {
+    dimension: string
+    score: number
+    rationale: string
+  }
+  confidence: number
+}
+
+export interface DimensionState {
+  dimension: string
+  label: string
+  score?: number
+  evidence_count: number
+  confidence: number
+  evidence?: EvidenceItem[]
 }
 
 export interface Recommendation {

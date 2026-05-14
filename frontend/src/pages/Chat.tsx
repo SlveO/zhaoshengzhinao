@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useChatStore } from '../stores/chatStore'
 import { useChat } from '../hooks/useChat'
 import StageIndicator from '../components/chat/StageIndicator'
-import SlotProgress from '../components/chat/SlotProgress'
+import EvidenceProgress from '../components/chat/EvidenceProgress'
 import ChatBubble from '../components/chat/ChatBubble'
 import ChatInput from '../components/chat/ChatInput'
 import SummaryModal from '../components/chat/SummaryModal'
@@ -95,7 +95,7 @@ export default function Chat() {
       {sidebarOpen && (
         <div className="w-[260px] bg-gray-50/80 border-r border-border p-4 flex flex-col gap-6 flex-shrink-0">
           <StageIndicator current={stage} />
-          <SlotProgress slots={slots} />
+          <EvidenceProgress slots={slots} />
           <Link to="/recommendations" className="text-xs text-primary hover:underline mt-auto">
             跳过对话，直接查看推荐 →
           </Link>
