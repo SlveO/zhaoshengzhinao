@@ -55,23 +55,29 @@ def _fallback_extract(user_msg: str) -> dict:
     return update
 
 
-def _parse_response(text: str, current_slots: dict, user_msg: str) -> tuple[str, dict]:
-    """Parse AI response, extracting embedded slot JSON, with keyword fallback."""
+def _parse_response(text: str, current_slots: dict, user_msg: str) -> tuple[str, dict, bool]:
+    """Parse AI response. Returns (clean_text, slots, llm_extracted).
+    llm_extracted=True means LLM provided slots, skip keyword fallback."""
     match = _SLOT_PATTERN.search(text)
     if match:
         try:
             update = json.loads(match.group(1))
             clean_text = _SLOT_PATTERN.sub('', text).strip()
-            return clean_text, merge_slots(current_slots, update)
+            has_data = any(
+                update.get(k)
+                for k in ["score", "subjects", "riasec_update", "values_hint", "region_pref", "career_vision", "family_influence"]
+            )
+            if has_data:
+                return clean_text, merge_slots(current_slots, update), True
         except (json.JSONDecodeError, TypeError):
             pass
 
-    # Fallback: keyword extraction from user message
+    # LLM didn't produce useful SLOTS block — use keyword fallback
     fallback = _fallback_extract(user_msg)
     if fallback:
-        return text.strip(), merge_slots(current_slots, fallback)
+        return text.strip(), merge_slots(current_slots, fallback), False
 
-    return text.strip(), current_slots
+    return text.strip(), current_slots, False
 
 
 async def conversation_node(state: ConversationState) -> dict:
@@ -88,7 +94,7 @@ async def conversation_node(state: ConversationState) -> dict:
             break
 
     response = await llm.ainvoke(msgs)
-    clean_text, new_slots = _parse_response(response.content, state["slots"], last_user)
+    clean_text, new_slots, _ = _parse_response(response.content, state["slots"], last_user)
     response.content = clean_text
     return {"messages": [response], "slots": new_slots}
 
