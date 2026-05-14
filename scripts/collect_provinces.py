@@ -14,7 +14,7 @@ PROVINCES = {
     61: "陕西", 62: "甘肃", 63: "青海", 64: "宁夏", 65: "新疆",
 }
 YEARS = [2021, 2022, 2023, 2024]
-CONCURRENCY = 10
+CONCURRENCY = 6  # per province; 12 total when running BJ+SH in parallel
 API_BASE = "https://static-data.gaokao.cn/www/2.0/schoolspecialscore"
 
 
@@ -98,11 +98,12 @@ async def main():
     from scrapers.config_beijing import BEIJING_SCHOOLS
     from scrapers.config_shanghai import SHANGHAI_SCHOOLS
 
-    # Collect Beijing
-    bj_records = await collect_schools(BEIJING_SCHOOLS, "Beijing")
+    # Collect Beijing and Shanghai in parallel
+    bj_task = collect_schools(BEIJING_SCHOOLS, "Beijing")
+    sh_task = collect_schools(SHANGHAI_SCHOOLS, "Shanghai")
 
-    # Collect Shanghai
-    sh_records = await collect_schools(SHANGHAI_SCHOOLS, "Shanghai")
+    results = await asyncio.gather(bj_task, sh_task)
+    bj_records, sh_records = results
 
     # Save
     with open("data/raw/beijing_scores.json", "w", encoding="utf-8") as f:
