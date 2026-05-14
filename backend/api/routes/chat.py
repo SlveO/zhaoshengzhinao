@@ -239,7 +239,6 @@ async def chat_websocket(ws: WebSocket, session_id: str):
                 # Invalidate recommendation cache
                 try:
                     import redis.asyncio as aioredis
-                    from config import settings
                     r = aioredis.from_url(settings.redis_url)
                     await r.delete(f"recs_cache:{state_data['user_id']}")
                 except Exception:
