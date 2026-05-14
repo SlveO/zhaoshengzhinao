@@ -1,0 +1,443 @@
+2026-05-14 12:17:15.322 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\gaokao_scores\colleges_test.json
+2026-05-14 12:17:15.329 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\gaokao_scores\admissions_test.json
+2026-05-14 12:18:10.261 | INFO     | scrapers.sources.industry_data:build_industries:504 - Built 60 industry records
+2026-05-14 12:18:10.266 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\industry_data\industries.json
+2026-05-14 12:18:10.268 | INFO     | scrapers.sources.industry_data:build_mappings:516 - Built 20 major-industry mappings
+2026-05-14 12:18:10.269 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\industry_data\major_industry_mapping.json
+2026-05-14 12:18:10.276 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.sysu.edu.cn/report/2024.pdf: 
+2026-05-14 12:18:10.315 | INFO     | scrapers.sources.eol_api:run:186 - College info 1/27: 中山大学 (platform_id=104)
+2026-05-14 12:18:10.795 | INFO     | scrapers.sources.eol_api:run:186 - College info 2/27: 华南理工大学 (platform_id=105)
+2026-05-14 12:18:11.292 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.scut.edu.cn/report/2024.pdf: 
+2026-05-14 12:18:11.300 | INFO     | scrapers.sources.eol_api:run:186 - College info 3/27: 暨南大学 (platform_id=106)
+2026-05-14 12:18:11.824 | INFO     | scrapers.sources.eol_api:run:186 - College info 4/27: 华南师范大学 (platform_id=98)
+2026-05-14 12:18:12.312 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.jnu.edu.cn/report/2024.pdf: 
+2026-05-14 12:18:12.319 | INFO     | scrapers.sources.eol_api:run:186 - College info 5/27: 华南农业大学 (platform_id=287)
+2026-05-14 12:18:12.827 | INFO     | scrapers.sources.eol_api:run:186 - College info 6/27: 广州医科大学 (platform_id=295)
+2026-05-14 12:18:13.408 | INFO     | scrapers.sources.eol_api:run:186 - College info 7/27: 广州中医药大学 (platform_id=289)
+2026-05-14 12:18:13.964 | INFO     | scrapers.sources.eol_api:run:186 - College info 8/27: 深圳大学 (platform_id=284)
+2026-05-14 12:18:14.357 | INFO     | scrapers.sources.eol_api:run:186 - College info 9/27: 广东工业大学 (platform_id=286)
+2026-05-14 12:18:14.863 | INFO     | scrapers.sources.eol_api:run:186 - College info 10/27: 广州大学 (platform_id=293)
+2026-05-14 12:18:15.407 | INFO     | scrapers.sources.eol_api:run:186 - College info 11/27: 广东外语外贸大学 (platform_id=290)
+2026-05-14 12:18:16.062 | INFO     | scrapers.sources.eol_api:run:186 - College info 12/27: 汕头大学 (platform_id=283)
+2026-05-14 12:18:16.405 | INFO     | scrapers.sources.eol_api:run:186 - College info 13/27: 广东财经大学 (platform_id=302)
+2026-05-14 12:18:16.931 | INFO     | scrapers.sources.eol_api:run:186 - College info 14/27: 广东海洋大学 (platform_id=288)
+2026-05-14 12:18:17.436 | INFO     | scrapers.sources.eol_api:run:186 - College info 15/27: 东莞理工学院 (platform_id=291)
+2026-05-14 12:18:17.956 | INFO     | scrapers.sources.eol_api:run:186 - College info 16/27: 佛山大学 (platform_id=306)
+2026-05-14 12:18:18.468 | INFO     | scrapers.sources.eol_api:run:186 - College info 17/27: 五邑大学 (platform_id=285)
+2026-05-14 12:18:19.019 | INFO     | scrapers.sources.eol_api:run:186 - College info 18/27: 广东医科大学 (platform_id=294)
+2026-05-14 12:18:19.501 | INFO     | scrapers.sources.eol_api:run:186 - College info 19/27: 广东药科大学 (platform_id=296)
+2026-05-14 12:18:20.009 | INFO     | scrapers.sources.eol_api:run:186 - College info 20/27: 韶关学院 (platform_id=298)
+2026-05-14 12:18:20.518 | INFO     | scrapers.sources.eol_api:run:186 - College info 21/27: 惠州学院 (platform_id=300)
+2026-05-14 12:18:21.041 | INFO     | scrapers.sources.eol_api:run:186 - College info 22/27: 韩山师范学院 (platform_id=297)
+2026-05-14 12:18:21.550 | INFO     | scrapers.sources.eol_api:run:186 - College info 23/27: 岭南师范学院 (platform_id=299)
+2026-05-14 12:18:22.063 | INFO     | scrapers.sources.eol_api:run:186 - College info 24/27: 嘉应学院 (platform_id=301)
+2026-05-14 12:18:22.572 | INFO     | scrapers.sources.eol_api:run:186 - College info 25/27: 广州体育学院 (platform_id=303)
+2026-05-14 12:18:23.081 | INFO     | scrapers.sources.eol_api:run:186 - College info 26/27: 广州美术学院 (platform_id=304)
+2026-05-14 12:18:23.588 | INFO     | scrapers.sources.eol_api:run:186 - College info 27/27: 星海音乐学院 (platform_id=305)
+2026-05-14 12:18:23.904 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\gaokao_scores\colleges.json
+2026-05-14 12:18:23.904 | INFO     | scrapers.sources.eol_api:run:208 - Fetching scores: 27 schools × 6 years = 162 requests...
+2026-05-14 12:18:26.738 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/283/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/283/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:26.738 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=283/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/283/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/283/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:27.399 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://career.scnu.edu.cn/report/2024.pdf: Client error '404 Not Found' for url 'https://career.scnu.edu.cn/report/2024.pdf'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:29.751 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/284/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/284/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:29.751 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=284/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/284/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/284/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:31.457 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://career.szu.edu.cn/report/2024.pdf: 
+2026-05-14 12:18:32.483 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.gdut.edu.cn/report/2024.pdf: 
+2026-05-14 12:18:32.776 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/285/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/285/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:32.776 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=285/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/285/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/285/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:35.833 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/286/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/286/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:35.833 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=286/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/286/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/286/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:38.879 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/287/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/287/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:38.879 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=287/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/287/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/287/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:41.919 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/288/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/288/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:41.919 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=288/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/288/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/288/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:44.997 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/289/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/289/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:44.997 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=289/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/289/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/289/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:48.041 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/290/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/290/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:48.041 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=290/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/290/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/290/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:51.097 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/291/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/291/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:51.097 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=291/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/291/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/291/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:54.198 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/293/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/293/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:54.198 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=293/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/293/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/293/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:57.176 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/294/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/294/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:18:57.176 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=294/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/294/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/294/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:00.280 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/295/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/295/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:00.280 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=295/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/295/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/295/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:03.291 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/296/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/296/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:03.291 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=296/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/296/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/296/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:06.317 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/297/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/297/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:06.317 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=297/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/297/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/297/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:09.418 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/298/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/298/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:09.418 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=298/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/298/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/298/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:12.375 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/299/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/299/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:12.375 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=299/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/299/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/299/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:15.416 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/300/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/300/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:15.416 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=300/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/300/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/300/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:18.472 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/301/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/301/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:18.472 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=301/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/301/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/301/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:21.508 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/302/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/302/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:21.508 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=302/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/302/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/302/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:24.549 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/303/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/303/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:24.549 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=303/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/303/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/303/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:27.569 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/304/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/304/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:27.569 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=304/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/304/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/304/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:28.114 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2020/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2020/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:28.114 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=305/2020: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2020/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2020/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:30.149 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.sysu.edu.cn/report/2024.pdf: 
+2026-05-14 12:19:30.617 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:30.617 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=305/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:31.166 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.scut.edu.cn/report/2024.pdf: 
+2026-05-14 12:19:32.178 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.jnu.edu.cn/report/2024.pdf: 
+2026-05-14 12:19:33.254 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://career.scnu.edu.cn/report/2024.pdf: Client error '404 Not Found' for url 'https://career.scnu.edu.cn/report/2024.pdf'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:33.665 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/306/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/306/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:33.665 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=306/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/306/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/306/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:36.710 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:36.710 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=98/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:37.290 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://career.szu.edu.cn/report/2024.pdf: 
+2026-05-14 12:19:38.312 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.gdut.edu.cn/report/2024.pdf: 
+2026-05-14 12:19:39.820 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/104/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/104/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:39.820 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=104/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/104/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/104/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:42.804 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/105/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/105/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:42.804 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=105/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/105/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/105/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:45.864 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/106/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/106/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:45.864 | WARNING  | scrapers.sources.eol_api:fetch_scores:78 - Score fetch failed for id=106/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/106/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/106/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:19:45.864 | INFO     | scrapers.sources.eol_api:run:217 - Collected 22905 admission score records (27 college infos)
+2026-05-14 12:19:46.163 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\gaokao_scores\admissions.json
+2026-05-14 12:20:35.739 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\university_reports\employment.json
+2026-05-14 12:20:35.739 | INFO     | __main__:main:50 - Scraper gaokao_scores: {'source': 'gaokao_scores', 'colleges': 27, 'admissions': 22905}
+2026-05-14 12:20:35.739 | INFO     | __main__:main:50 - Scraper university_reports: {'source': 'university_reports', 'employment_records': 0}
+2026-05-14 12:20:35.739 | INFO     | __main__:main:50 - Scraper industry_data: {'source': 'industry_data', 'industries': 60, 'mappings': 20}
+2026-05-14 12:20:35.739 | INFO     | __main__:main:53 - 
+============================================================
+2026-05-14 12:20:35.740 | INFO     | __main__:main:54 - Stage 2: Loading and merging raw data
+2026-05-14 12:20:35.740 | INFO     | __main__:main:55 - ============================================================
+2026-05-14 12:20:35.969 | INFO     | __main__:main:193 - Data summary: 65 colleges, 0 majors, 22905 admissions, 0 employment, 60 industries, 20 mappings
+2026-05-14 12:20:35.969 | INFO     | __main__:main:201 - 
+============================================================
+2026-05-14 12:20:35.969 | INFO     | __main__:main:202 - Stage 3: Validation
+2026-05-14 12:20:35.969 | INFO     | __main__:main:203 - ============================================================
+2026-05-14 12:20:36.008 | INFO     | scrapers.storage.validator:validate_colleges:24 - College validation: 65 ok, 0 errors
+2026-05-14 12:20:36.013 | INFO     | scrapers.storage.validator:validate_admissions:47 - Admission validation: 22905 ok, 0 errors
+2026-05-14 12:20:36.013 | INFO     | scrapers.storage.validator:validate_employment:66 - Employment validation: 0 ok, 0 errors
+2026-05-14 12:20:36.013 | INFO     | scrapers.storage.validator:validate_industries:88 - Industry validation: 60 ok, 0 errors
+2026-05-14 12:20:36.013 | INFO     | scrapers.storage.validator:run_all_validations:111 - All validations passed
+2026-05-14 12:20:36.016 | INFO     | __main__:main:217 - 
+============================================================
+2026-05-14 12:20:36.016 | INFO     | __main__:main:218 - Stage 4: Exporting to seed/ and approved/
+2026-05-14 12:20:36.016 | INFO     | __main__:main:219 - ============================================================
+2026-05-14 12:20:36.019 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 65 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\approved\colleges_full.json
+2026-05-14 12:20:36.019 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 0 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\approved\majors.json
+2026-05-14 12:20:36.372 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 22905 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\approved\admissions.json
+2026-05-14 12:20:36.376 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 0 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\approved\employment.json
+2026-05-14 12:20:36.382 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 60 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\approved\industries.json
+2026-05-14 12:20:36.383 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 20 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\approved\major_industry_mapping.json
+2026-05-14 12:20:36.385 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 65 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\seed\schools.json
+2026-05-14 12:20:36.641 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 22905 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\seed\scores.json
+2026-05-14 12:20:36.642 | INFO     | scrapers.storage.exporter:export_full_data:92 - Full data export complete
+2026-05-14 12:20:36.643 | INFO     | __main__:main:226 - 
+============================================================
+2026-05-14 12:20:36.643 | INFO     | __main__:main:227 - Pipeline complete!
+2026-05-14 12:20:36.643 | INFO     | __main__:main:228 -   Seed: data/seed/schools.json (65 schools) + data/seed/scores.json (22905 scores)
+2026-05-14 12:20:36.643 | INFO     | __main__:main:232 -   Full: data/approved/ (6 files)
+2026-05-14 12:20:36.643 | INFO     | __main__:main:233 - ============================================================
+2026-05-14 12:45:59.919 | INFO     | scrapers.sources.industry_data:build_industries:504 - Built 60 industry records
+2026-05-14 12:45:59.926 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\industry_data\industries.json
+2026-05-14 12:45:59.926 | INFO     | scrapers.sources.industry_data:build_mappings:516 - Built 20 major-industry mappings
+2026-05-14 12:45:59.927 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\industry_data\major_industry_mapping.json
+2026-05-14 12:45:59.934 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.sysu.edu.cn/report/2024.pdf: 
+2026-05-14 12:45:59.985 | INFO     | scrapers.sources.eol_api:run:196 - College info 1/36: 中山大学 (platform_id=104)
+2026-05-14 12:46:00.610 | INFO     | scrapers.sources.eol_api:run:196 - College info 2/36: 华南理工大学 (platform_id=105)
+2026-05-14 12:46:00.931 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.scut.edu.cn/report/2024.pdf: 
+2026-05-14 12:46:00.968 | INFO     | scrapers.sources.eol_api:run:196 - College info 3/36: 暨南大学 (platform_id=106)
+2026-05-14 12:46:01.487 | INFO     | scrapers.sources.eol_api:run:196 - College info 4/36: 华南师范大学 (platform_id=98)
+2026-05-14 12:46:01.952 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.jnu.edu.cn/report/2024.pdf: 
+2026-05-14 12:46:02.066 | INFO     | scrapers.sources.eol_api:run:196 - College info 5/36: 华南农业大学 (platform_id=287)
+2026-05-14 12:46:02.764 | INFO     | scrapers.sources.eol_api:run:196 - College info 6/36: 南方医科大学 (platform_id=960)
+2026-05-14 12:46:03.165 | INFO     | scrapers.sources.eol_api:run:196 - College info 7/36: 广州中医药大学 (platform_id=289)
+2026-05-14 12:46:04.130 | INFO     | scrapers.sources.eol_api:run:196 - College info 8/36: 深圳大学 (platform_id=284)
+2026-05-14 12:46:04.357 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://career.scnu.edu.cn/report/2024.pdf: Client error '404 Not Found' for url 'https://career.scnu.edu.cn/report/2024.pdf'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:04.575 | INFO     | scrapers.sources.eol_api:run:196 - College info 9/36: 广东工业大学 (platform_id=286)
+2026-05-14 12:46:04.988 | INFO     | scrapers.sources.eol_api:run:196 - College info 10/36: 广州大学 (platform_id=293)
+2026-05-14 12:46:05.494 | INFO     | scrapers.sources.eol_api:run:196 - College info 11/36: 广东外语外贸大学 (platform_id=290)
+2026-05-14 12:46:06.547 | INFO     | scrapers.sources.eol_api:run:196 - College info 12/36: 汕头大学 (platform_id=283)
+2026-05-14 12:46:06.901 | INFO     | scrapers.sources.eol_api:run:196 - College info 13/36: 广州医科大学 (platform_id=295)
+2026-05-14 12:46:07.385 | INFO     | scrapers.sources.eol_api:run:196 - College info 14/36: 广东财经大学 (platform_id=302)
+2026-05-14 12:46:08.046 | INFO     | scrapers.sources.eol_api:run:196 - College info 15/36: 广东海洋大学 (platform_id=288)
+2026-05-14 12:46:08.356 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://career.szu.edu.cn/report/2024.pdf: 
+2026-05-14 12:46:08.687 | INFO     | scrapers.sources.eol_api:run:196 - College info 16/36: 东莞理工学院 (platform_id=291)
+2026-05-14 12:46:09.084 | INFO     | scrapers.sources.eol_api:run:196 - College info 17/36: 佛山大学 (platform_id=306)
+2026-05-14 12:46:09.363 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.gdut.edu.cn/report/2024.pdf: 
+2026-05-14 12:46:09.540 | INFO     | scrapers.sources.eol_api:run:196 - College info 18/36: 五邑大学 (platform_id=285)
+2026-05-14 12:46:10.030 | INFO     | scrapers.sources.eol_api:run:196 - College info 19/36: 广东医科大学 (platform_id=294)
+2026-05-14 12:46:10.575 | INFO     | scrapers.sources.eol_api:run:196 - College info 20/36: 广东药科大学 (platform_id=296)
+2026-05-14 12:46:11.223 | INFO     | scrapers.sources.eol_api:run:196 - College info 21/36: 韶关学院 (platform_id=298)
+2026-05-14 12:46:11.546 | INFO     | scrapers.sources.eol_api:run:196 - College info 22/36: 惠州学院 (platform_id=300)
+2026-05-14 12:46:12.113 | INFO     | scrapers.sources.eol_api:run:196 - College info 23/36: 韩山师范学院 (platform_id=297)
+2026-05-14 12:46:12.592 | INFO     | scrapers.sources.eol_api:run:196 - College info 24/36: 岭南师范学院 (platform_id=299)
+2026-05-14 12:46:13.359 | INFO     | scrapers.sources.eol_api:run:196 - College info 25/36: 肇庆学院 (platform_id=961)
+2026-05-14 12:46:13.825 | INFO     | scrapers.sources.eol_api:run:196 - College info 26/36: 嘉应学院 (platform_id=301)
+2026-05-14 12:46:14.200 | INFO     | scrapers.sources.eol_api:run:196 - College info 27/36: 广州体育学院 (platform_id=303)
+2026-05-14 12:46:14.822 | INFO     | scrapers.sources.eol_api:run:196 - College info 28/36: 广州美术学院 (platform_id=304)
+2026-05-14 12:46:15.241 | INFO     | scrapers.sources.eol_api:run:196 - College info 29/36: 星海音乐学院 (platform_id=305)
+2026-05-14 12:46:15.986 | INFO     | scrapers.sources.eol_api:run:196 - College info 30/36: 广东技术师范大学 (platform_id=964)
+2026-05-14 12:46:16.682 | INFO     | scrapers.sources.eol_api:run:196 - College info 31/36: 广东金融学院 (platform_id=1031)
+2026-05-14 12:46:17.616 | INFO     | scrapers.sources.eol_api:run:196 - College info 32/36: 广东警官学院 (platform_id=963)
+2026-05-14 12:46:18.203 | INFO     | scrapers.sources.eol_api:run:196 - College info 33/36: 广东培正学院 (platform_id=965)
+2026-05-14 12:46:18.755 | INFO     | scrapers.sources.eol_api:run:196 - College info 34/36: 广东白云学院 (platform_id=966)
+2026-05-14 12:46:19.384 | INFO     | scrapers.sources.eol_api:run:196 - College info 35/36: 广州南方学院 (platform_id=1096)
+2026-05-14 12:46:19.845 | INFO     | scrapers.sources.eol_api:run:196 - College info 36/36: 广州航海学院 (platform_id=967)
+2026-05-14 12:46:20.157 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\gaokao_scores\colleges.json
+2026-05-14 12:46:20.157 | INFO     | scrapers.sources.eol_api:run:218 - Fetching scores: 36 schools × 6 years = 216 requests...
+2026-05-14 12:46:23.000 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/1031/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/1031/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:23.000 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=1031/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/1031/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/1031/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:26.235 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/283/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/283/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:26.235 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=283/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/283/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/283/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:29.209 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/284/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/284/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:29.209 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=284/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/284/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/284/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:32.154 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/285/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/285/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:32.155 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=285/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/285/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/285/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:35.988 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/286/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/286/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:35.988 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=286/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/286/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/286/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:38.732 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/287/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/287/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:38.732 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=287/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/287/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/287/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:41.217 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/288/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/288/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:41.218 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=288/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/288/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/288/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:44.277 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/289/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/289/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:44.277 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=289/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/289/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/289/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:47.336 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/290/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/290/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:47.336 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=290/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/290/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/290/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:50.846 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/291/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/291/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:50.846 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=291/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/291/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/291/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:53.323 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/293/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/293/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:53.323 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=293/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/293/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/293/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:56.457 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/294/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/294/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:56.458 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=294/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/294/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/294/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:59.793 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/295/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/295/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:46:59.793 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=295/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/295/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/295/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:02.533 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/296/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/296/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:02.533 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=296/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/296/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/296/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:06.318 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/297/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/297/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:06.318 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=297/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/297/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/297/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:06.947 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.sysu.edu.cn/report/2024.pdf: 
+2026-05-14 12:47:07.958 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.scut.edu.cn/report/2024.pdf: 
+2026-05-14 12:47:08.758 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/298/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/298/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:08.758 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=298/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/298/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/298/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:08.963 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.jnu.edu.cn/report/2024.pdf: 
+2026-05-14 12:47:10.185 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://career.scnu.edu.cn/report/2024.pdf: Client error '404 Not Found' for url 'https://career.scnu.edu.cn/report/2024.pdf'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:11.994 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/299/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/299/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:11.995 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=299/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/299/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/299/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:14.238 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://career.szu.edu.cn/report/2024.pdf: 
+2026-05-14 12:47:15.035 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/300/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/300/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:15.036 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=300/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/300/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/300/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:15.265 | WARNING  | scrapers.sources.university_reports:download_pdf:56 - Failed to download https://jyzd.gdut.edu.cn/report/2024.pdf: 
+2026-05-14 12:47:17.787 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/301/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/301/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:17.787 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=301/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/301/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/301/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:20.964 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/302/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/302/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:20.964 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=302/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/302/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/302/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:23.803 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/303/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/303/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:23.803 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=303/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/303/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/303/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:27.322 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/304/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/304/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:27.322 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=304/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/304/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/304/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:27.323 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2020/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2020/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:27.323 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=305/2020: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2020/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2020/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:30.139 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:30.139 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=305/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/305/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:33.129 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/306/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/306/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:33.129 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=306/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/306/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/306/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:36.961 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/960/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/960/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:36.961 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=960/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/960/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/960/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:39.166 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/961/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/961/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:39.166 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=961/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/961/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/961/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:42.118 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/963/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/963/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:42.118 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=963/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/963/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/963/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:47.615 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/964/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/964/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:47.615 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=964/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/964/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/964/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:48.708 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/965/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/965/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:48.708 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=965/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/965/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/965/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:51.790 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/966/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/966/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:51.790 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=966/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/966/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/966/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:55.154 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/967/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/967/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:55.154 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=967/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/967/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/967/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:58.620 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/1096/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/1096/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:47:58.620 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=1096/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/1096/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/1096/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:48:01.108 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:48:01.108 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=98/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:48:04.175 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/104/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/104/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:48:04.175 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=104/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/104/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/104/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:48:07.363 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/105/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/105/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:48:07.363 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=105/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/105/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/105/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:48:10.395 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/106/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/106/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:48:10.395 | WARNING  | scrapers.sources.eol_api:fetch_scores:88 - Score fetch failed for id=106/2025: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/106/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/106/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-14 12:48:12.727 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\university_reports\employment.json
+2026-05-14 12:48:41.083 | INFO     | scrapers.sources.eol_api:run:227 - Collected 29749 admission score records (36 college infos)
+2026-05-14 12:48:41.479 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\gaokao_scores\admissions.json
+2026-05-14 12:48:41.485 | INFO     | __main__:main:50 - Scraper gaokao_scores: {'source': 'gaokao_scores', 'colleges': 36, 'admissions': 29749}
+2026-05-14 12:48:41.485 | INFO     | __main__:main:50 - Scraper university_reports: {'source': 'university_reports', 'employment_records': 0}
+2026-05-14 12:48:41.485 | INFO     | __main__:main:50 - Scraper industry_data: {'source': 'industry_data', 'industries': 60, 'mappings': 20}
+2026-05-14 12:48:41.485 | INFO     | __main__:main:53 - 
+============================================================
+2026-05-14 12:48:41.485 | INFO     | __main__:main:54 - Stage 2: Loading and merging raw data
+2026-05-14 12:48:41.485 | INFO     | __main__:main:55 - ============================================================
+2026-05-14 12:48:41.896 | INFO     | __main__:main:193 - Data summary: 65 colleges, 0 majors, 29749 admissions, 0 employment, 60 industries, 20 mappings
+2026-05-14 12:48:41.896 | INFO     | __main__:main:201 - 
+============================================================
+2026-05-14 12:48:41.896 | INFO     | __main__:main:202 - Stage 3: Validation
+2026-05-14 12:48:41.896 | INFO     | __main__:main:203 - ============================================================
+2026-05-14 12:48:41.992 | INFO     | scrapers.storage.validator:validate_colleges:24 - College validation: 65 ok, 0 errors
+2026-05-14 12:48:42.000 | INFO     | scrapers.storage.validator:validate_admissions:47 - Admission validation: 29749 ok, 0 errors
+2026-05-14 12:48:42.000 | INFO     | scrapers.storage.validator:validate_employment:66 - Employment validation: 0 ok, 0 errors
+2026-05-14 12:48:42.000 | INFO     | scrapers.storage.validator:validate_industries:88 - Industry validation: 60 ok, 0 errors
+2026-05-14 12:48:42.000 | INFO     | scrapers.storage.validator:run_all_validations:111 - All validations passed
+2026-05-14 12:48:42.004 | INFO     | __main__:main:217 - 
+============================================================
+2026-05-14 12:48:42.004 | INFO     | __main__:main:218 - Stage 4: Exporting to seed/ and approved/
+2026-05-14 12:48:42.004 | INFO     | __main__:main:219 - ============================================================
+2026-05-14 12:48:42.008 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 65 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\approved\colleges_full.json
+2026-05-14 12:48:42.008 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 0 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\approved\majors.json
+2026-05-14 12:48:42.578 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 29749 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\approved\admissions.json
+2026-05-14 12:48:42.583 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 0 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\approved\employment.json
+2026-05-14 12:48:42.587 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 60 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\approved\industries.json
+2026-05-14 12:48:42.588 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 20 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\approved\major_industry_mapping.json
+2026-05-14 12:48:42.590 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 65 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\seed\schools.json
+2026-05-14 12:48:42.941 | INFO     | scrapers.storage.exporter:save_json:29 - Exported 29749 records to D:\_Greatest_programmer\_Projects\gaokao_agents\data\seed\scores.json
+2026-05-14 12:48:42.944 | INFO     | scrapers.storage.exporter:export_full_data:92 - Full data export complete
+2026-05-14 12:48:42.945 | INFO     | __main__:main:226 - 
+============================================================
+2026-05-14 12:48:42.945 | INFO     | __main__:main:227 - Pipeline complete!
+2026-05-14 12:48:42.945 | INFO     | __main__:main:228 -   Seed: data/seed/schools.json (65 schools) + data/seed/scores.json (29749 scores)
+2026-05-14 12:48:42.945 | INFO     | __main__:main:232 -   Full: data/approved/ (6 files)
+2026-05-14 12:48:42.945 | INFO     | __main__:main:233 - ============================================================

@@ -1,0 +1,431 @@
+[
+  {
+    "major_name": "计算机科学与技术",
+    "primary_industries": [
+      "信息传输、软件和信息技术服务业"
+    ],
+    "secondary_industries": [
+      "金融业",
+      "科学研究和技术服务业",
+      "教育"
+    ],
+    "typical_positions": [
+      "软件工程师",
+      "算法工程师",
+      "数据工程师",
+      "系统架构师",
+      "全栈工程师"
+    ],
+    "salary_range": {
+      "entry": 8000,
+      "mid": 18000,
+      "senior": 35000
+    }
+  },
+  {
+    "major_name": "软件工程",
+    "primary_industries": [
+      "信息传输、软件和信息技术服务业"
+    ],
+    "secondary_industries": [
+      "金融业",
+      "制造业"
+    ],
+    "typical_positions": [
+      "软件开发工程师",
+      "前端工程师",
+      "移动端工程师",
+      "DevOps工程师"
+    ],
+    "salary_range": {
+      "entry": 8000,
+      "mid": 17000,
+      "senior": 33000
+    }
+  },
+  {
+    "major_name": "人工智能",
+    "primary_industries": [
+      "信息传输、软件和信息技术服务业"
+    ],
+    "secondary_industries": [
+      "科学研究和技术服务业",
+      "制造业",
+      "金融业"
+    ],
+    "typical_positions": [
+      "算法工程师",
+      "机器学习工程师",
+      "NLP工程师",
+      "计算机视觉工程师"
+    ],
+    "salary_range": {
+      "entry": 12000,
+      "mid": 25000,
+      "senior": 45000
+    }
+  },
+  {
+    "major_name": "数据科学与大数据技术",
+    "primary_industries": [
+      "信息传输、软件和信息技术服务业"
+    ],
+    "secondary_industries": [
+      "金融业",
+      "科学研究和技术服务业",
+      "租赁和商务服务业"
+    ],
+    "typical_positions": [
+      "数据分析师",
+      "数据工程师",
+      "数据科学家",
+      "BI工程师"
+    ],
+    "salary_range": {
+      "entry": 9000,
+      "mid": 18000,
+      "senior": 32000
+    }
+  },
+  {
+    "major_name": "临床医学",
+    "primary_industries": [
+      "卫生和社会工作"
+    ],
+    "secondary_industries": [
+      "科学研究和技术服务业",
+      "教育"
+    ],
+    "typical_positions": [
+      "临床医师",
+      "医学研究员",
+      "医疗管理者"
+    ],
+    "salary_range": {
+      "entry": 6000,
+      "mid": 12000,
+      "senior": 25000
+    }
+  },
+  {
+    "major_name": "金融学",
+    "primary_industries": [
+      "金融业"
+    ],
+    "secondary_industries": [
+      "信息传输、软件和信息技术服务业",
+      "租赁和商务服务业"
+    ],
+    "typical_positions": [
+      "投资分析师",
+      "金融产品经理",
+      "风险控制师",
+      "理财顾问"
+    ],
+    "salary_range": {
+      "entry": 7000,
+      "mid": 15000,
+      "senior": 30000
+    }
+  },
+  {
+    "major_name": "会计学",
+    "primary_industries": [
+      "金融业",
+      "租赁和商务服务业"
+    ],
+    "secondary_industries": [
+      "制造业",
+      "信息传输、软件和信息技术服务业"
+    ],
+    "typical_positions": [
+      "会计师",
+      "审计师",
+      "财务分析师",
+      "税务顾问"
+    ],
+    "salary_range": {
+      "entry": 5000,
+      "mid": 10000,
+      "senior": 22000
+    }
+  },
+  {
+    "major_name": "电子信息工程",
+    "primary_industries": [
+      "信息传输、软件和信息技术服务业",
+      "制造业"
+    ],
+    "secondary_industries": [
+      "科学研究和技术服务业"
+    ],
+    "typical_positions": [
+      "嵌入式工程师",
+      "硬件工程师",
+      "通信工程师",
+      "电子工程师"
+    ],
+    "salary_range": {
+      "entry": 7000,
+      "mid": 14000,
+      "senior": 25000
+    }
+  },
+  {
+    "major_name": "机械设计制造及其自动化",
+    "primary_industries": [
+      "制造业"
+    ],
+    "secondary_industries": [
+      "科学研究和技术服务业",
+      "建筑业"
+    ],
+    "typical_positions": [
+      "机械工程师",
+      "结构工程师",
+      "工艺工程师",
+      "设备工程师"
+    ],
+    "salary_range": {
+      "entry": 6000,
+      "mid": 11000,
+      "senior": 20000
+    }
+  },
+  {
+    "major_name": "电气工程及其自动化",
+    "primary_industries": [
+      "制造业",
+      "电力、热力、燃气及水生产和供应业"
+    ],
+    "secondary_industries": [
+      "建筑业",
+      "信息传输、软件和信息技术服务业"
+    ],
+    "typical_positions": [
+      "电气工程师",
+      "电力系统工程师",
+      "自动化工程师",
+      "新能源工程师"
+    ],
+    "salary_range": {
+      "entry": 6000,
+      "mid": 12000,
+      "senior": 22000
+    }
+  },
+  {
+    "major_name": "建筑学",
+    "primary_industries": [
+      "建筑业"
+    ],
+    "secondary_industries": [
+      "科学研究和技术服务业",
+      "房地产业"
+    ],
+    "typical_positions": [
+      "建筑设计师",
+      "方案设计师",
+      "BIM工程师",
+      "城市设计师"
+    ],
+    "salary_range": {
+      "entry": 6000,
+      "mid": 12000,
+      "senior": 25000
+    }
+  },
+  {
+    "major_name": "土木工程",
+    "primary_industries": [
+      "建筑业"
+    ],
+    "secondary_industries": [
+      "交通运输、仓储和邮政业",
+      "科学研究和技术服务业"
+    ],
+    "typical_positions": [
+      "结构工程师",
+      "施工工程师",
+      "造价工程师",
+      "项目经理"
+    ],
+    "salary_range": {
+      "entry": 5500,
+      "mid": 11000,
+      "senior": 22000
+    }
+  },
+  {
+    "major_name": "法学",
+    "primary_industries": [
+      "租赁和商务服务业",
+      "公共管理、社会保障和社会组织"
+    ],
+    "secondary_industries": [
+      "金融业",
+      "信息传输、软件和信息技术服务业"
+    ],
+    "typical_positions": [
+      "律师",
+      "法务",
+      "合规官",
+      "知识产权顾问"
+    ],
+    "salary_range": {
+      "entry": 5000,
+      "mid": 12000,
+      "senior": 30000
+    }
+  },
+  {
+    "major_name": "自动化",
+    "primary_industries": [
+      "制造业",
+      "信息传输、软件和信息技术服务业"
+    ],
+    "secondary_industries": [
+      "电力、热力、燃气及水生产和供应业",
+      "交通运输、仓储和邮政业"
+    ],
+    "typical_positions": [
+      "自动化工程师",
+      "PLC工程师",
+      "机器人工程师",
+      "系统集成工程师"
+    ],
+    "salary_range": {
+      "entry": 6500,
+      "mid": 12000,
+      "senior": 22000
+    }
+  },
+  {
+    "major_name": "汉语言文学",
+    "primary_industries": [
+      "教育",
+      "文化、体育和娱乐业"
+    ],
+    "secondary_industries": [
+      "租赁和商务服务业",
+      "公共管理、社会保障和社会组织"
+    ],
+    "typical_positions": [
+      "教师",
+      "编辑",
+      "文案策划",
+      "公务员"
+    ],
+    "salary_range": {
+      "entry": 5000,
+      "mid": 9000,
+      "senior": 18000
+    }
+  },
+  {
+    "major_name": "英语",
+    "primary_industries": [
+      "教育",
+      "租赁和商务服务业"
+    ],
+    "secondary_industries": [
+      "信息传输、软件和信息技术服务业",
+      "制造业"
+    ],
+    "typical_positions": [
+      "翻译",
+      "英语教师",
+      "外贸专员",
+      "海外运营"
+    ],
+    "salary_range": {
+      "entry": 5000,
+      "mid": 10000,
+      "senior": 20000
+    }
+  },
+  {
+    "major_name": "化学工程与工艺",
+    "primary_industries": [
+      "制造业"
+    ],
+    "secondary_industries": [
+      "科学研究和技术服务业",
+      "电力、热力、燃气及水生产和供应业"
+    ],
+    "typical_positions": [
+      "化工工程师",
+      "工艺工程师",
+      "研发工程师",
+      "质量工程师"
+    ],
+    "salary_range": {
+      "entry": 5500,
+      "mid": 10000,
+      "senior": 20000
+    }
+  },
+  {
+    "major_name": "生物科学",
+    "primary_industries": [
+      "科学研究和技术服务业",
+      "制造业"
+    ],
+    "secondary_industries": [
+      "教育",
+      "卫生和社会工作"
+    ],
+    "typical_positions": [
+      "生物研究员",
+      "实验员",
+      "医药代表",
+      "生物教师"
+    ],
+    "salary_range": {
+      "entry": 5500,
+      "mid": 10000,
+      "senior": 20000
+    }
+  },
+  {
+    "major_name": "环境工程",
+    "primary_industries": [
+      "水利、环境和公共设施管理业"
+    ],
+    "secondary_industries": [
+      "科学研究和技术服务业",
+      "制造业"
+    ],
+    "typical_positions": [
+      "环境工程师",
+      "环保工程师",
+      "环评工程师",
+      "EHS工程师"
+    ],
+    "salary_range": {
+      "entry": 5000,
+      "mid": 9000,
+      "senior": 18000
+    }
+  },
+  {
+    "major_name": "护理学",
+    "primary_industries": [
+      "卫生和社会工作"
+    ],
+    "secondary_industries": [
+      "教育"
+    ],
+    "typical_positions": [
+      "临床护士",
+      "护理管理者",
+      "社区护士",
+      "护理教师"
+    ],
+    "salary_range": {
+      "entry": 5000,
+      "mid": 9000,
+      "senior": 15000
+    }
+  }
+]
