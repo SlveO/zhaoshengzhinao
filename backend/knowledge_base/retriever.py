@@ -34,9 +34,11 @@ def retrieve_candidates(profile: dict, k: int = 30) -> list[dict]:
         meta = item["metadata"]
         raw_req = (meta.get("subjects", "") or "").replace("+", " ").split()
         req = {s for s in raw_req if s}
-        if not user_subjects or not req or req == {"不限"} or user_subjects & req:
+        subject_ok = not user_subjects or not req or req == {"不限"} or user_subjects & req
+        if not subject_ok and user_subjects and req:
+            subject_ok = any(us in r for us in user_subjects for r in req)
+        if subject_ok:
             filtered.append(item)
-    # Diversity: keep at most 3 results per college
     seen = {}
     diverse = []
     for item in filtered:
