@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     redis_url: str = "redis://redis:6379/0"
     jwt_secret: str = "change-me-in-production"
     jwt_algorithm: str = "HS256"
-    access_token_expire_minutes: int = 15
+    access_token_expire_minutes: int = 1440  # 24 hours — avoid kicking users during demo
     refresh_token_expire_days: int = 7
     deepseek_api_key: str = ""
     deepseek_base_url: str = "https://api.deepseek.com/v1"
