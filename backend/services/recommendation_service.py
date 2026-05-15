@@ -73,8 +73,8 @@ L3_PROMPT_ADDON = """
 
 
 @retry(
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=1, max=8),
+    stop=stop_after_attempt(2),
+    wait=wait_exponential(multiplier=1, min=2, max=15),
     retry=retry_if_exception_type((Exception,)),
     reraise=True,
 )
@@ -183,7 +183,7 @@ async def generate_recommendations(
     try:
         response = await asyncio.wait_for(
             _call_llm_with_retry(prompt),
-            timeout=30,
+            timeout=90,
         )
         content = response.content.strip()
         if content.startswith("```"):
