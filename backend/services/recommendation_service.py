@@ -10,10 +10,12 @@ from knowledge_base.retriever import retrieve_candidates
 from models.recommendation import Recommendation
 
 llm = ChatOpenAI(
-    model=settings.deepseek_model,
+    model="deepseek-chat",  # faster model for ranking large prompts
     api_key=settings.deepseek_api_key,
     base_url=settings.deepseek_base_url,
     temperature=0.3,
+    max_tokens=4096,
+    timeout=120,
 )
 
 RANKING_PROMPT = """你是高考志愿填报专家。下面是真实的候选院校数据，你必须从中选择排序，绝对不能编造或修改院校名和专业名。
