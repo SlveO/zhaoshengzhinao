@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>院校AI招生官 — B2B 商业可行性分析报告</title>
+<style>
+  :root {
+    --primary: #1a56db;
+    --primary-light: #e8f0fe;
+    --success: #059669;
+    --success-light: #ecfdf5;
+    --warning: #d97706;
+    --warning-light: #fffbeb;
+    --danger: #dc2626;
+    --danger-light: #fef2f2;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --radius: 8px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--gray-800);
+    background: var(--gray-50);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  .report-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1a56db 100%);
+    color: white;
+    padding: 64px 0 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .report-header::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .report-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 8px; position: relative; z-index: 1; letter-spacing: -0.02em; }
+  .report-header .subtitle { font-size: 1.1rem; opacity: 0.85; font-weight: 400; position: relative; z-index: 1; }
+  .report-header .meta { margin-top: 20px; font-size: 0.85rem; opacity: 0.6; position: relative; z-index: 1; display: flex; gap: 24px; flex-wrap: wrap; }
+
+  /* Score Badge */
+  .score-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 10px 20px;
+    border-radius: 50px;
+    margin-top: 20px;
+    position: relative; z-index: 1;
+  }
+  .score-badge .score-num { font-size: 2rem; font-weight: 900; }
+  .score-badge .score-label { font-size: 0.8rem; opacity: 0.8; line-height: 1.3; }
+
+  /* Sections */
+  section { padding: 48px 0; }
+  section:nth-child(even) { background: white; }
+
+  h2 {
+    font-size: 1.6rem; font-weight: 700; color: var(--gray-900);
+    margin-bottom: 8px; padding-bottom: 12px;
+    border-bottom: 3px solid var(--primary);
+    display: inline-block;
+  }
+  h3 { font-size: 1.2rem; font-weight: 700; color: var(--gray-800); margin: 32px 0 12px; }
+  h4 { font-size: 1rem; font-weight: 600; color: var(--gray-700); margin: 20px 0 8px; }
+
+  /* Executive Summary */
+  .exec-summary {
+    background: var(--primary-light);
+    border-left: 4px solid var(--primary);
+    padding: 24px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin: 24px 0;
+  }
+  .exec-summary p { margin: 4px 0; }
+
+  /* Comparison Card */
+  .comparison-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 24px; margin: 24px 0;
+  }
+  @media (max-width: 768px) { .comparison-grid { grid-template-columns: 1fr; } }
+
+  .comparison-card {
+    background: white; border-radius: var(--radius);
+    padding: 24px; box-shadow: var(--shadow);
+    border-top: 4px solid var(--gray-300);
+  }
+  .comparison-card.highlight { border-top-color: var(--success); }
+  .comparison-card .card-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-500); font-weight: 600; margin-bottom: 8px; }
+  .comparison-card .card-value { font-size: 2rem; font-weight: 800; color: var(--gray-900); }
+  .comparison-card .card-desc { font-size: 0.85rem; color: var(--gray-500); margin-top: 4px; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; margin: 20px 0; border-radius: var(--radius); box-shadow: var(--shadow); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  thead { background: var(--gray-800); color: white; }
+  th { padding: 12px 16px; text-align: left; font-weight: 600; white-space: nowrap; }
+  td { padding: 10px 16px; border-bottom: 1px solid var(--gray-200); }
+  tbody tr { background: white; }
+  tbody tr:hover { background: var(--gray-50); }
+  tbody tr:last-child td { border-bottom: none; }
+
+  /* Score Bar */
+  .score-bar { display: flex; align-items: center; gap: 12px; margin: 8px 0; }
+  .score-bar .bar-label { min-width: 120px; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); }
+  .score-bar .bar-track { flex: 1; height: 10px; background: var(--gray-200); border-radius: 5px; overflow: hidden; }
+  .score-bar .bar-fill { height: 100%; border-radius: 5px; transition: width 0.3s; }
+  .score-bar .bar-num { min-width: 40px; text-align: right; font-weight: 700; font-size: 0.85rem; color: var(--gray-700); }
+
+  /* Risk Matrix */
+  .risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin: 20px 0; }
+  .risk-card { background: white; border-radius: var(--radius); padding: 16px 20px; box-shadow: var(--shadow); border-left: 4px solid var(--gray-300); }
+  .risk-card.severe { border-left-color: var(--danger); }
+  .risk-card.high { border-left-color: var(--warning); }
+  .risk-card.medium { border-left-color: #f59e0b; }
+  .risk-card .risk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .risk-card .risk-name { font-weight: 700; }
+  .risk-card .risk-level { font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 50px; }
+  .risk-card .risk-level.fatal { background: var(--danger-light); color: var(--danger); }
+  .risk-card .risk-level.warn { background: var(--warning-light); color: var(--warning); }
+  .risk-card .risk-mitigation { font-size: 0.85rem; color: var(--gray-500); }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 32px; margin: 20px 0; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--gray-300); }
+  .timeline-item { position: relative; margin-bottom: 28px; }
+  .timeline-item::before { content: ''; position: absolute; left: -28px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--primary); border: 3px solid white; box-shadow: 0 0 0 2px var(--primary); }
+  .timeline-item .time-label { font-size: 0.8rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .timeline-item .time-content { background: white; padding: 16px 20px; border-radius: var(--radius); box-shadow: var(--shadow); }
+  .timeline-item .time-content ul { margin: 4px 0 0 18px; }
+  .timeline-item .time-content li { font-size: 0.9rem; margin: 2px 0; }
+
+  /* Phase Cards */
+  .phase-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin: 20px 0; }
+  .phase-card { background: white; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); text-align: center; }
+  .phase-card .phase-num { font-size: 2.5rem; font-weight: 900; color: var(--primary); opacity: 0.2; }
+  .phase-card .phase-title { font-weight: 700; margin: -16px 0 8px; color: var(--gray-800); }
+  .phase-card .phase-desc { font-size: 0.85rem; color: var(--gray-500); }
+
+  /* Moat */
+  .moat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin: 20px 0; }
+  .moat-card { background: white; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+  .moat-card .moat-type { font-weight: 700; margin-bottom: 4px; }
+  .moat-card .moat-strength { font-size: 0.8rem; font-weight: 600; margin-bottom: 8px; }
+  .moat-card .moat-strength.strong { color: var(--success); }
+  .moat-card .moat-strength.mid { color: var(--warning); }
+  .moat-card .moat-desc { font-size: 0.85rem; color: var(--gray-500); }
+
+  /* Key Insight Box */
+  .insight-box {
+    background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+    border: 1px solid #bfdbfe;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+  }
+  .insight-box h4 { color: var(--primary); margin-top: 0; }
+  .insight-box ul { margin-left: 20px; }
+  .insight-box li { margin: 4px 0; font-size: 0.9rem; }
+
+  /* Funnel */
+  .funnel { margin: 24px 0; }
+  .funnel-stage { display: flex; align-items: center; margin-bottom: 8px; }
+  .funnel-stage .stage-bar { height: 32px; background: var(--primary); border-radius: 4px; display: flex; align-items: center; padding: 0 12px; color: white; font-size: 0.8rem; font-weight: 600; transition: width 0.3s; min-width: 60px; }
+  .funnel-stage .stage-arrow { font-size: 1.2rem; color: var(--gray-400); margin: 0 8px 0 4px; }
+  .funnel-stage .stage-stat { font-size: 0.8rem; color: var(--gray-500); white-space: nowrap; }
+
+  /* Final Score */
+  .final-score {
+    background: white;
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .final-score .big-score {
+    font-size: 4rem; font-weight: 900;
+    background: linear-gradient(135deg, var(--primary), #7c3aed);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Footer */
+  .report-footer {
+    background: var(--gray-900);
+    color: var(--gray-400);
+    padding: 24px 0;
+    font-size: 0.8rem;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block; padding: 2px 10px; border-radius: 50px;
+    font-size: 0.75rem; font-weight: 600; margin-right: 4px;
+  }
+  .tag-green { background: var(--success-light); color: var(--success); }
+  .tag-red { background: var(--danger-light); color: var(--danger); }
+  .tag-yellow { background: var(--warning-light); color: var(--warning); }
+  .tag-blue { background: var(--primary-light); color: var(--primary); }
+
+  /* Print styles */
+  @media print {
+    body { background: white; font-size: 12px; }
+    section { padding: 20px 0; page-break-inside: avoid; }
+    .report-header { background: var(--gray-900) !important; -webkit-print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="report-header">
+  <div class="container">
+    <h1>院校AI招生官</h1>
+    <div class="subtitle">B2B 商业可行性分析报告 — 从 B2C 志愿填报到 B2B 院校招生 SaaS 的战略转型</div>
+    <div class="score-badge">
+      <span class="score-num">8.5</span>
+      <span class="score-label">/ 10<br>综合评分</span>
+    </div>
+    <div class="meta">
+      <span>评估日期: 2026-05-16</span>
+      <span>评估对象: Gaokao Agents B2B Pivot</span>
+      <span>分析框架: 5 阶段商业分析</span>
+      <span>对比基线: B2C 模式 7.2/10</span>
+    </div>
+  </div>
+</header>
+
+<!-- Executive Summary -->
+<section>
+  <div class="container">
+    <h2>执行摘要</h2>
+
+    <div class="exec-summary">
+      <p><strong>商业可行性综合评分: 8.5/10 —— 比 B2C 模式 (7.2/10) 高 1.3 分，核心风险可控。</strong></p>
+      <p style="margin-top:12px;">将 Gaokao Agents 的核心技术（AI 心理学对话 + RAG 证据溯源）从 B2C 志愿填报工具转型为 B2B 院校招生 SaaS 平台，是一次战略升级。这个 pivot 同时解决了 B2C 模式的三个根本性缺陷：</p>
+      <p style="margin-top:8px;"><strong>1. LTV 天花板消失</strong> — 从一次性购买变为年费 SaaS，LTV 从 ¥310 跃升至 ¥1,280,000+</p>
+      <p><strong>2. 获客窗口从 45 天扩展到全年</strong> — 大学招生办全年都在做招生准备</p>
+      <p><strong>3. 护城河从"还行"变为"极深"</strong> — 系统集成 + 数据锁定 = 极高切换成本</p>
+    </div>
+
+    <div class="comparison-grid" style="margin-top: 24px;">
+      <div class="comparison-card">
+        <div class="card-label">B2C 模式</div>
+        <div class="card-value" style="color: var(--gray-500);">7.2/10</div>
+        <div class="card-desc">LTV ¥310 · 获客窗口45天 · 护城河中等</div>
+      </div>
+      <div class="comparison-card highlight">
+        <div class="card-label">B2B 模式 ✦ 推荐</div>
+        <div class="card-value" style="color: var(--success);">8.5/10</div>
+        <div class="card-desc">LTV ¥1,280,000 · 全年获客 · 护城河极深</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stage 1: Problem & Market Validation -->
+<section>
+  <div class="container">
+    <h2>Stage 1: 问题与市场验证</h2>
+
+    <h3>1.1 3D 场景价值模型</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>维度</th><th>评分</th><th>权重</th><th>依据</th></tr></thead>
+        <tbody>
+          <tr><td><strong>刚性</strong></td><td>8/10</td><td>0.4</td><td>招生质量直接影响院校声誉和经费。生源不足的院校面临专业裁撤风险</td></tr>
+          <tr><td><strong>频率</strong></td><td>7/10</td><td>0.3</td><td>招生是全年性工作，年年循环。咨询高峰期6-7月，准备期长达10个月</td></tr>
+          <tr><td><strong>可自动化</strong></td><td>8/10</td><td>0.3</td><td>招生咨询80%问题可自动化；20%需人工介入</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="text-align:center; margin-top: 12px;"><strong>加权得分: 7.7/10</strong>（比 B2C 的 6.9 高 0.8）</p>
+
+    <h3>1.2 院校招生办四大困境</h3>
+    <div class="risk-grid">
+      <div class="risk-card severe">
+        <div class="risk-header"><span class="risk-name">物理触达天花板</span></div>
+        <p style="font-size:0.9rem; color: var(--gray-600);">3-5人招生办每年跑10-20个城市，覆盖约100所高中，遗漏省内90%+高中。年度差旅预算¥20-50万</p>
+      </div>
+      <div class="risk-card severe">
+        <div class="risk-header"><span class="risk-name">转化率不可度量</span></div>
+        <p style="font-size:0.9rem; color: var(--gray-600);">来了多少学生？谁真正有兴趣？核心关切是什么？最终因宣讲报考了多少？——全无数据</p>
+      </div>
+      <div class="risk-card high">
+        <div class="risk-header"><span class="risk-name">信息一致性无法保证</span></div>
+        <p style="font-size:0.9rem; color: var(--gray-600);">10个老师10种说法，官网数据更新滞后。招生办主任的日常噩梦</p>
+      </div>
+      <div class="risk-card high">
+        <div class="risk-header"><span class="risk-name">被动应对而非主动洞察</span></div>
+        <p style="font-size:0.9rem; color: var(--gray-600);">不知道意向学生画像、不知道与竞校对比的劣势、不知道"有意向但最终没报"的原因</p>
+      </div>
+    </div>
+
+    <h3>1.3 政策顺风</h3>
+    <div class="insight-box">
+      <ul>
+        <li><strong>教育部《教育信息化2.0》</strong>: 要求高校利用大数据和AI提升管理服务水平</li>
+        <li><strong>新高考改革</strong>: "专业+院校"志愿模式使学生对专业了解需求暴增</li>
+        <li><strong>生源下降压力</strong>: 2025年后适龄考生逐年下降，院校间招生竞争加剧</li>
+        <li><strong>教育数字化预算</strong>: 各高校信息化支出占比持续提升（目前平均3-5%）</li>
+      </ul>
+    </div>
+
+    <p style="margin-top: 20px;"><span class="tag tag-green">验证结论</span> <strong>问题真实且持续恶化，置信度：高。</strong>生源下降 + 新高考改革 + 数字化政策三轮驱动。B2B模式比B2C更稳定——大学是长期存在的机构客户，而非一次性消费者。</p>
+  </div>
+</section>
+
+<!-- Stage 2: Target Customers & Competition -->
+<section>
+  <div class="container">
+    <h2>Stage 2: 目标客户与竞争格局</h2>
+
+    <h3>2.1 客户分层</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>层级</th><th>院校画像</th><th>数量</th><th>付费能力</th><th>招生痛点</th><th>决策特点</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Tier 1</strong></td><td>985/211/双一流</td><td>~150所</td><td>高 ¥200-500K</td><td>中</td><td>预算充足但流程复杂，需校级招标</td></tr>
+          <tr style="background: #fef3c7;"><td><strong>Tier 2 ⭐</strong></td><td>省属重点本科</td><td>~600所</td><td>中高 ¥100-200K</td><td><strong>高（金牌客户）</strong></td><td>招生压力大，决策较快</td></tr>
+          <tr style="background: #fef3c7;"><td><strong>Tier 3 ⭐</strong></td><td>一般本科/独立学院</td><td>~400所</td><td>中 ¥50-100K</td><td><strong>极高</strong></td><td>生源不足是生死问题</td></tr>
+          <tr><td><strong>Tier 4</strong></td><td>民办本科/高职高专</td><td>~1,400所</td><td>低中 ¥30-80K</td><td>极高</td><td>预算紧张但痛点最痛</td></tr>
+          <tr><td><strong>B端</strong></td><td>地市级教育局</td><td>~300个</td><td>高 ¥200-500K</td><td>中</td><td>统一采购覆盖辖区高校</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>金牌客户: Tier 2 + Tier 3 ≈ 1,000所院校</strong> — 招生压力大、有预算、决策效率相对高。</p>
+
+    <h3>2.2 市场规模</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>层级</th><th>计算</th><th>规模</th></tr></thead>
+        <tbody>
+          <tr><td><strong>TAM</strong></td><td>3,012所高校 × ¥150K + 300个教育局 × ¥300K + 15,000所高中 × ¥20K</td><td><strong>≈ ¥84亿/年</strong></td></tr>
+          <tr><td><strong>SAM</strong></td><td>1,270所本科 × ¥120K + 300个教育局 × ¥300K</td><td><strong>≈ ¥24亿/年</strong></td></tr>
+          <tr><td><strong>SOM (3年)</strong></td><td>150所付费院校 × ¥120K + 10个教育局 × ¥300K</td><td><strong>≈ ¥2,100万/年</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><em>自下而上验证: 全国高校年招生宣传总支出约¥100-200亿。5%转移至AI数字化渠道 = ¥5-10亿可触及市场。</em></p>
+
+    <h3>2.3 竞争定位</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>方案</th><th>价格</th><th>核心缺陷</th></tr></thead>
+        <tbody>
+          <tr><td>中国教育在线「招生E答」</td><td>¥50,000-200,000/年</td><td>本质是智能FAQ，非个性化对话；无学生画像分析</td></tr>
+          <tr><td>自建微信小程序</td><td>¥100,000-300,000（一次性）</td><td>无AI对话能力；数据更新依赖人工</td></tr>
+          <tr><td>人工招生咨询会</td><td>¥200,000-500,000/年</td><td>覆盖有限、不可追溯、质量不一致</td></tr>
+          <tr><td>通用型CRM</td><td>¥50,000-200,000/年</td><td>非招生场景设计，需大量定制</td></tr>
+          <tr style="background: #ecfdf5;"><td><strong>✦ 招生智脑（本产品）</strong></td><td><strong>¥48,000-398,000/年</strong></td><td><strong>AI心理学对话 + RAG证据溯源 + 学生画像分析</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><span class="tag tag-green">核心差异化</span> 将"AI招生官"做到招聘级深度——不仅是FAQ机器人，而是能进行心理学对话、证据溯源、画像构建的智能招生系统。目前无人占据此象限。</p>
+
+    <h3>2.4 护城河评估（B2B vs B2C）</h3>
+    <div class="moat-grid">
+      <div class="moat-card">
+        <div class="moat-type">数据网络效应</div>
+        <div class="moat-strength strong">极高 ↑（B2C: 中）</div>
+        <div class="moat-desc">每增加一所院校，其数据丰富整个推荐系统；院校数据具有排他性</div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-type">技术壁垒</div>
+        <div class="moat-strength strong">高 ↑（B2C: 中高）</div>
+        <div class="moat-desc">LangGraph多阶段对话 + 院校专属知识库整合——远超堆prompt</div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-type">切换成本</div>
+        <div class="moat-strength strong">极高 ↑↑（B2C: 中）</div>
+        <div class="moat-desc">深度集成微信生态 + 历史学生画像积累 → 替换代价巨大</div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-type">品牌信任</div>
+        <div class="moat-strength mid">中 ↑（B2C: 弱）</div>
+        <div class="moat-desc">通过教育局合作和学术论文建立，需时间积累</div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-type">独占资源</div>
+        <div class="moat-strength strong">高 ↑（B2C: 中）</div>
+        <div class="moat-desc">与教育局/院校的正式合作可形成区域独占</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stage 3: Revenue Models & Unit Economics -->
+<section>
+  <div class="container">
+    <h2>Stage 3: 收入模式与单位经济</h2>
+
+    <h3>3.1 B2B SaaS 定价</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>版本</th><th>年费</th><th>目标客户</th><th>核心功能</th><th>预期占比</th></tr></thead>
+        <tbody>
+          <tr><td><strong>基础版</strong></td><td>¥48,000</td><td>Tier 4 民办/高职</td><td>AI招生问答 + 基础数据面板 + 标准化小程序</td><td>40%</td></tr>
+          <tr><td><strong>标准版</strong></td><td>¥98,000</td><td>Tier 3 一般本科</td><td>深度对话 + 学生画像 + 专业热度分析 + 定制品牌</td><td>35%</td></tr>
+          <tr><td><strong>高级版</strong></td><td>¥198,000</td><td>Tier 2 省属重点</td><td>全功能 + 竞品分析 + 招生策略建议 + 专属数据管道</td><td>20%</td></tr>
+          <tr><td><strong>旗舰版</strong></td><td>¥398,000</td><td>Tier 1 双一流</td><td>全部功能 + 专属部署 + 多院系管理 + API开放</td><td>5%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>3.2 定价锚点</h3>
+    <div class="insight-box">
+      <ul>
+        <li>¥48,000/年 = <strong>1次跨省招生出差的费用</strong></li>
+        <li>¥98,000/年 = <strong>半个招生老师的年薪</strong></li>
+        <li>¥198,000/年 = <strong>一场大型招生宣传活动预算</strong></li>
+        <li>¥398,000/年 = <strong>传统招生外包服务的 1/5</strong></li>
+      </ul>
+      <p style="margin-top:8px;"><em>"你每年花30万让3个老师跑15个城市，覆盖3000个学生。花10万用我们的系统，覆盖全省所有学生，24/7在线，还有精准画像。"</em></p>
+    </div>
+
+    <h3>3.3 单位经济（Year 2 稳态）</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>指标</th><th>数值</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><strong>CAC</strong></td><td>¥35,000-65,000</td><td>直销+展会+试用转化，教育SaaS典型CAC</td></tr>
+          <tr><td><strong>ARPU</strong></td><td>¥128,000</td><td>各版本加权平均</td></tr>
+          <tr><td><strong>毛利率</strong></td><td>75%</td><td>主成本 = LLM API + 云服务器 + 院校onboarding人力</td></tr>
+          <tr><td><strong>年流失率</strong></td><td>8-12%</td><td>教育SaaS行业平均5-15%，保守取10%</td></tr>
+          <tr style="background: #ecfdf5;"><td><strong>LTV</strong></td><td><strong>¥1,280,000</strong></td><td>ARPU / Churn = 128,000 / 0.10</td></tr>
+          <tr style="background: #ecfdf5;"><td><strong>LTV:CAC</strong></td><td><strong>20:1 - 37:1</strong></td><td>远超健康线3:1</td></tr>
+          <tr><td><strong>回本周期</strong></td><td>3-6个月</td><td>年付模式使现金流极好</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>3.4 B2B vs B2C 单位经济对比</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>指标</th><th>B2C</th><th>B2B</th><th>变化</th></tr></thead>
+        <tbody>
+          <tr><td>LTV</td><td>¥310</td><td>¥1,280,000</td><td style="color: var(--success); font-weight:700;">↑ 4,129倍</td></tr>
+          <tr><td>付费周期</td><td>一次性</td><td>年付循环</td><td style="color: var(--success); font-weight:700;">从一次性到ARR</td></tr>
+          <tr><td>获客窗口</td><td>45天/年</td><td>全年</td><td style="color: var(--success); font-weight:700;">从季节性到持续性</td></tr>
+          <tr><td>毛利率</td><td>85%</td><td>75%</td><td style="color: var(--warning);">-10%（onboarding成本）</td></tr>
+          <tr><td>护城河深度</td><td>中等</td><td>极深</td><td style="color: var(--success); font-weight:700;">系统集成+数据锁定</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Stage 4: Financial Projections & Risks -->
+<section>
+  <div class="container">
+    <h2>Stage 4: 财务预测与风险</h2>
+
+    <h3>4.1 月度成本结构（Year 2 稳态，服务80所院校）</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>成本类别</th><th>月度 (¥)</th><th>年度 (¥)</th></tr></thead>
+        <tbody>
+          <tr><td>LLM API (DeepSeek)</td><td>35,000</td><td>420,000</td></tr>
+          <tr><td>云服务器 + ChromaDB</td><td>30,000</td><td>360,000</td></tr>
+          <tr><td>院校数据管道维护</td><td>12,000</td><td>144,000</td></tr>
+          <tr><td>工程师（3人）</td><td>75,000</td><td>900,000</td></tr>
+          <tr><td>销售/客户成功（2人）</td><td>40,000</td><td>480,000</td></tr>
+          <tr><td>运营/市场（1人）</td><td>15,000</td><td>180,000</td></tr>
+          <tr><td>合规/法务（外包）</td><td>10,000</td><td>120,000</td></tr>
+          <tr><td>其他</td><td>8,000</td><td>96,000</td></tr>
+          <tr style="font-weight:700; background: var(--gray-100);"><td>合计</td><td>225,000</td><td>2,700,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>4.2 三年收入预测</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>Year 1 (2026-27)</th><th>Year 2 (2027-28)</th><th>Year 3 (2028-29)</th></tr></thead>
+        <tbody>
+          <tr><td>产品阶段</td><td>试点打磨</td><td>规模扩展</td><td>区域深耕</td></tr>
+          <tr><td>付费院校数</td><td>5</td><td>45</td><td>150</td></tr>
+          <tr><td>教育局客户</td><td>0</td><td>3</td><td>12</td></tr>
+          <tr><td>B2B院校收入</td><td>¥400,000</td><td>¥5,200,000</td><td>¥18,000,000</td></tr>
+          <tr><td>B2B教育局收入</td><td>¥0</td><td>¥1,000,000</td><td>¥4,200,000</td></tr>
+          <tr><td>Onboarding收入</td><td>¥100,000</td><td>¥900,000</td><td>¥2,500,000</td></tr>
+          <tr><td>B2C导流收入</td><td>¥0</td><td>¥200,000</td><td>¥800,000</td></tr>
+          <tr style="font-weight:700; background: var(--gray-100);"><td>总收入</td><td>¥500,000</td><td>¥7,300,000</td><td>¥25,500,000</td></tr>
+          <tr><td>总成本</td><td>¥1,800,000</td><td>¥2,700,000</td><td>¥5,200,000</td></tr>
+          <tr style="font-weight:700; background: #ecfdf5;"><td>净利润</td><td style="color: var(--danger);">-¥1,300,000</td><td style="color: var(--success);">+¥4,600,000</td><td style="color: var(--success);">+¥20,300,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>4.3 盈亏平衡点</h3>
+    <div style="background: var(--primary-light); border-radius: var(--radius); padding: 24px; text-align: center; margin: 20px 0;">
+      <p style="font-size: 0.9rem; color: var(--gray-600);">月度固定成本 ¥225,000 ÷ 单院校月均毛利 ¥8,000</p>
+      <p style="font-size: 2rem; font-weight: 900; color: var(--primary); margin: 8px 0;">= 28 所院校</p>
+      <p style="font-size: 0.85rem; color: var(--gray-500);">仅需占1,270所本科院校的 2.2% 即可盈亏平衡。预计 Year 2 中期达到。</p>
+    </div>
+
+    <h3>4.4 风险矩阵</h3>
+    <div class="risk-grid">
+      <div class="risk-card severe">
+        <div class="risk-header"><span class="risk-name">LLM幻觉给出错误招生信息</span><span class="risk-level fatal">致命</span></div>
+        <div class="risk-mitigation">所有回复强制关联官方数据源；前端标注"AI生成"；定期人工审核</div>
+      </div>
+      <div class="risk-card severe">
+        <div class="risk-header"><span class="risk-name">院校数据隐私泄露</span><span class="risk-level fatal">致命</span></div>
+        <div class="risk-mitigation">严格租户隔离；独立ChromaDB collection + 行级PG安全；PIPL合规</div>
+      </div>
+      <div class="risk-card high">
+        <div class="risk-header"><span class="risk-name">院校采购周期过长(>12个月)</span><span class="risk-level warn">高概率</span></div>
+        <div class="risk-mitigation">从"试用"切入而非"投标"；民办院校优先（决策快）；3个月免费试点</div>
+      </div>
+      <div class="risk-card high">
+        <div class="risk-header"><span class="risk-name">院校不信任AI建议</span><span class="risk-level warn">高概率</span></div>
+        <div class="risk-mitigation">定位"辅助工具"非"替代决策"；推荐附带数据溯源链接</div>
+      </div>
+      <div class="risk-card medium">
+        <div class="risk-header"><span class="risk-name">微信生态政策变化</span><span class="risk-level warn">中</span></div>
+        <div class="risk-mitigation">保留H5降级方案；自建APP作为终极备份</div>
+      </div>
+      <div class="risk-card medium">
+        <div class="risk-header"><span class="risk-name">巨头入场（腾讯/阿里教育）</span><span class="risk-level warn">中</span></div>
+        <div class="risk-mitigation">深耕垂直深度；数据网络效应护城河；他们做广度我们做深度</div>
+      </div>
+      <div class="risk-card medium">
+        <div class="risk-header"><span class="risk-name">招生数据获取被封锁</span><span class="risk-level warn">中</span></div>
+        <div class="risk-mitigation">院校正式合作后数据由校方直接提供；不再依赖爬虫</div>
+      </div>
+      <div class="risk-card medium">
+        <div class="risk-header"><span class="risk-name">销售扩张导致文化稀释</span><span class="risk-level warn">低概率</span></div>
+        <div class="risk-mitigation">保持工程师主导文化；销售团队控制在20%以内</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stage 5: GTM Strategy -->
+<section>
+  <div class="container">
+    <h2>Stage 5: GTM 策略与时间线</h2>
+
+    <h3>5.1 目标时间线</h3>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">2026 Q2 (5-6月) — 架构改造</div>
+        <div class="time-content">
+          <ul>
+            <li>多租户数据库设计（Organization模型 + tenant_id迁移）</li>
+            <li>白标小程序框架v1（可配置主题、Logo、院校名称）</li>
+            <li>院校数据接入标准格式定义</li>
+            <li>选定3所试点院校（省属本科+民办本科+高职）</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">2026 Q3 (7-9月) — 试点启动</div>
+        <div class="time-content">
+          <ul>
+            <li>3所试点院校数据接入 + 专属知识库部署</li>
+            <li>用2026年招生数据做后测</li>
+            <li>收集招生办反馈，快速迭代</li>
+            <li>制作第一版案例研究材料</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">2026 Q4 (10-12月) — 产品完善</div>
+        <div class="time-content">
+          <ul>
+            <li>根据试点反馈完成产品v2</li>
+            <li>管理端面板：招生漏斗、学生画像仪表盘</li>
+            <li>竞品分析功能 + 参加2场高等教育展会</li>
+            <li>目标：签约5所付费院校</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">2027 Q1-Q2 (1-5月) — 招生季预备</div>
+        <div class="time-content">
+          <ul>
+            <li>现有客户系统压力测试 + 数据更新</li>
+            <li>发布《AI赋能高校招生白皮书》</li>
+            <li>行业媒体PR + 目标累计10-15所签约院校</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">2027 Q3 (6-8月) — 招生季实战</div>
+        <div class="time-content">
+          <ul>
+            <li>全力支持客户院校招生季运行</li>
+            <li>实时监控系统稳定性 + 对话质量</li>
+            <li>招生季后30天内输出效果分析报告</li>
+            <li>目标：续约率>85%，新增签约15-20所</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3>5.2 B2B 获客漏斗</h3>
+    <div class="funnel">
+      <div class="funnel-stage">
+        <div class="stage-bar" style="width: 100%;">高校决策者触达: 5,000人/年</div>
+      </div>
+      <div class="funnel-stage">
+        <div class="stage-arrow">↓ 10%</div>
+        <div class="stage-bar" style="width: 50%;">产生兴趣/申请演示: 500所</div>
+      </div>
+      <div class="funnel-stage">
+        <div class="stage-arrow">↓ 30%</div>
+        <div class="stage-bar" style="width: 25%;">进入试用/试点: 150所</div>
+      </div>
+      <div class="funnel-stage">
+        <div class="stage-arrow">↓ 40%</div>
+        <div class="stage-bar" style="width: 12%;">签约付费: 60所 → ¥768万ARR</div>
+      </div>
+      <div class="funnel-stage">
+        <div class="stage-arrow">↓ 85%</div>
+        <div class="stage-bar" style="width: 10%;">续约: 51所 → ¥653万续约ARR</div>
+      </div>
+    </div>
+    <p><span class="tag tag-blue">漏斗关键</span> B2B教育SaaS的核心不是流量，而是试点院校的成功案例。3所试点 → 3个成功故事 → 同行推荐 = 最有效的增长引擎。</p>
+
+    <h3>5.3 最高优先级四件事</h3>
+    <div class="phase-grid">
+      <div class="phase-card">
+        <div class="phase-num">01</div>
+        <div class="phase-title">多租户架构改造</div>
+        <div class="phase-desc">Organization模型 + tenant_id迁移 + ChromaDB多collection + 白标主题系统。2个月，1名全栈。</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">02</div>
+        <div class="phase-title">锁定3所试点院校</div>
+        <div class="phase-desc">省属本科+民办本科+高职。以"合作研究"而非"卖产品"切入，免费提供系统。</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">03</div>
+        <div class="phase-title">数据接入标准化</div>
+        <div class="phase-desc">定义Onboarding Data Pack标准。Excel模板（最低门槛）+ API对接（高端客户）。</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">04</div>
+        <div class="phase-title">教育行业信任背书</div>
+        <div class="phase-desc">师范院校合作论文 + 教育部产学研项目 + 行业媒体案例文章。</div>
+      </div>
+    </div>
+
+    <h3>5.4 B2B + B2C 双引擎协同</h3>
+    <div style="background: white; border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); margin: 20px 0; text-align: center;">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;">
+        <div style="background: var(--primary-light); padding: 16px 24px; border-radius: var(--radius);">
+          <div style="font-weight:700; color: var(--primary);">B2B 院校端</div>
+          <div style="font-size:0.8rem; color: var(--gray-500);">主要收入引擎</div>
+        </div>
+        <div style="font-size: 1.5rem; color: var(--gray-400);">⇄</div>
+        <div style="background: #fef3c7; padding: 16px 24px; border-radius: var(--radius);">
+          <div style="font-weight:700; color: var(--warning);">B2C 学生端</div>
+          <div style="font-size:0.8rem; color: var(--gray-500);">数据飞轮 + 二级收入</div>
+        </div>
+      </div>
+      <p style="margin-top: 16px; font-size: 0.9rem; color: var(--gray-600);">
+        学生在院校小程序咨询后 → 选择"多校对比" → 进入B2C端 → B2C端的聚合画像反馈给院校<br>
+        <strong>数据飞轮:</strong> B2B越多院校 → B2C越多数据 → 推荐越精准 → 更多院校想接入
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Technical Architecture -->
+<section>
+  <div class="container">
+    <h2>技术架构：B2B 转型路线图</h2>
+
+    <h3>当前架构差距</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>能力</th><th>当前状态</th><th>B2B需求</th><th>差距</th></tr></thead>
+        <tbody>
+          <tr><td>多租户隔离</td><td>无</td><td>每院校独立数据空间</td><td><span class="tag tag-red">从零建设</span></td></tr>
+          <tr><td>白标/主题</td><td>硬编码</td><td>每院校自定义品牌</td><td><span class="tag tag-red">从零建设</span></td></tr>
+          <tr><td>知识库隔离</td><td>1个Chroma collection</td><td>N个独立collection</td><td><span class="tag tag-yellow">架构扩展</span></td></tr>
+          <tr><td>API密钥管理</td><td>JWT用户认证</td><td>租户级API密钥</td><td><span class="tag tag-red">从零建设</span></td></tr>
+          <tr><td>管理端面板</td><td>无</td><td>招生漏斗 + 学生画像</td><td><span class="tag tag-red">从零建设</span></td></tr>
+          <tr><td>院校数据接入</td><td>集中式爬虫</td><td>每院校独立管道</td><td><span class="tag tag-yellow">流程改造</span></td></tr>
+          <tr><td>使用量计费</td><td>无</td><td>按对话量计费</td><td><span class="tag tag-yellow">新增功能</span></td></tr>
+          <tr><td>微信小程序</td><td>无</td><td>每院校白标小程序</td><td><span class="tag tag-red">从零建设</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>四阶段实施路线</h3>
+    <div class="phase-grid">
+      <div class="phase-card">
+        <div class="phase-num">P1</div>
+        <div class="phase-title">多租户基础</div>
+        <div class="phase-desc">Month 1-2<br>Organization模型 + DB迁移 + 租户中间件 + ChromaDB多collection</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">P2</div>
+        <div class="phase-title">白标化</div>
+        <div class="phase-desc">Month 2-3<br>CSS变量主题 + uni-app小程序模板 + 院校自定义配置</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">P3</div>
+        <div class="phase-title">数据+管理端</div>
+        <div class="phase-desc">Month 3-5<br>数据接入标准 + 管理仪表盘 + 竞品分析功能</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">P4</div>
+        <div class="phase-title">规模化</div>
+        <div class="phase-desc">Month 5-8<br>自动onboarding + 计费系统 + 教育局管理后台 + 性能优化</div>
+      </div>
+    </div>
+
+    <h3>关键技术决策</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>决策点</th><th>推荐方案</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>多租户隔离策略</td><td>共享DB + tenant_id行隔离</td><td>成本最低，教育数据非金融级别</td></tr>
+          <tr><td>ChromaDB隔离</td><td>每租户独立collection</td><td>数据物理隔离，院校更容易接受</td></tr>
+          <tr><td>小程序框架</td><td>uni-app (Vue)</td><td>一套代码编译多平台</td></tr>
+          <tr><td>LLM模型</td><td>DeepSeek + 租户级覆盖</td><td>大部分够用，高端客户可选更强模型</td></tr>
+          <tr><td>部署方式</td><td>SaaS优先 + 旗舰版私有部署</td><td>教育行业对私有部署有强烈需求</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Final Assessment -->
+<section>
+  <div class="container">
+    <h2>综合评估</h2>
+
+    <div style="max-width: 600px; margin: 24px auto;">
+      <div class="score-bar"><span class="bar-label">问题真实性</span><div class="bar-track"><div class="bar-fill" style="width:90%; background: var(--success);"></div></div><span class="bar-num">9/10</span></div>
+      <div class="score-bar"><span class="bar-label">市场规模</span><div class="bar-track"><div class="bar-fill" style="width:80%; background: var(--success);"></div></div><span class="bar-num">8/10</span></div>
+      <div class="score-bar"><span class="bar-label">竞争护城河</span><div class="bar-track"><div class="bar-fill" style="width:90%; background: var(--success);"></div></div><span class="bar-num">9/10</span></div>
+      <div class="score-bar"><span class="bar-label">单位经济</span><div class="bar-track"><div class="bar-fill" style="width:90%; background: var(--success);"></div></div><span class="bar-num">9/10</span></div>
+      <div class="score-bar"><span class="bar-label">盈利能力</span><div class="bar-track"><div class="bar-fill" style="width:80%; background: var(--success);"></div></div><span class="bar-num">8/10</span></div>
+      <div class="score-bar"><span class="bar-label">执行可行性</span><div class="bar-track"><div class="bar-fill" style="width:80%; background: #6366f1;"></div></div><span class="bar-num">8/10</span></div>
+    </div>
+
+    <div class="final-score" style="margin: 32px auto;">
+      <div style="font-size: 0.9rem; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">B2B 综合评分</div>
+      <div class="big-score">8.5 / 10</div>
+      <div style="color: var(--gray-500); font-size: 0.85rem; margin-top: 4px;">B2C 模式: 7.2/10 → B2B 模式: 8.5/10 (+1.3)</div>
+    </div>
+
+    <h3>核心结论</h3>
+    <div class="insight-box">
+      <ol style="margin-left: 20px;">
+        <li style="margin: 8px 0;"><strong>B2B模式在商业维度全面优于B2C</strong> — LTV提升4000+倍、获客窗口从45天扩展到全年、护城河从中等升至极深。B2C模式的三个结构性缺陷被一次性解决。</li>
+        <li style="margin: 8px 0;"><strong>招生SaaS是真实且增长的蓝海市场</strong> — 生源下降 + 新高考改革 + 教育数字化三轮驱动。中国教育在线「招生E答」是最接近的竞品，但产品深度存在代际差距。</li>
+        <li style="margin: 8px 0;"><strong>护城河深度远超B2C</strong> — 系统集成 + 历史数据积累 + 院校间数据网络效应 = 极高替换成本。一旦院校将招生系统嵌入微信生态、积累了一届学生的完整画像数据，供应商锁定效应极强。</li>
+        <li style="margin: 8px 0;"><strong>盈亏平衡门槛极低</strong> — 仅需28所付费院校（占1,270所本科院校的2.2%）即可盈亏平衡。Year 2可实现盈利。</li>
+        <li style="margin: 8px 0;"><strong>核心风险从"市场存在性"转为"执行能力"</strong> — B2C的风险是"这个市场能成立吗？"B2B的风险是"我们能执行好吗？"后者可控得多。</li>
+        <li style="margin: 8px 0;"><strong>B2B + B2C 双引擎是最优解</strong> — 以B2B为收入核心、B2C为数据飞轮，两者互为放大器。</li>
+        <li style="margin: 8px 0;"><strong>时间窗口友好</strong> — 不同于B2C的45天窗口，B2B没有季节性压力。2026年慢工出细活，目标2027年招生季验证。</li>
+      </ol>
+    </div>
+
+    <h3>最终建议：执行优先级</h3>
+    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 20px 0; justify-content: center;">
+      <span style="background: var(--gray-800); color: white; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">1. 多租户架构改造</span>
+      <span style="color: var(--gray-400); font-size: 1.2rem;">→</span>
+      <span style="background: var(--gray-800); color: white; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">2. 签约3所试点院校</span>
+      <span style="color: var(--gray-400); font-size: 1.2rem;">→</span>
+      <span style="background: var(--gray-800); color: white; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">3. 白标小程序 + 管理端</span>
+      <span style="color: var(--gray-400); font-size: 1.2rem;">→</span>
+      <span style="background: var(--gray-800); color: white; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">4. 2027招生季实战</span>
+      <span style="color: var(--gray-400); font-size: 1.2rem;">→</span>
+      <span style="background: var(--success); color: white; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">5. 规模化增长</span>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="report-footer">
+  <div class="container">
+    <p><strong>报告基础:</strong> 基于 PROJECT_PLAN.md、business-analysis-report.md 及项目实际代码状态分析。当前MVP已构建核心对话+推荐闭环（182K Chroma文档、162所学校、3省），技术栈为 FastAPI + LangGraph + ChromaDB + React + TypeScript + Docker。</p>
+    <p style="margin-top: 8px;"><strong>对比基线:</strong> B2C商业分析评分 7.2/10 → B2B模式评分 8.5/10。建议以B2B为主引擎、B2C为数据飞轮，双模式并行发展。</p>
+    <p style="margin-top: 16px; opacity: 0.5;">© 2026 Gaokao Agents B2B Analysis · Generated 2026-05-16</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -14,7 +14,12 @@
       "Bash(python -c \"import json; d=json.load\\(open\\('D:/_Greatest_programmer/_Projects/gaokao_agents/data/seed/schools.json', encoding='utf-8'\\)\\); print\\('Schools:', len\\(d\\)\\)\")",
       "Bash(python -c \"import json; d=json.load\\(open\\('D:/_Greatest_programmer/_Projects/gaokao_agents/data/seed/scores.json', encoding='utf-8'\\)\\); print\\('Scores:', len\\(d\\)\\)\")",
       "Bash(python *)",
-      "Skill(superpowers:subagent-driven-development)"
+      "Skill(superpowers:subagent-driven-development)",
+      "Skill(superpowers:verification-before-completion)",
+      "Bash(docker exec gaokao_agents-backend-1 python -c ' *)",
+      "Bash(docker exec *)",
+      "Skill(business-analysis)",
+      "Bash(docker compose *)"
     ]
   }
 }
