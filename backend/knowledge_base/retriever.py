@@ -24,9 +24,9 @@ def build_query_text(profile: dict) -> str:
     return " ".join(parts) if parts else "综合 大学 本科"
 
 
-def retrieve_candidates(profile: dict, k: int = 30) -> list[dict]:
+def retrieve_candidates(profile: dict, k: int = 30, tenant_slug: str | None = None) -> list[dict]:
     query = build_query_text(profile)
-    candidates = search_similar(query, k=max(k * 3, 100))
+    candidates = search_similar(query, k=max(k * 3, 100), tenant_slug=tenant_slug)
     raw = (profile.get("subjects", "") or "").replace("+", " ").split()
     user_subjects = {s for s in raw if s}
     filtered = []

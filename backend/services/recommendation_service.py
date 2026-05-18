@@ -101,9 +101,9 @@ def _get_adaptive_prompt(profile: dict) -> str:
 
 
 async def generate_recommendations(
-    user_id: str, profile: dict, db: AsyncSession
+    user_id: str, profile: dict, db: AsyncSession, tenant_slug: str | None = None
 ) -> list[dict]:
-    candidates = retrieve_candidates(profile, k=30)
+    candidates = retrieve_candidates(profile, k=30, tenant_slug=tenant_slug)
 
     # Enrich candidates with industry/career data
     from models.mapping import MajorIndustryMapping
@@ -210,4 +210,21 @@ async def generate_recommendations(
     )
     db.add(rec)
     await db.commit()
+
+    # Write analytics event
+    try:
+        from core.event_writer import write_event
+        await write_event(
+            tenant_id=rec.tenant_id if hasattr(rec, 'tenant_id') and rec.tenant_id else None,
+            event_type="recommendation.generated",
+            user_id=uuid.UUID(user_id),
+            payload={
+                "profile_level": profile.get("completeness", "L1"),
+                "candidates_count": len(candidates),
+                "output_count": len(recommendations),
+            },
+        )
+    except Exception:
+        pass  # Event writing failure should not block the recommendation
+
     return recommendations

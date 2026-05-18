@@ -15,9 +15,22 @@ def index_documents(docs: list[str], metadatas: list[dict], ids: list[str]):
     clean_metas = [_sanitize_meta(m) for m in metadatas]
     collection.add(ids=ids, embeddings=embeddings, documents=docs, metadatas=clean_metas)
 
-def search_similar(query: str, k: int = 30) -> list[dict]:
+_tenant_collections: dict[str, object] = {}
+
+
+def get_tenant_collection(tenant_slug: str):
+    """Get or create a tenant-specific ChromaDB collection."""
+    if tenant_slug not in _tenant_collections:
+        _tenant_collections[tenant_slug] = client.get_or_create_collection(
+            name=f"{tenant_slug}_colleges"
+        )
+    return _tenant_collections[tenant_slug]
+
+
+def search_similar(query: str, k: int = 30, tenant_slug: str | None = None) -> list[dict]:
     q_emb = embedding_model.embed_query(query)
-    results = collection.query(query_embeddings=[q_emb], n_results=k)
+    coll = get_tenant_collection(tenant_slug) if tenant_slug else collection
+    results = coll.query(query_embeddings=[q_emb], n_results=k)
     items = []
     if results["ids"] and results["ids"][0]:
         for i, doc_id in enumerate(results["ids"][0]):
