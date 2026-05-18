@@ -22,7 +22,7 @@
 | Foundation | `feat/foundation` | ✅ 已完成 | current (main) | Phase 0-1 完成，6 commits |
 | Admin SPA | `feat/admin-spa` | ✅ 已完成 | admin_spa | 30 文件, build 通过 |
 | Mini-App | `feat/mini-app` | ✅ 已完成 | mini_app | 29 文件, build 通过, dist/gdufs/ 产物正常 |
-| Analytics | `feat/analytics` | ⬜ 未开始 | — | 待启动：7 模块真实 SQL 查询 |
+| Analytics | `feat/analytics` | 🔵 进行中 | Analytics | 7 模块真实 SQL 查询实现中 |
 | Data Onboarding | `feat/data-onboarding` | ⬜ 未开始 | — | 待启动：Excel 导入 + 校验 + 索引 |
 
 状态: ⬜ 未开始 | 🔵 进行中 | ✅ 已完成 | 🔴 阻塞 | ⏸️ 暂停
