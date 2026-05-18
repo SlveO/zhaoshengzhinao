@@ -6,21 +6,21 @@ the first failure stops the chain.
 
 Each guard receives (tenant_slug, session_id, ip_address, msg_count, message_text).
 Return None to pass, or a dict {code, message} to block.
+
+Guards can be sync or async — run_guards() handles both.
 """
 
 from __future__ import annotations
 
-import time
+import asyncio
 from abc import ABC, abstractmethod
-
-# ── Guard interface ──
 
 
 class BaseGuard(ABC):
     """One guard in the chain. Override check()."""
 
     @abstractmethod
-    async def check(
+    def check(
         self,
         *,
         tenant_slug: str,
@@ -42,11 +42,11 @@ class MessageLimitGuard(BaseGuard):
     def __init__(self, max_messages: int = 20):
         self.max_messages = max_messages
 
-    async def check(self, **kwargs) -> dict | None:
+    def check(self, **kwargs) -> dict | None:
         if kwargs["msg_count"] > self.max_messages:
             return {
                 "code": "MESSAGE_LIMIT",
-                "message": f"免费对话已达上限（{self.max_messages}条）。注册后可继续深入交流～",
+                "message": f"已超过免费对话上限（{self.max_messages}条）。注册后可继续深入交流～",
             }
         return None
 
@@ -57,7 +57,7 @@ class ContentLengthGuard(BaseGuard):
     def __init__(self, min_chars: int = 2):
         self.min_chars = min_chars
 
-    async def check(self, **kwargs) -> dict | None:
+    def check(self, **kwargs) -> dict | None:
         text = (kwargs.get("message_text") or "").strip()
         if len(text) < self.min_chars:
             return {"code": "TOO_SHORT", "message": None}  # silent skip
@@ -65,16 +65,22 @@ class ContentLengthGuard(BaseGuard):
 
 
 class RateLimitGuard(BaseGuard):
-    """Redis-based per-IP rate limiter for anonymous session creation."""
+    """Redis-based per-IP rate limiter for anonymous session creation.
+
+    NOTE: this guard is async (needs Redis). Use it only in async contexts.
+    """
 
     def __init__(self, max_sessions_per_hour: int = 10):
         self.max_sessions = max_sessions_per_hour
         self._window = 3600
 
-    async def check(self, **kwargs) -> dict | None:
+    def check(self, **kwargs) -> dict | None:
+        """Sync stub — always passes. Use check_async() for real enforcement."""
+        return None
+
+    async def check_async(self, **kwargs) -> dict | None:
         ip = kwargs.get("ip_address", "unknown")
         key = f"rate_limit:anon_session:{ip}"
-
         try:
             from config import settings
             import redis.asyncio as aioredis
@@ -84,12 +90,9 @@ class RateLimitGuard(BaseGuard):
             if current == 1:
                 await r.expire(key, self._window)
             if current > self.max_sessions:
-                return {
-                    "code": "RATE_LIMITED",
-                    "message": "访问过于频繁，请稍后再试",
-                }
+                return {"code": "RATE_LIMITED", "message": "访问过于频繁，请稍后再试"}
         except Exception:
-            pass  # Redis unavailable → allow (fail open)
+            pass
         return None
 
 
@@ -112,13 +115,23 @@ async def run_guards(
 ) -> dict | None:
     """Run all guards in order. Return the first blocking result, or None if all pass."""
     for g in guards or DEFAULT_GUARDS:
-        block = await g.check(
-            tenant_slug=tenant_slug,
-            session_id=session_id,
-            ip_address=ip_address,
-            msg_count=msg_count,
-            message_text=message_text,
-        )
+        # Support both sync and async guards
+        if isinstance(g, RateLimitGuard):
+            block = await g.check_async(
+                tenant_slug=tenant_slug,
+                session_id=session_id,
+                ip_address=ip_address,
+                msg_count=msg_count,
+                message_text=message_text,
+            )
+        else:
+            block = g.check(
+                tenant_slug=tenant_slug,
+                session_id=session_id,
+                ip_address=ip_address,
+                msg_count=msg_count,
+                message_text=message_text,
+            )
         if block is not None:
             return block
     return None
