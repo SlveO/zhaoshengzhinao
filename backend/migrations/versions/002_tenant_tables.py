@@ -49,7 +49,7 @@ def upgrade() -> None:
         sa.Column("source_url", sa.String(1000), server_default=""),
         sa.Column("year", sa.Integer),
         sa.Column("province", sa.String(100)),
-        sa.Column("metadata", JSONB, server_default="{}"),
+        sa.Column("extra_meta", JSONB, server_default="{}"),
         sa.Column("indexed_at", sa.DateTime(timezone=True)),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
     )

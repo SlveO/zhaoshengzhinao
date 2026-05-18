@@ -49,7 +49,7 @@ async def index_tenant_data(tenant_slug: str, data: TenantData) -> None:
             "data_type": str(data.data_type) if hasattr(data.data_type, "value") else data.data_type,
             "year": data.year,
             "province": data.province,
-            **data.metadata,
+            **data.extra_meta,
         }],
     )
 
@@ -94,7 +94,7 @@ async def reindex_tenant(tenant_slug: str) -> None:
                     "data_type": str(r.data_type) if hasattr(r.data_type, "value") else r.data_type,
                     "year": r.year,
                     "province": r.province,
-                    **r.metadata,
+                    **r.extra_meta,
                 }
                 for r in batch
             ],

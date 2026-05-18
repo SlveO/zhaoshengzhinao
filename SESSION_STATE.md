@@ -19,7 +19,7 @@
 
 | 轨道 | 分支 | 状态 | 当前 Session | 最新任务 |
 |------|------|------|-------------|---------|
-| Foundation | `feat/foundation` | 🔵 进行中 | current (main) | Task F0.1 |
+| Foundation | `feat/foundation` | 🔵 进行中 | current (main) | Phase 0-1 批量创建中 |
 | Admin SPA | `feat/admin-spa` | ⬜ 未开始 | — | — |
 | Mini-App | `feat/mini-app` | ⬜ 未开始 | — | — |
 | Analytics | `feat/analytics` | ⬜ 未开始 | — | — |

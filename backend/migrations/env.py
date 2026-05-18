@@ -1,8 +1,9 @@
 import asyncio
+import os
 from logging.config import fileConfig
 
 from sqlalchemy import pool
-from sqlalchemy.ext.asyncio import async_engine_from_config
+from sqlalchemy.ext.asyncio import create_async_engine
 
 from alembic import context
 
@@ -13,18 +14,21 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+# Use DATABASE_URL from environment, falling back to alembic.ini
+database_url = os.environ.get("DATABASE_URL", config.get_main_option("sqlalchemy.url"))
+
 # Import all models so Base.metadata is populated
 from models import Base  # noqa: E402
 from models import college, admission, user, profile, recommendation, industry, mapping, recommendation_feedback  # noqa: E402, F401
+from tenants.models import Tenant, TenantUser, TenantData, Department, SessionProfile  # noqa: E402, F401
 
 target_metadata = Base.metadata
 
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode."""
-    url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url,
+        url=database_url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -41,11 +45,7 @@ def do_run_migrations(connection):
 
 async def run_async_migrations():
     """Run migrations in 'online' mode with async engine."""
-    connectable = async_engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
+    connectable = create_async_engine(database_url, poolclass=pool.NullPool)
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
     await connectable.dispose()

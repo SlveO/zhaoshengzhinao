@@ -57,7 +57,7 @@ class TenantData(Base):
     source_url = Column(String(1000), default="")
     year = Column(Integer)
     province = Column(String(100))
-    metadata = Column(JSONB, default=dict)  # noqa: F821 (shadowing stdlib)
+    extra_meta = Column(JSONB, default=dict)  # stored as extra_meta to avoid SQLAlchemy reserved 'metadata'
     indexed_at = Column(DateTime(timezone=True))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
