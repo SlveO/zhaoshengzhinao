@@ -10,22 +10,26 @@
 |--------|---------|------|
 | Phase 0 完成：核心引擎稳定 | Week 2 | ✅ 已完成 |
 | Phase 1 完成：多租户地基 | Week 5 | ✅ 已完成 |
-| Phase 2 完成：单院校全链路 | Week 9 | ✅ 已完成（三轨合并，集成测试通过） |
-| Phase 3 完成：完整产品 | Week 13 | ⬜ 未开始 |
+| Phase 2 完成：外壳重建 | Week 9 | ✅ 已完成 |
+| Phase 3 完成：增值模块 | Week 13 | ✅ 已完成 |
+| Phase 4 完成：调试修复 + 单院校数据 | 当前 | ✅ 已完成 |
+| Phase 5 完成：多院校数据扩展 | 待定 | ⬜ 未开始 |
+| Phase 6 完成：压测 + 部署准备 | 待定 | ⬜ 未开始 |
 
 ---
 
 ## 轨道状态
 
-| 轨道 | 分支 | 状态 | 当前 Session | 最新任务 |
-|------|------|------|-------------|---------|
-| Foundation | `feat/foundation` | ✅ 已完成 | current (main) | Phase 0-1 完成，6 commits |
-| Admin SPA | `feat/admin-spa` | ✅ 已完成 | admin_spa | 30 文件, build 通过 |
-| Mini-App | `feat/mini-app` | ✅ 已完成 | mini_app | 29 文件, build 通过, dist/gdufs/ 产物正常 |
-| Analytics | `feat/analytics` | ✅ 已完成 | Analytics | 7 模块 + 7 测试文件, 合并到 develop |
-| Data Onboarding | `feat/data-onboarding` | ✅ 已完成 | Data Onboarding | Excel 导入 + 校验 + 模板, 合并到 develop |
-| Scraper SCNU | `feat/data-scnu-scraper` | ⬜ 未开始 | — | 待启动：华师 5 年录取+培养+就业数据采集 |
-| Data Import SCNU | `feat/data-scnu-import` | ⬜ 未开始 | — | 待启动：华师 tenant 创建+数据导入+验证 |
+| 轨道 | 分支 | 状态 | 核心产出 |
+|------|------|------|---------|
+| Foundation | `feat/foundation` | ✅ 已完成 | 多租户框架、中间件、事件系统、guest 对话、18 单元测试 |
+| Admin SPA | `feat/admin-spa` | ✅ 已完成 | 管理端 5 页面 + CSS 换肤 + ECharts |
+| Mini-App | `feat/mini-app` | ✅ 已完成 | 小程序 29 文件 + 白标构建 + build 通过 |
+| Analytics | `feat/analytics` | ✅ 已完成 | 7 个真实 SQL 聚合模块 |
+| Data Onboarding | `feat/data-onboarding` | ✅ 已完成 | Excel 导入 + 校验 + 模板 + 知识库 API |
+| SCNU Scraper | `feat/data-scnu-scraper` | ✅ 已完成 | 华师 1,567 录取 + 86 培养 + 344 就业 |
+| SCNU Import | `feat/data-scnu-import` | ✅ 已完成 | 华师 tenant + 1,997 条数据全量导入 |
+| Bug Fixes | `develop` | ✅ 已完成 | 4 根因修复（WS/API/CORS/BaseHTTPMiddleware） |
 
 状态: ⬜ 未开始 | 🔵 进行中 | ✅ 已完成 | 🔴 阻塞 | ⏸️ 暂停
 
@@ -39,12 +43,14 @@
 
 ---
 
-## 每日更新日志
+## 当前可运行服务
 
-### 2026-05-18
+| 服务 | 端口 | 启动命令 |
+|------|------|---------|
+| 后端 API | 8000 | `cd backend && uvicorn main:app --host 127.0.0.1 --port 8000` |
+| Admin SPA | 3001 | `cd admin-spa && npm run dev -- --port 3001` |
+| Mini-App H5 | 3002 | `cd mini-app && TENANT=scnu node build.config.js && npm run dev:h5 -- --port 3002` |
+| PostgreSQL | 5432 | `docker compose up -d db` |
+| Redis | 6379 | `docker compose up -d redis` |
 
-- 设计文档完成 (`docs/superpowers/specs/2026-05-18-b2b-platform-design.md`)
-- 协作基础设施创建 (COLLABORATION.md, CONVENTIONS.md, SESSION_STATE.md)
-- Mini-App 轨道启动：项目结构创建完成 (27 文件)，含所有页面/组件/stores/工具
-- Mini-App 修复完成：alpha 包版本修正、localhost 改为环境判断、TS 类型修复、build 通过
-- Foundation 后端未启动，端到端测试待后端启动后执行
+**演示账号**：admin / admin123（华南师大，X-Tenant: scnu）
