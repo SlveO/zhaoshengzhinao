@@ -7,6 +7,7 @@ from agents.conversation.state import Stage, STAGE_ORDER
 from agents.conversation.agent import _build_system_prompt, _detect_emotion
 from agents.conversation.slot_filler import slots_summary
 from agents.conversation.profile_analyzer import analyze_turn
+from agents.conversation.prompts_b2b import B2B_SYSTEM_PROMPT
 from agents.conversation.evidence_accumulator import EvidenceAccumulator
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from langchain_openai import ChatOpenAI
@@ -90,10 +91,16 @@ async def chat_websocket(ws: WebSocket, session_id: str):
     # Resolve tenant from query params (middleware skips WebSocket)
     tenant_slug = ws.query_params.get("tenant", "default")
     tenant_id = None
+    uni_name = ""        # university full name for B2B prompt
+    uni_short = ""       # university short name for B2B prompt
     try:
         from tenants.service import resolve_tenant as _resolve
         t = await _resolve(tenant_slug)
-        tenant_id = str(t.id) if t else None
+        if t:
+            tenant_id = str(t.id)
+            brand = (t.config or {}).get("brand", {})
+            uni_name = brand.get("name", "")
+            uni_short = brand.get("short_name", uni_name)
     except Exception:
         pass
 
@@ -102,6 +109,9 @@ async def chat_websocket(ws: WebSocket, session_id: str):
         await ws.send_json({"type": "error", "content": "Session not found"})
         await ws.close()
         return
+
+    # Store tenant_id in session state for event logging
+    state_data["tenant_id"] = tenant_id
 
     # Initialize evidence or migrate from old slots
     if "evidence" not in state_data:
@@ -143,7 +153,12 @@ async def chat_websocket(ws: WebSocket, session_id: str):
         while True:
             raw = await ws.receive_text()
             msg = json.loads(raw)
-            user_content = msg.get("content", "")
+            # Skip ping keepalive and empty messages
+            if msg.get("type") == "ping":
+                continue
+            user_content = (msg.get("content") or "").strip()
+            if not user_content:
+                continue
             msg_count += 1
 
             await ws.send_json({"type": "thinking", "message": "正在分析你的回答..."})
@@ -162,10 +177,26 @@ async def chat_websocket(ws: WebSocket, session_id: str):
             acc = EvidenceAccumulator.from_dict(state_data["evidence"])
             blind_spots = acc.detect_blind_spots()
 
-            # Build system prompt with blind spot hints
+            # Build system prompt — B2B (university-specific) or B2C (generic advisor)
             slots_text = slots_summary(acc.export_snapshot())
             emotion = _detect_emotion(user_content)
-            system_content = _build_system_prompt(current_stage.value, slots_text, blind_spots, emotion)
+            if uni_name:
+                system_content = B2B_SYSTEM_PROMPT.format(
+                    university_name=uni_name,
+                    university_short=uni_short or uni_name,
+                    stage=current_stage.value,
+                    slots_summary=slots_text,
+                )
+            else:
+                system_content = _build_system_prompt(current_stage.value, slots_text, blind_spots, emotion)
+            if blind_spots:
+                hint_text = "、".join(blind_spots)
+                system_content += f"\n\n## 当前未探索领域\n以下维度尚无证据：{hint_text}。在后续对话中自然地引导学生谈论这些方面。"
+            if emotion:
+                from agents.conversation.agent import _EMOTION_HINTS
+                hint = _EMOTION_HINTS.get(emotion)
+                if hint:
+                    system_content += f"\n\n## 情绪提示\n{hint}"
             system_msg = SystemMessage(content=system_content)
             msgs = [system_msg] + history
 
