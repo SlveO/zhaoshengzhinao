@@ -1,16 +1,21 @@
-import json, uuid
+import json
+import uuid
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
-from api.routes import auth, chat, profile, recommendation, college, industry
+
 from models import init_db, async_session
 from models.college import College
 from models.admission import AdmissionData
 
 
+# ── Seed / Index helpers (unchanged) ──
+
 def _load_json(path: str) -> list:
     import os
+
     base = os.environ.get("DATA_DIR", "data/seed")
     filepath = os.path.join(base, path)
     with open(filepath, encoding="utf-8") as f:
@@ -77,6 +82,8 @@ async def _run_index():
             print(f"Indexed {len(docs)} documents into Chroma.")
 
 
+# ── Lifespan ──
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_db()
@@ -88,20 +95,34 @@ async def lifespan(app: FastAPI):
     else:
         print("Skipping seed and index (already seeded).")
 
-    # Note: embedding model loads lazily on first recommendation request.
-    # Cached in hf_cache Docker volume so subsequent restarts are instant.
     yield
 
 
-app = FastAPI(title="Gaokao Advisor API", version="0.1.0", lifespan=lifespan)
+# ── App ──
 
+app = FastAPI(title="招生智脑 API", version="2.0.0", lifespan=lifespan)
+
+# CORS (allow admin SPA dev + mini-app dev origins)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://localhost:3001",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ── B2B Middleware (order matters!) ──
+from core.middleware import TenantResolutionMiddleware, ModuleGateMiddleware  # noqa: E402
+
+app.add_middleware(TenantResolutionMiddleware)
+app.add_middleware(ModuleGateMiddleware)
+
+# ── Existing Routes (api/routes) ──
+from api.routes import auth, chat, profile, recommendation, college, industry  # noqa: E402
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(chat.router, prefix="/api/v1/chat", tags=["chat"])
@@ -109,6 +130,15 @@ app.include_router(profile.router, prefix="/api/v1/profile", tags=["profile"])
 app.include_router(recommendation.router, prefix="/api/v1/recommendations", tags=["recommendations"])
 app.include_router(college.router, prefix="/api/v1/colleges", tags=["colleges"])
 app.include_router(industry.router, prefix="/api/v1", tags=["industry"])
+
+# ── New B2B Routes ──
+from tenants.router import router as tenant_router  # noqa: E402
+from analytics.router import router as analytics_router  # noqa: E402
+from admin.router import router as admin_router  # noqa: E402
+
+app.include_router(tenant_router, prefix="/api/v1/admin/tenants", tags=["tenants"])
+app.include_router(analytics_router, prefix="/api/v1/admin/analytics", tags=["analytics"])
+app.include_router(admin_router, prefix="/api/v1/admin", tags=["admin"])
 
 
 @app.get("/api/health")
