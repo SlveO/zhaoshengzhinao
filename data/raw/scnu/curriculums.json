@@ -1,0 +1,1503 @@
+[
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "教育学",
+    "college": "教育科学学院",
+    "category": "教育学",
+    "degree_type": "教育学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "教育原理",
+      "教育心理学",
+      "课程与教学论",
+      "教育研究方法",
+      "中国教育史",
+      "外国教育史"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握教育学学科基础理论和教育学专业知识与技能，能够胜任中小学教育教学、教育管理与教育研究工作的专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "小学教育",
+    "college": "教育科学学院",
+    "category": "教育学",
+    "degree_type": "教育学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握教育学学科基础理论和小学教育专业知识与技能，能够胜任中小学教育教学、教育管理与教育研究工作的专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "学前教育",
+    "college": "教育科学学院",
+    "category": "教育学",
+    "degree_type": "教育学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握教育学学科基础理论和学前教育专业知识与技能，能够胜任中小学教育教学、教育管理与教育研究工作的专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "特殊教育",
+    "college": "教育科学学院",
+    "category": "教育学",
+    "degree_type": "教育学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握教育学学科基础理论和特殊教育专业知识与技能，能够胜任中小学教育教学、教育管理与教育研究工作的专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "教育技术学",
+    "college": "教育科学学院",
+    "category": "教育学",
+    "degree_type": "教育学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握教育学学科基础理论和教育技术学专业知识与技能，能够胜任中小学教育教学、教育管理与教育研究工作的专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "心理学",
+    "college": "心理学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "普通心理学",
+      "实验心理学",
+      "心理统计学",
+      "发展心理学",
+      "认知心理学",
+      "心理测量学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和心理学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "应用心理学",
+    "college": "心理学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "普通心理学",
+      "实验心理学",
+      "心理统计学",
+      "发展心理学",
+      "认知心理学",
+      "心理测量学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和应用心理学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "汉语言文学",
+    "college": "文学院",
+    "category": "文学",
+    "degree_type": "文学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "中国古代文学",
+      "中国现代文学",
+      "外国文学",
+      "文学理论",
+      "古代汉语",
+      "现代汉语"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握文学学科基础理论和汉语言文学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "汉语言",
+    "college": "文学院",
+    "category": "文学",
+    "degree_type": "文学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握文学学科基础理论和汉语言专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "汉语国际教育",
+    "college": "国际文化学院",
+    "category": "文学",
+    "degree_type": "文学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握文学学科基础理论和汉语国际教育专业知识与技能，能够胜任中小学教育教学、教育管理与教育研究工作的专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "英语",
+    "college": "外国语言文化学院",
+    "category": "文学",
+    "degree_type": "文学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "综合英语",
+      "英语听力",
+      "英语口语",
+      "英语写作",
+      "英语国家概况",
+      "英汉互译"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握文学学科基础理论和英语专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "翻译",
+    "college": "外国语言文化学院",
+    "category": "文学",
+    "degree_type": "文学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握文学学科基础理论和翻译专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "日语",
+    "college": "外国语言文化学院",
+    "category": "文学",
+    "degree_type": "文学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握文学学科基础理论和日语专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "俄语",
+    "college": "外国语言文化学院",
+    "category": "文学",
+    "degree_type": "文学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握文学学科基础理论和俄语专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "法语",
+    "college": "外国语言文化学院",
+    "category": "文学",
+    "degree_type": "文学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握文学学科基础理论和法语专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "新闻学",
+    "college": "教育科学学院",
+    "category": "文学",
+    "degree_type": "文学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握文学学科基础理论和新闻学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "传播学",
+    "college": "教育科学学院",
+    "category": "文学",
+    "degree_type": "文学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握文学学科基础理论和传播学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "历史学",
+    "college": "历史文化学院",
+    "category": "历史学",
+    "degree_type": "历史学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "中国通史",
+      "世界通史",
+      "史学概论",
+      "历史文献学",
+      "考古学通论"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握历史学学科基础理论和历史学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "哲学",
+    "college": "哲学与社会发展学院",
+    "category": "哲学",
+    "degree_type": "哲学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握哲学学科基础理论和哲学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "法学",
+    "college": "法学院",
+    "category": "法学",
+    "degree_type": "法学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "法理学",
+      "宪法学",
+      "民法学",
+      "刑法学",
+      "行政法学",
+      "诉讼法学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握法学学科基础理论和法学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "社会工作",
+    "college": "哲学与社会发展学院",
+    "category": "法学",
+    "degree_type": "法学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握法学学科基础理论和社会工作专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "思想政治教育",
+    "college": "马克思主义学院",
+    "category": "法学",
+    "degree_type": "法学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "马克思主义哲学",
+      "政治经济学",
+      "科学社会主义",
+      "思想政治教育原理",
+      "伦理学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握法学学科基础理论和思想政治教育专业知识与技能，能够胜任中小学教育教学、教育管理与教育研究工作的专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "政治学与行政学",
+    "college": "政治与公共管理学院",
+    "category": "法学",
+    "degree_type": "法学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握法学学科基础理论和政治学与行政学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "行政管理",
+    "college": "政治与公共管理学院",
+    "category": "管理学",
+    "degree_type": "管理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握管理学学科基础理论和行政管理专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "公共事业管理",
+    "college": "政治与公共管理学院",
+    "category": "管理学",
+    "degree_type": "管理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握管理学学科基础理论和公共事业管理专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "经济学",
+    "college": "经济与管理学院",
+    "category": "经济学",
+    "degree_type": "经济学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "微观经济学",
+      "宏观经济学",
+      "计量经济学",
+      "政治经济学",
+      "经济统计学",
+      "发展经济学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握经济学学科基础理论和经济学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "金融学",
+    "college": "经济与管理学院",
+    "category": "经济学",
+    "degree_type": "经济学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握经济学学科基础理论和金融学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "金融科技",
+    "college": "经济与管理学院",
+    "category": "经济学",
+    "degree_type": "经济学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握经济学学科基础理论和金融科技专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "国际经济与贸易",
+    "college": "经济与管理学院",
+    "category": "经济学",
+    "degree_type": "经济学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握经济学学科基础理论和国际经济与贸易专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "会计学",
+    "college": "经济与管理学院",
+    "category": "管理学",
+    "degree_type": "管理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握管理学学科基础理论和会计学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "财务管理",
+    "college": "经济与管理学院",
+    "category": "管理学",
+    "degree_type": "管理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握管理学学科基础理论和财务管理专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "人力资源管理",
+    "college": "经济与管理学院",
+    "category": "管理学",
+    "degree_type": "管理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握管理学学科基础理论和人力资源管理专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "工商管理",
+    "college": "经济与管理学院",
+    "category": "管理学",
+    "degree_type": "管理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握管理学学科基础理论和工商管理专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "物流管理",
+    "college": "经济与管理学院",
+    "category": "管理学",
+    "degree_type": "管理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握管理学学科基础理论和物流管理专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "电子商务",
+    "college": "经济与管理学院",
+    "category": "管理学",
+    "degree_type": "管理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握管理学学科基础理论和电子商务专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "信息管理与信息系统",
+    "college": "信息管理系",
+    "category": "管理学",
+    "degree_type": "管理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握管理学学科基础理论和信息管理与信息系统专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "旅游管理",
+    "college": "旅游管理学院",
+    "category": "管理学",
+    "degree_type": "管理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握管理学学科基础理论和旅游管理专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "酒店管理",
+    "college": "旅游管理学院",
+    "category": "管理学",
+    "degree_type": "管理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握管理学学科基础理论和酒店管理专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "会展经济与管理",
+    "college": "旅游管理学院",
+    "category": "管理学",
+    "degree_type": "管理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握管理学学科基础理论和会展经济与管理专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "数学与应用数学",
+    "college": "数学科学学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "数学分析",
+      "高等代数",
+      "概率论与数理统计",
+      "常微分方程",
+      "实变函数",
+      "复变函数"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和数学与应用数学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "信息与计算科学",
+    "college": "数学科学学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和信息与计算科学专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "金融数学",
+    "college": "数学科学学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和金融数学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "物理学",
+    "college": "物理与电信工程学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "力学",
+      "热学",
+      "电磁学",
+      "光学",
+      "原子物理学",
+      "量子力学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和物理学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "化学",
+    "college": "化学学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "无机化学",
+      "有机化学",
+      "分析化学",
+      "物理化学",
+      "结构化学",
+      "高分子化学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和化学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "应用化学",
+    "college": "化学学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "无机化学",
+      "有机化学",
+      "分析化学",
+      "物理化学",
+      "结构化学",
+      "高分子化学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和应用化学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "生物科学",
+    "college": "生命科学学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "植物学",
+      "动物学",
+      "生物化学",
+      "分子生物学",
+      "细胞生物学",
+      "遗传学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和生物科学专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "生物技术",
+    "college": "生命科学学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和生物技术专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "生物工程",
+    "college": "生命科学学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和生物工程专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "地理科学",
+    "college": "地理科学学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "自然地理学",
+      "人文地理学",
+      "经济地理学",
+      "地图学",
+      "遥感概论",
+      "GIS原理"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和地理科学专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "自然地理与资源环境",
+    "college": "地理科学学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和自然地理与资源环境专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "人文地理与城乡规划",
+    "college": "地理科学学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和人文地理与城乡规划专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "地理信息科学",
+    "college": "地理科学学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和地理信息科学专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "大气科学",
+    "college": "地理科学学院",
+    "category": "理学",
+    "degree_type": "理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握理学学科基础理论和大气科学专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "计算机科学与技术",
+    "college": "计算机学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "数据结构",
+      "计算机组成原理",
+      "操作系统",
+      "计算机网络",
+      "算法设计与分析",
+      "数据库系统"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和计算机科学与技术专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "软件工程",
+    "college": "软件学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "软件工程导论",
+      "面向对象程序设计",
+      "软件测试",
+      "软件项目管理",
+      "软件体系结构"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和软件工程专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "网络工程",
+    "college": "计算机学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和网络工程专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "人工智能",
+    "college": "人工智能学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和人工智能专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "数据科学与大数据技术",
+    "college": "计算机学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和数据科学与大数据技术专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "光电信息科学与工程",
+    "college": "信息光电子科技学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和光电信息科学与工程专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "电子信息工程",
+    "college": "电子与信息工程学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和电子信息工程专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "通信工程",
+    "college": "电子与信息工程学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和通信工程专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "电子科学与技术",
+    "college": "电子与信息工程学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和电子科学与技术专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "集成电路设计与集成系统",
+    "college": "半导体科学与技术学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和集成电路设计与集成系统专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "微电子科学与工程",
+    "college": "半导体科学与技术学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和微电子科学与工程专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "环境工程",
+    "college": "环境学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和环境工程专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "环境科学",
+    "college": "环境学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和环境科学专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "材料物理",
+    "college": "材料与新能源学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和材料物理专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "材料化学",
+    "college": "材料与新能源学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "无机化学",
+      "有机化学",
+      "分析化学",
+      "物理化学",
+      "结构化学",
+      "高分子化学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和材料化学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "新能源材料与器件",
+    "college": "材料与新能源学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和新能源材料与器件专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "新能源科学与工程",
+    "college": "材料与新能源学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和新能源科学与工程专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "测控技术与仪器",
+    "college": "物理与电信工程学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和测控技术与仪器专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "音乐学",
+    "college": "音乐学院",
+    "category": "艺术学",
+    "degree_type": "艺术学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "基本乐理",
+      "视唱练耳",
+      "中外音乐史",
+      "和声学",
+      "曲式分析",
+      "钢琴基础"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握艺术学学科基础理论和音乐学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "音乐表演",
+    "college": "音乐学院",
+    "category": "艺术学",
+    "degree_type": "艺术学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握艺术学学科基础理论和音乐表演专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "舞蹈学",
+    "college": "音乐学院",
+    "category": "艺术学",
+    "degree_type": "艺术学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握艺术学学科基础理论和舞蹈学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "美术学",
+    "college": "美术学院",
+    "category": "艺术学",
+    "degree_type": "艺术学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "素描",
+      "色彩",
+      "中外美术史",
+      "艺术概论",
+      "国画基础",
+      "油画基础"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握艺术学学科基础理论和美术学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "设计学",
+    "college": "美术学院",
+    "category": "艺术学",
+    "degree_type": "艺术学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握艺术学学科基础理论和设计学专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "视觉传达设计",
+    "college": "美术学院",
+    "category": "艺术学",
+    "degree_type": "艺术学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握艺术学学科基础理论和视觉传达设计专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "环境设计",
+    "college": "美术学院",
+    "category": "艺术学",
+    "degree_type": "艺术学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握艺术学学科基础理论和环境设计专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "产品设计",
+    "college": "美术学院",
+    "category": "艺术学",
+    "degree_type": "艺术学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握艺术学学科基础理论和产品设计专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "数字媒体艺术",
+    "college": "美术学院",
+    "category": "艺术学",
+    "degree_type": "艺术学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握艺术学学科基础理论和数字媒体艺术专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "体育教育",
+    "college": "体育科学学院",
+    "category": "教育学",
+    "degree_type": "教育学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "运动生理学",
+      "体育心理学",
+      "学校体育学",
+      "田径",
+      "体操",
+      "球类运动"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握教育学学科基础理论和体育教育专业知识与技能，能够胜任中小学教育教学、教育管理与教育研究工作的专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "运动训练",
+    "college": "体育科学学院",
+    "category": "教育学",
+    "degree_type": "教育学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握教育学学科基础理论和运动训练专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "社会体育指导与管理",
+    "college": "体育科学学院",
+    "category": "教育学",
+    "degree_type": "教育学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握教育学学科基础理论和社会体育指导与管理专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "数据科学与大数据技术(中外合作)",
+    "college": "阿伯丁数据科学与人工智能学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和数据科学与大数据技术(中外合作)专业知识与技能，能够在相关领域从事科学研究、技术开发与管理工作的应用型高级专门人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "人工智能(中外合作)",
+    "college": "阿伯丁数据科学与人工智能学院",
+    "category": "工学",
+    "degree_type": "工学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握工学学科基础理论和人工智能(中外合作)专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  },
+  {
+    "college_code": "10574",
+    "college_name": "华南师范大学",
+    "major_name": "信息管理与信息系统(中外合作)",
+    "college": "阿伯丁数据科学与人工智能学院",
+    "category": "管理学",
+    "degree_type": "管理学学士",
+    "duration": 4,
+    "source": "scnu_catalog",
+    "core_courses": [
+      "学科基础课",
+      "专业核心课",
+      "专业选修课",
+      "实践教学"
+    ],
+    "objective": "本专业培养德智体美劳全面发展，掌握管理学学科基础理论和信息管理与信息系统(中外合作)专业知识与技能，能够在相关行业从事专业工作的高素质人才。"
+  }
+]

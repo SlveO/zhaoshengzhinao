@@ -1,0 +1,166 @@
+2026-05-18 13:39:14.496 | INFO     | __main__:run:124 - Fetching SCNU admissions: 5 years x 10 provinces = 50 requests
+2026-05-18 13:39:15.072 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/11.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/11.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:15.073 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2021/p11: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/11.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/11.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:15.598 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/31.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/31.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:15.598 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2021/p31: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/31.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/31.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:17.104 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/42.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/42.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:17.104 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2021/p42: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/42.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/42.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:17.615 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/43.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/43.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:17.615 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2021/p43: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/43.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2021/43.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:20.164 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2022/11.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2022/11.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:20.164 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2022/p11: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2022/11.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2022/11.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:20.800 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2022/31.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2022/31.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:20.801 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2022/p31: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2022/31.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2022/31.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:25.287 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/11.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/11.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:25.287 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2023/p11: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/11.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/11.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:25.800 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/31.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/31.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:25.800 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2023/p31: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/31.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/31.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:27.332 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/42.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/42.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:27.332 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2023/p42: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/42.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/42.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:27.811 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/43.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/43.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:27.811 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2023/p43: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/43.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2023/43.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:35.045 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:35.045 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2025/p44: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/44.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/44.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:35.461 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/11.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/11.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:35.461 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2025/p11: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/11.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/11.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:35.978 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/31.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/31.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:35.978 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2025/p31: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/31.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/31.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:36.564 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/32.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/32.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:36.564 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2025/p32: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/32.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/32.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:37.515 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/42.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/42.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:37.515 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2025/p42: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/42.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/42.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:38.012 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/43.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/43.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:38.012 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2025/p43: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/43.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/43.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:38.519 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/51.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/51.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:38.519 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2025/p51: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/51.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/51.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:39.529 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/41.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/41.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:39.529 | WARNING  | __main__:fetch_scores:53 - Score fetch failed for SCNU 2025/p41: Failed to fetch https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/41.json: Client error '404 Not Found' for url 'https://static-data.gaokao.cn/www/2.0/schoolspecialscore/98/2025/41.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:39.529 | INFO     | __main__:run:141 - SCNU admissions: 1567 records, 18 empty provinces
+2026-05-18 13:39:39.555 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\scnu\admissions.json
+2026-05-18 13:39:39.556 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\scnu\errors_admissions.json
+2026-05-18 13:39:56.854 | INFO     | __main__:run:252 - Building SCNU curriculum data for 86 majors
+2026-05-18 13:39:57.532 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://zsb.scnu.edu.cn/zyjs.htm: Client error '404 Not Found' for url 'https://zsb.scnu.edu.cn/zyjs.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:39:59.452 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://zsb.scnu.edu.cn/zsjh.htm: Client error '404 Not Found' for url 'https://zsb.scnu.edu.cn/zsjh.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:40:01.459 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://zsb.scnu.edu.cn/list.jsp?urltype=tree.TreeTempUrl&wbtreeid=1021: Client error '404 Not Found' for url 'https://zsb.scnu.edu.cn/list.jsp?urltype=tree.TreeTempUrl&wbtreeid=1021'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:40:03.475 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://zsb.scnu.edu.cn/list.jsp?a1178232t=1178232&a1178232p=1&a1178232c=10&urltype=tree.TreeTempUrl&wbtreeid=1021: Client error '404 Not Found' for url 'https://zsb.scnu.edu.cn/list.jsp?a1178232t=1178232&a1178232p=1&a1178232c=10&urltype=tree.TreeTempUrl&wbtreeid=1021'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:40:07.516 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://psy.scnu.edu.cn/rcpy/bkjx.htm: Client error '404 Not Found' for url 'https://psy.scnu.edu.cn/rcpy/bkjx.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:40:09.527 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://zheshe.scnu.edu.cn/rcpy/bkjx.htm: 
+2026-05-18 13:40:11.570 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://marx.scnu.edu.cn/rcpy/bkjx.htm: 
+2026-05-18 13:40:13.531 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://psy.scnu.edu.cn/jxgl.htm: Client error '404 Not Found' for url 'https://psy.scnu.edu.cn/jxgl.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:40:17.494 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://zheshe.scnu.edu.cn/jxgl.htm: 
+2026-05-18 13:40:19.500 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://marx.scnu.edu.cn/jxgl.htm: 
+2026-05-18 13:40:21.638 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://psy.scnu.edu.cn/pyfa.htm: Client error '404 Not Found' for url 'https://psy.scnu.edu.cn/pyfa.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:40:23.515 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://zheshe.scnu.edu.cn/pyfa.htm: 
+2026-05-18 13:40:25.523 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://jky.scnu.edu.cn/rcpy/bkjx.htm after 3 retries: RetryError[<Future at 0x18f24019ac0 state=finished raised RemoteProtocolError>]
+2026-05-18 13:40:27.514 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://marx.scnu.edu.cn/pyfa.htm: 
+2026-05-18 13:40:29.553 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://psy.scnu.edu.cn/rcpy.htm: Client error '404 Not Found' for url 'https://psy.scnu.edu.cn/rcpy.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:40:31.538 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://zheshe.scnu.edu.cn/rcpy.htm: 
+2026-05-18 13:40:35.550 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://marx.scnu.edu.cn/rcpy.htm: 
+2026-05-18 13:40:41.635 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://cicz.scnu.edu.cn/rcpy/bkjx.htm: 
+2026-05-18 13:40:51.679 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://jky.scnu.edu.cn/jxgl.htm after 3 retries: RetryError[<Future at 0x18f2502eb70 state=finished raised RemoteProtocolError>]
+2026-05-18 13:40:53.629 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://cicz.scnu.edu.cn/jxgl.htm: 
+2026-05-18 13:40:55.656 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://lswh.scnu.edu.cn/rcpy/bkjx.htm after 3 retries: RetryError[<Future at 0x18f2502cd70 state=finished raised RemoteProtocolError>]
+2026-05-18 13:40:59.653 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://sfs.scnu.edu.cn/rcpy/bkjx.htm after 3 retries: RetryError[<Future at 0x18f240476e0 state=finished raised RemoteProtocolError>]
+2026-05-18 13:41:01.643 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://cicz.scnu.edu.cn/pyfa.htm: 
+2026-05-18 13:41:09.662 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://cicz.scnu.edu.cn/rcpy.htm: 
+2026-05-18 13:41:17.716 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://jky.scnu.edu.cn/pyfa.htm after 3 retries: RetryError[<Future at 0x18f250364e0 state=finished raised RemoteProtocolError>]
+2026-05-18 13:41:19.724 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://lswh.scnu.edu.cn/jxgl.htm after 3 retries: RetryError[<Future at 0x18f24047590 state=finished raised RemoteProtocolError>]
+2026-05-18 13:41:21.750 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://sfs.scnu.edu.cn/jxgl.htm after 3 retries: RetryError[<Future at 0x18f2504cf20 state=finished raised RemoteProtocolError>]
+2026-05-18 13:41:35.787 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://wxy.scnu.edu.cn/rcpy/bkjx.htm after 3 retries: RetryError[<Future at 0x18f2504ff20 state=finished raised RemoteProtocolError>]
+2026-05-18 13:41:39.817 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://jky.scnu.edu.cn/rcpy.htm after 3 retries: RetryError[<Future at 0x18f25037500 state=finished raised RemoteProtocolError>]
+2026-05-18 13:41:43.805 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://lswh.scnu.edu.cn/pyfa.htm after 3 retries: RetryError[<Future at 0x18f250651f0 state=finished raised RemoteProtocolError>]
+2026-05-18 13:41:45.852 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://maths.scnu.edu.cn/rcpy/bkjx.htm: Client error '404 Not Found' for url 'https://maths.scnu.edu.cn/rcpy/bkjx.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:41:47.817 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://sfs.scnu.edu.cn/pyfa.htm after 3 retries: RetryError[<Future at 0x18f250363f0 state=finished raised RemoteProtocolError>]
+2026-05-18 13:41:53.844 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://maths.scnu.edu.cn/jxgl.htm: Client error '404 Not Found' for url 'https://maths.scnu.edu.cn/jxgl.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:41:58.645 | INFO     | __main__:run:290 - Building SCNU employment data
+2026-05-18 13:41:59.859 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://maths.scnu.edu.cn/pyfa.htm: Client error '404 Not Found' for url 'https://maths.scnu.edu.cn/pyfa.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:42:01.357 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://career.scnu.edu.cn/list.jsp?urltype=tree.TreeTempUrl&wbtreeid=1003: Client error '404 Not Found' for url 'https://career.scnu.edu.cn/list.jsp?urltype=tree.TreeTempUrl&wbtreeid=1003'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:42:01.856 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://wxy.scnu.edu.cn/jxgl.htm after 3 retries: RetryError[<Future at 0x18f25066f30 state=finished raised RemoteProtocolError>]
+2026-05-18 13:42:03.378 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://career.scnu.edu.cn/news/list-4-1.html: Client error '404 Not Found' for url 'https://career.scnu.edu.cn/news/list-4-1.html'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:42:05.415 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://career.scnu.edu.cn/module/jysq?c=news&a=list&catid=4: Client error '404 Not Found' for url 'https://career.scnu.edu.cn/module/jysq?c=news&a=list&catid=4'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:42:05.890 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://maths.scnu.edu.cn/rcpy.htm: Client error '404 Not Found' for url 'https://maths.scnu.edu.cn/rcpy.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:42:07.368 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://zsb.scnu.edu.cn/list.jsp?a1203162t=1203162&a1203162p=1&a1203162c=10&urltype=tree.TreeTempUrl&wbtreeid=1203: Client error '404 Not Found' for url 'https://zsb.scnu.edu.cn/list.jsp?a1203162t=1203162&a1203162p=1&a1203162c=10&urltype=tree.TreeTempUrl&wbtreeid=1203'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:42:07.368 | INFO     | __main__:run:316 - Found 0 potential employment report URLs
+2026-05-18 13:42:07.888 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://lswh.scnu.edu.cn/rcpy.htm after 3 retries: RetryError[<Future at 0x18f2504d520 state=finished raised RemoteProtocolError>]
+2026-05-18 13:42:11.943 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://physics.scnu.edu.cn/rcpy/bkjx.htm: Client error '404 Not Found' for url 'https://physics.scnu.edu.cn/rcpy/bkjx.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:42:13.925 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://sfs.scnu.edu.cn/rcpy.htm after 3 retries: RetryError[<Future at 0x18f25064da0 state=finished raised RemoteProtocolError>]
+2026-05-18 13:42:17.947 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://physics.scnu.edu.cn/jxgl.htm: Client error '404 Not Found' for url 'https://physics.scnu.edu.cn/jxgl.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:42:19.933 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://physics.scnu.edu.cn/pyfa.htm: Client error '404 Not Found' for url 'https://physics.scnu.edu.cn/pyfa.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:42:21.969 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://wxy.scnu.edu.cn/pyfa.htm after 3 retries: RetryError[<Future at 0x18f25036540 state=finished raised RemoteProtocolError>]
+2026-05-18 13:42:23.955 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://physics.scnu.edu.cn/rcpy.htm: Client error '404 Not Found' for url 'https://physics.scnu.edu.cn/rcpy.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:42:32.063 | ERROR    | scrapers.base_scraper:fetch_with_retry:95 - Fetch failed for https://wxy.scnu.edu.cn/rcpy.htm after 3 retries: RetryError[<Future at 0x18f25036b40 state=finished raised RemoteProtocolError>]
+2026-05-18 13:42:32.063 | INFO     | __main__:run:288 - College pages scraped: 0/10
+2026-05-18 13:42:34.079 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://jwc.scnu.edu.cn/jxyj/rcpy.htm: Client error '404 Not Found' for url 'https://jwc.scnu.edu.cn/jxyj/rcpy.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:42:36.032 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://jwc.scnu.edu.cn/jxyj.htm: Client error '404 Not Found' for url 'https://jwc.scnu.edu.cn/jxyj.htm'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:42:38.038 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\scnu\curriculums.json
+2026-05-18 13:42:38.039 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\scnu\errors_curriculum.json
+2026-05-18 13:42:55.477 | INFO     | __main__:run:302 - Building SCNU employment data
+2026-05-18 13:42:56.334 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://career.scnu.edu.cn/list.jsp?urltype=tree.TreeTempUrl&wbtreeid=1003: Client error '404 Not Found' for url 'https://career.scnu.edu.cn/list.jsp?urltype=tree.TreeTempUrl&wbtreeid=1003'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:42:58.120 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://career.scnu.edu.cn/news/list-4-1.html: Client error '404 Not Found' for url 'https://career.scnu.edu.cn/news/list-4-1.html'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:43:00.167 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://career.scnu.edu.cn/module/jysq?c=news&a=list&catid=4: Client error '404 Not Found' for url 'https://career.scnu.edu.cn/module/jysq?c=news&a=list&catid=4'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:43:02.125 | ERROR    | scrapers.base_scraper:fetch_with_retry:100 - Fetch failed for https://zsb.scnu.edu.cn/list.jsp?a1203162t=1203162&a1203162p=1&a1203162c=10&urltype=tree.TreeTempUrl&wbtreeid=1203: Client error '404 Not Found' for url 'https://zsb.scnu.edu.cn/list.jsp?a1203162t=1203162&a1203162p=1&a1203162c=10&urltype=tree.TreeTempUrl&wbtreeid=1203'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-05-18 13:43:02.125 | INFO     | __main__:run:328 - Found 0 potential employment report URLs
+2026-05-18 13:43:02.138 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\scnu\employment.json
+2026-05-18 13:43:02.139 | INFO     | scrapers.base_scraper:save_raw:112 - Saved raw data: D:\_Greatest_programmer\_Projects\gaokao_agents\data\raw\scnu\errors_employment.json
