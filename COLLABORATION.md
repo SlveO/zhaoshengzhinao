@@ -54,8 +54,8 @@ refactor/<component>   重构分支
 | 轨道 | 分支 | 依赖 | 产出 |
 |------|------|------|------|
 | **Foundation** | `feat/foundation` | 无 | 多租户框架 + 核心引擎 + API scaffold |
-| **Admin SPA** | `feat/admin-spa` | Foundation API 就绪 | 管理端 React 应用 |
-| **Mini-App** | `feat/mini-app` | Foundation API 就绪 | uni-app 小程序 |
+| **Admin SPA** | `feat/admin-spa` | Foundation API 就绪 | 管理端 React 应用 → 详见 `SESSION_ADMIN_SPA.md` |
+| **Mini-App** | `feat/mini-app` | Foundation API 就绪 | uni-app 小程序 → 详见 `SESSION_MINI_APP.md` |
 | **Analytics** | `feat/analytics` | Foundation API 就绪 | 增值分析模块 |
 | **Data Onboarding** | `feat/data-onboarding` | Foundation 数据模型 | 数据接入管道 |
 
@@ -69,8 +69,8 @@ refactor/<component>   重构分支
 
 1. [ ] 阅读本文件（COLLABORATION.md）
 2. [ ] 阅读 `CONVENTIONS.md`
-3. [ ] 阅读 `docs/superpowers/specs/2026-05-18-b2b-platform-design.md` 中相关章节
-4. [ ] 阅读 `docs/superpowers/plans/2026-05-18-b2b-platform-plan.md` 中相关 Task
+3. [ ] 阅读你的轨道专属 Session 文档（`SESSION_ADMIN_SPA.md` 或 `SESSION_MINI_APP.md`）
+4. [ ] 阅读 `docs/superpowers/specs/2026-05-18-b2b-platform-design.md` 中相关章节
 5. [ ] `git fetch origin && git checkout <你的分支>`
 6. [ ] 检查 `SESSION_STATE.md` 确认你的轨道没有冲突
 7. [ ] 开始工作前更新 `SESSION_STATE.md` 标记你的轨道为 `active`
