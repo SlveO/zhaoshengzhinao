@@ -58,6 +58,8 @@ refactor/<component>   重构分支
 | **Mini-App** | `feat/mini-app` | Foundation API 就绪 | uni-app 小程序 → 详见 `SESSION_MINI_APP.md` |
 | **Analytics** | `feat/analytics` | Foundation API 就绪 | 增值分析模块 → 详见 `SESSION_ANALYTICS.md` |
 | **Data Onboarding** | `feat/data-onboarding` | Foundation 数据模型 | 数据接入管道 → 详见 `SESSION_DATA_ONBOARDING.md` |
+| **Scraper SCNU** | `feat/data-scnu-scraper` | 无 | 华师数据采集 → 详见 `SESSION_SCRAPER_SCNU.md` |
+| **Data Import SCNU** | `feat/data-scnu-import` | Scraper 产出 | 华师数据导入+验证 → 详见 `SESSION_DATA_IMPORT_SCNU.md` |
 
 **轨道启动条件**: Foundation 轨道的 API scaffold（Phase 1 Week 5）完成后，其他轨道即可启动。
 

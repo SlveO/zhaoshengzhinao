@@ -24,6 +24,8 @@
 | Mini-App | `feat/mini-app` | ✅ 已完成 | mini_app | 29 文件, build 通过, dist/gdufs/ 产物正常 |
 | Analytics | `feat/analytics` | ✅ 已完成 | Analytics | 7 模块 + 7 测试文件, 合并到 develop |
 | Data Onboarding | `feat/data-onboarding` | ✅ 已完成 | Data Onboarding | Excel 导入 + 校验 + 模板, 合并到 develop |
+| Scraper SCNU | `feat/data-scnu-scraper` | ⬜ 未开始 | — | 待启动：华师 5 年录取+培养+就业数据采集 |
+| Data Import SCNU | `feat/data-scnu-import` | ⬜ 未开始 | — | 待启动：华师 tenant 创建+数据导入+验证 |
 
 状态: ⬜ 未开始 | 🔵 进行中 | ✅ 已完成 | 🔴 阻塞 | ⏸️ 暂停
 
