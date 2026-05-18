@@ -1,0 +1,5 @@
+node_modules/
+dist/
+src/tenant.config.ts
+*.log
+.DS_Store

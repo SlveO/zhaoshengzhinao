@@ -1,0 +1,39 @@
+{
+  "pages": [
+    {
+      "path": "pages/chat/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationBarBackgroundColor": "@primaryColor",
+        "navigationBarTextStyle": "white",
+        "disableScroll": true
+      }
+    },
+    {
+      "path": "pages/recommendations/index",
+      "style": {
+        "navigationBarTitleText": "推荐结果",
+        "navigationBarBackgroundColor": "@primaryColor",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/profile/index",
+      "style": {
+        "navigationBarTitleText": "我的画像",
+        "navigationBarBackgroundColor": "@primaryColor",
+        "navigationBarTextStyle": "white"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "招生咨询",
+    "navigationBarBackgroundColor": "#1a56db",
+    "backgroundColor": "#f5f5f5"
+  },
+  "easycom": {
+    "autoscan": true,
+    "custom": {}
+  }
+}
