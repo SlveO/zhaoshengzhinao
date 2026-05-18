@@ -1,0 +1,24 @@
+{
+  "name": "招生咨询",
+  "appid": "__TENANT_APPID__",
+  "description": "AI招生咨询小程序",
+  "versionName": "0.1.0",
+  "versionCode": 1,
+  "mp-weixin": {
+    "appid": "__TENANT_APPID__",
+    "setting": {
+      "urlCheck": false,
+      "es6": true,
+      "postcss": true,
+      "minified": true
+    },
+    "usingComponents": true,
+    "permission": {
+      "scope.userLocation": {
+        "desc": "用于推荐附近院校"
+      }
+    },
+    "requiredBackgroundModes": [],
+    "plugins": {}
+  }
+}

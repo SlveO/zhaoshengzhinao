@@ -1,0 +1,15 @@
+{
+  "appId": "wx_gdufs_app_id",
+  "tenantSlug": "gdufs",
+  "brand": {
+    "name": "广东工业大学",
+    "shortName": "广工",
+    "primaryColor": "#1a56db",
+    "secondaryColor": "#f59e0b",
+    "welcomeText": "欢迎了解广东工业大学！我是你的专属AI招生顾问，可以帮你了解专业方向、录取分数、就业前景，一起来聊聊你的兴趣吧~"
+  },
+  "features": {
+    "guestMode": true,
+    "crossCollegeCompare": true
+  }
+}

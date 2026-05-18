@@ -21,7 +21,7 @@
 |------|------|------|-------------|---------|
 | Foundation | `feat/foundation` | 🔵 进行中 | current (main) | Phase 0-1 基本完成 |
 | Admin SPA | `feat/admin-spa` | ⬜ 未开始 | — | — |
-| Mini-App | `feat/mini-app` | ⬜ 未开始 | — | — |
+| Mini-App | `feat/mini-app` | 🔵 进行中 | mini_app | init uni-app project structure |
 | Analytics | `feat/analytics` | ⬜ 未开始 | — | — |
 | Data Onboarding | `feat/data-onboarding` | ⬜ 未开始 | — | — |
 
@@ -43,4 +43,5 @@
 
 - 设计文档完成 (`docs/superpowers/specs/2026-05-18-b2b-platform-design.md`)
 - 协作基础设施创建 (COLLABORATION.md, CONVENTIONS.md, SESSION_STATE.md)
-- 实施计划待创建
+- Mini-App 轨道启动：项目结构创建完成 (27 文件)，含所有页面/组件/stores/工具
+- 待验证：Foundation 后端未启动，npm install + build 待测试
