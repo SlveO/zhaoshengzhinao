@@ -33,7 +33,7 @@ export default function Sidebar() {
           style={{ backgroundImage: 'var(--brand-logo)' }}
         />
         <span className="text-white font-semibold text-base truncate">
-          {config?.brand?.shortName || config?.brand?.name || '管理后台'}
+          {config?.brand?.short_name || config?.brand?.name || '管理后台'}
         </span>
       </div>
 

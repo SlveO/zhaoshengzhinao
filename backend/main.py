@@ -109,6 +109,7 @@ app.add_middleware(
         "http://localhost:5173",
         "http://localhost:3000",
         "http://localhost:3001",
+        "http://localhost:3002",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -116,9 +117,10 @@ app.add_middleware(
 )
 
 # ── B2B Middleware (order matters!) ──
-from core.middleware import TenantResolutionMiddleware, ModuleGateMiddleware  # noqa: E402
+from core.middleware import TenantResolutionMiddleware, UserAuthMiddleware, ModuleGateMiddleware  # noqa: E402
 
 app.add_middleware(TenantResolutionMiddleware)
+app.add_middleware(UserAuthMiddleware)
 app.add_middleware(ModuleGateMiddleware)
 
 # ── Existing Routes (api/routes) ──

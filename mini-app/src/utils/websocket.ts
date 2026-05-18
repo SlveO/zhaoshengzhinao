@@ -67,7 +67,7 @@ export class WebSocketManager {
     }
 
     this.socket = uni.connectSocket({
-      url: `${WS_BASE}/chat/session/${this.sessionId}`,
+      url: `${WS_BASE}/chat/session/${this.sessionId}?tenant=${TENANT_SLUG}`,
       header,
     });
 

@@ -1,0 +1,15 @@
+{
+  "appId": "",
+  "tenantSlug": "scnu",
+  "brand": {
+    "name": "华南师范大学",
+    "shortName": "华南师大",
+    "primaryColor": "#1a3a6b",
+    "secondaryColor": "#c41230",
+    "welcomeText": "欢迎了解华南师范大学！艰苦奋斗、严谨治学、求实创新、为人师表。我是你的专属AI招生顾问，有什么想了解的？"
+  },
+  "features": {
+    "guestMode": true,
+    "crossCollegeCompare": true
+  }
+}

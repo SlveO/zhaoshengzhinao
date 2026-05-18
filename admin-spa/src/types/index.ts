@@ -1,11 +1,12 @@
 export interface BrandConfig {
   name: string
-  shortName: string
-  primaryColor: string
-  secondaryColor: string
-  logoUrl: string
-  faviconUrl: string | null
-  loginBgUrl: string | null
+  short_name: string
+  primary_color: string
+  secondary_color: string
+  logo_url: string
+  favicon_url: string | null
+  login_bg_url: string | null
+  welcome_text?: string
 }
 
 export interface FunnelData {

@@ -20,8 +20,8 @@ export default function BrandSettingsPage() {
       await api.put('/admin/brand-config', brand)
       setMessage('保存成功')
       // Re-apply CSS variables
-      document.documentElement.style.setProperty('--brand-primary', brand.primaryColor)
-      document.documentElement.style.setProperty('--brand-secondary', brand.secondaryColor)
+      document.documentElement.style.setProperty('--brand-primary', brand.primary_color)
+      document.documentElement.style.setProperty('--brand-secondary', brand.secondary_color)
       document.title = `${brand.name} · 管理后台`
     } catch {
       setMessage('保存失败')
@@ -57,8 +57,8 @@ export default function BrandSettingsPage() {
           <label className="block text-sm font-medium text-gray-600 mb-1">院校简称</label>
           <input
             type="text"
-            value={brand.shortName}
-            onChange={(e) => setBrand({ ...brand, shortName: e.target.value })}
+            value={brand.short_name}
+            onChange={(e) => setBrand({ ...brand, short_name: e.target.value })}
             className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
           />
         </div>
@@ -69,14 +69,14 @@ export default function BrandSettingsPage() {
             <div className="flex items-center gap-3">
               <input
                 type="color"
-                value={brand.primaryColor}
-                onChange={(e) => setBrand({ ...brand, primaryColor: e.target.value })}
+                value={brand.primary_color}
+                onChange={(e) => setBrand({ ...brand, primary_color: e.target.value })}
                 className="w-10 h-10 rounded-lg border cursor-pointer"
               />
               <input
                 type="text"
-                value={brand.primaryColor}
-                onChange={(e) => setBrand({ ...brand, primaryColor: e.target.value })}
+                value={brand.primary_color}
+                onChange={(e) => setBrand({ ...brand, primary_color: e.target.value })}
                 className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm font-mono"
               />
             </div>
@@ -87,14 +87,14 @@ export default function BrandSettingsPage() {
             <div className="flex items-center gap-3">
               <input
                 type="color"
-                value={brand.secondaryColor}
-                onChange={(e) => setBrand({ ...brand, secondaryColor: e.target.value })}
+                value={brand.secondary_color}
+                onChange={(e) => setBrand({ ...brand, secondary_color: e.target.value })}
                 className="w-10 h-10 rounded-lg border cursor-pointer"
               />
               <input
                 type="text"
-                value={brand.secondaryColor}
-                onChange={(e) => setBrand({ ...brand, secondaryColor: e.target.value })}
+                value={brand.secondary_color}
+                onChange={(e) => setBrand({ ...brand, secondary_color: e.target.value })}
                 className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm font-mono"
               />
             </div>
@@ -105,8 +105,8 @@ export default function BrandSettingsPage() {
           <label className="block text-sm font-medium text-gray-600 mb-1">Logo URL</label>
           <input
             type="text"
-            value={brand.logoUrl}
-            onChange={(e) => setBrand({ ...brand, logoUrl: e.target.value })}
+            value={brand.logo_url}
+            onChange={(e) => setBrand({ ...brand, logo_url: e.target.value })}
             className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
           />
         </div>
@@ -116,11 +116,11 @@ export default function BrandSettingsPage() {
           <div className="flex items-center gap-3">
             <div
               className="w-10 h-10 rounded-lg bg-center bg-contain bg-no-repeat bg-gray-200"
-              style={{ backgroundImage: brand.logoUrl ? `url(${brand.logoUrl})` : undefined }}
+              style={{ backgroundImage: brand.logo_url ? `url(${brand.logo_url})` : undefined }}
             />
             <div className="flex gap-2">
-              <div className="w-6 h-6 rounded" style={{ background: brand.primaryColor }} />
-              <div className="w-6 h-6 rounded" style={{ background: brand.secondaryColor }} />
+              <div className="w-6 h-6 rounded" style={{ background: brand.primary_color }} />
+              <div className="w-6 h-6 rounded" style={{ background: brand.secondary_color }} />
             </div>
             <span className="text-sm font-medium">{brand.name}</span>
           </div>

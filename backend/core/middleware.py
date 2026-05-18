@@ -45,6 +45,45 @@ class TenantResolutionMiddleware(BaseHTTPMiddleware):
         return await call_next(request)
 
 
+class UserAuthMiddleware(BaseHTTPMiddleware):
+    """Decode JWT from Authorization header → find TenantUser → set contextvar.
+
+    Runs AFTER TenantResolutionMiddleware (tenant is already set).
+    Runs BEFORE ModuleGateMiddleware (module gate needs user role).
+    Skips public paths (login, register, health).
+    """
+
+    async def dispatch(self, request: Request, call_next):
+        from core.tenant_context import TENANT_PUBLIC_PATHS, _current_user
+
+        if request.url.path in TENANT_PUBLIC_PATHS or request.url.path.startswith("/docs"):
+            return await call_next(request)
+
+        auth = request.headers.get("Authorization", "")
+        if not auth.startswith("Bearer "):
+            return await call_next(request)  # optional auth — guest OK
+
+        token = auth[7:]
+        try:
+            from utils.jwt import decode_token
+            payload = decode_token(token)
+            if payload:
+                from models import async_session
+                from sqlalchemy import select
+                from tenants.models import TenantUser as TUModel
+                async with async_session() as db:
+                    result = await db.execute(
+                        select(TUModel).where(TUModel.user_id == payload["user_id"])
+                    )
+                    tu = result.scalar_one_or_none()
+                    if tu:
+                        _current_user.set(tu)
+        except Exception:
+            pass
+
+        return await call_next(request)
+
+
 class ModuleGateMiddleware(BaseHTTPMiddleware):
     """Check that the tenant has the required module enabled for admin analytics routes."""
 
