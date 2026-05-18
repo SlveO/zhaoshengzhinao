@@ -20,8 +20,8 @@
 | 轨道 | 分支 | 状态 | 当前 Session | 最新任务 |
 |------|------|------|-------------|---------|
 | Foundation | `feat/foundation` | 🔵 进行中 | current (main) | Phase 0-1 基本完成 |
-| Admin SPA | `feat/admin-spa` | ⬜ 未开始 | — | — |
-| Mini-App | `feat/mini-app` | 🔵 进行中 | mini_app | init uni-app project structure |
+| Admin SPA | `feat/admin-spa` | 🔵 进行中 | admin_spa | 30 文件, 全部页面/组件完成, build 通过 |
+| Mini-App | `feat/mini-app` | ✅ 已完成 | mini_app | npm install + build 通过, dist/gdufs/ 产物正常 |
 | Analytics | `feat/analytics` | ⬜ 未开始 | — | — |
 | Data Onboarding | `feat/data-onboarding` | ⬜ 未开始 | — | — |
 
@@ -44,4 +44,5 @@
 - 设计文档完成 (`docs/superpowers/specs/2026-05-18-b2b-platform-design.md`)
 - 协作基础设施创建 (COLLABORATION.md, CONVENTIONS.md, SESSION_STATE.md)
 - Mini-App 轨道启动：项目结构创建完成 (27 文件)，含所有页面/组件/stores/工具
-- 待验证：Foundation 后端未启动，npm install + build 待测试
+- Mini-App 修复完成：alpha 包版本修正、localhost 改为环境判断、TS 类型修复、build 通过
+- Foundation 后端未启动，端到端测试待后端启动后执行

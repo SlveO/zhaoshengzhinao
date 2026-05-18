@@ -5,7 +5,9 @@ type StatusHandler = (status: WsStatus) => void;
 
 export type WsStatus = "disconnected" | "connecting" | "connected" | "reconnecting";
 
-const WS_BASE = "ws://localhost:8000/api/v1";
+const WS_PROTOCOL =
+  process.env.NODE_ENV === "development" ? "ws://localhost:8000" : `wss://${location.host}`;
+const WS_BASE = `${WS_PROTOCOL}/api/v1`;
 
 export class WebSocketManager {
   private socket: SocketTask | null = null;
@@ -13,10 +15,10 @@ export class WebSocketManager {
   private handlers = new Map<string, Set<MessageHandler>>();
   private statusHandlers = new Set<StatusHandler>();
   private status: WsStatus = "disconnected";
-  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private reconnectTimer: number | null = null;
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 10;
-  private pingTimer: ReturnType<typeof setInterval> | null = null;
+  private pingTimer: number | null = null;
   private intentionalClose = false;
 
   getStatus(): WsStatus {
