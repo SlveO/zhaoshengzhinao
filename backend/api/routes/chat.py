@@ -12,6 +12,7 @@ from agents.conversation.evidence_accumulator import EvidenceAccumulator
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from config import settings
+from core.guard import run_guards
 
 router = APIRouter()
 
@@ -159,6 +160,23 @@ async def chat_websocket(ws: WebSocket, session_id: str):
             user_content = (msg.get("content") or "").strip()
             if not user_content:
                 continue
+
+            # Pluggable guard chain — rate limit, content quality, message cap
+            block = await run_guards(
+                tenant_slug=tenant_slug,
+                session_id=session_id,
+                ip_address=ws.client.host if ws.client else "",
+                msg_count=msg_count,
+                message_text=user_content,
+            )
+            if block:
+                if block.get("message"):
+                    await ws.send_json({"type": "error", "code": block["code"], "message": block["message"]})
+                if block["code"] == "MESSAGE_LIMIT":
+                    await ws.send_json({"type": "stage_change", "from": state_data.get("stage", "open"), "to": "done"})
+                    break
+                continue
+
             msg_count += 1
 
             await ws.send_json({"type": "thinking", "message": "正在分析你的回答..."})
