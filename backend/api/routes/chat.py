@@ -86,6 +86,17 @@ async def update_user_profile(body: dict, user: dict = Depends(get_current_user)
 @router.websocket("/session/{session_id}")
 async def chat_websocket(ws: WebSocket, session_id: str):
     await ws.accept()
+
+    # Resolve tenant from query params (middleware skips WebSocket)
+    tenant_slug = ws.query_params.get("tenant", "default")
+    tenant_id = None
+    try:
+        from tenants.service import resolve_tenant as _resolve
+        t = await _resolve(tenant_slug)
+        tenant_id = str(t.id) if t else None
+    except Exception:
+        pass
+
     state_data = await get_dialog_state(session_id)
     if not state_data:
         await ws.send_json({"type": "error", "content": "Session not found"})

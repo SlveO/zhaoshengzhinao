@@ -10,7 +10,7 @@ const WS_PROTOCOL =
 const WS_BASE = `${WS_PROTOCOL}/api/v1`;
 
 export class WebSocketManager {
-  private socket: SocketTask | null = null;
+  private socket: WebSocket | null = null;
   private sessionId: string | null = null;
   private handlers = new Map<string, Set<MessageHandler>>();
   private statusHandlers = new Set<StatusHandler>();
@@ -46,7 +46,7 @@ export class WebSocketManager {
   connect(sessionId: string): void {
     if (this.socket) {
       this.intentionalClose = true;
-      this.socket.close({ code: 1000, reason: "reconnect" });
+      this.socket.close(1000, "reconnect");
     }
 
     this.sessionId = sessionId;
@@ -60,57 +60,45 @@ export class WebSocketManager {
 
     this.setStatus(this.reconnectAttempts > 0 ? "reconnecting" : "connecting");
 
-    const token = this.getToken();
-    const header: Record<string, string> = { "X-Tenant": TENANT_SLUG };
-    if (token) {
-      header["Authorization"] = `Bearer ${token}`;
-    }
+    // Use native WebSocket (uni.connectSocket broken in H5 mode)
+    const wsUrl = `${WS_BASE}/chat/session/${this.sessionId}?tenant=${TENANT_SLUG}`;
+    const ws = new WebSocket(wsUrl);
+    this.socket = ws;
 
-    this.socket = uni.connectSocket({
-      url: `${WS_BASE}/chat/session/${this.sessionId}?tenant=${TENANT_SLUG}`,
-      header,
-    });
-
-    this.socket.onOpen(() => {
+    ws.onopen = () => {
       this.setStatus("connected");
       this.reconnectAttempts = 0;
       this.startPing();
-    });
+    };
 
-    this.socket.onMessage((res: { data: string }) => {
+    ws.onmessage = (event: MessageEvent) => {
       try {
-        const msg = JSON.parse(res.data);
+        const msg = JSON.parse(event.data);
         const type = msg.type || "unknown";
-        const handlers = this.handlers.get(type);
-        if (handlers) {
-          handlers.forEach((h) => h(msg));
-        }
-        const allHandlers = this.handlers.get("*");
-        if (allHandlers) {
-          allHandlers.forEach((h) => h(msg));
-        }
+        this.handlers.get(type)?.forEach((h) => h(msg));
+        this.handlers.get("*")?.forEach((h) => h(msg));
       } catch {
         // ignore malformed messages
       }
-    });
+    };
 
-    this.socket.onError(() => {
+    ws.onerror = () => {
       this.stopPing();
       this.setStatus("disconnected");
       this.tryReconnect();
-    });
+    };
 
-    this.socket.onClose((res: { code: number; reason: string }) => {
+    ws.onclose = (event: CloseEvent) => {
       this.stopPing();
       if (this.intentionalClose) {
         this.setStatus("disconnected");
         return;
       }
-      if (res.code !== 1000) {
+      if (event.code !== 1000) {
         this.setStatus("disconnected");
         this.tryReconnect();
       }
-    });
+    };
   }
 
   private tryReconnect(): void {
@@ -126,9 +114,9 @@ export class WebSocketManager {
 
   private startPing(): void {
     this.stopPing();
-    this.pingTimer = setInterval(() => {
+    this.pingTimer = window.setInterval(() => {
       if (this.socket && this.status === "connected") {
-        this.socket.send({ data: JSON.stringify({ type: "ping" }) });
+        this.socket.send(JSON.stringify({ type: "ping" }));
       }
     }, 30000);
   }
@@ -142,9 +130,7 @@ export class WebSocketManager {
 
   send(content: string): void {
     if (this.socket && this.status === "connected") {
-      this.socket.send({
-        data: JSON.stringify({ type: "message", content }),
-      });
+      this.socket.send(JSON.stringify({ type: "message", content }));
     }
   }
 
@@ -156,7 +142,7 @@ export class WebSocketManager {
       this.reconnectTimer = null;
     }
     if (this.socket) {
-      this.socket.close({ code: 1000, reason: "user_disconnect" });
+      this.socket.close(1000, "user_disconnect");
       this.socket = null;
     }
     this.setStatus("disconnected");

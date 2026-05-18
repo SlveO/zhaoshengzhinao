@@ -99,12 +99,13 @@ export const useChatStore = defineStore("chat", () => {
 
   async function createSession(guest = true): Promise<string | null> {
     try {
-      const res = await chatApi.createSession();
-      if (res.data) {
-        sessionId.value = res.data.session_id;
-        isGuest.value = res.data.guest;
-        initWs(res.data.session_id);
-        return res.data.session_id;
+      const res: any = await chatApi.createSession();
+      const sid = res?.session_id;
+      if (sid) {
+        sessionId.value = sid;
+        isGuest.value = res.guest !== false;
+        initWs(sid);
+        return sid;
       }
     } catch (e: any) {
       uni.showToast({ title: e?.message || "创建会话失败", icon: "none" });

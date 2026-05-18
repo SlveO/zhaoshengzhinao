@@ -17,7 +17,9 @@ class TenantResolutionMiddleware(BaseHTTPMiddleware):
     """
 
     async def dispatch(self, request: Request, call_next):
-        # Skip tenant resolution for public paths
+        # Skip tenant resolution for CORS preflight and public paths
+        if request.method == "OPTIONS":
+            return await call_next(request)
         if request.url.path in TENANT_PUBLIC_PATHS or request.url.path.startswith("/docs"):
             return await call_next(request)
 
