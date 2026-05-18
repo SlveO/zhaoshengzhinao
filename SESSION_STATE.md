@@ -23,7 +23,7 @@
 | Admin SPA | `feat/admin-spa` | ✅ 已完成 | admin_spa | 30 文件, build 通过 |
 | Mini-App | `feat/mini-app` | ✅ 已完成 | mini_app | 29 文件, build 通过, dist/gdufs/ 产物正常 |
 | Analytics | `feat/analytics` | ✅ 已完成 | Analytics | 7 模块 + 7 测试文件, 合并到 develop |
-| Data Onboarding | `feat/data-onboarding` | ✅ 已完成 | Analytics (same) | Excel 导入 + 校验 + 模板, 合并到 develop |
+| Data Onboarding | `feat/data-onboarding` | ✅ 已完成 | Data Onboarding | Excel 导入 + 校验 + 模板, 合并到 develop |
 
 状态: ⬜ 未开始 | 🔵 进行中 | ✅ 已完成 | 🔴 阻塞 | ⏸️ 暂停
 
