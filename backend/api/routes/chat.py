@@ -1,7 +1,7 @@
 # backend/api/routes/chat.py
 import json
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
-from api.deps import get_current_user
+from api.deps import get_current_user, get_optional_user
 from services.chat_service import get_dialog_state, save_dialog_state, create_session, delete_dialog_state
 from agents.conversation.state import Stage, STAGE_ORDER
 from agents.conversation.agent import _build_system_prompt, _detect_emotion
@@ -127,11 +127,13 @@ async def chat_websocket(ws: WebSocket, session_id: str):
         temperature=0.7,
     )
 
+    msg_count = 0
     try:
         while True:
             raw = await ws.receive_text()
             msg = json.loads(raw)
             user_content = msg.get("content", "")
+            msg_count += 1
 
             await ws.send_json({"type": "thinking", "message": "正在分析你的回答..."})
 
@@ -156,22 +158,29 @@ async def chat_websocket(ws: WebSocket, session_id: str):
             system_msg = SystemMessage(content=system_content)
             msgs = [system_msg] + history
 
-            # Step 1: Conversation agent
-            ai_response = await session_llm.ainvoke(msgs)
-            ai_msg = ai_response.content
+            # Step 1: Conversation agent (with error handling)
+            try:
+                ai_response = await session_llm.ainvoke(msgs)
+                ai_msg = ai_response.content
+            except Exception:
+                await ws.send_json({"type": "error", "code": "LLM_FAILED", "message": "AI 服务暂时不可用，请稍后重试"})
+                continue  # Don't kill the connection
 
             # Step 2: Profile analyzer (analyze this turn)
-            analysis = await analyze_turn(user_content, ai_msg, acc.to_dict(), blind_spots)
+            try:
+                analysis = await analyze_turn(user_content, ai_msg, acc.to_dict(), blind_spots)
+            except Exception:
+                analysis = {"new_evidence": [], "values_hint": None, "region_mentioned": None, "engagement_assessment": {}}
 
             # Apply new evidence
-            for evt in analysis["new_evidence"]:
+            for evt in analysis.get("new_evidence", []):
                 acc.add_evidence(
                     dimension=evt["dimension"],
                     source_turn=state_data["turns"],
-                    user_quote=evt["user_quote"],
-                    inferred_score=evt["inferred_score"],
-                    rationale=evt["rationale"],
-                    confidence=evt["confidence"],
+                    user_quote=evt.get("user_quote", ""),
+                    inferred_score=evt.get("inferred_score", 5),
+                    rationale=evt.get("rationale", ""),
+                    confidence=evt.get("confidence", 0.5),
                 )
             if analysis.get("values_hint"):
                 existing_vals = acc.to_dict().get("values", {}).get("ranked", [])
@@ -198,6 +207,43 @@ async def chat_websocket(ws: WebSocket, session_id: str):
             snapshot = acc.export_snapshot()
             await _persist_profile(state_data["user_id"], acc.to_dict())
 
+            # ── Event logging ──
+            try:
+                from core.event_writer import write_event
+                await write_event(
+                    tenant_id=state_data.get("tenant_id"),
+                    event_type="chat.message_sent",
+                    user_id=state_data.get("user_id"),
+                    session_id=session_id,
+                    payload={
+                        "stage": next_stage.value,
+                        "turn": state_data["turns"],
+                        "message_length": len(user_content),
+                        "emotion": emotion,
+                    },
+                )
+                if stage_changed:
+                    await write_event(
+                        tenant_id=state_data.get("tenant_id"),
+                        event_type="chat.stage_changed",
+                        user_id=state_data.get("user_id"),
+                        session_id=session_id,
+                        payload={"from_stage": current_stage.value, "to_stage": next_stage.value, "turn": state_data["turns"]},
+                    )
+                await write_event(
+                    tenant_id=state_data.get("tenant_id"),
+                    event_type="profile.updated",
+                    user_id=state_data.get("user_id"),
+                    session_id=session_id,
+                    payload={
+                        "completeness": snapshot.get("completeness"),
+                        "riasec_dims": [k for k in RIASEC_KEYS if acc.to_dict()[k]["evidence_count"] > 0],
+                        "confidence": snapshot.get("confidence_avg", 0),
+                    },
+                )
+            except Exception:
+                pass
+
             # Send AI response
             await ws.send_json({
                 "type": "message",
@@ -221,7 +267,6 @@ async def chat_websocket(ws: WebSocket, session_id: str):
                     "from": current_stage.value,
                     "to": next_stage.value,
                 })
-                # Send summary for the stage just completed (including confirm→done)
                 summary_text = slots_summary(snapshot)
                 await ws.send_json({
                     "type": "summary",
@@ -244,36 +289,57 @@ async def chat_websocket(ws: WebSocket, session_id: str):
                 except Exception:
                     pass
 
+                # Persist session profile for analytics
+                try:
+                    from core.event_writer import write_event
+                    await write_event(
+                        tenant_id=state_data.get("tenant_id"),
+                        event_type="page.intent_expressed",
+                        user_id=state_data.get("user_id"),
+                        session_id=session_id,
+                        payload={"completeness": snapshot.get("completeness"), "riasec_dims": [k for k in RIASEC_KEYS if acc.to_dict()[k]["evidence_count"] > 0]},
+                    )
+                except Exception:
+                    pass
+
     except WebSocketDisconnect:
-        pass
+        # Clean up on disconnect — persist final state
+        try:
+            await _persist_profile(state_data.get("user_id"), state_data.get("evidence", {}))
+        except Exception:
+            pass
 
 
 @router.post("/session")
-async def new_session(user: dict = Depends(get_current_user)):
+async def new_session(user: dict | None = Depends(get_optional_user)):
+    """Create a new chat session. Works for both registered users and guests."""
     from sqlalchemy import select
     from models import async_session
     from models.user import User
+    import uuid as uuid_mod
+
+    user_id = user["user_id"] if user else str(uuid_mod.uuid4())
 
     acc = EvidenceAccumulator()
-    async with async_session() as db:
-        result = await db.execute(select(User).where(User.id == user["user_id"]))
-        u = result.scalar_one_or_none()
-        if u:
-            if u.score:
-                acc.seed_basics(score=u.score)
-            if u.subjects:
-                acc.seed_basics(subjects=u.subjects)
-            if u.region:
-                acc.seed_basics(region=[u.region])
+    if user:
+        async with async_session() as db:
+            result = await db.execute(select(User).where(User.id == user["user_id"]))
+            u = result.scalar_one_or_none()
+            if u:
+                if u.score:
+                    acc.seed_basics(score=u.score)
+                if u.subjects:
+                    acc.seed_basics(subjects=u.subjects)
+                if u.region:
+                    acc.seed_basics(region=[u.region])
 
     initial_slots = acc.export_snapshot()
-    sid = await create_session(user["user_id"], initial_slots)
-    # Also store evidence in session state
+    sid = await create_session(user_id, initial_slots)
     state = await get_dialog_state(sid)
     if state:
         state["evidence"] = acc.to_dict()
         await save_dialog_state(sid, state)
-    return {"session_id": sid}
+    return {"session_id": sid, "guest": not bool(user)}
 
 
 @router.get("/session/{session_id}")
