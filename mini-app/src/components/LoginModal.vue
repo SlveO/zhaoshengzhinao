@@ -86,12 +86,11 @@ async function handleSubmit(): Promise<void> {
 
   let ok = false;
   if (mode.value === "login") {
-    ok = await userStore.login({ login: phone.value, password: password.value });
+    ok = await userStore.login({ username: phone.value, password: password.value });
   } else {
     ok = await userStore.register({
-      phone: phone.value,
+      username: phone.value,
       password: password.value,
-      nickname: nickname.value || undefined,
     });
   }
 

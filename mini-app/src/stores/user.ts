@@ -40,16 +40,13 @@ export const useUserStore = defineStore("user", () => {
     uni.setStorageSync("userInfo", JSON.stringify(info));
   }
 
-  async function register(data: { nickname?: string; phone?: string; password: string }): Promise<boolean> {
+  async function register(data: { username: string; password: string }): Promise<boolean> {
     try {
-      const res = await authApi.register(data);
-      if (res.data) {
-        setToken(res.data.token);
-        setUserInfo({
-          user_id: res.data.user_id,
-          nickname: data.nickname || "",
-          phone: data.phone || "",
-        });
+      const res = await authApi.register({ ...data, region: "", score: 0, subjects: "" });
+      const body: any = res as any;
+      if (body.access_token) {
+        setToken(body.access_token);
+        setUserInfo({ user_id: body.user_id, nickname: data.username, phone: data.username });
         return true;
       }
     } catch (e: any) {
@@ -58,16 +55,13 @@ export const useUserStore = defineStore("user", () => {
     return false;
   }
 
-  async function login(data: { login: string; password: string }): Promise<boolean> {
+  async function login(data: { username: string; password: string }): Promise<boolean> {
     try {
       const res = await authApi.login(data);
-      if (res.data) {
-        setToken(res.data.token);
-        setUserInfo({
-          user_id: res.data.user_id,
-          nickname: "",
-          phone: data.login,
-        });
+      const body: any = res as any;
+      if (body.access_token) {
+        setToken(body.access_token);
+        setUserInfo({ user_id: body.user_id, nickname: body.username, phone: data.username });
         return true;
       }
     } catch (e: any) {

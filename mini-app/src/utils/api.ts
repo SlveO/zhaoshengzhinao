@@ -70,11 +70,11 @@ export const chatApi = {
 };
 
 export const authApi = {
-  register: (data: { nickname?: string; phone?: string; password: string }) =>
-    api.post<{ token: string; user_id: string }>("/auth/register", data),
-  login: (data: { login: string; password: string }) =>
-    api.post<{ token: string; user_id: string }>("/auth/login", data),
-  refresh: () => api.post<{ token: string }>("/auth/refresh"),
+  register: (data: { username: string; password: string; region?: string; score?: number; subjects?: string }) =>
+    api.post<{ access_token: string; refresh_token: string; user_id: string; username: string }>("/auth/register", data),
+  login: (data: { username: string; password: string }) =>
+    api.post<{ access_token: string; refresh_token: string; user_id: string; username: string }>("/auth/login", data),
+  refresh: () => api.post<{ access_token: string }>("/auth/refresh"),
 };
 
 export const recommendationsApi = {
