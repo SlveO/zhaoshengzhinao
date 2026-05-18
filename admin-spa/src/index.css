@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  --brand-primary: #4f46e5;
+  --brand-primary-hover: #4338ca;
+  --brand-secondary: #f59e0b;
+  --brand-secondary-hover: #d97706;
+  --brand-logo: none;
+  --sidebar-bg: var(--brand-primary);
+  --sidebar-text: #ffffff;
+  --sidebar-width: 240px;
+  --header-height: 56px;
+
+  font-family: 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f5f6fa;
+}
+
+/* Sidebar scrollbar */
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+/* Login card shadow */
+.login-card {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+}

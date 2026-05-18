@@ -20,8 +20,13 @@
 | 轨道 | 分支 | 状态 | 当前 Session | 最新任务 |
 |------|------|------|-------------|---------|
 | Foundation | `feat/foundation` | 🔵 进行中 | current (main) | Phase 0-1 基本完成 |
-| Admin SPA | `feat/admin-spa` | ⬜ 未开始 | — | — |
-| Mini-App | `feat/mini-app` | ⬜ 未开始 | — | — |
+<<<<<<< HEAD
+| Admin SPA | `feat/admin-spa` | 🔵 进行中 | admin_spa | Vite + React + TS + Tailwind 项目创建，全部页面/组件完成 |
+| Mini-App | `feat/mini-app` | 🔵 进行中 | mini_app | init uni-app project structure |
+=======
+| Admin SPA | `feat/admin-spa` | 🔵 进行中 | admin_spa | Vite + React + TS + Tailwind 项目创建，全部页面/组件完成 |
+| Mini-App | `feat/mini-app` | 🔵 进行中 | mini_app | init uni-app project structure |
+>>>>>>> 1064f0c (feat: scaffold Admin SPA with Vite + React + TypeScript + Tailwind)
 | Analytics | `feat/analytics` | ⬜ 未开始 | — | — |
 | Data Onboarding | `feat/data-onboarding` | ⬜ 未开始 | — | — |
 
