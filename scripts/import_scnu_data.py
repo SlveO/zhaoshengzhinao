@@ -7,13 +7,15 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "backend"))
+# Set up backend as the working directory so all imports match the FastAPI app
+_backend_dir = str(Path(__file__).resolve().parent.parent / "backend")
+sys.path.insert(0, _backend_dir)
+os.chdir(_backend_dir)
 
-from sqlalchemy import select, text
-from backend.models import async_session
-from backend.tenants.models import TenantData, Tenant
-from backend.knowledge.indexer import index_tenant_data
+from sqlalchemy import select, text  # noqa: E402
+from models import async_session  # noqa: E402
+from tenants.models import TenantData, Tenant  # noqa: E402
+from knowledge.indexer import index_tenant_data  # noqa: E402
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "raw" / "scnu"
 TENANT_SLUG = "scnu"
@@ -23,6 +25,20 @@ DATA_TYPE_MAP = {
     "curriculums.json": "curriculum",
     "employment.json": "employment",
 }
+
+
+def _make_title(r: dict, data_type: str) -> str:
+    """Build a human-readable title from record fields."""
+    major = r.get("major_name", "")
+    year = r.get("year", "")
+    if data_type == "admission_score":
+        province = r.get("province", "")
+        return f"{major} {year} {province}"
+    elif data_type == "curriculum":
+        return f"{major} 培养计划"
+    elif data_type == "employment":
+        return f"{major} {year}届 就业报告"
+    return f"{major} {year}".strip()
 
 
 async def import_file(tenant_id, filepath, data_type):
@@ -38,7 +54,7 @@ async def import_file(tenant_id, filepath, data_type):
                     id=uuid.uuid4(),
                     tenant_id=tenant_id,
                     data_type=data_type,
-                    title=r.get("title", f"{r.get('major_name', '')} {r.get('year', '')}"),
+                    title=_make_title(r, data_type),
                     content=r,
                     year=r.get("year"),
                     province=r.get("province"),
@@ -54,7 +70,7 @@ async def import_file(tenant_id, filepath, data_type):
                 await db.commit()
                 imported += 1
             except Exception as e:
-                errors.append({"record": r.get("title", str(r)[:100]), "error": str(e)})
+                errors.append({"record": _make_title(r, data_type), "error": str(e)})
 
     return imported, errors
 
@@ -90,7 +106,7 @@ async def main():
                 SET config = jsonb_set(config, '{knowledge_base,doc_count}', (:cnt)::text::jsonb)
                 WHERE slug = :slug
             """),
-            {"cnt": total, "slug": TENANT_SLUG},
+            {"cnt": str(total), "slug": TENANT_SLUG},
         )
         await db.commit()
         print(f"Updated doc_count to {total}")

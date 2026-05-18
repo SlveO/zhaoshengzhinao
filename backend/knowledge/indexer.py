@@ -20,18 +20,35 @@ def _build_document_text(data: TenantData) -> str:
             f"选科要求{content.get('subject_requirements', '')}"
         )
     elif data.data_type == "curriculum":
-        parts.append(content.get("core_courses", ""))
-        parts.append(content.get("objective", ""))
+        courses = content.get("core_courses", [])
+        if isinstance(courses, list):
+            parts.append(" ".join(str(c) for c in courses))
+        else:
+            parts.append(str(courses))
+        obj = content.get("objective", "")
+        parts.append(obj if isinstance(obj, str) else str(obj))
     elif data.data_type == "employment":
+        top_ind = content.get("top_industries", [])
+        ind_text = ""
+        if isinstance(top_ind, list):
+            ind_text = " ".join(
+                f"{i.get('industry', '')}({i.get('percentage', 0)*100:.0f}%)"
+                for i in top_ind[:5]
+            )
         parts.append(
             f"就业率{content.get('employment_rate', '')} "
-            f"平均薪资{content.get('avg_salary', '')} "
-            f"主要行业{content.get('main_industries', '')}"
+            f"月薪{content.get('avg_monthly_salary', '')} "
+            f"行业: {ind_text}"
         )
     elif data.data_type == "campus_life":
         parts.append(str(content.get("text", "")))
 
-    return " ".join(parts)
+    return " ".join(str(p) for p in parts if p)
+
+
+def _sanitize_meta_val(v):
+    """Replace None with empty string for ChromaDB compatibility."""
+    return v if v is not None else ""
 
 
 async def index_tenant_data(tenant_slug: str, data: TenantData) -> None:
@@ -41,16 +58,18 @@ async def index_tenant_data(tenant_slug: str, data: TenantData) -> None:
     collection = client.get_or_create_collection(collection_name)
 
     doc_text = _build_document_text(data)
+    raw_meta = {
+        "tenant_slug": tenant_slug,
+        "data_type": str(data.data_type) if hasattr(data.data_type, "value") else data.data_type,
+        "year": data.year,
+        "province": data.province,
+        **data.extra_meta,
+    }
+    clean_meta = {k: _sanitize_meta_val(v) for k, v in raw_meta.items()}
     collection.add(
         ids=[str(data.id)],
         documents=[doc_text],
-        metadatas=[{
-            "tenant_slug": tenant_slug,
-            "data_type": str(data.data_type) if hasattr(data.data_type, "value") else data.data_type,
-            "year": data.year,
-            "province": data.province,
-            **data.extra_meta,
-        }],
+        metadatas=[clean_meta],
     )
 
 
@@ -92,9 +111,9 @@ async def reindex_tenant(tenant_slug: str) -> None:
                 {
                     "tenant_slug": tenant_slug,
                     "data_type": str(r.data_type) if hasattr(r.data_type, "value") else r.data_type,
-                    "year": r.year,
-                    "province": r.province,
-                    **r.extra_meta,
+                    "year": _sanitize_meta_val(r.year),
+                    "province": _sanitize_meta_val(r.province),
+                    **{k: _sanitize_meta_val(v) for k, v in r.extra_meta.items()},
                 }
                 for r in batch
             ],

@@ -1,15 +1,17 @@
 """Create SCNU (华南师范大学) tenant in the database."""
 import asyncio
 import json
+import os
 import sys
 import uuid
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "backend"))
+_backend_dir = str(Path(__file__).resolve().parent.parent / "backend")
+sys.path.insert(0, _backend_dir)
+os.chdir(_backend_dir)
 
-from sqlalchemy import text
-from backend.models import async_session
+from sqlalchemy import text  # noqa: E402
+from models import async_session  # noqa: E402
 
 SCNU_TENANT = {
     "id": "20000000-0000-0000-0000-000000000002",

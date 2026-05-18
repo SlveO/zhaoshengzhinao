@@ -1,14 +1,16 @@
 """Verify SCNU data import — database counts and ChromaDB index status."""
 import asyncio
+import os
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "backend"))
+_backend_dir = str(Path(__file__).resolve().parent.parent / "backend")
+sys.path.insert(0, _backend_dir)
+os.chdir(_backend_dir)
 
-from sqlalchemy import text, select
-from backend.models import async_session
-from backend.tenants.models import Tenant
+from sqlalchemy import text, select  # noqa: E402
+from models import async_session  # noqa: E402
+from tenants.models import Tenant  # noqa: E402
 
 
 async def verify():
