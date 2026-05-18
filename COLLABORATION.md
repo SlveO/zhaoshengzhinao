@@ -56,8 +56,8 @@ refactor/<component>   重构分支
 | **Foundation** | `feat/foundation` | 无 | 多租户框架 + 核心引擎 + API scaffold |
 | **Admin SPA** | `feat/admin-spa` | Foundation API 就绪 | 管理端 React 应用 → 详见 `SESSION_ADMIN_SPA.md` |
 | **Mini-App** | `feat/mini-app` | Foundation API 就绪 | uni-app 小程序 → 详见 `SESSION_MINI_APP.md` |
-| **Analytics** | `feat/analytics` | Foundation API 就绪 | 增值分析模块 |
-| **Data Onboarding** | `feat/data-onboarding` | Foundation 数据模型 | 数据接入管道 |
+| **Analytics** | `feat/analytics` | Foundation API 就绪 | 增值分析模块 → 详见 `SESSION_ANALYTICS.md` |
+| **Data Onboarding** | `feat/data-onboarding` | Foundation 数据模型 | 数据接入管道 → 详见 `SESSION_DATA_ONBOARDING.md` |
 
 **轨道启动条件**: Foundation 轨道的 API scaffold（Phase 1 Week 5）完成后，其他轨道即可启动。
 
