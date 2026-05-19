@@ -30,10 +30,10 @@
 | SCNU Scraper | `feat/data-scnu-scraper` | ✅ 已完成 | 华师 1,567 录取 + 86 培养 + 344 就业 |
 | SCNU Import | `feat/data-scnu-import` | ✅ 已完成 | 华师 tenant + 1,997 条数据全量导入 |
 | Bug Fixes | `develop` | ✅ 已完成 | 4 根因修复（WS/API/CORS/BaseHTTPMiddleware） |
-| Compare Page | `feat/compare-page` | ⬜ 未开始 | — | 跨院校对比推荐页面 |
-| Dual Agent | `feat/dual-agent` | ⬜ 未开始 | — | 双 agent 智能路由 |
-| Enhanced Analytics | `feat/enhanced-analytics` | ⬜ 未开始 | — | 词云+情绪+热点 |
-| Custom Agent | `feat/custom-agent` | ⬜ 未开始 | — | 院校自定义 persona |
+| Compare Page | `feat/compare-page` | ✅ 已完成 | V2 session | 跨院校对比 API + 页面 |
+| Dual Agent | `feat/dual-agent` | ✅ 已完成 | V2 session | 双 agent 智能路由 (15行) |
+| Enhanced Analytics | `feat/enhanced-analytics` | ✅ 已完成 | V2 session | 词云+情绪+热点 + InsightsPage |
+| Custom Agent | `feat/custom-agent` | ✅ 已完成 | V2 session | Persona CRUD + AgentSettingsPage |
 
 状态: ⬜ 未开始 | 🔵 进行中 | ✅ 已完成 | 🔴 阻塞 | ⏸️ 暂停
 
