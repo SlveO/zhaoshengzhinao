@@ -6,7 +6,10 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
   const location = useLocation()
 
   if (!token) {
-    return <Navigate to="/login" state={{ from: location }} replace />
+    const params = new URLSearchParams(location.search)
+    const tenant = params.get('tenant')
+    const target = tenant ? `/login?tenant=${tenant}` : '/login'
+    return <Navigate to={target} state={{ from: location }} replace />
   }
 
   return <>{children}</>

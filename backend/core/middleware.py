@@ -20,7 +20,7 @@ class TenantResolutionMiddleware(BaseHTTPMiddleware):
         # Skip tenant resolution for CORS preflight and public paths
         if request.method == "OPTIONS":
             return await call_next(request)
-        if request.url.path in TENANT_PUBLIC_PATHS or request.url.path.startswith("/docs"):
+        if request.url.path in TENANT_PUBLIC_PATHS or request.url.path.startswith("/docs") or request.url.path == "/openapi.json":
             return await call_next(request)
 
         slug = request.headers.get("X-Tenant")
@@ -58,7 +58,7 @@ class UserAuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         from core.tenant_context import TENANT_PUBLIC_PATHS, _current_user
 
-        if request.url.path in TENANT_PUBLIC_PATHS or request.url.path.startswith("/docs"):
+        if request.url.path in TENANT_PUBLIC_PATHS or request.url.path.startswith("/docs") or request.url.path == "/openapi.json":
             return await call_next(request)
 
         auth = request.headers.get("Authorization", "")
