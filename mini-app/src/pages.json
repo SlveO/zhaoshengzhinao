@@ -18,6 +18,14 @@
       }
     },
     {
+      "path": "pages/compare/index",
+      "style": {
+        "navigationBarTitleText": "跨院校对比",
+        "navigationBarBackgroundColor": "@primaryColor",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
       "path": "pages/profile/index",
       "style": {
         "navigationBarTitleText": "我的画像",

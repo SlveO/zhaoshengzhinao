@@ -19,6 +19,9 @@ class ModuleKey(Enum):
     ANNUAL_REPORT = "annual_report"
     MULTI_DEPARTMENT = "multi_department"
     ROLE_MANAGEMENT = "role_management"
+    TOPIC_CLOUD = "topic_cloud"
+    EMOTION_TIMELINE = "emotion_timeline"
+    HOT_QUESTIONS = "hot_questions"
 
 
 # Modules that require other modules to be enabled first
@@ -44,6 +47,9 @@ MODULE_ROUTE_MAP: dict[str, ModuleKey] = {
     "/api/v1/admin/analytics/competitive": ModuleKey.COMPETITIVE_ANALYSIS,
     "/api/v1/admin/analytics/dialogue-quality": ModuleKey.DIALOGUE_QUALITY,
     "/api/v1/admin/analytics/annual-report": ModuleKey.ANNUAL_REPORT,
+    "/api/v1/admin/analytics/topic-cloud": ModuleKey.TOPIC_CLOUD,
+    "/api/v1/admin/analytics/emotion-timeline": ModuleKey.EMOTION_TIMELINE,
+    "/api/v1/admin/analytics/hot-questions": ModuleKey.HOT_QUESTIONS,
     "/api/v1/admin/departments": ModuleKey.MULTI_DEPARTMENT,
     "/api/v1/admin/roles": ModuleKey.ROLE_MANAGEMENT,
 }

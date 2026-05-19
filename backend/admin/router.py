@@ -212,3 +212,22 @@ async def list_roles(
 ):
     check_module_enabled(tenant, ModuleKey.ROLE_MANAGEMENT)
     return {"roles": [], "_stub": True}
+
+
+# ── AI Persona ──
+
+
+@router.get("/ai-persona")
+async def get_persona(tenant=Depends(get_current_tenant)):
+    return (tenant.config or {}).get("ai_persona", {})
+
+
+@router.put("/ai-persona")
+async def update_persona(
+    body: dict,
+    tenant=Depends(get_current_tenant),
+    _user=Depends(get_current_tenant_user),
+):
+    from tenants.service import update_tenant_config
+    merged = await update_tenant_config(tenant, {"ai_persona": body})
+    return merged.config.get("ai_persona", {})

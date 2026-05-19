@@ -7,7 +7,7 @@
       <view class="header-actions">
         <text class="ws-dot" :class="'ws-' + chatStore.wsStatus" />
         <text class="header-btn" @tap="showProfile = true">画像</text>
-        <text class="header-btn" @tap="goRecommendations">推荐</text>
+        <text class="header-btn" @tap="goCompare">对比</text>
       </view>
     </view>
 
@@ -126,8 +126,8 @@ function sendMessage(): void {
   scrollToBottom();
 }
 
-function goRecommendations(): void {
-  uni.navigateTo({ url: "/pages/recommendations/index" });
+function goCompare(): void {
+  uni.navigateTo({ url: "/pages/compare/index" });
 }
 
 function onLoginSuccess(): void {

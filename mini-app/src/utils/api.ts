@@ -92,6 +92,30 @@ export const profileApi = {
     api.post("/profiles/feedback", data),
 };
 
+export const compareApi = {
+  getRecommendations: () =>
+    api.get<{
+      recommendations: Array<{
+        tenant_slug: string;
+        tenant_name: string;
+        majors: Array<{
+          college_name: string;
+          major_name: string;
+          level: string;
+          province: string;
+          city: string;
+          min_rank: number;
+          min_score: number;
+          subjects: string;
+          source_url: string;
+        }>;
+        match_score: number;
+      }>;
+      profile_snapshot: Record<string, any>;
+      tenants_compared: number;
+    }>("/compare/recommendations"),
+};
+
 export const collegeApi = {
   list: () => api.get("/colleges"),
   get: (id: string) => api.get(`/colleges/${id}`),

@@ -7,6 +7,7 @@ import FunnelPage from './pages/FunnelPage'
 import ProfileDashboardPage from './pages/ProfileDashboardPage'
 import BrandSettingsPage from './pages/BrandSettingsPage'
 import KnowledgeSettingsPage from './pages/KnowledgeSettingsPage'
+import InsightsPage from './pages/InsightsPage'
 
 export default function App() {
   useBrandConfig()
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="profile" element={<ProfileDashboardPage />} />
           <Route path="brand" element={<BrandSettingsPage />} />
           <Route path="knowledge" element={<KnowledgeSettingsPage />} />
+          <Route path="insights" element={<InsightsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

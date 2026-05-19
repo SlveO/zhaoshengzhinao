@@ -59,3 +59,21 @@ export interface LoginResponse {
   user_id: string
   username: string
 }
+
+export interface TopicCloudItem {
+  word: string
+  count: number
+}
+
+export interface EmotionTimelineData {
+  timeline: {
+    emotion: string
+    data: { date: string; count: number }[]
+  }[]
+  dates: string[]
+}
+
+export interface HotQuestionItem {
+  topic: string
+  count: number
+}

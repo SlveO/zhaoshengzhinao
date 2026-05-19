@@ -76,3 +76,30 @@ async def annual_report(
 ):
     from analytics.annual_report import get_annual_report
     return await get_annual_report(str(tenant.id), days=days)
+
+
+@router.get("/topic-cloud")
+async def topic_cloud(
+    tenant=Depends(_require(ModuleKey.TOPIC_CLOUD)),
+    days: int = Query(default=30, ge=1, le=365),
+):
+    from analytics.topic_cloud import get_topic_cloud
+    return await get_topic_cloud(str(tenant.id), days=days)
+
+
+@router.get("/emotion-timeline")
+async def emotion_timeline(
+    tenant=Depends(_require(ModuleKey.EMOTION_TIMELINE)),
+    days: int = Query(default=30, ge=1, le=365),
+):
+    from analytics.emotion_timeline import get_emotion_timeline
+    return await get_emotion_timeline(str(tenant.id), days=days)
+
+
+@router.get("/hot-questions")
+async def hot_questions(
+    tenant=Depends(_require(ModuleKey.HOT_QUESTIONS)),
+    days: int = Query(default=30, ge=1, le=365),
+):
+    from analytics.hot_questions import get_hot_questions
+    return await get_hot_questions(str(tenant.id), days=days)

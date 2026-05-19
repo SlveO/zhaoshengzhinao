@@ -94,14 +94,17 @@ async def chat_websocket(ws: WebSocket, session_id: str):
     tenant_id = None
     uni_name = ""        # university full name for B2B prompt
     uni_short = ""       # university short name for B2B prompt
+    persona = {}          # AI persona config for customizable agent
     try:
         from tenants.service import resolve_tenant as _resolve
         t = await _resolve(tenant_slug)
         if t:
             tenant_id = str(t.id)
-            brand = (t.config or {}).get("brand", {})
+            tenant_config = t.config or {}
+            brand = tenant_config.get("brand", {})
             uni_name = brand.get("name", "")
             uni_short = brand.get("short_name", uni_name)
+            persona = tenant_config.get("ai_persona", {})
     except Exception:
         pass
 
@@ -195,10 +198,15 @@ async def chat_websocket(ws: WebSocket, session_id: str):
             acc = EvidenceAccumulator.from_dict(state_data["evidence"])
             blind_spots = acc.detect_blind_spots()
 
-            # Build system prompt — B2B (university-specific) or B2C (generic advisor)
+            # Build system prompt — persona overrides B2B/B2C defaults
             slots_text = slots_summary(acc.export_snapshot())
             emotion = _detect_emotion(user_content)
-            if uni_name:
+            if persona.get("custom_prompt"):
+                system_content = persona["custom_prompt"].format(
+                    stage=current_stage.value,
+                    slots_summary=slots_text,
+                )
+            elif uni_name:
                 system_content = B2B_SYSTEM_PROMPT.format(
                     university_name=uni_name,
                     university_short=uni_short or uni_name,
@@ -207,6 +215,10 @@ async def chat_websocket(ws: WebSocket, session_id: str):
                 )
             else:
                 system_content = _build_system_prompt(current_stage.value, slots_text, blind_spots, emotion)
+            # Append persona style hint
+            style = persona.get("style", "casual")
+            if style == "formal":
+                system_content += "\n\n请使用正式、专业的语气。"
             if blind_spots:
                 hint_text = "、".join(blind_spots)
                 system_content += f"\n\n## 当前未探索领域\n以下维度尚无证据：{hint_text}。在后续对话中自然地引导学生谈论这些方面。"
@@ -280,6 +292,7 @@ async def chat_websocket(ws: WebSocket, session_id: str):
                         "turn": state_data["turns"],
                         "message_length": len(user_content),
                         "emotion": emotion,
+                        "content": user_content,
                     },
                 )
                 if stage_changed:
