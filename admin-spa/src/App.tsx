@@ -8,6 +8,7 @@ import ProfileDashboardPage from './pages/ProfileDashboardPage'
 import BrandSettingsPage from './pages/BrandSettingsPage'
 import KnowledgeSettingsPage from './pages/KnowledgeSettingsPage'
 import InsightsPage from './pages/InsightsPage'
+import AgentSettingsPage from './pages/AgentSettingsPage'
 
 export default function App() {
   useBrandConfig()
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="brand" element={<BrandSettingsPage />} />
           <Route path="knowledge" element={<KnowledgeSettingsPage />} />
           <Route path="insights" element={<InsightsPage />} />
+          <Route path="agent-settings" element={<AgentSettingsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

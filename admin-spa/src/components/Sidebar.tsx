@@ -9,6 +9,7 @@ const ALL_MENU_ITEMS = [
   { path: '/brand', label: '品牌设置', module: null, icon: '🎨' },
   { path: '/knowledge', label: '知识库', module: null, icon: '📚' },
   { path: '/insights', label: '增强分析', module: 'topic_cloud', icon: '📈' },
+  { path: '/agent-settings', label: 'AI 设置', module: null, icon: '🤖' },
 ]
 
 export default function Sidebar() {

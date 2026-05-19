@@ -34,6 +34,7 @@
 | Dual Agent | `feat/dual-agent` | ✅ 已完成 | V2 session | 双 agent 智能路由 (15行) |
 | Enhanced Analytics | `feat/enhanced-analytics` | ✅ 已完成 | V2 session | 词云+情绪+热点 + InsightsPage |
 | Custom Agent | `feat/custom-agent` | ✅ 已完成 | V2 session | Persona CRUD + AgentSettingsPage |
+| Frontend Polish | `feat/frontend-polish` | ⬜ 未开始 | — | 前端重构+统一+匿名对比 |
 
 状态: ⬜ 未开始 | 🔵 进行中 | ✅ 已完成 | 🔴 阻塞 | ⏸️ 暂停
 
