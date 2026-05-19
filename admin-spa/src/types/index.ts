@@ -77,3 +77,9 @@ export interface HotQuestionItem {
   topic: string
   count: number
 }
+
+export interface PersonaConfig {
+  custom_prompt: string
+  style: 'casual' | 'formal'
+  proactive_recommend: boolean
+}

@@ -3,6 +3,8 @@ import ReactECharts from 'echarts-for-react'
 import 'echarts-wordcloud'
 import api from '../api/client'
 import type { TopicCloudItem, EmotionTimelineData, HotQuestionItem } from '../types'
+import StatusCard from '../components/StatusCard'
+import PageHeader from '../components/PageHeader'
 
 const EMOTION_COLORS: Record<string, string> = {
   positive: '#52c41a',
@@ -12,11 +14,14 @@ const EMOTION_COLORS: Record<string, string> = {
   anxious: '#ff7a45',
 }
 
+const BRAND_COLOR = 'var(--brand-primary)'
+
 export default function InsightsPage() {
   const [topicCloud, setTopicCloud] = useState<TopicCloudItem[] | null>(null)
   const [emotionTimeline, setEmotionTimeline] = useState<EmotionTimelineData | null>(null)
   const [hotQuestions, setHotQuestions] = useState<HotQuestionItem[] | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     Promise.all([
@@ -29,17 +34,9 @@ export default function InsightsPage() {
         setEmotionTimeline(em.data)
         setHotQuestions(hq.data)
       })
-      .catch(console.error)
+      .catch((e) => setError(e?.message || '获取分析数据失败'))
       .finally(() => setLoading(false))
   }, [])
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64 text-gray-400">
-        加载中...
-      </div>
-    )
-  }
 
   const wordCloudOption = {
     tooltip: { show: true },
@@ -56,7 +53,7 @@ export default function InsightsPage() {
           fontWeight: 'bold',
           color() {
             const colors = [
-              'var(--brand-primary)',
+              BRAND_COLOR,
               '#1890ff', '#52c41a', '#faad14', '#ff4d4f',
               '#722ed1', '#13c2c2', '#eb2f96',
             ]
@@ -109,7 +106,7 @@ export default function InsightsPage() {
       {
         type: 'bar',
         data: (hotQuestions || []).map((item) => item.count).reverse(),
-        itemStyle: { color: 'var(--brand-primary)', borderRadius: [0, 4, 4, 0] },
+        itemStyle: { color: BRAND_COLOR, borderRadius: [0, 4, 4, 0] },
         barMaxWidth: 28,
       },
     ],
@@ -117,43 +114,35 @@ export default function InsightsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold text-gray-800">增强分析</h2>
-        <p className="text-sm text-gray-400 mt-1">关键词词云 / 情绪趋势 / 咨询热点</p>
-      </div>
+      <PageHeader
+        title="增强分析"
+        subtitle="关键词词云 / 情绪趋势 / 咨询热点"
+      />
 
-      <div className="bg-white rounded-xl p-6 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">关键词词云</h3>
-        {topicCloud && topicCloud.length > 0 ? (
-          <ReactECharts option={wordCloudOption} style={{ height: 400 }} />
-        ) : (
-          <div className="flex items-center justify-center h-64 text-gray-400 text-sm">
-            暂无词云数据
+      <StatusCard loading={loading} error={error}>
+        <>
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">关键词词云</h3>
+            <StatusCard empty={!topicCloud || topicCloud.length === 0} emptyHint="暂无词云数据，等待更多对话后自动生成。">
+              <ReactECharts option={wordCloudOption} style={{ height: 400 }} />
+            </StatusCard>
           </div>
-        )}
-      </div>
 
-      <div className="bg-white rounded-xl p-6 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">情绪时间线</h3>
-        {emotionTimeline && emotionTimeline.timeline.length > 0 ? (
-          <ReactECharts option={emotionOption} style={{ height: 360 }} />
-        ) : (
-          <div className="flex items-center justify-center h-64 text-gray-400 text-sm">
-            暂无情绪数据
+          <div className="bg-white rounded-xl p-6 shadow-sm mt-4">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">情绪时间线</h3>
+            <StatusCard empty={!emotionTimeline || emotionTimeline.timeline.length === 0} emptyHint="暂无情绪数据。">
+              <ReactECharts option={emotionOption} style={{ height: 360 }} />
+            </StatusCard>
           </div>
-        )}
-      </div>
 
-      <div className="bg-white rounded-xl p-6 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">咨询热点 Top-10</h3>
-        {hotQuestions && hotQuestions.length > 0 ? (
-          <ReactECharts option={hotOption} style={{ height: 400 }} />
-        ) : (
-          <div className="flex items-center justify-center h-64 text-gray-400 text-sm">
-            暂无热点数据
+          <div className="bg-white rounded-xl p-6 shadow-sm mt-4">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">咨询热点 Top-10</h3>
+            <StatusCard empty={!hotQuestions || hotQuestions.length === 0} emptyHint="暂无热点数据。">
+              <ReactECharts option={hotOption} style={{ height: 400 }} />
+            </StatusCard>
           </div>
-        )}
-      </div>
+        </>
+      </StatusCard>
     </div>
   )
 }

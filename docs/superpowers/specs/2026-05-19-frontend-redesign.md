@@ -100,7 +100,7 @@ import AgentSettingsPage from './pages/AgentSettingsPage'
 当前 6 个页面各自独立实现，风格不完全一致。建议：
 - 统一卡片样式（border-radius, shadow, padding）
 - 统一 loading/error/empty 状态组件
-- 统一图表配色方案（使用品牌色）
+- 统一图表配色方案
 
 ### P3: 学生端对话页增强
 

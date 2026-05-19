@@ -79,7 +79,7 @@ export function PageHeader({ title, subtitle }) {
 
 **3c. 统一图表配色**
 
-所有 ECharts 图表使用品牌色变量：
+
 
 ```tsx
 const brandColor = getComputedStyle(document.documentElement)

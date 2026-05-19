@@ -157,7 +157,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import { api } from "@/utils/api";
+import { onLoad } from "@dcloudio/uni-app";
+import { compareApi } from "@/utils/api";
 
 interface MajorMeta {
   college_name: string;
@@ -184,6 +185,13 @@ const error = ref("");
 const expandedSlug = ref("");
 const compareMode = ref(false);
 const selectedSlugs = ref<string[]>([]);
+const profileSnapshot = ref<string | null>(null);
+
+onLoad((options: any) => {
+  if (options?.profile_snapshot) {
+    profileSnapshot.value = decodeURIComponent(options.profile_snapshot);
+  }
+});
 
 function getRecBySlug(slug: string): CompareRec | undefined {
   return recommendations.value.find((r) => r.tenant_slug === slug);
@@ -193,11 +201,7 @@ async function fetchData(): Promise<void> {
   loading.value = true;
   error.value = "";
   try {
-    const res = await api.get<{
-      recommendations: CompareRec[];
-      profile_snapshot: Record<string, any>;
-      tenants_compared: number;
-    }>("/compare/recommendations");
+    const res = await compareApi.getRecommendations(profileSnapshot.value);
     if (res.data) {
       recommendations.value = res.data.recommendations || [];
     }

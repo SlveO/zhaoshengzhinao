@@ -93,8 +93,11 @@ export const profileApi = {
 };
 
 export const compareApi = {
-  getRecommendations: () =>
-    api.get<{
+  getRecommendations: (profileSnapshot?: string | null) => {
+    const qs = profileSnapshot
+      ? `?profile_snapshot=${encodeURIComponent(profileSnapshot)}`
+      : "";
+    return api.get<{
       recommendations: Array<{
         tenant_slug: string;
         tenant_name: string;
@@ -113,7 +116,8 @@ export const compareApi = {
       }>;
       profile_snapshot: Record<string, any>;
       tenants_compared: number;
-    }>("/compare/recommendations"),
+    }>(`/compare/recommendations${qs}`);
+  },
 };
 
 export const collegeApi = {
