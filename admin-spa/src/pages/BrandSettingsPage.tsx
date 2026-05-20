@@ -2,7 +2,17 @@ import { useEffect, useState, type FormEvent } from 'react'
 import api from '../api/client'
 import type { BrandConfig } from '../types'
 import StatusCard from '../components/StatusCard'
-import PageHeader from '../components/PageHeader'
+
+const DEFAULTS: BrandConfig = {
+  name: '华南师范大学',
+  short_name: 'SCNU',
+  primary_color: '#2563eb',
+  secondary_color: '#f59e0b',
+  logo_url: '',
+  favicon_url: null,
+  login_bg_url: null,
+  welcome_text: '欢迎来到华南师范大学招生咨询平台！我是您的专属招生助手，为您解答关于专业选择、录取政策、校园生活等问题。',
+}
 
 export default function BrandSettingsPage() {
   const [brand, setBrand] = useState<BrandConfig | null>(null)
@@ -12,7 +22,7 @@ export default function BrandSettingsPage() {
 
   useEffect(() => {
     api.get<BrandConfig>('/admin/brand-config')
-      .then((r) => setBrand(r.data))
+      .then((r) => setBrand({ ...DEFAULTS, ...r.data }))
       .catch((e) => setError(e?.message || '获取品牌配置失败'))
   }, [])
 
@@ -23,9 +33,7 @@ export default function BrandSettingsPage() {
     setMessage('')
     try {
       await api.put('/admin/brand-config', brand)
-      setMessage('保存成功')
-      document.documentElement.style.setProperty('--brand-primary', brand.primary_color)
-      document.documentElement.style.setProperty('--brand-secondary', brand.secondary_color)
+      setMessage('品牌配置已保存')
       document.title = `${brand.name} · 管理后台`
     } catch {
       setMessage('保存失败')
@@ -34,117 +42,73 @@ export default function BrandSettingsPage() {
     }
   }
 
+  const reset = () => {
+    setBrand({ ...DEFAULTS })
+    setMessage('已恢复默认配置')
+  }
+
+  const update = (patch: Partial<BrandConfig>) => {
+    if (!brand) return
+    setBrand({ ...brand, ...patch })
+  }
+
   return (
-    <div className="max-w-2xl space-y-6">
-      <PageHeader
-        title="品牌设置"
-        subtitle="配置院校品牌信息与视觉样式"
-      />
-
+    <div>
       <StatusCard loading={!brand} error={error}>
-        <form onSubmit={handleSave} className="bg-white rounded-xl p-6 shadow-sm space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">院校全称</label>
-            <input
-              type="text"
-              value={brand!.name}
-              onChange={(e) => setBrand({ ...brand!, name: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">院校简称</label>
-            <input
-              type="text"
-              value={brand!.short_name}
-              onChange={(e) => setBrand({ ...brand!, short_name: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent transition"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-1">主题色</label>
-              <div className="flex items-center gap-3">
-                <input
-                  type="color"
-                  value={brand!.primary_color}
-                  onChange={(e) => setBrand({ ...brand!, primary_color: e.target.value })}
-                  className="w-10 h-10 rounded-lg border cursor-pointer"
-                />
-                <input
-                  type="text"
-                  value={brand!.primary_color}
-                  onChange={(e) => setBrand({ ...brand!, primary_color: e.target.value })}
-                  className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent transition"
-                />
-              </div>
+        {brand && (
+          <div className="chart-grid even">
+            <div className="card">
+              <div className="card-header"><h3>品牌配置</h3></div>
+              <form onSubmit={handleSave}>
+                <div className="form-grid">
+                  <div className="field"><label>院校全称</label><input value={brand.name} onChange={(e) => update({ name: e.target.value })} /></div>
+                  <div className="field"><label>院校简称</label><input value={brand.short_name} onChange={(e) => update({ short_name: e.target.value })} /></div>
+                  <div className="field">
+                    <label>主题色</label>
+                    <div className="field-row">
+                      <input type="color" value={brand.primary_color} onChange={(e) => update({ primary_color: e.target.value })} />
+                      <input value={brand.primary_color} onChange={(e) => update({ primary_color: e.target.value })} style={{ flex: 1 }} />
+                    </div>
+                  </div>
+                  <div className="field">
+                    <label>辅助色</label>
+                    <div className="field-row">
+                      <input type="color" value={brand.secondary_color} onChange={(e) => update({ secondary_color: e.target.value })} />
+                      <input value={brand.secondary_color} onChange={(e) => update({ secondary_color: e.target.value })} style={{ flex: 1 }} />
+                    </div>
+                  </div>
+                  <div className="field"><label>Logo URL</label><input value={brand.logo_url} onChange={(e) => update({ logo_url: e.target.value })} placeholder="https://..." /></div>
+                  <div className="field"><label>Favicon URL</label><input value={brand.favicon_url || ''} onChange={(e) => update({ favicon_url: e.target.value })} placeholder="https://..." /></div>
+                  <div className="field"><label>登录背景图 URL</label><input value={brand.login_bg_url || ''} onChange={(e) => update({ login_bg_url: e.target.value })} placeholder="https://..." /></div>
+                  <div className="field" style={{ gridColumn: '1 / -1' }}><label>欢迎语</label><textarea value={brand.welcome_text || ''} onChange={(e) => update({ welcome_text: e.target.value })} /></div>
+                </div>
+                <div className="btn-group" style={{ marginTop: 20 }}>
+                  <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? '保存中...' : '保存配置'}</button>
+                  <button type="button" className="btn btn-secondary" onClick={reset}>恢复默认</button>
+                </div>
+              </form>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-1">辅助色</label>
-              <div className="flex items-center gap-3">
-                <input
-                  type="color"
-                  value={brand!.secondary_color}
-                  onChange={(e) => setBrand({ ...brand!, secondary_color: e.target.value })}
-                  className="w-10 h-10 rounded-lg border cursor-pointer"
-                />
-                <input
-                  type="text"
-                  value={brand!.secondary_color}
-                  onChange={(e) => setBrand({ ...brand!, secondary_color: e.target.value })}
-                  className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent transition"
-                />
+            <div className="card">
+              <div className="card-header"><h3>实时预览</h3></div>
+              <div className="brand-preview-box">
+                <div className="brand-preview-logo" style={{ background: brand.primary_color }}>{brand.short_name[0]}</div>
+                <div style={{ fontSize: 16, fontWeight: 600 }}>{brand.name}</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>{brand.short_name}</div>
+                <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 12 }}>
+                  <span className="brand-preview-swatch" style={{ background: brand.primary_color }} />
+                  <span className="brand-preview-swatch" style={{ background: brand.secondary_color }} />
+                </div>
               </div>
             </div>
           </div>
+        )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">Logo URL</label>
-            <input
-              type="text"
-              value={brand!.logo_url}
-              onChange={(e) => setBrand({ ...brand!, logo_url: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent transition"
-            />
+        {message && (
+          <div className={`view-status loading`} style={{ marginTop: 16 }}>
+            {message}
           </div>
-
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <p className="text-xs text-gray-500 mb-3">预览</p>
-            <div className="flex items-center gap-3">
-              <div
-                className="w-10 h-10 rounded-lg bg-center bg-contain bg-no-repeat bg-gray-200"
-                style={{ backgroundImage: brand!.logo_url ? `url(${brand!.logo_url})` : undefined }}
-              />
-              <div className="flex gap-2">
-                <div className="w-6 h-6 rounded" style={{ background: brand!.primary_color }} />
-                <div className="w-6 h-6 rounded" style={{ background: brand!.secondary_color }} />
-              </div>
-              <span className="text-sm font-medium">{brand!.name}</span>
-            </div>
-          </div>
-
-          {message && (
-            <div
-              className={`text-sm px-3 py-2 rounded-lg ${
-                message.includes('成功') ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-500'
-              }`}
-            >
-              {message}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={saving}
-            className="px-6 py-2.5 rounded-lg text-white font-medium text-sm transition cursor-pointer disabled:opacity-60 hover:opacity-90"
-            style={{ background: 'var(--brand-primary)' }}
-          >
-            {saving ? '保存中...' : '保存'}
-          </button>
-        </form>
+        )}
       </StatusCard>
     </div>
   )

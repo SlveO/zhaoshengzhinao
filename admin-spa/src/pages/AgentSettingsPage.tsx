@@ -2,10 +2,9 @@ import { useEffect, useState, type FormEvent } from 'react'
 import api from '../api/client'
 import type { PersonaConfig } from '../types'
 import StatusCard from '../components/StatusCard'
-import PageHeader from '../components/PageHeader'
 
 const DEFAULT_PERSONA: PersonaConfig = {
-  custom_prompt: '',
+  custom_prompt: '你是一位专业、热情的招生咨询助手，代表{tenant_name}招生办。请根据学生的{stage}阶段和以下信息提供帮助：{slots_summary}。保持{style}的语气，帮助学生了解学校的优势和特色。',
   style: 'casual',
   proactive_recommend: true,
 }
@@ -15,12 +14,33 @@ export default function AgentSettingsPage() {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [preview, setPreview] = useState('')
 
   useEffect(() => {
     api.get<PersonaConfig>('/admin/ai-persona')
-      .then((r) => setPersona({ ...DEFAULT_PERSONA, ...r.data }))
+      .then((r) => {
+        const p = { ...DEFAULT_PERSONA, ...r.data }
+        setPersona(p)
+        setPreview(renderPrompt(p))
+      })
       .catch((e) => setError(e?.message || '获取 AI 设置失败'))
   }, [])
+
+  const renderPrompt = (p: PersonaConfig) => {
+    const styleText = p.style === 'casual' ? '亲切自然的语气' : '正式专业的语气'
+    return (p.custom_prompt || DEFAULT_PERSONA.custom_prompt)
+      .replace(/\{tenant_name\}/g, '华南师范大学')
+      .replace(/\{stage\}/g, '深度咨询阶段')
+      .replace(/\{slots_summary\}/g, '已了解：省份=广东，选科=物化生，预估分数=620，意向专业=计算机/电子信息')
+      .replace(/\{style\}/g, styleText)
+  }
+
+  const updatePersona = (patch: Partial<PersonaConfig>) => {
+    if (!persona) return
+    const p = { ...persona, ...patch }
+    setPersona(p)
+    setPreview(renderPrompt(p))
+  }
 
   const handleSave = async (e: FormEvent) => {
     e.preventDefault()
@@ -29,7 +49,7 @@ export default function AgentSettingsPage() {
     setMessage('')
     try {
       await api.put('/admin/ai-persona', persona)
-      setMessage('保存成功')
+      setMessage('AI 配置已保存')
     } catch {
       setMessage('保存失败')
     } finally {
@@ -38,110 +58,77 @@ export default function AgentSettingsPage() {
   }
 
   return (
-    <div className="max-w-2xl space-y-6">
-      <PageHeader
-        title="AI 对话设置"
-        subtitle="自定义 AI 对话风格、提示词和交互行为"
-      />
-
+    <div>
       <StatusCard loading={!persona} error={error}>
-        <form onSubmit={handleSave} className="bg-white rounded-xl p-6 shadow-sm space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
-              自定义提示词
-            </label>
-            <textarea
-              value={persona!.custom_prompt}
-              onChange={(e) => setPersona({ ...persona!, custom_prompt: e.target.value })}
-              rows={6}
-              placeholder="输入自定义系统提示词，留空则使用默认提示词..."
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] resize-y transition"
-            />
-            <p className="text-xs text-gray-400 mt-1">
-              可用占位符：<code className="bg-gray-100 px-1 rounded">{'{stage}'}</code> — 当前对话阶段，{' '}
-              <code className="bg-gray-100 px-1 rounded">{'{slots_summary}'}</code> — 学生画像摘要
-            </p>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">对话风格</label>
-            <div className="flex gap-3">
-              {[
-                { value: 'casual', label: '亲切', desc: '温暖、鼓励的语气' },
-                { value: 'formal', label: '正式', desc: '专业、严谨的语气' },
-              ].map((opt) => (
-                <label
-                  key={opt.value}
-                  className={`flex-1 p-3 rounded-lg border-2 cursor-pointer transition ${
-                    persona!.style === opt.value
-                      ? 'border-[var(--brand-primary)] bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="style"
-                    value={opt.value}
-                    checked={persona!.style === opt.value}
-                    onChange={(e) =>
-                      setPersona({ ...persona!, style: e.target.value as PersonaConfig['style'] })
-                    }
-                    className="sr-only"
+        {persona && (
+          <div className="chart-grid even">
+            <div className="card">
+              <div className="card-header"><h3>AI 对话配置</h3></div>
+              <form onSubmit={handleSave}>
+                <div className="field">
+                  <label>自定义提示词</label>
+                  <textarea
+                    value={persona.custom_prompt}
+                    onChange={(e) => updatePersona({ custom_prompt: e.target.value })}
+                    style={{ minHeight: 180 }}
                   />
-                  <div className="text-sm font-medium text-gray-800">{opt.label}</div>
-                  <div className="text-xs text-gray-400 mt-0.5">{opt.desc}</div>
-                </label>
-              ))}
-            </div>
-          </div>
+                </div>
+                <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 16 }}>
+                  可用占位符：<code>{'{stage}'}</code> <code>{'{slots_summary}'}</code> <code>{'{tenant_name}'}</code> <code>{'{style}'}</code>
+                </div>
 
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-            <div>
-              <div className="text-sm font-medium text-gray-800">主动推荐</div>
-              <div className="text-xs text-gray-400 mt-0.5">
-                AI 在对话中适时主动推荐院校和专业
+                <div className="field">
+                  <label>对话风格</label>
+                  <div className="radio-cards">
+                    <div
+                      className={`radio-card${persona.style === 'casual' ? ' selected' : ''}`}
+                      onClick={() => updatePersona({ style: 'casual' })}
+                    >
+                      亲切自然<br /><small style={{ color: 'var(--muted)', fontSize: 11 }}>如学长般温和交流</small>
+                    </div>
+                    <div
+                      className={`radio-card${persona.style === 'formal' ? ' selected' : ''}`}
+                      onClick={() => updatePersona({ style: 'formal' })}
+                    >
+                      正式专业<br /><small style={{ color: 'var(--muted)', fontSize: 11 }}>如招生官般严谨</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="field">
+                  <label>主动推荐</label>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <button
+                      type="button"
+                      className={`switch${persona.proactive_recommend ? ' on' : ''}`}
+                      onClick={() => updatePersona({ proactive_recommend: !persona.proactive_recommend })}
+                    />
+                    <span style={{ fontSize: 12, color: 'var(--muted)' }}>
+                      {persona.proactive_recommend ? '已开启 — AI 会主动推荐匹配专业' : '已关闭 — AI 仅在用户询问时推荐'}
+                    </span>
+                  </div>
+                </div>
+
+                <button type="submit" className="btn btn-primary" disabled={saving}>
+                  {saving ? '保存中...' : '保存配置'}
+                </button>
+              </form>
+            </div>
+
+            <div className="card">
+              <div className="card-header"><h3>提示词渲染预览</h3><span className="badge">示例数据</span></div>
+              <div style={{ background: 'var(--bg)', borderRadius: 'var(--radius)', padding: 14, fontSize: 13, lineHeight: 1.6, whiteSpace: 'pre-wrap', color: 'var(--fg)' }}>
+                {preview}
               </div>
             </div>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={persona!.proactive_recommend}
-              onClick={() =>
-                setPersona({ ...persona!, proactive_recommend: !persona!.proactive_recommend })
-              }
-              className={`relative w-11 h-6 rounded-full transition ${
-                persona!.proactive_recommend
-                  ? 'bg-[var(--brand-primary)]'
-                  : 'bg-gray-300'
-              }`}
-            >
-              <span
-                className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition ${
-                  persona!.proactive_recommend ? 'left-[22px]' : 'left-0.5'
-                }`}
-              />
-            </button>
           </div>
+        )}
 
-          {message && (
-            <div
-              className={`text-sm px-3 py-2 rounded-lg ${
-                message.includes('成功') ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-500'
-              }`}
-            >
-              {message}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={saving}
-            className="px-6 py-2.5 rounded-lg text-white font-medium text-sm transition cursor-pointer disabled:opacity-60 hover:opacity-90"
-            style={{ background: 'var(--brand-primary)' }}
-          >
-            {saving ? '保存中...' : '保存'}
-          </button>
-        </form>
+        {message && (
+          <div className="view-status loading" style={{ marginTop: 16 }}>
+            {message}
+          </div>
+        )}
       </StatusCard>
     </div>
   )

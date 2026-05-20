@@ -9,19 +9,6 @@ export interface BrandConfig {
   welcome_text?: string
 }
 
-export interface FunnelData {
-  period: { start: string; end: string }
-  stages: {
-    visitors: number
-    conversations: number
-    deepConsultations: number
-    intentExpressed: number
-    enrolled: number
-  }
-  conversionRates: Record<string, number>
-  _stub?: boolean
-}
-
 export interface ProfileDashboard {
   riasecDistribution: { dimension: string; avgScore: number; count: number }[]
   valuesDistribution: { value: string; percentage: number }[]
@@ -82,4 +69,12 @@ export interface PersonaConfig {
   custom_prompt: string
   style: 'casual' | 'formal'
   proactive_recommend: boolean
+}
+
+export interface ModuleItem {
+  key: string
+  name: string
+  desc: string
+  depends: string[]
+  enabled: boolean
 }
