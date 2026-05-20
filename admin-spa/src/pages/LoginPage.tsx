@@ -1,17 +1,28 @@
-import { useState, type FormEvent } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
+import api from '../api/client'
+import type { BrandConfig } from '../types'
 
 export default function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [brand, setBrand] = useState<BrandConfig | null>(null)
   const login = useAuthStore((s) => s.login)
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
 
   const tenantSlug = searchParams.get('tenant') || localStorage.getItem('tenantSlug') || ''
+
+  useEffect(() => {
+    if (tenantSlug) {
+      api.get<BrandConfig>('/admin/brand-config')
+        .then((r) => setBrand(r.data))
+        .catch(() => {})
+    }
+  }, [tenantSlug])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -31,12 +42,25 @@ export default function LoginPage() {
     }
   }
 
+  const brandName = brand?.name || '招生智脑'
+  const brandLogo = brand?.logo_url
+
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
+    <div style={{
+      minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: brand?.login_bg_url ? `url(${brand.login_bg_url}) center/cover` : 'var(--color-page)',
+    }}>
       <div className="login-container">
         <div className="login-brand-panel">
-          <div className="login-brand-logo">智</div>
-          <div className="login-brand-name">招生智脑</div>
+          {brandLogo ? (
+            <img src={brandLogo} alt="" style={{
+              width: 80, height: 80, borderRadius: 20, objectFit: 'cover',
+              marginBottom: 22, border: '1px solid rgba(255,255,255,0.1)',
+            }} />
+          ) : (
+            <div className="login-brand-logo">{brandName[0]}</div>
+          )}
+          <div className="login-brand-name">{brandName}</div>
           <div className="login-brand-subtitle">院校管理后台</div>
         </div>
 
@@ -55,8 +79,7 @@ export default function LoginPage() {
             <div className="field">
               <label>院校标识</label>
               <input
-                type="text"
-                placeholder="如 scnu"
+                type="text" placeholder="如 scnu"
                 onChange={(e) => localStorage.setItem('tenantSlug', e.target.value)}
               />
             </div>
@@ -68,26 +91,19 @@ export default function LoginPage() {
             <div className="field">
               <label>用户名</label>
               <input
-                type="text"
-                value={username}
+                type="text" value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="请输入用户名"
-                autoComplete="username"
-                autoFocus
+                placeholder="请输入用户名" autoComplete="username" autoFocus
               />
             </div>
-
             <div className="field">
               <label>密码</label>
               <input
-                type="password"
-                value={password}
+                type="password" value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="请输入密码"
-                autoComplete="current-password"
+                placeholder="请输入密码" autoComplete="current-password"
               />
             </div>
-
             <button type="submit" className="login-btn" disabled={loading} style={{ marginTop: 8 }}>
               {loading ? '登录中…' : '登 录'}
             </button>

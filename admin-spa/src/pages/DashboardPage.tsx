@@ -1,114 +1,197 @@
 import { useEffect, useRef } from 'react'
 import * as echarts from 'echarts'
 
-const STATS = [
-  { label: '累计咨询人数', value: '12,847', change: '+18.2%', up: true },
-  { label: '高意向学生', value: '862', change: '+12.5%', up: true },
-  { label: '意向转化率', value: '6.7%', change: '+2.1%', up: true },
-  { label: '活跃天数', value: '28', change: '本月累计', up: false },
-]
+// TODO: replace with API calls when backend ready
+const MOCK = {
+  channelSummary: {
+    todayNewLeads: 8562,
+    channels: [
+      { name: '官网', count: 2350 },
+      { name: '微信公众号', count: 2189 },
+      { name: '微信小程序', count: 2015 },
+      { name: '线下宣讲会', count: 2017 },
+    ],
+  },
+  consultationSummary: {
+    total: 1246,
+    aiHandled: 842,
+    humanHandled: 404,
+    avgResponseSeconds: 28,
+    trendData: [120, 135, 98, 160, 142, 155, 170, 145, 180, 162, 190, 175],
+  },
+  intentSummary: { intentScore: 78, highIntent: 642, midIntent: 1284, lowIntent: 2163 },
+  followupProgress: { completionRate: 65, pending: 862, inProgress: 1246, done: 2318 },
+  news: [
+    { date: '5月14日', content: '省份高考政策及志愿填报时间汇总已更新', isNew: true },
+    { date: '5月13日', content: '计算机学院线上宣讲会报名人数已突破2,000人', isNew: false },
+    { date: '5月12日', content: '2025年招生指南电子版已发布', isNew: false },
+  ],
+  todos: [
+    { label: '待分配线索', count: 236 },
+    { label: '未跟进提醒（超24小时）', count: 128 },
+    { label: '待回访咨询', count: 91 },
+  ],
+}
 
 export default function DashboardPage() {
   const trendRef = useRef<HTMLDivElement>(null)
-  const sourceRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!trendRef.current || !sourceRef.current) return
-
-    const dates = Array.from({ length: 30 }, (_, i) => {
-      const d = new Date(); d.setDate(d.getDate() - 29 + i)
-      return (d.getMonth() + 1) + '/' + d.getDate()
-    })
-
-    const trendChart = echarts.init(trendRef.current)
-    trendChart.setOption({
-      grid: { left: 40, right: 16, top: 16, bottom: 32 },
-      tooltip: { trigger: 'axis' },
-      legend: { bottom: 0, textStyle: { fontSize: 11 } },
-      xAxis: { type: 'category', data: dates, axisLabel: { fontSize: 10 }, axisTick: { show: false } },
-      yAxis: { type: 'value', splitLine: { lineStyle: { color: '#e5e7eb' } } },
-      series: [
-        {
-          name: '咨询量', type: 'line',
-          data: Array.from({ length: 30 }, () => Math.floor(200 + Math.random() * 400)),
-          smooth: true, symbol: 'none', lineStyle: { color: 'oklch(58% 0.18 255)', width: 2 },
-          areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: 'oklch(58% 0.18 255 / 0.12)' }, { offset: 1, color: 'oklch(58% 0.18 255 / 0)' },
-          ]) },
-        },
-        {
-          name: '意向数', type: 'line',
-          data: Array.from({ length: 30 }, () => Math.floor(30 + Math.random() * 100)),
-          smooth: true, symbol: 'none', lineStyle: { color: 'oklch(54% 0.14 155)', width: 2 },
-        },
-      ],
-    })
-
-    const sourceChart = echarts.init(sourceRef.current)
-    sourceChart.setOption({
-      tooltip: { trigger: 'item' },
-      legend: { bottom: 0, textStyle: { fontSize: 11 } },
+    if (!trendRef.current) return
+    const chart = echarts.init(trendRef.current)
+    chart.setOption({
+      grid: { left: 0, right: 0, top: 4, bottom: 0 },
+      xAxis: { show: false, data: Array(12).fill('') },
+      yAxis: { show: false, min: 0 },
       series: [{
-        type: 'pie', radius: ['55%', '80%'], center: ['50%', '48%'], itemStyle: { borderWidth: 0 },
-        label: { fontSize: 10 },
-        data: [
-          { value: 38, name: '广东省' }, { value: 18, name: '湖南省' },
-          { value: 14, name: '江西省' }, { value: 12, name: '广西' },
-          { value: 10, name: '福建省' }, { value: 8, name: '其他' },
-        ],
+        type: 'line', data: MOCK.consultationSummary.trendData,
+        smooth: true, symbol: 'none',
+        lineStyle: { color: '#1e40af', width: 2 },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(30,64,175,0.1)' },
+            { offset: 1, color: 'rgba(30,64,175,0)' },
+          ]),
+        },
       }],
     })
-
-    return () => { trendChart.dispose(); sourceChart.dispose() }
+    return () => chart.dispose()
   }, [])
 
   return (
     <div>
+      {/* Hero */}
+      <div style={{
+        background: 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)',
+        borderRadius: 12, padding: '28px 32px', marginBottom: 20,
+        position: 'relative', overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', right: -20, top: -20,
+          opacity: 0.04, fontSize: 96, fontWeight: 900,
+          color: '#fff', letterSpacing: 8, lineHeight: 1,
+        }}>
+          ADMISSIONS
+        </div>
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: '#fff', margin: '0 0 4px', letterSpacing: '-0.02em' }}>
+            高校招生运营工作台
+          </h1>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: 0 }}>
+            · 生源转化闭环 ·
+          </p>
+        </div>
+      </div>
+
+      {/* 4-column Metric Cards */}
       <div className="stat-grid">
-        {STATS.map((s) => (
-          <div className="stat-card" key={s.label}>
-            <span className="stat-label">{s.label}</span>
-            <span className="stat-value">{s.value}</span>
-            <span className={`stat-change${s.up ? ' up' : ''}`} style={!s.up ? { color: 'var(--muted)' } : undefined}>
-              {s.change}
-            </span>
+        {/* Channel Summary */}
+        <div className="stat-card">
+          <span className="stat-label">渠道汇总 · 今日</span>
+          <span className="stat-value">{MOCK.channelSummary.todayNewLeads.toLocaleString()}</span>
+          <span className="stat-detail">新增线索</span>
+          <div style={{ display: 'flex', gap: 6, marginTop: 4, fontSize: 11, color: 'var(--color-text-muted)' }}>
+            {MOCK.channelSummary.channels.map((c) => (
+              <span key={c.name}>{c.name} {c.count.toLocaleString()}</span>
+            ))}
           </div>
-        ))}
+        </div>
+
+        {/* Consultation Summary */}
+        <div className="stat-card">
+          <span className="stat-label">咨询承接 · 今日</span>
+          <span className="stat-value">{MOCK.consultationSummary.total.toLocaleString()}</span>
+          <span className="stat-detail">
+            AI {MOCK.consultationSummary.aiHandled} · 人工 {MOCK.consultationSummary.humanHandled} · 均 {MOCK.consultationSummary.avgResponseSeconds}s
+          </span>
+          <div ref={trendRef} style={{ height: 44, marginTop: 4 }} />
+        </div>
+
+        {/* Intent Score */}
+        <div className="stat-card">
+          <span className="stat-label">意向识别 · 今日</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div style={{ position: 'relative', width: 56, height: 56 }}>
+              <svg viewBox="0 0 56 56" style={{ width: 56, height: 56, transform: 'rotate(-90deg)' }}>
+                <circle cx="28" cy="28" r="22" stroke="#e5e9f2" strokeWidth="6" fill="none" />
+                <circle cx="28" cy="28" r="22" stroke="#22c55e" strokeWidth="6" fill="none"
+                  strokeDasharray={`${MOCK.intentSummary.intentScore * 1.38} ${138 - MOCK.intentSummary.intentScore * 1.38}`}
+                  strokeLinecap="round" />
+              </svg>
+              <div style={{
+                position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
+                fontSize: 18, fontWeight: 700, color: 'var(--color-text-primary)',
+              }}>
+                {MOCK.intentSummary.intentScore}
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 12, color: 'var(--color-brand-800)', fontWeight: 500 }}>
+                高意向 {MOCK.intentSummary.highIntent.toLocaleString()}
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>
+                中 {MOCK.intentSummary.midIntent.toLocaleString()} · 低 {MOCK.intentSummary.lowIntent.toLocaleString()}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Followup Progress */}
+        <div className="stat-card">
+          <span className="stat-label">跟进进度 · 今日</span>
+          <span className="stat-value">{MOCK.followupProgress.completionRate}%</span>
+          <div className="progress-bar" style={{ marginTop: 4 }}>
+            <div className="progress-fill" style={{ width: `${MOCK.followupProgress.completionRate}%` }} />
+          </div>
+          <span className="stat-detail">
+            待跟进 {MOCK.followupProgress.pending} · 跟进中 {MOCK.followupProgress.inProgress} · 已完成 {MOCK.followupProgress.done}
+          </span>
+        </div>
       </div>
 
-      <div className="chart-grid">
+      {/* Bottom 2-column */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        {/* News */}
         <div className="card">
-          <div className="card-header"><h3>咨询趋势 · 近30天</h3><span className="badge">实时</span></div>
-          <div ref={trendRef} style={{ height: 260 }} />
+          <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>招生动态</h3>
+          {MOCK.news.map((n, i) => (
+            <div key={i} style={{
+              display: 'flex', gap: 8, alignItems: 'baseline',
+              padding: '8px 0', borderBottom: i < MOCK.news.length - 1 ? '1px solid var(--color-border)' : 'none',
+              fontSize: 13,
+            }}>
+              {n.isNew && (
+                <span style={{
+                  background: 'var(--color-brand-800)', color: '#fff',
+                  padding: '1px 6px', borderRadius: 3, fontSize: 9, fontWeight: 600,
+                }}>
+                  NEW
+                </span>
+              )}
+              <span style={{ color: 'var(--color-text-muted)', fontSize: 12, flexShrink: 0 }}>{n.date}</span>
+              <span style={{ color: 'var(--color-text-primary)' }}>{n.content}</span>
+            </div>
+          ))}
         </div>
-        <div className="card">
-          <div className="card-header"><h3>学生来源分布</h3></div>
-          <div ref={sourceRef} style={{ height: 260 }} />
-        </div>
-      </div>
 
-      <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-        <div className="card-header" style={{ padding: '20px 24px 0' }}><h3>最近高意向学生</h3></div>
-        <div className="table-wrap">
-          <table>
-            <thead><tr><th>学生</th><th>省份</th><th>意向专业</th><th>咨询深度</th><th>最近互动</th><th>状态</th></tr></thead>
-            <tbody>
-              {[
-                ['张*明', '广东', '计算机科学', '深度咨询', '10分钟前', '高意向'],
-                ['李*华', '湖南', '电子信息', '表达意向', '1小时前', '高意向'],
-                ['王*婷', '江西', '软件工程', '深度咨询', '2小时前', '跟进中'],
-                ['陈*杰', '广西', '人工智能', '初步咨询', '3小时前', '待跟进'],
-                ['黄*欣', '广东', '数据科学', '表达意向', '5小时前', '高意向'],
-              ].map((r, i) => (
-                <tr key={i}>
-                  <td style={{ fontWeight: 500 }}>{r[0]}</td>
-                  <td>{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td>
-                  <td style={{ fontSize: 12, color: 'var(--muted)' }}>{r[4]}</td>
-                  <td><span className={`pill${r[5] === '高意向' ? ' green' : ' amber'}`}>{r[5]}</span></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Todos */}
+        <div className="card">
+          <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>待办提醒</h3>
+          {MOCK.todos.map((t, i) => (
+            <div key={i} style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '10px 0', borderBottom: i < MOCK.todos.length - 1 ? '1px solid var(--color-border)' : 'none',
+            }}>
+              <span style={{ fontSize: 13 }}>{t.label}</span>
+              <span style={{
+                background: 'var(--color-danger)', color: '#fff',
+                padding: '3px 12px', borderRadius: 100,
+                fontSize: 13, fontWeight: 600, fontVariantNumeric: 'tabular-nums',
+              }}>
+                {t.count}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
