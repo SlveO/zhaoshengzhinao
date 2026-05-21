@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 
 // TODO: replace with API GET /api/strategy/report?view=
 interface ReportEntry {
@@ -111,6 +111,8 @@ const PRIORITY_LABEL: Record<string, { bg: string; color: string }> = {
   P2: { bg: '#dbeafe', color: '#1e40af' },
 }
 
+const PRIORITY_ORDER = { P0: 0, P1: 1, P2: 2 }
+
 interface Version {
   label: string
   time: string
@@ -123,6 +125,7 @@ export default function ReportsPage() {
   const [data, setData] = useState<PerspectiveData>(structuredClone(REPORT_DATA.weekly))
   const [showHistory, setShowHistory] = useState(false)
   const [selectedVersion, setSelectedVersion] = useState<number | null>(null)
+  const dragItem = useRef<{ col: keyof PerspectiveData; idx: number } | null>(null)
 
   const systemVersion = REPORT_DATA[view]
   const [versions] = useState<Version[]>([
@@ -157,6 +160,9 @@ export default function ReportsPage() {
     setData((prev) => {
       const next = structuredClone(prev)
       next.actions[idx].priority = p
+      // Auto-sort by priority: P0 → P1 → P2
+      next.actions.sort((a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority])
+      next.actions.forEach((item, i) => { item.rank = i + 1 })
       return next
     })
   }
@@ -166,9 +172,11 @@ export default function ReportsPage() {
       const next = structuredClone(prev)
       const items = next[col] as ReportEntry[]
       if (col === 'actions') {
-        ;(items as ActionEntry[]).push({
-          rank: items.length + 1, title: '新建条目', desc: '', priority: 'P2',
-        })
+        const newAction: ActionEntry = { rank: items.length + 1, title: '新建条目', desc: '', priority: 'P2' }
+        ;(items as ActionEntry[]).push(newAction)
+        // Re-sort after adding
+        ;(items as ActionEntry[]).sort((a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority])
+        items.forEach((item, i) => { item.rank = i + 1 })
       } else {
         items.push({ rank: items.length + 1, title: '新建条目', desc: '' })
       }
@@ -185,6 +193,34 @@ export default function ReportsPage() {
     })
   }
 
+  const moveItem = useCallback((col: keyof PerspectiveData, from: number, to: number) => {
+    setData((prev) => {
+      const next = structuredClone(prev)
+      const items = next[col] as ReportEntry[]
+      const [moved] = items.splice(from, 1)
+      items.splice(to, 0, moved)
+      items.forEach((item, i) => { item.rank = i + 1 })
+      return next
+    })
+  }, [])
+
+  // Drag handlers
+  const onDragStart = (col: keyof PerspectiveData, idx: number) => {
+    dragItem.current = { col, idx }
+  }
+
+  const onDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+  }
+
+  const onDrop = (col: keyof PerspectiveData, toIdx: number) => {
+    const from = dragItem.current
+    if (!from || from.col !== col || from.idx === toIdx) return
+    moveItem(col, from.idx, toIdx)
+    dragItem.current = null
+  }
+
   const selectedData = selectedVersion !== null ? versions[selectedVersion].data : null
 
   const renderEditableCell = (
@@ -193,10 +229,22 @@ export default function ReportsPage() {
     idx: number,
     numberColor: string,
   ) => (
-    <div key={idx} style={{
-      padding: '10px 0', borderBottom: idx < data[col].length - 1 ? '1px solid #f1f5f9' : 'none',
-    }}>
+    <div
+      key={idx}
+      draggable={editing}
+      onDragStart={() => onDragStart(col, idx)}
+      onDragOver={onDragOver}
+      onDrop={() => onDrop(col, idx)}
+      style={{
+        padding: '10px 0', borderBottom: idx < data[col].length - 1 ? '1px solid #f1f5f9' : 'none',
+        cursor: editing ? 'grab' : 'default',
+        transition: 'background 0.12s',
+      }}
+      onMouseEnter={(e) => { if (editing) e.currentTarget.style.background = '#fafbfc' }}
+      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
+    >
       <div style={{ display: 'flex', gap: 8, alignItems: 'start' }}>
+        {/* Drag handle + rank number */}
         <span style={{
           width: 20, height: 20, borderRadius: '50%', background: numberColor,
           color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -222,6 +270,7 @@ export default function ReportsPage() {
               <option>P0</option><option>P1</option><option>P2</option>
             </select>
           )}
+          {/* Title */}
           <div
             contentEditable={editing}
             suppressContentEditableWarning
@@ -235,29 +284,44 @@ export default function ReportsPage() {
           >
             {item.title}
           </div>
+          {/* Description - always render &zwnj; when empty so it's clickable */}
           <div
             contentEditable={editing}
             suppressContentEditableWarning
-            onBlur={(e) => updateDesc(col, idx, e.currentTarget.textContent || '')}
+            onBlur={(e) => {
+              const text = e.currentTarget.textContent || ''
+              // Strip zero-width space if user left it empty
+              updateDesc(col, idx, text.replace(/​/g, ''))
+            }}
             style={{
               fontSize: 11, color: 'var(--color-text-secondary)', marginTop: 2,
               outline: 'none', borderBottom: editing ? '1px dashed transparent' : 'none',
-              padding: '2px 0', borderRadius: 3,
+              padding: '2px 0', borderRadius: 3, minHeight: editing ? 18 : undefined,
             }}
-            onFocus={(e) => { if (editing) e.currentTarget.style.borderBottomColor = '#bfdbfe' }}
+            onFocus={(e) => {
+              if (editing) {
+                e.currentTarget.style.borderBottomColor = '#bfdbfe'
+                // Insert zero-width space if empty so cursor lands inside
+                if (!e.currentTarget.textContent || e.currentTarget.textContent === '') {
+                  e.currentTarget.innerHTML = '​'
+                }
+              }
+            }}
           >
-            {item.desc}
+            {item.desc || (editing ? '​' : '')}
           </div>
         </div>
+        {/* Delete button — always visible in edit mode */}
         {editing && (
           <button
             onClick={() => removeItem(col, idx)}
+            className="btn btn-sm"
             style={{
-              opacity: 0, background: 'none', border: 'none', cursor: 'pointer',
-              color: '#9ba3b2', fontSize: 16, padding: 0, marginTop: 1, lineHeight: 1,
+              background: 'transparent', border: 'none', cursor: 'pointer',
+              color: '#f5222d', fontSize: 18, padding: '0 4px', lineHeight: 1,
+              flexShrink: 0,
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.opacity = '1' }}
-            onMouseLeave={(e) => { e.currentTarget.style.opacity = '0' }}
+            title="删除此条目"
           >
             ×
           </button>
@@ -369,18 +433,15 @@ export default function ReportsPage() {
             <div>
               <div style={{ fontWeight: 600, fontSize: 13 }}>学生高频关注</div>
               <div style={{ fontSize: 10, color: 'var(--color-text-muted)' }}>
-                按咨询频次排序 · 共 {data.concerns.length} 项
+                按咨询频次排序 · 共 {data.concerns.length} 项{editing ? ' · 可拖拽排序' : ''}
               </div>
             </div>
             {editing && (
-              <button
-                onClick={() => addItem('concerns')}
-                style={{
-                  fontSize: 10, padding: '3px 10px', border: '1px dashed var(--color-border)',
-                  background: 'transparent', borderRadius: 4, cursor: 'pointer',
-                  color: 'var(--color-text-secondary)', fontFamily: 'inherit',
-                }}
-              >
+              <button onClick={() => addItem('concerns')} style={{
+                fontSize: 10, padding: '3px 10px', border: '1px dashed var(--color-border)',
+                background: 'transparent', borderRadius: 4, cursor: 'pointer',
+                color: 'var(--color-text-secondary)', fontFamily: 'inherit',
+              }}>
                 + 添加
               </button>
             )}
@@ -402,7 +463,7 @@ export default function ReportsPage() {
             <div>
               <div style={{ fontWeight: 600, fontSize: 13 }}>现有内容缺口</div>
               <div style={{ fontSize: 10, color: 'var(--color-text-muted)' }}>
-                按漏覆盖影响排序 · 共 {data.gaps.length} 项
+                按漏覆盖影响排序 · 共 {data.gaps.length} 项{editing ? ' · 可拖拽排序' : ''}
               </div>
             </div>
             {editing && (
@@ -506,56 +567,38 @@ export default function ReportsPage() {
             </button>
           </div>
           <div style={{ display: 'flex', maxHeight: 260 }}>
-            {/* Version list */}
             <div style={{
               width: 200, borderRight: '1px solid #f1f5f9', overflowY: 'auto',
               flexShrink: 0, padding: '4px 0',
             }}>
-              <div
-                onClick={() => setSelectedVersion(null)}
-                style={{
-                  padding: '10px 14px', cursor: 'pointer',
-                  borderLeft: `3px solid ${selectedVersion === null ? 'var(--color-brand-800)' : 'transparent'}`,
-                  background: selectedVersion === null ? '#f8fafc' : 'transparent',
-                }}
-              >
+              <div onClick={() => setSelectedVersion(null)} style={{
+                padding: '10px 14px', cursor: 'pointer',
+                borderLeft: `3px solid ${selectedVersion === null ? 'var(--color-brand-800)' : 'transparent'}`,
+                background: selectedVersion === null ? '#f8fafc' : 'transparent',
+              }}>
                 <div style={{ fontWeight: 600, fontSize: 12 }}>当前修改</div>
                 <div style={{ fontSize: 10, color: 'var(--color-text-muted)' }}>未保存的更改</div>
               </div>
               {versions.map((v, i) => (
-                <div
-                  key={i}
-                  onClick={() => setSelectedVersion(i)}
-                  style={{
-                    padding: '10px 14px', cursor: 'pointer',
-                    borderLeft: `3px solid ${selectedVersion === i ? 'var(--color-brand-800)' : 'transparent'}`,
-                    background: selectedVersion === i ? '#f8fafc' : 'transparent',
-                  }}
-                >
+                <div key={i} onClick={() => setSelectedVersion(i)} style={{
+                  padding: '10px 14px', cursor: 'pointer',
+                  borderLeft: `3px solid ${selectedVersion === i ? 'var(--color-brand-800)' : 'transparent'}`,
+                  background: selectedVersion === i ? '#f8fafc' : 'transparent',
+                }}>
                   <div style={{ fontSize: 12 }}>{v.label}</div>
                   <div style={{ fontSize: 10, color: 'var(--color-text-muted)' }}>{v.time}</div>
                 </div>
               ))}
             </div>
-            {/* Diff area */}
             <div style={{ flex: 1, padding: 14, overflowY: 'auto' }}>
               <div style={{ fontSize: 10, color: 'var(--color-text-muted)', marginBottom: 12 }}>
                 对比：当前修改 ← → {selectedVersion !== null ? versions[selectedVersion].label : '系统建议'}
               </div>
-              <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 8, color: 'var(--color-brand-800)' }}>
-                改进建议
-              </div>
-              {data.actions.map((a, i) => {
-                const vItem = selectedData?.actions?.[i]
-                return renderDiffCell(a, vItem || null)
-              })}
-              <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 8, marginTop: 14, color: 'var(--color-brand-800)' }}>
-                学生高频关注
-              </div>
+              <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 8, color: 'var(--color-brand-800)' }}>改进建议</div>
+              {data.actions.map((a, i) => renderDiffCell(a, selectedData?.actions?.[i] || null))}
+              <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 8, marginTop: 14, color: 'var(--color-brand-800)' }}>学生高频关注</div>
               {data.concerns.map((c, i) => renderDiffCell(c, selectedData?.concerns?.[i] || null))}
-              <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 8, marginTop: 14, color: 'var(--color-brand-800)' }}>
-                现有内容缺口
-              </div>
+              <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 8, marginTop: 14, color: 'var(--color-brand-800)' }}>现有内容缺口</div>
               {data.gaps.map((g, i) => renderDiffCell(g, selectedData?.gaps?.[i] || null))}
             </div>
           </div>
