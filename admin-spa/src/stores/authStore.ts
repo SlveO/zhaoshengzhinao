@@ -6,8 +6,11 @@ interface AuthState {
   token: string | null
   user: { id: string; username: string } | null
   login: (username: string, password: string, tenantSlug: string) => Promise<void>
+  loginDemo: (tenantSlug: string) => void
   logout: () => void
 }
+
+const DEMO_TOKEN = 'demo-token-netlify-preview'
 
 export const useAuthStore = create<AuthState>((set) => ({
   token: localStorage.getItem('token'),
@@ -20,6 +23,13 @@ export const useAuthStore = create<AuthState>((set) => ({
     localStorage.setItem('token', access_token)
     localStorage.setItem('user', JSON.stringify({ id: user_id, username: uname }))
     set({ token: access_token, user: { id: user_id, username: uname } })
+  },
+
+  loginDemo: (tenantSlug: string) => {
+    localStorage.setItem('tenantSlug', tenantSlug)
+    localStorage.setItem('token', DEMO_TOKEN)
+    localStorage.setItem('user', JSON.stringify({ id: 'demo', username: '体验管理员' }))
+    set({ token: DEMO_TOKEN, user: { id: 'demo', username: '体验管理员' } })
   },
 
   logout: () => {
