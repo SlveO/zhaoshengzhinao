@@ -3,8 +3,42 @@ __pycache__/
 .env
 node_modules/
 dist/
-chroma_data/
+.pytest_cache/
+.vite/
 *.egg-info/
 .venv/
 venv/
+
+# Archive of deprecated/one-time files
+_archive/
+
+# Runtime data — regenerated via seed scripts
+backend/chroma_data/
+chroma_data/
+data/raw/
+
+# IDE
+.vscode/
+.idea/
+
+# Cloudflare Wrangler cache
+.wrangler/
+
+# Playwright
+.playwright-mcp/
+
+# Superpowers session cache
+.superpowers/
+
+# Claude worktrees
 .claude/worktrees/
+
+# Netlify
+.netlify
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large data files that are re-downloadable
+*.zip

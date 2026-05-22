@@ -3,6 +3,7 @@ import ReactECharts from 'echarts-for-react'
 import 'echarts-wordcloud'
 import api from '../api/client'
 import type { TopicCloudItem, EmotionTimelineData, HotQuestionItem } from '../types'
+import { mockTopicCloud, mockHotQuestions, mockEmotionTimeline } from '../mock/insights'
 import StatusCard from '../components/StatusCard'
 
 const EMOTION_COLORS: Record<string, string> = {
@@ -31,10 +32,19 @@ export default function InsightsPage() {
       api.get<EmotionTimelineData>(`/admin/analytics/emotion-timeline?days=${days}`),
       api.get<HotQuestionItem[]>(`/admin/analytics/hot-questions?days=${days}`),
     ]).then(([tc, em, hq]) => {
+      const rejected = [tc, em, hq].filter((r) => r.status === 'rejected')
+      if (rejected.length === 3) {
+        const firstErr = (rejected[0] as PromiseRejectedResult).reason
+        setError(firstErr?.message || '获取分析数据失败')
+        setTopicCloud(mockTopicCloud)
+        setHotQuestions(mockHotQuestions)
+        setEmotionTimeline(mockEmotionTimeline(days))
+        return
+      }
       if (tc.status === 'fulfilled') setTopicCloud(tc.value.data)
       if (em.status === 'fulfilled') setEmotionTimeline(em.value.data)
       if (hq.status === 'fulfilled') setHotQuestions(hq.value.data)
-    }).catch(() => setError('获取分析数据失败')).finally(() => setLoading(false))
+    }).finally(() => setLoading(false))
   }, [days])
 
   const wordCloudOption = {

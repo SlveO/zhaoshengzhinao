@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import api from '../api/client'
 import type { DocumentItem } from '../types'
+import { mockDocuments } from '../mock/knowledgeBase'
 import StatusCard from '../components/StatusCard'
 import Modal from '../components/Modal'
 
@@ -21,8 +22,11 @@ export default function KnowledgeSettingsPage() {
 
   const fetchDocs = () => {
     api.get<{ documents: DocumentItem[] }>('/admin/knowledge/documents')
-      .then((r) => setDocs(r.data.documents))
-      .catch((e) => setError(e?.message || '获取知识库文档失败'))
+      .then((r) => setDocs(r.data.documents ?? []))
+      .catch((e) => {
+        setError(e?.message || '获取知识库文档失败')
+        setDocs(mockDocuments)
+      })
       .finally(() => setLoading(false))
   }
 

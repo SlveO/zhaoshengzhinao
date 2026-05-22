@@ -41,7 +41,7 @@ export default function Sidebar() {
 
   const visibleItems = MENU_ITEMS.filter((item) => {
     if (!item.module) return true
-    return config?.modules?.[item.module] ?? false
+    return config?.modules?.[item.module] ?? true
   })
 
   const brand = config?.brand

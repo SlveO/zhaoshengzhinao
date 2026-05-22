@@ -1,35 +1,182 @@
-** 基于心理学引导的高考志愿填报系统 **
+# 招生智脑 · 院校招生管理平台
 
-功能：
-1. 用户画像的精准构建。通过预训练的 对话引导智能体 ，基于心理学知识与话术引导学生表达个人真实追求与愿景，构建深入、真实的用户画像；
-2. 基于真实历史数据与政策的志愿填报辅助。学生上传历史成绩数据、选课和所在区域后，智能分析合适的院校、专业以及地区，实现更加全面、可靠的志愿推荐；
-3. 行业前景分析。结合国家、地区政策，行业发展状况，学生个人兴趣，薪资数据统计，就业情况等，进行专业、行业、就业前景的分析与推荐。
+为高校招生办打造的 B2B SaaS 平台 —— AI 招生顾问替代人工答询，自动画像 + 院校匹配 + 数据分析。
 
-技术核心：
-1. 基于心理学数据的预训练智能体。通过与学生对话引导学生表达；
-2. 基于RAG知识库（是否需要改进？）的数据检索。通过引用真实的政策文件、行业分析报告、市场数据统计、国家与三方机构报告等数据进行更可靠的志愿填报分析；
-3. 基于爬虫+智能体过滤+人工审核的数据收集与清洗系统。通过网络爬虫收集相关数据，由数据审核智能体进行初步筛选（需给定指标，如数据源、时间、内容可靠性判别等），最后由人工审查数据并整理为数据库。需要做成一个可视化集成系统；（用于收集智能体训练数据与知识库数据）
-4. 数据分析的相关算法及智能体（模型）。通过相关算法、模型等，对用户输入的数据进行分析，并与知识库中的数据进行关联，以给出可靠的预测与推荐；
+## 架构
 
-智能体系统架构：
-1. 对话引导智能体。属于面向用户系统。与用户对话挖掘用户隐性需求；
-2. 数据分析智能体。属于面向用户系统。通过对用户数据、信息等进行分析，结合心理学知识进行用户画像构建与标签化，并结合知识库数据给出个性化建议；
+```
+┌─────────────────┐  ┌─────────────────┐
+│   admin-spa      │  │   mini-app       │
+│   React + TS     │  │   uni-app H5     │
+│   管理后台 :3001  │  │   学生端 :3002    │
+└────────┬────────┘  └────────┬────────┘
+         │                    │
+         └──────────┬─────────┘
+                    │ REST + WebSocket
+              ┌─────┴─────┐
+              │  backend   │
+              │  FastAPI   │
+              │  :8000     │
+              └─────┬─────┘
+                    │
+         ┌──────────┼──────────┐
+         │          │          │
+    PostgreSQL  ChromaDB   Redis
+```
 
-3. 数据筛选智能体。属于数据系统，通过硬编码的规则+内容分析，对数据进行筛选、过滤。
-4. 数据清洗智能体。属于数据系统。对经过筛选的数据进行补充与修改，确保数据符合格式、内容、大小等要求（具体根据数据库特性、使用场景等决定）；
-5. 数据审核智能体。属于数据系统。通过智能体程度更高的智能体，对经过筛选的数据进行最终审核，确保其内容准确可靠。
+## 快速启动
 
-系统数据系统架构：
-1. 收集层。基于网络爬虫收集公开数据。（是否有其他途径？）
-2. 过滤层。基于人工硬编码的筛选规则与数据筛选智能体实现的数据审核与筛选。
-3. 清洗层。基于数据清洗智能体对经过筛选的数据进行补充与修改。仍不符合要求的则删去。
-4. 审核层。智能体粗筛+人工精筛，确保最终数据可靠可信。
+```bash
+# 1. 基础设施
+docker compose up -d db redis
 
-面向用户系统架构：
-1. 前端页面管理层。负责前端相关代码，决定系统呈现给用户的效果。可以更改界面风格、元素布局与形态、页面渲染与动画效果等；
-2. 后端功能接口层。负责将前端元素按钮与后端对应功能接口连接起来，可以管理系统提供的功能，进行接口更改，功能更新与扩展等；
+# 2. 后端
+cd backend
+cp ../.env.example .env    # 填写 OPENAI_API_KEY
+uvicorn main:app --host 127.0.0.1 --port 8000
 
-用户数据系统架构：
-1. 用户数据管理层。通过某种可靠加密方式确保云端的用户数据与信息（成绩、家庭情况、住址、用户偏好等）安全不泄露；
-2. 用户数据分析层。基于数据分析智能体对获取的用户信息进行分析并构建用户画像，并结合知识库数据进行个性化报考与规划推荐；
-3. ？？？
+# 3. 管理后台
+cd admin-spa
+npm install && npm run dev -- --port 3001
+
+# 4. 小程序 (学生端)
+cd mini-app
+npm install
+TENANT=scnu node build.config.js && npm run dev:h5 -- --port 3002
+```
+
+访问：管理后台 `http://localhost:3001?tenant=scnu`（演示账号 admin/admin123），学生端 `http://localhost:3002`
+
+## 技术栈
+
+| 子系统 | 语言/框架 | 数据库 | 端口 |
+|--------|----------|--------|------|
+| backend | Python 3.11 / FastAPI / LangGraph | PostgreSQL + ChromaDB + Redis | 8000 |
+| admin-spa | TypeScript / React 19 / Vite / ECharts | — | 3001 |
+| mini-app | Vue 3 / uni-app / WebSocket | — | 3002 |
+
+## 目录结构
+
+```
+├── backend/            # FastAPI 后端
+│   ├── api/routes/     # REST + WebSocket 端点（39 个路由）
+│   ├── agents/         # LangGraph 对话引擎 + B2B Prompt
+│   ├── analytics/      # SQL 聚合分析模块（漏斗/画像/词云/情绪）
+│   ├── core/           # 中间件/Guard/Event/ModuleRegistry
+│   ├── knowledge_base/ # ChromaDB 向量知识库
+│   ├── migrations/     # Alembic 数据库迁移
+│   ├── models/         # SQLAlchemy 模型
+│   ├── schemas/        # Pydantic 请求/响应模式
+│   ├── services/       # 业务逻辑层
+│   ├── tenants/        # 多租户模型 + 中间件
+│   ├── data/           # 种子数据 fixtures
+│   ├── data_pipeline/  # 数据导入管道
+│   └── tests/          # pytest 测试套件
+├── admin-spa/src/
+│   ├── pages/          # 10 个管理页面
+│   ├── components/     # 共享组件（Sidebar/StatusCard/Modal）
+│   ├── api/            # Axios 客户端（自动注入 X-Tenant）
+│   ├── stores/         # Zustand 状态管理
+│   └── hooks/          # 品牌配置 hook
+├── mini-app/src/
+│   ├── pages/          # 聊天/对比/画像页
+│   ├── stores/         # Pinia 状态管理
+│   ├── utils/          # WebSocket 客户端
+│   └── components/     # Vue 组件
+├── scrapers/           # 数据爬虫（7 个数据源）
+├── scripts/            # 运维脚本（种子数据/索引/导入/测试）
+├── data/approved/      # 已审核数据（14 MB）
+├── docker/             # Docker 部署配置
+├── docs/               # 技术文档 + 设计规范
+├── CONVENTIONS.md      # 代码规范 + 完整 API 契约
+└── COLLABORATION.md    # 分支策略 + 并行开发轨道
+```
+
+## 团队分工
+
+| 角色 | 负责 | 目录 |
+|------|------|------|
+| **A: 后端核心** | API 开发、Agent 对话引擎、Analytics、Guard、租户系统、DB 迁移 | `backend/` |
+| **B: 管理后台** | 管理端 10 页面开发、图表、品牌换肤、ECharts | `admin-spa/` |
+| **C: 小程序** | 学生对话端、跨院校对比、WebSocket 连接、Vue 组件 | `mini-app/` |
+| **D: 数据+基础设施** | 爬虫、数据导入/清洗/索引、Docker、CI/CD、测试、文档 | `scrapers/` `scripts/` `docker/` `data/` `docs/` |
+
+### 协作方式
+
+1. **API 先行** ：A 在 `CONVENTIONS.md` 写好接口契约 → B、C 按契约开发前端，无需等后端完成
+2. **分支隔离** ：每人从 `develop` 开出 `feat/<name>` 分支，通过 PR 合并
+3. **每日站会** ：同步阻塞项，更新 `COLLABORATION.md`
+4. **共享数据** ：全部使用 `scnu` 租户数据，`scripts/seed_db.py` 重建测试数据
+
+## 开发流程
+
+```bash
+# 1. 拉取最新
+git checkout develop && git pull
+
+# 2. 创建功能分支
+git checkout -b feat/<your-feature>
+
+# 3. 开发 + 提交
+git add <具体文件>
+git commit -m "feat: <简短描述>"
+
+# 4. 推送并创建 PR
+git push -u origin feat/<your-feature>
+# 在 GitHub 上创建 PR，目标分支 develop
+```
+
+### Commit 规范
+
+```
+feat:    新功能
+fix:     Bug 修复
+refactor: 重构
+chore:   构建/工具/依赖
+docs:    文档
+```
+
+### 分支策略
+
+```
+main ← develop ← feat/*
+        ↑ 保护分支，PR 合入
+```
+
+详细规范见 `COLLABORATION.md`。
+
+## API 概览
+
+全部 39 个端点见 `CONVENTIONS.md`。核心端点：
+
+| 端点 | 用途 | 角色 |
+|------|------|------|
+| `POST /auth/login` | 管理端登录 | B |
+| `GET /admin/analytics/funnel` | 招生漏斗 | B |
+| `GET /admin/analytics/profile-dashboard` | 画像看板 | B |
+| `GET /admin/analytics/topic-cloud` | 关键词词云 | B |
+| `GET /admin/brand-config` | 品牌配置 | B |
+| `GET /admin/ai-persona` | AI 提示词设置 | B |
+| `GET /admin/knowledge/documents` | 知识库文档 | B |
+| `WS /chat/session/{id}?tenant=scnu` | 学生对话 | C |
+| `GET /compare/recommendations` | 跨院校对比 | C |
+| `POST /admin/knowledge/documents` | 文档上传 | D |
+
+## 环境变量
+
+```bash
+# .env（从 .env.example 复制）
+DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/gaokao
+REDIS_URL=redis://localhost:6379/0
+OPENAI_API_KEY=sk-xxx
+SECRET_KEY=your-jwt-secret
+```
+
+## 部署
+
+```bash
+docker compose up -d db redis
+docker build -f docker/Dockerfile.backend -t gaokao-backend .
+docker build -f docker/Dockerfile.frontend -t gaokao-admin-spa .
+docker compose up -d
+```

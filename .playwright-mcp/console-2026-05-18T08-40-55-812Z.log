@@ -1,8 +1,0 @@
-[     148ms] [LOG] [Mini-App] Launching 华南师范大学 (华南师大) @ http://localhost:3002/src/App.vue?t=1779092659266:12
-[     164ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3002/favicon.ico:0
-[     500ms] [ERROR] Access to XMLHttpRequest at 'http://localhost:8000/api/v1/chat/session' from origin 'http://localhost:3002' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:3002/#/:0
-[     502ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:8000/api/v1/chat/session:0
-[   79470ms] [ERROR] WebSocket connection to 'ws://localhost:3002/' failed:  @ http://localhost:3002/@vite/client:508
-[   79470ms] [LOG] [vite] server connection lost. polling for restart... @ http://localhost:3002/@vite/client:528
-[   80558ms] [LOG] [Mini-App] Launching 华南师范大学 (华南师大) @ http://localhost:3002/src/App.vue?t=1779092659266:12
-[   82972ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8000/api/v1/chat/session:0

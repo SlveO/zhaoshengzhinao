@@ -2,17 +2,23 @@ import { useEffect, useRef, useState } from 'react'
 import * as echarts from 'echarts'
 import api from '../api/client'
 import type { ProfileDashboard } from '../types'
+import { mockProfileDashboard } from '../mock/profileDashboard'
 import StatusCard from '../components/StatusCard'
 
 export default function ProfileDashboardPage() {
   const [data, setData] = useState<ProfileDashboard | null>(null)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const radarRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     api.get<ProfileDashboard>('/admin/analytics/profile-dashboard')
-      .then((r) => setData(r.data))
-      .catch((e) => setError(e?.message || '获取数据失败'))
+      .then((r) => setData(r.data ?? null))
+      .catch((e) => {
+        setError(e?.message || '获取数据失败')
+        setData(mockProfileDashboard)
+      })
+      .finally(() => setLoading(false))
   }, [])
 
   useEffect(() => {
@@ -56,7 +62,7 @@ export default function ProfileDashboardPage() {
 
   return (
     <div>
-      <StatusCard loading={!data} error={error}>
+      <StatusCard loading={loading} error={error}>
         {data && (
           <>
             <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(3,1fr)' }}>

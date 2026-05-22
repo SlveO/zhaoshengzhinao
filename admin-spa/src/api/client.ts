@@ -24,7 +24,15 @@ api.interceptors.request.use((config) => {
 })
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Cloudflare Pages _redirects 会劫持 API 请求返回 SPA 的 index.html，
+    // 此时 response.data 是 HTML 字符串而非 JSON 对象，主动 reject 以便
+    // 页面 catch handler 回退到 mock 数据。
+    if (typeof response.data === 'string' && /^\s*<!doctype/i.test(response.data)) {
+      return Promise.reject(new Error('API 不可用，当前为演示模式'))
+    }
+    return response
+  },
   (error) => {
     if (error.response?.status === 401) {
       useAuthStore.getState().logout()
