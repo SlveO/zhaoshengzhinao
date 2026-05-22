@@ -108,11 +108,37 @@ TENANT=scnu node build.config.js && npm run dev:h5 -- --port 3002
 3. **每日站会** ：同步阻塞项，更新 `COLLABORATION.md`
 4. **共享数据** ：全部使用 `scnu` 租户数据，`scripts/seed_db.py` 重建测试数据
 
-## 开发流程
+## Git 协作流程（Fork 模式）
+
+每个团队成员在 GitHub 上 Fork 主仓库到自己的账号，在自己的 Fork 中开发，通过 PR 合并到主仓库。
+
+### 初始设置（每人执行一次）
 
 ```bash
-# 1. 拉取最新
-git checkout develop && git pull
+# 1. 在 GitHub 网页上点击 Fork 按钮，Fork 到自己的账号
+
+# 2. Clone 自己的 Fork 到本地
+git clone git@github.com:<你的用户名>/zhaoshengzhinao.git
+cd zhaoshengzhinao
+
+# 3. 添加主仓库为 upstream，用于同步最新代码
+git remote add upstream https://github.com/SlveO/zhaoshengzhinao.git
+
+# 4. 验证远程仓库配置
+git remote -v
+# origin    git@github.com:<你的用户名>/zhaoshengzhinao.git (fetch)
+# origin    git@github.com:<你的用户名>/zhaoshengzhinao.git (push)
+# upstream  https://github.com/SlveO/zhaoshengzhinao.git (fetch)
+# upstream  https://github.com/SlveO/zhaoshengzhinao.git (push)
+```
+
+### 日常开发流程
+
+```bash
+# 1. 同步主仓库最新代码
+git checkout develop
+git fetch upstream
+git merge upstream/develop
 
 # 2. 创建功能分支
 git checkout -b feat/<your-feature>
@@ -121,9 +147,21 @@ git checkout -b feat/<your-feature>
 git add <具体文件>
 git commit -m "feat: <简短描述>"
 
-# 4. 推送并创建 PR
+# 4. 推送功能分支到自己的 Fork
 git push -u origin feat/<your-feature>
-# 在 GitHub 上创建 PR，目标分支 develop
+
+# 5. 在 GitHub 网页上创建 Pull Request
+#    base repository: SlveO/zhaoshengzhinao  base: develop
+#    head repository: <你的用户名>/zhaoshengzhinao  compare: feat/<your-feature>
+
+# 6. 等待 Code Review，通过后合并
+```
+
+### 分支策略
+
+```
+upstream/main ← upstream/develop ← PR ← origin/feat/*
+                   ↑ 保护分支            ↑ 你的功能分支
 ```
 
 ### Commit 规范
@@ -134,13 +172,6 @@ fix:     Bug 修复
 refactor: 重构
 chore:   构建/工具/依赖
 docs:    文档
-```
-
-### 分支策略
-
-```
-main ← develop ← feat/*
-        ↑ 保护分支，PR 合入
 ```
 
 详细规范见 `COLLABORATION.md`。
