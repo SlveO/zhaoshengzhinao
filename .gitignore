@@ -40,5 +40,11 @@ data/raw/
 .DS_Store
 Thumbs.db
 
-# Large data files that are re-downloadable
+# Stale prototypes — kept locally only
+landing-preview/
+
+# Playwright screenshots
+dashboard-fixed.png
+dashboard-layout-fix.png
+insights-page.png
 *.zip
