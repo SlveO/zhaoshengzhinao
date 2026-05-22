@@ -30,8 +30,11 @@ data/raw/
 # Superpowers session cache
 .superpowers/
 
-# Claude worktrees
-.claude/worktrees/
+# Claude config (local only)
+.claude/
+
+# Docker Compose (local only, each dev has their own)
+docker-compose.yml
 
 # Netlify
 .netlify
