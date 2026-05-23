@@ -3,33 +3,39 @@
     {
       "path": "pages/chat/index",
       "style": {
-        "navigationBarTitleText": "",
-        "navigationBarBackgroundColor": "@primaryColor",
-        "navigationBarTextStyle": "white",
+        "navigationStyle": "custom",
         "disableScroll": true
       }
     },
     {
       "path": "pages/recommendations/index",
       "style": {
-        "navigationBarTitleText": "推荐结果",
-        "navigationBarBackgroundColor": "@primaryColor",
+        "navigationBarTitleText": "报考建议",
+        "navigationBarBackgroundColor": "#1A56DB",
         "navigationBarTextStyle": "white"
       }
     },
     {
-      "path": "pages/compare/index",
+      "path": "pages/school/index",
       "style": {
-        "navigationBarTitleText": "跨院校对比",
-        "navigationBarBackgroundColor": "@primaryColor",
+        "navigationBarTitleText": "学校信息",
+        "navigationBarBackgroundColor": "#1A56DB",
         "navigationBarTextStyle": "white"
       }
     },
     {
       "path": "pages/profile/index",
       "style": {
-        "navigationBarTitleText": "我的画像",
-        "navigationBarBackgroundColor": "@primaryColor",
+        "navigationBarTitleText": "我的咨询档案",
+        "navigationBarBackgroundColor": "#1A56DB",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/compare/index",
+      "style": {
+        "navigationBarTitleText": "专业分析",
+        "navigationBarBackgroundColor": "#1A56DB",
         "navigationBarTextStyle": "white"
       }
     }
@@ -37,8 +43,32 @@
   "globalStyle": {
     "navigationBarTextStyle": "white",
     "navigationBarTitleText": "招生咨询",
-    "navigationBarBackgroundColor": "#1a56db",
-    "backgroundColor": "#f5f5f5"
+    "navigationBarBackgroundColor": "#1A56DB",
+    "backgroundColor": "#F6F8FA"
+  },
+  "tabBar": {
+    "color": "#64748B",
+    "selectedColor": "#1A56DB",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/chat/index",
+        "text": "AI咨询"
+      },
+      {
+        "pagePath": "pages/recommendations/index",
+        "text": "报考建议"
+      },
+      {
+        "pagePath": "pages/school/index",
+        "text": "学校信息"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的"
+      }
+    ]
   },
   "easycom": {
     "autoscan": true,
