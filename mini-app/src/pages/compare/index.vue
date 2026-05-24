@@ -1,602 +1,663 @@
 <template>
-  <view class="compare-page">
-    <!-- Header -->
-    <view class="page-header">
-      <text class="back-btn" @tap="goBack">← 返回</text>
-      <text class="header-title">跨院校对比</text>
-      <text class="compare-toggle" :class="{ active: compareMode }" @tap="toggleCompareMode">
-        {{ compareMode ? '取消' : '对比' }}
-      </text>
+  <view class="analysis-page">
+    <view class="page-bg-light page-bg-left" />
+    <view class="page-bg-light page-bg-right" />
+    <text class="page-watermark">SCNU</text>
+
+    <view class="hero-card">
+      <view class="hero-glow" />
+
+      <view class="hero-content">
+        <text class="eyebrow">华南师范大学</text>
+        <text class="page-title">专业分析</text>
+        <text class="page-subtitle">
+          结合你的分数、科类和兴趣方向，分析本校专业匹配度与报考风险
+        </text>
+        <text class="scope-tip">本页仅用于华师校内专业分析，不展示其他高校</text>
+        <text v-if="hasSession" class="session-note-light">
+          已关联当前咨询会话
+        </text>
+      </view>
     </view>
 
-    <!-- Loading -->
-    <view v-if="loading" class="status-area">
-      <text class="status-text">正在分析跨院校匹配...</text>
-    </view>
-
-    <!-- Error -->
-    <view v-else-if="error" class="status-area">
-      <text class="error-text">{{ error }}</text>
-      <button class="retry-btn" @tap="fetchData">重试</button>
-    </view>
-
-    <!-- Empty -->
-    <view v-else-if="!recommendations.length" class="status-area">
-      <text class="empty-icon">📊</text>
-      <text class="empty-text">暂无跨院校对比数据</text>
-      <text class="empty-hint">完成画像后将展示不同院校的匹配结果</text>
-      <button class="back-btn" @tap="goBack">返回对话</button>
-    </view>
-
-    <!-- Compare panel (side-by-side) -->
-    <view v-if="compareMode && selectedSlugs.length > 0" class="compare-panel">
-      <scroll-view class="compare-scroll" scroll-x>
-        <view class="compare-row">
-          <view
-            v-for="slug in selectedSlugs"
-            :key="slug"
-            class="compare-college"
-          >
-            <text class="cc-name">{{ getRecBySlug(slug)?.tenant_name }}</text>
-            <text class="cc-score">匹配 {{ getRecBySlug(slug)?.match_score }}%</text>
-            <view
-              v-for="(major, mi) in getRecBySlug(slug)?.majors || []"
-              :key="mi"
-              class="cc-major"
-            >
-              <text class="cc-major-name">{{ major.major_name }}</text>
-              <text class="cc-major-meta">分数: {{ major.min_score }} | 位次: {{ major.min_rank }}</text>
-              <text class="cc-major-meta">{{ major.level }} · {{ major.city }}</text>
-            </view>
-          </view>
+    <view class="student-card glass-card">
+      <view class="section-header">
+        <view>
+          <text class="section-title">学生咨询档案</text>
+          <text class="section-subtitle">根据当前演示数据生成</text>
         </view>
-      </scroll-view>
-      <text class="compare-hint">← 左右滑动查看更多 →</text>
-    </view>
+        <text class="status-badge">演示</text>
+      </view>
 
-    <!-- College card list -->
-    <scroll-view v-else class="card-list" scroll-y>
-      <view
-        v-for="rec in recommendations"
-        :key="rec.tenant_slug"
-        class="college-card"
-        :class="{
-          expanded: expandedSlug === rec.tenant_slug,
-          selected: selectedSlugs.includes(rec.tenant_slug),
-        }"
-      >
-        <!-- Card header -->
-        <view class="card-header" @tap="toggleExpand(rec.tenant_slug)">
-          <view class="card-left">
-            <view class="checkbox-dot" v-if="compareMode" @tap.stop="toggleSelect(rec.tenant_slug)">
-              <text v-if="selectedSlugs.includes(rec.tenant_slug)">✓</text>
-            </view>
-            <view class="card-info">
-              <text class="card-name">{{ rec.tenant_name }}</text>
-              <text class="card-hint">点击查看专业详情</text>
-            </view>
-          </view>
-          <view class="card-right">
-            <view class="score-ring">
-              <text class="score-num">{{ rec.match_score }}</text>
-              <text class="score-unit">%</text>
-            </view>
-            <text class="score-label">匹配度</text>
-          </view>
+      <view class="student-grid">
+        <view class="student-item">
+          <text class="item-label">生源地</text>
+          <text class="item-value">{{ studentInfo.province }}</text>
         </view>
 
-        <!-- Top 3 majors preview (always visible) -->
-        <view class="major-preview">
-          <view
-            v-for="(major, mi) in rec.majors"
-            :key="mi"
-            class="preview-row"
-          >
-            <text class="preview-rank">{{ mi + 1 }}</text>
-            <text class="preview-name">{{ major.major_name }}</text>
-            <text class="preview-score">{{ major.min_score }}分</text>
-          </view>
+        <view class="student-item">
+          <text class="item-label">科类</text>
+          <text class="item-value">{{ studentInfo.subject_type }}</text>
         </view>
 
-        <!-- Expanded major details -->
-        <view v-if="expandedSlug === rec.tenant_slug" class="major-details">
-          <view
-            v-for="(major, mi) in rec.majors"
-            :key="mi"
-            class="detail-block"
-          >
-            <text class="detail-title">{{ major.major_name }}</text>
-            <view class="detail-grid">
-              <view class="detail-item">
-                <text class="detail-label">院校</text>
-                <text class="detail-value">{{ major.college_name }}</text>
-              </view>
-              <view class="detail-item">
-                <text class="detail-label">层次</text>
-                <text class="detail-value">{{ major.level }}</text>
-              </view>
-              <view class="detail-item">
-                <text class="detail-label">城市</text>
-                <text class="detail-value">{{ major.city }}</text>
-              </view>
-              <view class="detail-item">
-                <text class="detail-label">最低分数</text>
-                <text class="detail-value">{{ major.min_score }}</text>
-              </view>
-              <view class="detail-item">
-                <text class="detail-label">最低位次</text>
-                <text class="detail-value">{{ major.min_rank }}</text>
-              </view>
-              <view class="detail-item">
-                <text class="detail-label">选科要求</text>
-                <text class="detail-value">{{ major.subjects || '不限' }}</text>
-              </view>
-            </view>
-          </view>
+        <view class="student-item">
+          <text class="item-label">分数</text>
+          <text class="item-value score">{{ studentInfo.score }} 分</text>
+        </view>
+
+        <view class="student-item wide">
+          <text class="item-label">意向方向</text>
+          <text class="item-value">{{ intentMajorsText }}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="major-card glass-card">
+      <view class="major-header">
+        <view class="major-title-wrap">
+          <text class="major-name">{{ currentMajor.name }}</text>
+          <text class="school-name">所属学校：华南师范大学</text>
+        </view>
+
+        <view class="match-badge">
+          <text class="match-number">{{ currentMajor.match_score }}</text>
+          <text class="match-label">匹配度</text>
         </view>
       </view>
 
-      <view v-if="recommendations.length" class="list-footer">
-        <text class="footer-text">共 {{ recommendations.length }} 所院校参与对比</text>
+      <view class="risk-row">
+        <text class="risk-tag" :class="riskClass">
+          {{ currentMajor.risk_label }}
+        </text>
+        <text class="risk-text">报考参考：{{ currentMajor.risk_label }}</text>
       </view>
-    </scroll-view>
 
-    <!-- Compare action bar -->
-    <view v-if="compareMode && selectedSlugs.length > 0" class="compare-bar">
-      <text class="compare-count">已选 {{ selectedSlugs.length }}/3 所</text>
-      <button
-        class="compare-start-btn"
-        :disabled="selectedSlugs.length < 2"
-        @tap="startCompare"
-      >
-        开始对比
-      </button>
+      <view class="core-grid">
+        <view class="core-item">
+          <text class="core-label">参考最低分</text>
+          <text class="core-value">{{ currentMajor.min_score }} 分</text>
+        </view>
+
+        <view class="core-item">
+          <text class="core-label">参考最低位次</text>
+          <text class="core-value">{{ currentMajor.min_rank }}</text>
+        </view>
+
+        <view class="core-item wide">
+          <text class="core-label">选科要求</text>
+          <text class="core-value">{{ currentMajor.subjects }}</text>
+        </view>
+      </view>
     </view>
+
+    <view class="analysis-card glass-card">
+      <view class="analysis-section">
+        <text class="analysis-title">为什么适合你</text>
+
+        <view
+          v-for="item in currentMajor.fit_reasons"
+          :key="item"
+          class="analysis-line"
+        >
+          <text class="analysis-dot" />
+          <text class="analysis-text">{{ item }}</text>
+        </view>
+      </view>
+
+      <view class="analysis-section">
+        <text class="analysis-title">报考风险说明</text>
+        <text class="paragraph-text">{{ currentMajor.risk_desc }}</text>
+      </view>
+
+      <view class="analysis-section">
+        <text class="analysis-title">建议关注点</text>
+
+        <view class="chip-list">
+          <text
+            v-for="item in currentMajor.focus_points"
+            :key="item"
+            class="focus-chip"
+          >
+            {{ item }}
+          </text>
+        </view>
+      </view>
+
+      <view class="analysis-section last">
+        <text class="analysis-title">后续咨询建议</text>
+        <text class="paragraph-text">
+          你可以继续向 AI 咨询该专业的课程设置、培养方向、近年录取参考、就业去向和所在学院情况。
+        </text>
+      </view>
+    </view>
+
+    <button class="ask-btn" @tap="goChat">
+      继续问 AI
+    </button>
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
-import { onLoad } from "@dcloudio/uni-app";
-import { compareApi } from "@/utils/api";
+import { computed, ref } from "vue"
+import { onLoad } from "@dcloudio/uni-app"
+import { mockStudentInfo } from "@/mock/student"
+import { getStoredSessionId } from "@/utils/session"
 
-interface MajorMeta {
-  college_name: string;
-  major_name: string;
-  level: string;
-  province: string;
-  city: string;
-  min_rank: number;
-  min_score: number;
-  subjects: string;
-  source_url: string;
+interface MajorAnalysis {
+  name: string
+  match_score: number
+  risk_label: "可冲" | "较匹配" | "较稳妥"
+  min_score: number
+  min_rank: string
+  subjects: string
+  fit_reasons: string[]
+  risk_desc: string
+  focus_points: string[]
 }
 
-interface CompareRec {
-  tenant_slug: string;
-  tenant_name: string;
-  majors: MajorMeta[];
-  match_score: number;
+interface PageQuery {
+  major?: string
 }
 
-const recommendations = ref<CompareRec[]>([]);
-const loading = ref(true);
-const error = ref("");
-const expandedSlug = ref("");
-const compareMode = ref(false);
-const selectedSlugs = ref<string[]>([]);
-const profileSnapshot = ref<string | null>(null);
+const studentInfo = mockStudentInfo
+const selectedMajorName = ref("人工智能")
+const sessionId = ref<string | null>(null)
 
-onLoad((options: any) => {
-  if (options?.profile_snapshot) {
-    profileSnapshot.value = decodeURIComponent(options.profile_snapshot);
+const hasSession = computed(() => Boolean(sessionId.value))
+
+const majorAnalysisMap: Record<string, MajorAnalysis> = {
+  人工智能: {
+    name: "人工智能",
+    match_score: 92,
+    risk_label: "可冲",
+    min_score: 589,
+    min_rank: "34,000",
+    subjects: "物理+不限",
+    fit_reasons: [
+      "你的意向方向包含计算机与人工智能，和该专业培养方向高度相关",
+      "该专业适合对算法、编程、智能系统和数据应用感兴趣的学生",
+      "你的演示分数接近该专业参考区间，可以作为重点关注方向"
+    ],
+    risk_desc:
+      "该专业热度较高，竞争相对更强。当前演示分数与参考最低分较接近，建议结合当年招生计划、专业组设置和最低位次综合判断。",
+    focus_points: ["算法基础", "编程能力", "智能系统", "专业组计划"]
+  },
+
+  软件工程: {
+    name: "软件工程",
+    match_score: 88,
+    risk_label: "较匹配",
+    min_score: 582,
+    min_rank: "38,200",
+    subjects: "物理+不限",
+    fit_reasons: [
+      "该专业更强调工程实践、系统开发和项目落地",
+      "适合喜欢编程实践、软件开发和团队项目的学生",
+      "与当前分数和计算机方向兴趣匹配度较高"
+    ],
+    risk_desc:
+      "该专业整体匹配度较高，但仍需关注当年招生计划和专业组变化。建议同时了解课程体系、培养模式和就业方向。",
+    focus_points: ["工程实践", "项目开发", "课程体系", "就业方向"]
+  },
+
+  数据科学与大数据技术: {
+    name: "数据科学与大数据技术",
+    match_score: 84,
+    risk_label: "较稳妥",
+    min_score: 575,
+    min_rank: "42,100",
+    subjects: "物理+不限",
+    fit_reasons: [
+      "该专业关注数据分析、数据平台和智能决策应用",
+      "适合希望结合计算机技术和行业数据应用的学生",
+      "在演示条件下可作为本校专业组合中的稳妥选择"
+    ],
+    risk_desc:
+      "该专业参考风险相对更稳，但仍建议结合个人兴趣和长期发展方向判断。可以继续了解课程内容和就业场景。",
+    focus_points: ["数据分析", "数据库", "行业应用", "培养方向"]
   }
-});
-
-function getRecBySlug(slug: string): CompareRec | undefined {
-  return recommendations.value.find((r) => r.tenant_slug === slug);
 }
 
-async function fetchData(): Promise<void> {
-  loading.value = true;
-  error.value = "";
+const currentMajor = computed<MajorAnalysis>(() => {
+  return majorAnalysisMap[selectedMajorName.value] || majorAnalysisMap["人工智能"]
+})
+
+const intentMajorsText = computed(() => studentInfo.intent_majors.join(" / "))
+
+const riskClass = computed(() => {
+  if (currentMajor.value.risk_label === "可冲") return "risk-reach"
+  if (currentMajor.value.risk_label === "较匹配") return "risk-match"
+  if (currentMajor.value.risk_label === "较稳妥") return "risk-safe"
+  return "risk-match"
+})
+
+onLoad((query: PageQuery = {}) => {
+  sessionId.value = getStoredSessionId()
+
+  const majorName = normalizeMajorName(query.major)
+
+  if (majorName && majorAnalysisMap[majorName]) {
+    selectedMajorName.value = majorName
+  }
+
+  /**
+   * 后续真实后端接入时：
+   * 使用 session_id + major 请求本校专业分析详情。
+   * 当前阶段继续展示本地 mock 内容。
+   */
+})
+
+function normalizeMajorName(major?: string): string {
+  if (!major) return ""
+
   try {
-    const res = await compareApi.getRecommendations(profileSnapshot.value);
-    if (res.data) {
-      recommendations.value = res.data.recommendations || [];
-    }
-  } catch (e: any) {
-    error.value = e?.message || "获取对比数据失败";
-  } finally {
-    loading.value = false;
+    return decodeURIComponent(major)
+  } catch (error) {
+    return major
   }
 }
 
-function toggleExpand(slug: string): void {
-  expandedSlug.value = expandedSlug.value === slug ? "" : slug;
+function goChat(): void {
+  uni.switchTab({
+    url: "/pages/chat/index"
+  })
 }
-
-function toggleCompareMode(): void {
-  compareMode.value = !compareMode.value;
-  if (!compareMode.value) {
-    selectedSlugs.value = [];
-    expandedSlug.value = "";
-  }
-}
-
-function toggleSelect(slug: string): void {
-  const idx = selectedSlugs.value.indexOf(slug);
-  if (idx >= 0) {
-    selectedSlugs.value.splice(idx, 1);
-  } else if (selectedSlugs.value.length < 3) {
-    selectedSlugs.value.push(slug);
-  } else {
-    uni.showToast({ title: "最多选择3所院校", icon: "none" });
-  }
-}
-
-function startCompare(): void {
-  if (selectedSlugs.value.length < 2) {
-    uni.showToast({ title: "请至少选择2所院校", icon: "none" });
-    return;
-  }
-  // The compare panel is shown in the template when compareMode && selectedSlugs.length > 0
-}
-
-function goBack(): void {
-  uni.navigateBack();
-}
-
-onMounted(() => {
-  fetchData();
-});
 </script>
 
 <style scoped>
-.compare-page {
+.analysis-page {
+  position: relative;
   min-height: 100vh;
-  background: #f5f5f5;
+  padding: 24rpx 24rpx 42rpx;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #f6f8fa 0%, #eaf4ff 100%);
+  overflow: hidden;
+}
+
+.page-bg-light {
+  position: absolute;
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.page-bg-left {
+  top: 160rpx;
+  left: -180rpx;
+  width: 480rpx;
+  height: 480rpx;
+  background: radial-gradient(
+    circle,
+    rgba(147, 197, 253, 0.24) 0%,
+    rgba(147, 197, 253, 0) 68%
+  );
+}
+
+.page-bg-right {
+  right: -230rpx;
+  bottom: 220rpx;
+  width: 580rpx;
+  height: 580rpx;
+  background: radial-gradient(
+    circle,
+    rgba(191, 219, 254, 0.34) 0%,
+    rgba(191, 219, 254, 0) 70%
+  );
+}
+
+.page-watermark {
+  position: absolute;
+  top: 420rpx;
+  right: -10rpx;
+  color: rgba(37, 99, 235, 0.04);
+  font-size: 126rpx;
+  font-weight: 900;
+  letter-spacing: 10rpx;
+  z-index: 0;
+}
+
+.hero-card,
+.glass-card,
+.ask-btn {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-card {
+  position: relative;
+  min-height: 250rpx;
+  padding: 34rpx 30rpx;
+  border-radius: 36rpx;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(26, 86, 219, 0.92) 0%,
+    rgba(37, 99, 235, 0.78) 58%,
+    rgba(96, 165, 250, 0.62) 100%
+  );
+  box-shadow: 0 18rpx 46rpx rgba(37, 99, 235, 0.18);
+}
+
+.hero-glow {
+  position: absolute;
+  right: -120rpx;
+  bottom: -170rpx;
+  width: 380rpx;
+  height: 320rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
 }
 
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 16px;
-  background: var(--brand-primary, #1a56db);
-}
-.back-btn {
-  font-size: 14px;
-  color: #fff;
-}
-.header-title {
-  font-size: 17px;
-  font-weight: 600;
-  color: #fff;
-}
-.compare-toggle {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
-  padding: 4px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 14px;
-}
-.compare-toggle.active {
-  background: #fff;
-  color: var(--brand-primary, #1a56db);
-  border-color: #fff;
+.eyebrow {
+  align-self: flex-start;
+  margin-bottom: 12rpx;
+  padding: 7rpx 16rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.18);
+  color: #dbeafe;
+  font-size: 23rpx;
+  line-height: 1.35;
 }
 
-/* Status areas */
-.status-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  padding: 32px;
-}
-.status-text {
-  font-size: 15px;
-  color: #999;
-}
-.error-text {
-  font-size: 15px;
-  color: #ef4444;
-  margin-bottom: 16px;
-  text-align: center;
-}
-.empty-icon {
-  font-size: 48px;
-  margin-bottom: 12px;
-}
-.empty-text {
-  font-size: 17px;
-  color: #333;
-  margin-bottom: 8px;
-}
-.empty-hint {
-  font-size: 13px;
-  color: #999;
-  text-align: center;
-  line-height: 1.6;
-}
-.retry-btn,
-.back-btn {
-  margin-top: 16px;
-  padding: 8px 24px;
-  border-radius: 20px;
-  background: var(--brand-primary, #1a56db);
-  color: #fff;
-  font-size: 14px;
-  border: none;
+.page-title {
+  color: #ffffff;
+  font-size: 42rpx;
+  font-weight: 800;
+  line-height: 1.28;
 }
 
-/* Compare panel */
-.compare-panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.compare-scroll {
-  flex: 1;
-  white-space: nowrap;
-}
-.compare-row {
-  display: inline-flex;
-  gap: 12px;
-  padding: 16px;
-}
-.compare-college {
-  width: 260px;
-  background: #fff;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  display: inline-flex;
-  flex-direction: column;
-  white-space: normal;
-}
-.cc-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 4px;
-}
-.cc-score {
-  font-size: 13px;
-  color: var(--brand-primary, #1a56db);
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-.cc-major {
-  padding: 8px 0;
-  border-top: 1px solid #f0f0f0;
-}
-.cc-major-name {
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  display: block;
-  margin-bottom: 4px;
-}
-.cc-major-meta {
-  font-size: 12px;
-  color: #999;
-  display: block;
-  line-height: 1.6;
-}
-.compare-hint {
-  text-align: center;
-  font-size: 12px;
-  color: #ccc;
-  padding: 8px 0 16px;
+.page-subtitle {
+  margin-top: 12rpx;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 25rpx;
+  line-height: 1.62;
 }
 
-/* Card list */
-.card-list {
-  flex: 1;
-  padding: 12px 16px;
-}
-.college-card {
-  background: #fff;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  padding: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  transition: box-shadow 0.2s;
-}
-.college-card.expanded {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-.college-card.selected {
-  border: 2px solid var(--brand-primary, #1a56db);
+.scope-tip,
+.session-note-light {
+  align-self: flex-start;
+  margin-top: 16rpx;
+  padding: 9rpx 18rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.2);
+  color: #eef6ff;
+  font-size: 23rpx;
+  line-height: 1.35;
 }
 
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+.session-note-light {
+  margin-top: 12rpx;
 }
-.card-left {
+
+.glass-card {
+  border: 1rpx solid rgba(255, 255, 255, 0.78);
+  border-radius: 32rpx;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 16rpx 40rpx rgba(15, 23, 42, 0.08);
+}
+
+.student-card,
+.major-card,
+.analysis-card {
+  margin-top: 24rpx;
+  padding: 28rpx;
+}
+
+.section-header,
+.major-header {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  flex: 1;
-}
-.checkbox-dot {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid #ddd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  color: var(--brand-primary, #1a56db);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.college-card.selected .checkbox-dot {
-  background: var(--brand-primary, #1a56db);
-  border-color: var(--brand-primary, #1a56db);
-  color: #fff;
-}
-.card-info {
-  flex: 1;
-}
-.card-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  display: block;
-  margin-bottom: 2px;
-}
-.card-hint {
-  font-size: 11px;
-  color: #bbb;
+  justify-content: space-between;
 }
 
-.card-right {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-shrink: 0;
+.section-title {
+  display: block;
+  color: #0f172a;
+  font-size: 32rpx;
+  font-weight: 800;
+  line-height: 1.35;
 }
-.score-ring {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--brand-primary, #1a56db), #6366f1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+
+.section-subtitle {
+  display: block;
+  margin-top: 6rpx;
+  color: #64748b;
+  font-size: 24rpx;
+  line-height: 1.45;
 }
-.score-num {
-  font-size: 16px;
+
+.status-badge {
+  padding: 7rpx 15rpx;
+  border-radius: 999rpx;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 22rpx;
   font-weight: 700;
-  color: #fff;
-  line-height: 1;
-}
-.score-unit {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1;
-}
-.score-label {
-  font-size: 11px;
-  color: #999;
-  margin-top: 4px;
 }
 
-/* Major preview */
-.major-preview {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid #f5f5f5;
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14rpx;
+  margin-top: 22rpx;
 }
-.preview-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 0;
+
+.student-item,
+.core-item {
+  padding: 18rpx;
+  border-radius: 24rpx;
+  background: #f8fbff;
+  box-sizing: border-box;
 }
-.preview-rank {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #f0f0f0;
-  font-size: 11px;
-  color: #999;
+
+.student-item.wide {
+  grid-column: span 3;
+}
+
+.item-label,
+.core-label {
+  display: block;
+  color: #64748b;
+  font-size: 22rpx;
+  line-height: 1.35;
+}
+
+.item-value,
+.core-value {
+  display: block;
+  margin-top: 8rpx;
+  color: #0f172a;
+  font-size: 27rpx;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.score {
+  color: #1d4ed8;
+}
+
+.major-title-wrap {
+  flex: 1;
+  min-width: 0;
+  padding-right: 20rpx;
+}
+
+.major-name {
+  display: block;
+  color: #0f172a;
+  font-size: 38rpx;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.school-name {
+  display: block;
+  margin-top: 8rpx;
+  color: #64748b;
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
+.match-badge {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 32rpx;
+  background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+  box-shadow: 0 10rpx 22rpx rgba(37, 99, 235, 0.08);
   flex-shrink: 0;
 }
-.preview-name {
-  flex: 1;
-  font-size: 13px;
-  color: #555;
-}
-.preview-score {
-  font-size: 12px;
-  color: #999;
+
+.match-number {
+  color: #1d4ed8;
+  font-size: 36rpx;
+  font-weight: 900;
+  line-height: 1;
 }
 
-/* Major details */
-.major-details {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px dashed #eee;
+.match-label {
+  margin-top: 7rpx;
+  color: #64748b;
+  font-size: 20rpx;
+  line-height: 1;
 }
-.detail-block {
-  margin-bottom: 12px;
+
+.risk-row {
+  display: flex;
+  align-items: center;
+  margin-top: 22rpx;
 }
-.detail-block:last-child {
+
+.risk-tag {
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+  font-size: 23rpx;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.risk-reach {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.risk-match {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.risk-safe {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.risk-text {
+  margin-left: 12rpx;
+  color: #64748b;
+  font-size: 23rpx;
+}
+
+.core-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14rpx;
+  margin-top: 22rpx;
+}
+
+.core-item.wide {
+  grid-column: span 2;
+}
+
+.analysis-section {
+  padding-bottom: 24rpx;
+  margin-bottom: 24rpx;
+  border-bottom: 1rpx solid rgba(226, 232, 240, 0.8);
+}
+
+.analysis-section.last {
+  padding-bottom: 0;
   margin-bottom: 0;
+  border-bottom: none;
 }
-.detail-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--brand-primary, #1a56db);
+
+.analysis-title {
   display: block;
-  margin-bottom: 8px;
+  color: #0f172a;
+  font-size: 30rpx;
+  font-weight: 900;
+  line-height: 1.35;
 }
-.detail-grid {
+
+.analysis-line {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 16rpx;
+}
+
+.analysis-dot {
+  width: 9rpx;
+  height: 9rpx;
+  margin-top: 15rpx;
+  margin-right: 12rpx;
+  border-radius: 50%;
+  background: #60a5fa;
+  flex-shrink: 0;
+}
+
+.analysis-text,
+.paragraph-text {
+  color: #334155;
+  font-size: 25rpx;
+  line-height: 1.68;
+}
+
+.paragraph-text {
+  display: block;
+  margin-top: 14rpx;
+}
+
+.chip-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 0;
-}
-.detail-item {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-}
-.detail-label {
-  font-size: 11px;
-  color: #bbb;
-}
-.detail-value {
-  font-size: 13px;
-  color: #333;
+  margin-top: 16rpx;
 }
 
-/* List footer */
-.list-footer {
-  text-align: center;
-  padding: 16px 0 24px;
-}
-.footer-text {
-  font-size: 12px;
-  color: #ccc;
+.focus-chip {
+  margin-right: 12rpx;
+  margin-bottom: 12rpx;
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  background: rgba(239, 246, 255, 0.9);
+  color: #1d4ed8;
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
-/* Compare action bar */
-.compare-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background: #fff;
-  border-top: 1px solid #eee;
-  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+.ask-btn {
+  height: 82rpx;
+  margin-top: 28rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(135deg, #5b8df6 0%, #2563eb 100%);
+  color: #ffffff;
+  font-size: 29rpx;
+  font-weight: 800;
+  line-height: 82rpx;
+  box-shadow: 0 14rpx 28rpx rgba(37, 99, 235, 0.18);
 }
-.compare-count {
-  font-size: 14px;
-  color: #666;
-}
-.compare-start-btn {
-  padding: 8px 24px;
-  border-radius: 20px;
-  background: var(--brand-primary, #1a56db);
-  color: #fff;
-  font-size: 14px;
+
+.ask-btn::after {
   border: none;
-}
-.compare-start-btn[disabled] {
-  opacity: 0.4;
 }
 </style>
