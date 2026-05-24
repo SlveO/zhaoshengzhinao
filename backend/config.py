@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     deepseek_model: str = "deepseek-v4-flash"
     embedding_model: str = "BAAI/bge-large-zh-v1.5"
     chroma_persist_dir: str = "./chroma_data"
+    cors_origins: str = "http://localhost:5173,http://localhost:3000,http://localhost:3001,http://localhost:3002"
 
     class Config:
         env_file = ".env"

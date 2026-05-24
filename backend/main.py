@@ -102,15 +102,10 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="招生智脑 API", version="2.0.0", lifespan=lifespan)
 
-# CORS (allow admin SPA dev + mini-app dev origins)
+# CORS (allow local dev + Cloudflare Pages production origins)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://localhost:3002",
-    ],
+    allow_origins=[o.strip() for o in settings.cors_origins.split(",")],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
