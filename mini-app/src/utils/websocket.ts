@@ -61,7 +61,7 @@ export class WebSocketManager {
     this.setStatus(this.reconnectAttempts > 0 ? "reconnecting" : "connecting");
 
     // Use native WebSocket (uni.connectSocket broken in H5 mode)
-    const wsUrl = `${WS_BASE}/chat/session/${this.sessionId}?tenant=${TENANT_SLUG}`;
+    const wsUrl = `${WS_BASE}/chat/session/${this.sessionId}?tenant=${encodeURIComponent(TENANT_SLUG)}`;
     const ws = new WebSocket(wsUrl);
     this.socket = ws;
 

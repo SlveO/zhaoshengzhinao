@@ -18,6 +18,32 @@ function getToken(): string | null {
   }
 }
 
+function getRefreshToken(): string | null {
+  try {
+    return uni.getStorageSync("refresh_token") || null;
+  } catch {
+    return null;
+  }
+}
+
+function saveTokens(access: string, refresh: string): void {
+  try {
+    uni.setStorageSync("token", access);
+    uni.setStorageSync("refresh_token", refresh);
+  } catch {
+    // storage full or unavailable
+  }
+}
+
+function clearTokens(): void {
+  try {
+    uni.removeStorageSync("token");
+    uni.removeStorageSync("refresh_token");
+  } catch {
+    // ignore
+  }
+}
+
 function buildHeaders(): Record<string, string> {
   const headers: Record<string, string> = {
     "X-Tenant": TENANT_SLUG,
@@ -30,10 +56,45 @@ function buildHeaders(): Record<string, string> {
   return headers;
 }
 
+let _refreshPromise: Promise<string | null> | null = null;
+
+async function tryRefreshToken(): Promise<string | null> {
+  if (_refreshPromise) return _refreshPromise;
+
+  _refreshPromise = (async () => {
+    const refreshToken = getRefreshToken();
+    if (!refreshToken) return null;
+    try {
+      const body = await new Promise<ApiResponse<{ access_token: string }>>((resolve, reject) => {
+        uni.request({
+          url: `${BASE_URL}/auth/refresh`,
+          method: "POST",
+          data: { refresh_token: refreshToken },
+          header: { "Content-Type": "application/json", "X-Tenant": TENANT_SLUG },
+          success: (res: any) => resolve(res.data),
+          fail: (err: any) => reject(err),
+        });
+      });
+      if (body.data?.access_token) {
+        uni.setStorageSync("token", body.data.access_token);
+        return body.data.access_token;
+      }
+      return null;
+    } catch {
+      return null;
+    } finally {
+      _refreshPromise = null;
+    }
+  })();
+
+  return _refreshPromise;
+}
+
 async function request<T = any>(
   method: "GET" | "POST" | "PUT" | "DELETE",
   path: string,
-  data?: any
+  data?: any,
+  retry = true,
 ): Promise<ApiResponse<T>> {
   return new Promise((resolve, reject) => {
     uni.request({
@@ -41,10 +102,18 @@ async function request<T = any>(
       method,
       data,
       header: buildHeaders(),
-      success: (res: any) => {
+      success: async (res: any) => {
         const body = res.data as ApiResponse<T>;
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve(body);
+        } else if (res.statusCode === 401 && retry) {
+          const newToken = await tryRefreshToken();
+          if (newToken) {
+            resolve(request<T>(method, path, data, false));
+          } else {
+            clearTokens();
+            reject(body.error || { code: "AUTH_EXPIRED", message: "登录已过期，请重新登录" });
+          }
         } else {
           reject(body.error || { code: "HTTP_ERROR", message: `Status ${res.statusCode}` });
         }
@@ -70,11 +139,22 @@ export const chatApi = {
 };
 
 export const authApi = {
-  register: (data: { username: string; password: string; region?: string; score?: number; subjects?: string }) =>
-    api.post<{ access_token: string; refresh_token: string; user_id: string; username: string }>("/auth/register", data),
-  login: (data: { username: string; password: string }) =>
-    api.post<{ access_token: string; refresh_token: string; user_id: string; username: string }>("/auth/login", data),
+  register: async (data: { username: string; password: string; region?: string; score?: number; subjects?: string }) => {
+    const result = await api.post<{ access_token: string; refresh_token: string; user_id: string; username: string }>("/auth/register", data);
+    if (result.data?.access_token && result.data?.refresh_token) {
+      saveTokens(result.data.access_token, result.data.refresh_token);
+    }
+    return result;
+  },
+  login: async (data: { username: string; password: string }) => {
+    const result = await api.post<{ access_token: string; refresh_token: string; user_id: string; username: string }>("/auth/login", data);
+    if (result.data?.access_token && result.data?.refresh_token) {
+      saveTokens(result.data.access_token, result.data.refresh_token);
+    }
+    return result;
+  },
   refresh: () => api.post<{ access_token: string }>("/auth/refresh"),
+  logout: () => { clearTokens(); },
 };
 
 export const recommendationsApi = {
@@ -82,7 +162,7 @@ export const recommendationsApi = {
     const qs = params ? `?${new URLSearchParams(params as any).toString()}` : "";
     return api.get(`/recommendations${qs}`);
   },
-  submitFeedback: (data: { recommendation_id: string; rating: number; comment?: string }) =>
+  submitFeedback: (data: { college_name: string; major_name: string; feedback_type: string }) =>
     api.post("/recommendations/feedback", data),
 };
 

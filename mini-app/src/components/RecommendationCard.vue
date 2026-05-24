@@ -35,10 +35,10 @@
     </view>
 
     <view class="card-actions">
-      <button class="btn-like" @tap="$emit('feedback', { recommendation_id: rec.id, rating: 1 })">
+      <button class="btn-like" @tap="$emit('feedback', { college_name: rec.college_name || '华南师范大学', major_name: rec.major_name, feedback_type: 'useful' })">
         👍 有用
       </button>
-      <button class="btn-dislike" @tap="$emit('feedback', { recommendation_id: rec.id, rating: -1 })">
+      <button class="btn-dislike" @tap="$emit('feedback', { college_name: rec.college_name || '华南师范大学', major_name: rec.major_name, feedback_type: 'not_relevant' })">
         👎 不感兴趣
       </button>
     </view>
@@ -59,7 +59,7 @@ defineProps<{
 }>();
 
 defineEmits<{
-  feedback: [data: { recommendation_id: string; rating: number }];
+  feedback: [data: { college_name: string; major_name: string; feedback_type: string }];
 }>();
 </script>
 
