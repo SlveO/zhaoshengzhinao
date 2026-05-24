@@ -107,8 +107,7 @@
 import { nextTick, onUnmounted, ref } from "vue"
 import { onLoad } from "@dcloudio/uni-app"
 import { getStoredSessionId, saveSessionId } from "@/utils/session"
-
-const TENANT_SLUG = "scnu"
+import { TENANT_SLUG } from "@/utils/config"
 
 interface ChatMessageItem {
   id: string
