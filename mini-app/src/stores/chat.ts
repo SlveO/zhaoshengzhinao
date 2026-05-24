@@ -63,12 +63,13 @@ export const useChatStore = defineStore("chat", () => {
     });
 
     unsubProfileUpdate = wsManager.on("profile_update", (data: any) => {
-      if (data.riasec) {
+      const riasec = data.value?.riasec || data.riasec;
+      if (riasec) {
         profile.value = {
-          riasec: data.riasec,
-          values: data.values || [],
+          riasec,
+          values: data.value?.values || data.values || [],
           confidence: data.confidence || 0,
-          completeness: data.completeness || "L1",
+          completeness: data.value?.completeness || data.completeness || "L1",
         };
       }
     });
@@ -123,7 +124,15 @@ export const useChatStore = defineStore("chat", () => {
       timestamp: Date.now(),
     });
 
-    wsManager.send(content);
+    const sent = wsManager.send(content);
+    if (!sent) {
+      messages.value.push({
+        id: `sys-${Date.now()}`,
+        role: "assistant",
+        content: "连接已断开，请检查网络后重试。",
+        timestamp: Date.now(),
+      });
+    }
   }
 
   function disconnect(): void {

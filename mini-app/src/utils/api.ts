@@ -3,7 +3,7 @@ import { TENANT_SLUG } from "./config";
 const BASE_URL =
   process.env.NODE_ENV === "development"
     ? "http://localhost:8000/api/v1"
-    : "/api/v1";
+    : (import.meta.env.VITE_API_BASE_URL as string) || "/api/v1";
 
 interface ApiResponse<T = any> {
   data: T | null;
@@ -87,9 +87,9 @@ export const recommendationsApi = {
 };
 
 export const profileApi = {
-  get: () => api.get("/profiles"),
+  get: () => api.get("/profile"),
   submitFeedback: (data: { dimension: string; score: number }) =>
-    api.post("/profiles/feedback", data),
+    api.post("/profile/feedback", data),
 };
 
 export const compareApi = {

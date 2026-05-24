@@ -68,6 +68,7 @@ export class WebSocketManager {
     ws.onopen = () => {
       this.setStatus("connected");
       this.reconnectAttempts = 0;
+      this.reconnectTimer = null;
       this.startPing();
     };
 
@@ -103,6 +104,7 @@ export class WebSocketManager {
 
   private tryReconnect(): void {
     if (this.reconnectAttempts >= this.maxReconnectAttempts) return;
+    if (this.reconnectTimer) return; // already reconnecting
 
     const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
     this.reconnectAttempts++;
@@ -128,10 +130,12 @@ export class WebSocketManager {
     }
   }
 
-  send(content: string): void {
+  send(content: string): boolean {
     if (this.socket && this.status === "connected") {
       this.socket.send(JSON.stringify({ type: "message", content }));
+      return true;
     }
+    return false;
   }
 
   disconnect(): void {
