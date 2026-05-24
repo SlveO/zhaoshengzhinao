@@ -1,7 +1,6 @@
 """Competitive analysis — compare our profile metrics with market benchmarks and analyze loss."""
 from datetime import datetime, timezone, timedelta
 from sqlalchemy import text
-from models import async_session
 
 RIASEC_LABELS = {
     "R": "动手操作", "I": "研究思考", "A": "艺术创造",
@@ -10,6 +9,7 @@ RIASEC_LABELS = {
 
 
 async def get_competitive_analysis(tenant_id: str, days: int = 365) -> dict:
+    from models import async_session
     async with async_session() as db:
         since = datetime.now(timezone.utc) - timedelta(days=days)
 

@@ -1,6 +1,31 @@
-FROM python:3.11-slim
+FROM python:3.11-slim AS runtime
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    HOME=/app \
+    HF_HOME=/app/.cache/huggingface \
+    TRANSFORMERS_CACHE=/app/.cache/huggingface \
+    MODELSCOPE_CACHE=/app/.cache/modelscope
+
 WORKDIR /app
-COPY backend/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-COPY backend/ .
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4", "--timeout-keep-alive", "300"]
+
+RUN addgroup --system app && adduser --system --ingroup app app \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY backend/requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+COPY backend/ /app/
+COPY data/seed/ /app/data/seed/
+
+RUN mkdir -p /app/chroma_data /app/uploads /app/.cache/modelscope /app/.cache/huggingface && chown -R app:app /app
+USER app
+
+EXPOSE 8000
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+    CMD curl -fsS http://127.0.0.1:8000/api/health || exit 1
+
+CMD ["sh", "-c", "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --workers 2 --timeout-keep-alive 300"]

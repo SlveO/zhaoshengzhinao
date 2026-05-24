@@ -5,15 +5,41 @@ from config import settings
 class Base(DeclarativeBase):
     pass
 
-engine = create_async_engine(settings.database_url, echo=False)
-async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+_engine = None
+_async_session = None
+
+
+def _init_engine():
+    global _engine, _async_session
+    if _engine is None:
+        _engine = create_async_engine(settings.database_url, echo=False)
+        _async_session = async_sessionmaker(_engine, class_=AsyncSession, expire_on_commit=False)
+    return _engine
+
+
+class _LazyEngine:
+    """Proxy that defers engine creation until first method call."""
+    def __getattr__(self, name):
+        return getattr(_init_engine(), name)
+
+
+class _LazySessionMaker:
+    """Proxy that defers engine creation until first session is created."""
+    def __call__(self):
+        _init_engine()
+        return _async_session()
+
+
+engine = _LazyEngine()
+async_session = _LazySessionMaker()
+
 
 async def get_db():
     async with async_session() as session:
         yield session
 
+
 async def init_db():
-    # Import all models so Base.metadata knows about them
     from . import college       # noqa: F401
     from . import admission     # noqa: F401
     from . import user          # noqa: F401

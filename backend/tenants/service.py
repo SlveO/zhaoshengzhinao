@@ -19,14 +19,17 @@ async def update_tenant_config(tenant: Tenant, updates: dict) -> Tenant:
     """Merge *updates* into tenant.config JSONB field."""
     current = dict(tenant.config or {})
     _deep_merge(current, updates)
-    tenant.config = current
 
     async with async_session() as db:
-        db.add(tenant)
+        result = await db.execute(
+            select(Tenant).where(Tenant.id == tenant.id)
+        )
+        db_tenant = result.scalar_one()
+        db_tenant.config = current
         await db.commit()
-        await db.refresh(tenant)
+        await db.refresh(db_tenant)
 
-    return tenant
+    return db_tenant
 
 
 def _deep_merge(base: dict, updates: dict) -> None:

@@ -1,0 +1,33 @@
+name: Lint
+
+on:
+  pull_request:
+  push:
+    branches: [develop, "feat/**"]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: admin-spa/package-lock.json
+      - name: Install backend lint dependencies
+        working-directory: backend
+        run: python -m pip install --upgrade pip && python -m pip install -r requirements-dev.txt
+      - name: Ruff backend
+        run: ruff check backend
+      - name: Install admin dependencies
+        working-directory: admin-spa
+        run: npm ci
+      - name: ESLint admin
+        working-directory: admin-spa
+        run: npm run lint
