@@ -1,10 +1,10 @@
 """Emotion timeline — aggregate emotion labels from chat.message_sent over time."""
 from datetime import datetime, timezone, timedelta
 from sqlalchemy import text
-from models import async_session
 
 
 async def get_emotion_timeline(tenant_id: str, days: int = 30) -> dict:
+    from models import async_session
     async with async_session() as db:
         since = datetime.now(timezone.utc) - timedelta(days=days)
         rows = await db.execute(text("""

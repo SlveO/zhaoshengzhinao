@@ -1,7 +1,6 @@
 """Topic cloud — jieba segmentation on chat message content, word frequency for wordCloud."""
 from datetime import datetime, timezone, timedelta
 from sqlalchemy import text
-from models import async_session
 
 import jieba
 
@@ -26,6 +25,7 @@ STOP_WORDS = frozenset({
 
 
 async def get_topic_cloud(tenant_id: str, days: int = 30) -> list[dict]:
+    from models import async_session
     async with async_session() as db:
         since = datetime.now(timezone.utc) - timedelta(days=days)
         rows = await db.execute(text("""

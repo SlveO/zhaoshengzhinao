@@ -33,9 +33,6 @@ data/raw/
 # Claude config (local only)
 .claude/
 
-# Docker Compose (local only, each dev has their own)
-docker-compose.yml
-
 # Netlify
 .netlify
 

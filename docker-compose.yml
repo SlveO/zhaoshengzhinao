@@ -1,0 +1,94 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: gaokao
+      POSTGRES_USER: gaokao
+      POSTGRES_PASSWORD: gaokao
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gaokao -d gaokao"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    environment:
+      DATABASE_URL: postgresql+asyncpg://gaokao:gaokao@db:5432/gaokao
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com/v1}
+      DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-deepseek-chat}
+      CHROMA_PERSIST_DIR: /app/chroma_data
+      HOME: /app
+      HF_HOME: /app/.cache/huggingface
+      TRANSFORMERS_CACHE: /app/.cache/huggingface
+      MODELSCOPE_CACHE: /app/.cache/modelscope
+      DATA_DIR: /app/data/seed
+    volumes:
+      - chroma_data:/app/chroma_data
+      - uploads:/app/uploads
+      - modelscope_cache:/app/.cache/modelscope
+      - huggingface_cache:/app/.cache/huggingface
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  admin-spa:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args:
+        APP_DIR: admin-spa
+        VITE_BASE_PATH: /admin/
+        BUILD_CMD: npm run build
+    depends_on:
+      - backend
+
+  mini-app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args:
+        APP_DIR: mini-app
+        PREBUILD_CMD: TENANT=scnu node build.config.js
+        BUILD_CMD: npm run build:h5
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - backend
+      - admin-spa
+      - mini-app
+
+volumes:
+  postgres_data:
+  redis_data:
+  chroma_data:
+  uploads:
+  modelscope_cache:
+  huggingface_cache:

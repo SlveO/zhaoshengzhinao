@@ -1,7 +1,6 @@
 """Hot questions — cluster messages by stage + keyword mentions for Top-10 bar chart."""
 from datetime import datetime, timezone, timedelta
 from sqlalchemy import text
-from models import async_session
 
 
 MAJOR_KEYWORDS = [
@@ -18,6 +17,7 @@ MAJOR_KEYWORDS = [
 
 
 async def get_hot_questions(tenant_id: str, days: int = 30) -> list[dict]:
+    from models import async_session
     async with async_session() as db:
         since = datetime.now(timezone.utc) - timedelta(days=days)
         rows = await db.execute(text("""

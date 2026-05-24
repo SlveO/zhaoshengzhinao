@@ -1,10 +1,8 @@
 """Major heatmap — aggregate recommendation + intent events to rank majors by interest."""
 from datetime import datetime, timezone, timedelta
 from sqlalchemy import text
-from models import async_session
-
-
 async def get_major_heatmap(tenant_id: str, days: int = 365) -> dict:
+    from models import async_session
     async with async_session() as db:
         since = datetime.now(timezone.utc) - timedelta(days=days)
 

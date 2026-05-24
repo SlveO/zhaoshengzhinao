@@ -124,7 +124,7 @@ app.add_middleware(UserAuthMiddleware)
 app.add_middleware(ModuleGateMiddleware)
 
 # ── Existing Routes (api/routes) ──
-from api.routes import auth, chat, profile, recommendation, college, industry, compare  # noqa: E402
+from api.routes import auth, chat, profile, recommendation, college, industry, compare, knowledge  # noqa: E402
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(chat.router, prefix="/api/v1/chat", tags=["chat"])
@@ -133,6 +133,7 @@ app.include_router(recommendation.router, prefix="/api/v1/recommendations", tags
 app.include_router(college.router, prefix="/api/v1/colleges", tags=["colleges"])
 app.include_router(compare.router, prefix="/api/v1/compare", tags=["compare"])
 app.include_router(industry.router, prefix="/api/v1", tags=["industry"])
+app.include_router(knowledge.router, prefix="/api/v1/knowledge", tags=["knowledge"])
 
 # ── New B2B Routes ──
 from tenants.router import router as tenant_router  # noqa: E402

@@ -1,10 +1,8 @@
 """Region distribution — aggregate session profile region preferences."""
 from datetime import datetime, timezone, timedelta
 from sqlalchemy import text
-from models import async_session
-
-
 async def get_region_distribution(tenant_id: str, days: int = 365) -> dict:
+    from models import async_session
     async with async_session() as db:
         since = datetime.now(timezone.utc) - timedelta(days=days)
 

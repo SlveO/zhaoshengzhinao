@@ -51,7 +51,7 @@ TOPICS = [
 async def seed():
     async with async_session() as db:
         # Get SCNU tenant ID
-        result = await db.execute(text(f"SELECT id FROM tenants WHERE slug='{TENANT_SLUG}'"))
+        result = await db.execute(text("SELECT id FROM tenants WHERE slug = :slug"), {"slug": TENANT_SLUG})
         tid = result.scalar_one()
         print(f"Tenant: {TENANT_SLUG} ({tid})")
 

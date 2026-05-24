@@ -1,10 +1,14 @@
 # 数据指南 (Data Guide)
 
-> 最后更新: 2026-05-15 | 分支: main | 验证状态: 全部通过
+> 最后更新: 2026-05-23 | 当前状态: SCNU 单院校深度数据可用；Phase 5 多省数据扩展暂缓
+
+## 本轮说明
+
+本轮基础设施加固不新增省份、不新增爬虫配置、不扩展 Phase 5 数据范围。当前完整可演示数据以华南师大 `scnu` tenant 为主，包含录取、培养、就业数据导入与 ChromaDB 索引。下方“数据扩充流水线”保留为后续 Phase 5 的操作参考。
 
 ## 一、数据位置速查
 
-**所有数据在宿主机 `D:\_Greatest_programmer\_Projects\gaokao_agents\` 下，已提交到 main 分支。**
+**项目数据位于仓库 `data/`、`backend/chroma_data/` 和租户导入表中。**
 
 | 你要什么 | 在哪里 | 怎么读 |
 |----------|--------|--------|
@@ -12,6 +16,7 @@
 | 录取数据 (194K条) | `data/seed/scores.json` | JSON数组，字段: college_name/major_name/year/province/min_score/min_rank |
 | 行业分析 (60条) | `data/approved/industries.json` | JSON数组，字段: industry_name/avg_annual_salary/outlook |
 | 专业映射 (20条) | `data/approved/major_industry_mapping.json` | JSON数组，字段: major_name/primary_industries/salary_range |
+| 华师综合咨询知识 | `data/approved/scnu_comprehensive_knowledge.json` | JSON数组，字段: category/topic/summary/text/qa/source_url |
 | 向量索引 (182K文档) | `backend/chroma_data/` | ChromaDB集合 `colleges_majors` |
 | 数据库 (4表) | Docker `gaokao_agents-db-1:5432` | PostgreSQL, 用户gaokao/密码gaokao/库gaokao |
 
@@ -26,12 +31,47 @@
 | `/api/v1/industries` | GET | 行业分析 | `?year=2024` |
 | `/api/v1/mappings` | GET | 专业映射 | `?major_name=计算机科学与技术` |
 | `/api/v1/industries/by-major` | GET | 专业→行业详情 | `?major_name=计算机科学与技术` |
+| `/api/v1/knowledge/search` | GET | 租户知识库RAG检索 | `?q=华师住宿费多少&k=5&data_type=campus_life` |
 | `/api/v1/recommendations` | GET | 志愿推荐 | 需Bearer Token |
 | `/api/health` | GET | 健康检查 | 返回 `{"status":"ok"}` |
 
 **推荐API调用前提:** 用户需先走完对话流程构建画像（RIASEC+价值观+地域），否则返回空列表。注册+登录即可调用其他端点。
 
-## 三、ChromaDB状态（已验证）
+## 三、华南师大综合咨询知识库
+
+本轮新增 `scnu` tenant 的综合咨询知识包，面向高考生常见问题整理，覆盖学校概况、三校区四校园、优势学科、师范特色、招生批次、录取规则、转专业限制、选科与外语、体检限制、学费住宿费、奖助政策、招生计划入口、招生办联系方式和志愿咨询策略。
+
+导入并索引：
+
+```bash
+python scripts/create_scnu_tenant.py
+python scripts/import_scnu_knowledge.py
+```
+
+RAG 检索示例：
+
+```bash
+curl "http://localhost:8000/api/v1/knowledge/search?q=华南师范大学住宿费多少&k=5&data_type=campus_life" \
+  -H "X-Tenant: scnu"
+```
+
+返回结构：
+
+```json
+{
+  "query": "华南师范大学住宿费多少",
+  "tenant": "scnu",
+  "results": [
+    {
+      "text": "华南师范大学 收费与住宿...",
+      "metadata": {"category": "收费与住宿", "source_url": "..."},
+      "source_url": "https://zsb.scnu.edu.cn/a/20250515/684.html"
+    }
+  ]
+}
+```
+
+## 四、ChromaDB状态（已验证）
 
 ```
 SQLite完整性: ok
@@ -43,7 +83,7 @@ sqlite3大小:  589MB → 当前正常
 
 **之前报 `sqlite3.OperationalError` 的原因:** 索引重建进程与backend同时访问SQLite导致的瞬时锁冲突，非数据损坏。索引进程结束后自动恢复。
 
-## 四、数据扩充流水线（严格流程）
+## 五、数据扩充流水线（严格流程）
 
 ### 新增省份 (如浙江/江苏)
 

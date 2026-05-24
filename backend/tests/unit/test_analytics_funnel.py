@@ -1,5 +1,6 @@
 import pytest
 from analytics.funnel import get_funnel
+from tests.conftest import TEST_TENANT_ID
 
 
 @pytest.mark.asyncio
@@ -39,3 +40,27 @@ async def test_funnel_conversion_rates_keys():
         "visitorToConversation", "conversationToDeep",
         "deepToIntent", "intentToEnrolled",
     }
+
+
+@pytest.mark.asyncio
+async def test_funnel_aggregates_seeded_events(test_tenant, seed_event):
+    user_id = "55555555-5555-5555-5555-555555555555"
+    session_id = "66666666-6666-6666-6666-666666666666"
+
+    await seed_event("page.viewed", user_id=user_id, session_id=session_id)
+    await seed_event("chat.message_sent", user_id=user_id, session_id=session_id, payload={"turn": 1})
+    await seed_event(
+        "profile.updated",
+        user_id=user_id,
+        session_id=session_id,
+        payload={"completeness": "L2"},
+    )
+    await seed_event("page.intent_expressed", user_id=user_id, session_id=session_id)
+
+    result = await get_funnel(str(TEST_TENANT_ID), days=7)
+
+    assert result["stages"]["visitors"] == 1
+    assert result["stages"]["conversations"] == 1
+    assert result["stages"]["deepConsultations"] == 1
+    assert result["stages"]["intentExpressed"] == 1
+    assert result["conversionRates"]["visitorToConversation"] == 100

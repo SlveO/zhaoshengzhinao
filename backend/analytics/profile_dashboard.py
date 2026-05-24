@@ -1,10 +1,8 @@
 """Profile dashboard — aggregate session_profiles for RIASEC, values, completeness."""
 from datetime import datetime, timezone, timedelta
 from sqlalchemy import text
-from models import async_session
-
-
 async def get_profile_dashboard(tenant_id: str, days: int = 365) -> dict:
+    from models import async_session
     async with async_session() as db:
         since = datetime.now(timezone.utc) - timedelta(days=days)
 
