@@ -5,9 +5,17 @@ type StatusHandler = (status: WsStatus) => void;
 
 export type WsStatus = "disconnected" | "connecting" | "connected" | "reconnecting";
 
-const WS_PROTOCOL =
-  process.env.NODE_ENV === "development" ? "ws://localhost:8000" : `wss://${location.host}`;
-const WS_BASE = `${WS_PROTOCOL}/api/v1`;
+function getWsBase(): string {
+  if (process.env.NODE_ENV === "development") {
+    return "ws://localhost:8000/api/v1";
+  }
+  const apiBase = (import.meta.env.VITE_API_BASE_URL as string) || "";
+  if (apiBase) {
+    return apiBase.replace(/^http/, "ws");
+  }
+  return "wss://slveo-gaokao-api.hf.space/api/v1";
+}
+const WS_BASE = getWsBase();
 
 export class WebSocketManager {
   private socket: WebSocket | null = null;
