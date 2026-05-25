@@ -39,6 +39,7 @@ class ChatMessageData(BaseModel):
     assistant_message: dict
     profile_updated: bool
     profile_summary: Optional[dict] = None
+    sources: list[dict] = []
 
 class StudentProfileData(BaseModel):
     session_id: str
