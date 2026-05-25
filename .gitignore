@@ -48,3 +48,7 @@ dashboard-fixed.png
 dashboard-layout-fix.png
 insights-page.png
 *.zip
+
+.dev.vars*
+!.dev.vars.example
+!.env.example
