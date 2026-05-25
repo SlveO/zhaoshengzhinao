@@ -1,4 +1,5 @@
 import json
+import logging
 import uuid
 from contextlib import asynccontextmanager
 
@@ -10,6 +11,8 @@ from config import settings
 from models import init_db, async_session
 from models.college import College
 from models.admission import AdmissionData
+
+logger = logging.getLogger(__name__)
 
 
 # ── Seed / Index helpers (unchanged) ──
@@ -98,6 +101,35 @@ async def lifespan(app: FastAPI):
             print("Seed data files not found, skipping seed (production mode).")
     else:
         print("Skipping seed and index (already seeded).")
+
+    # 预热 embedding 模型（消除首次调用冷启动延迟）
+    try:
+        from knowledge_base.embeddings import embedding_model
+        _ = embedding_model.embed_query("预热")
+        logger.info("Embedding model warmed up")
+    except Exception as e:
+        logger.warning(f"Embedding model warmup failed: {e}")
+
+    # 检查 scnu_colleges 集合是否有数据，空则触发索引
+    try:
+        from knowledge_base.chroma_client import client as chroma_client
+        try:
+            col = chroma_client.get_collection("scnu_colleges")
+            count = col.count()
+            if count == 0:
+                logger.warning("scnu_colleges collection is empty, running index...")
+                from knowledge.indexer import index_tenant_data
+                index_tenant_data("scnu")
+                logger.info("scnu_colleges indexed successfully")
+            else:
+                logger.info(f"scnu_colleges collection has {count} documents")
+        except Exception:
+            logger.warning("scnu_colleges collection not found, running index...")
+            from knowledge.indexer import index_tenant_data
+            index_tenant_data("scnu")
+            logger.info("scnu_colleges indexed successfully")
+    except Exception as e:
+        logger.warning(f"ChromaDB index check failed: {e}")
 
     yield
 
