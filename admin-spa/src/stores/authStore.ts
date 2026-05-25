@@ -10,8 +10,6 @@ interface AuthState {
   logout: () => void
 }
 
-const DEMO_TOKEN = 'demo-token-netlify-preview'
-
 export const useAuthStore = create<AuthState>((set) => ({
   token: localStorage.getItem('token'),
   user: JSON.parse(localStorage.getItem('user') || 'null'),
@@ -25,11 +23,19 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ token: access_token, user: { id: user_id, username: uname } })
   },
 
-  loginDemo: (tenantSlug: string) => {
+  loginDemo: async (tenantSlug: string) => {
+    // 体验模式：用真实 demo 账号登录，token 走正常流程
     localStorage.setItem('tenantSlug', tenantSlug)
-    localStorage.setItem('token', DEMO_TOKEN)
-    localStorage.setItem('user', JSON.stringify({ id: 'demo', username: '体验管理员' }))
-    set({ token: DEMO_TOKEN, user: { id: 'demo', username: '体验管理员' } })
+    try {
+      const res = await api.post<LoginResponse>('/auth/login', { username: 'admin', password: 'admin123' })
+      const { access_token, user_id, username: uname } = res.data
+      localStorage.setItem('token', access_token)
+      localStorage.setItem('user', JSON.stringify({ id: user_id, username: uname }))
+      set({ token: access_token, user: { id: user_id, username: uname } })
+    } catch {
+      // 如果登录失败，至少设置 tenant，让用户手动登录
+      set({ token: null, user: null })
+    }
   },
 
   logout: () => {

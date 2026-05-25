@@ -49,9 +49,7 @@
 
     <view class="notice-card glass-card">
       <text class="notice-title">报考参考说明</text>
-      <text class="notice-text">
-        以下建议为华南师范大学校内专业报考参考，不代表录取承诺。
-      </text>
+      <text class="notice-text">{{ disclaimer }}</text>
       <text v-if="hasSession" class="session-note">
         已关联当前咨询会话，后续可按会话生成个性化建议。
       </text>
@@ -134,10 +132,8 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import { onLoad } from "@dcloudio/uni-app"
+import { api } from "@/utils/api"
 import { getStoredSessionId } from "@/utils/session"
-import type { RecommendationItem } from "@/types/api"
-import { mockStudentInfo } from "@/mock/student"
-import { mockRecommendationsData } from "@/mock/recommendations"
 
 type RiskLevel = "reach" | "match" | "safe"
 
@@ -146,95 +142,48 @@ interface RiskMeta {
   className: string
 }
 
-const studentInfo = mockStudentInfo
+const studentInfo = ref<any>({ province: "", subject_type: "", score: 0, intent_majors: [] })
+const recommendations = ref<any[]>([])
+const disclaimer = ref("以下建议为华南师范大学校内专业报考参考，不代表录取承诺。")
 
 const sessionId = ref<string | null>(null)
-
 const hasSession = computed(() => Boolean(sessionId.value))
 
-onLoad(() => {
-  sessionId.value = getStoredSessionId()
-
-  /**
-   * 后续真实后端接入时：
-   * 根据 session_id 调用 /api/v1/recommendations
-   * 获取当前咨询会话对应的真实报考建议。
-   * 当前阶段继续使用 mock/recommendations.ts。
-   */
-})
-
-const scnuMajors = ["人工智能", "软件工程", "数据科学与大数据技术"]
-const scnuRiskLevels: RiskLevel[] = ["reach", "match", "safe"]
-const scnuScores = [91, 88, 84]
-const scnuMinScores = [589, 582, 575]
-const scnuMinRanks = [34500, 38200, 42100]
-
-const scnuReasons = [
-  [
-    "专业方向与智能系统、算法应用和数据能力高度相关",
-    "适合对编程、数学建模和人工智能应用有持续兴趣的学生",
-    "该方向竞争相对更强，建议结合当年专业组计划谨慎填报"
-  ],
-  [
-    "更偏工程实践、系统开发和项目落地，与计算机兴趣匹配度高",
-    "培养方向与软件开发、平台建设和应用工程相关",
-    "分数条件与演示档案较匹配，可作为重点关注方向"
-  ],
-  [
-    "面向数据分析、数据平台和智能决策等应用场景",
-    "适合同时关注计算机技术、数据能力和行业应用的学生",
-    "整体风险相对更稳妥，可作为本校专业组合中的补充选择"
-  ]
-]
-
-const recommendations = computed<RecommendationItem[]>(() => {
-  return scnuMajors.map((major, index) => {
-    const source = mockRecommendationsData.items[index] || mockRecommendationsData.items[0]
-
-    return {
-      ...source,
-      id: `scnu-major-${index + 1}`,
-      college_id: "tenant_scnu",
-      college_name: "华南师范大学",
-      major_name: major,
-      province: "广东",
-      city: "广州",
-      level: "本科",
-      match_score: scnuScores[index],
-      min_score: scnuMinScores[index],
-      min_rank: scnuMinRanks[index],
-      subjects: "物理+不限",
-      reasons: scnuReasons[index],
-      risk_level: scnuRiskLevels[index]
+onLoad(async () => {
+  const sid = getStoredSessionId()
+  sessionId.value = sid
+  if (sid) {
+    try {
+      const res = await api.post<any>("/recommendations", {
+        session_id: sid,
+        tenant_slug: "scnu",
+      })
+      if (res.data) {
+        recommendations.value = res.data.items || []
+        disclaimer.value = res.data.disclaimer || disclaimer.value
+      }
+    } catch {
+      // API 不通时保留空列表
     }
-  })
+  }
 })
 
-const intentMajorsText = computed(() => studentInfo.intent_majors.join(" / "))
+const intentMajorsText = computed(() => (studentInfo.value.intent_majors || []).join(" / "))
 
 const riskMap: Record<RiskLevel, RiskMeta> = {
-  reach: {
-    label: "可冲",
-    className: "risk-reach"
-  },
-  match: {
-    label: "较匹配",
-    className: "risk-match"
-  },
-  safe: {
-    label: "较稳妥",
-    className: "risk-safe"
-  }
+  reach: { label: "可冲", className: "risk-reach" },
+  match: { label: "较匹配", className: "risk-match" },
+  safe: { label: "较稳妥", className: "risk-safe" },
 }
 
-function riskLabel(level?: RecommendationItem["risk_level"]): string {
+function riskLabel(level?: string): string {
   if (!level) return "待评估"
-  return riskMap[level]?.label || "待评估"
+  return riskMap[level as RiskLevel]?.label || "待评估"
 }
 
-function riskClass(level?: RecommendationItem["risk_level"]): string {
+function riskClass(level?: string): string {
   if (!level) return "risk-unknown"
-  return riskMap[level]?.className || "risk-unknown"
+  return riskMap[level as RiskLevel]?.className || "risk-unknown"
 }
 
 function formatOptionalNumber(value?: number): string {
@@ -247,7 +196,7 @@ function formatRank(value?: number): string {
   return value.toLocaleString("zh-CN")
 }
 
-function goAnalysis(item: RecommendationItem): void {
+function goAnalysis(item: any): void {
   uni.navigateTo({
     url: `/pages/compare/index?major=${encodeURIComponent(item.major_name)}`
   })

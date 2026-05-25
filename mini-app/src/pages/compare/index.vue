@@ -140,89 +140,31 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import { onLoad } from "@dcloudio/uni-app"
-import { mockStudentInfo } from "@/mock/student"
+import { api } from "@/utils/api"
 import { getStoredSessionId } from "@/utils/session"
-
-interface MajorAnalysis {
-  name: string
-  match_score: number
-  risk_label: "可冲" | "较匹配" | "较稳妥"
-  min_score: number
-  min_rank: string
-  subjects: string
-  fit_reasons: string[]
-  risk_desc: string
-  focus_points: string[]
-}
 
 interface PageQuery {
   major?: string
 }
 
-const studentInfo = mockStudentInfo
+const studentInfo = ref<any>({ province: "", subject_type: "", score: 0, intent_majors: [] })
 const selectedMajorName = ref("人工智能")
 const sessionId = ref<string | null>(null)
-
 const hasSession = computed(() => Boolean(sessionId.value))
 
-const majorAnalysisMap: Record<string, MajorAnalysis> = {
-  人工智能: {
-    name: "人工智能",
-    match_score: 92,
-    risk_label: "可冲",
-    min_score: 589,
-    min_rank: "34,000",
-    subjects: "物理+不限",
-    fit_reasons: [
-      "你的意向方向包含计算机与人工智能，和该专业培养方向高度相关",
-      "该专业适合对算法、编程、智能系统和数据应用感兴趣的学生",
-      "你的演示分数接近该专业参考区间，可以作为重点关注方向"
-    ],
-    risk_desc:
-      "该专业热度较高，竞争相对更强。当前演示分数与参考最低分较接近，建议结合当年招生计划、专业组设置和最低位次综合判断。",
-    focus_points: ["算法基础", "编程能力", "智能系统", "专业组计划"]
-  },
-
-  软件工程: {
-    name: "软件工程",
-    match_score: 88,
-    risk_label: "较匹配",
-    min_score: 582,
-    min_rank: "38,200",
-    subjects: "物理+不限",
-    fit_reasons: [
-      "该专业更强调工程实践、系统开发和项目落地",
-      "适合喜欢编程实践、软件开发和团队项目的学生",
-      "与当前分数和计算机方向兴趣匹配度较高"
-    ],
-    risk_desc:
-      "该专业整体匹配度较高，但仍需关注当年招生计划和专业组变化。建议同时了解课程体系、培养模式和就业方向。",
-    focus_points: ["工程实践", "项目开发", "课程体系", "就业方向"]
-  },
-
-  数据科学与大数据技术: {
-    name: "数据科学与大数据技术",
-    match_score: 84,
-    risk_label: "较稳妥",
-    min_score: 575,
-    min_rank: "42,100",
-    subjects: "物理+不限",
-    fit_reasons: [
-      "该专业关注数据分析、数据平台和智能决策应用",
-      "适合希望结合计算机技术和行业数据应用的学生",
-      "在演示条件下可作为本校专业组合中的稳妥选择"
-    ],
-    risk_desc:
-      "该专业参考风险相对更稳，但仍建议结合个人兴趣和长期发展方向判断。可以继续了解课程内容和就业场景。",
-    focus_points: ["数据分析", "数据库", "行业应用", "培养方向"]
-  }
-}
-
-const currentMajor = computed<MajorAnalysis>(() => {
-  return majorAnalysisMap[selectedMajorName.value] || majorAnalysisMap["人工智能"]
+const currentMajor = ref<any>({
+  name: "加载中...",
+  match_score: 0,
+  risk_label: "参考",
+  min_score: 0,
+  min_rank: "暂无",
+  subjects: "待确认",
+  fit_reasons: [],
+  risk_desc: "",
+  focus_points: [],
 })
 
-const intentMajorsText = computed(() => studentInfo.intent_majors.join(" / "))
+const intentMajorsText = computed(() => (studentInfo.value.intent_majors || []).join(" / "))
 
 const riskClass = computed(() => {
   if (currentMajor.value.risk_label === "可冲") return "risk-reach"
@@ -232,19 +174,22 @@ const riskClass = computed(() => {
 })
 
 onLoad((query: PageQuery = {}) => {
-  sessionId.value = getStoredSessionId()
+  const sid = getStoredSessionId()
+  sessionId.value = sid
 
   const majorName = normalizeMajorName(query.major)
+  if (majorName) selectedMajorName.value = majorName
 
-  if (majorName && majorAnalysisMap[majorName]) {
-    selectedMajorName.value = majorName
+  if (sid && majorName) {
+    api.get<any>(`/majors/analysis?session_id=${sid}&major=${encodeURIComponent(majorName)}`)
+      .then(res => {
+        if (res.data) {
+          if (res.data.major) Object.assign(currentMajor.value, res.data.major)
+          if (res.data.analysis) Object.assign(currentMajor.value, res.data.analysis)
+        }
+      })
+      .catch(() => { /* 保留默认空状态 */ })
   }
-
-  /**
-   * 后续真实后端接入时：
-   * 使用 session_id + major 请求本校专业分析详情。
-   * 当前阶段继续展示本地 mock 内容。
-   */
 })
 
 function normalizeMajorName(major?: string): string {

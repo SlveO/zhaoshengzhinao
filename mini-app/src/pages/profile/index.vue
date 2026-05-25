@@ -89,25 +89,32 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import { onLoad } from "@dcloudio/uni-app"
-import { mockStudentInfo } from "@/mock/student"
+import { api } from "@/utils/api"
 import { getStoredSessionId } from "@/utils/session"
 
-const studentInfo = mockStudentInfo
-const focusPoints = ["专业实力", "就业方向", "录取参考"]
+const studentInfo = ref<any>({ province: "", subject_type: "", score: 0, intent_majors: [], focus_points: ["专业实力", "就业方向", "录取参考"] })
+const hasProfile = ref(false)
 
 const sessionId = ref<string | null>(null)
 
-onLoad(() => {
-  sessionId.value = getStoredSessionId()
-
-  /**
-   * 后续真实后端接入时：
-   * 使用 session_id 请求 /api/v1/student/profile
-   * 获取当前咨询会话对应的学生档案。
-   */
+onLoad(async () => {
+  const sid = getStoredSessionId()
+  sessionId.value = sid
+  if (sid) {
+    try {
+      const res = await api.get<any>(`/student/profile?session_id=${sid}`)
+      if (res.data?.profile) {
+        studentInfo.value = res.data.profile
+        hasProfile.value = res.data.has_profile
+      }
+    } catch {
+      // API 不通时保留默认空状态
+    }
+  }
 })
 
-const intentMajorsText = computed(() => studentInfo.intent_majors.join(" / "))
+const focusPoints = computed(() => studentInfo.value.focus_points || ["专业实力", "就业方向", "录取参考"])
+const intentMajorsText = computed(() => (studentInfo.value.intent_majors || []).join(" / "))
 
 function goChat(): void {
   uni.switchTab({

@@ -104,24 +104,11 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onUnmounted, ref } from "vue"
+import { nextTick, ref } from "vue"
 import { onLoad } from "@dcloudio/uni-app"
+import { api } from "@/utils/api"
 import { getStoredSessionId, saveSessionId } from "@/utils/session"
 import { TENANT_SLUG } from "@/utils/config"
-
-interface ChatMessageItem {
-  id: string
-  role: "assistant" | "user"
-  content: string
-  timestamp: number
-
-  /**
-   * 第一阶段前端预留字段：
-   * 后续真实后端接入时，聊天消息会带上 session_id 与 tenant_slug。
-   */
-  session_id?: string
-  tenant_slug?: string
-}
 
 const welcomeMessage =
   "你好，我是华南师范大学招生咨询助手。你可以直接问我招生政策、专业介绍、录取参考、校园生活等问题。如果你愿意，也可以告诉我你的省份、科类、分数和意向专业，我会为你生成更适合的本校报考建议。"
@@ -137,116 +124,74 @@ const sessionId = ref<string | null>(null)
 const inputText = ref("")
 const scrollTop = ref(0)
 const isThinking = ref(false)
-
-const messages = ref<ChatMessageItem[]>([
-  {
-    id: "welcome",
-    role: "assistant",
-    content: welcomeMessage,
-    timestamp: Date.now()
-  }
+const messages = ref<any[]>([
+  { id: "welcome", role: "assistant", content: welcomeMessage, timestamp: Date.now() }
 ])
 
-let replyTimer: ReturnType<typeof setTimeout> | null = null
-
-onLoad(() => {
-  const currentSessionId = ensureSessionId()
-
-  /**
-   * 后续真实后端接入时：
-   * 这里可以调用 /api/v1/miniapp/enter
-   * 后端根据 session_id 恢复聊天记录、学生档案和推荐结果。
-   */
-  if (messages.value[0]) {
-    messages.value[0].session_id = currentSessionId
-    messages.value[0].tenant_slug = TENANT_SLUG
+onLoad(async () => {
+  const stored = getStoredSessionId()
+  try {
+    const res = await api.post<any>("/miniapp/enter", {
+      session_id: stored || null,
+      tenant_slug: TENANT_SLUG,
+      scene: "miniapp_enter",
+    })
+    if (res.data) {
+      sessionId.value = res.data.session_id
+      saveSessionId(res.data.session_id)
+      if (res.data.chat_history?.length) {
+        messages.value = res.data.chat_history.map((m: any) => ({
+          id: m.message_id || m.id,
+          role: m.role,
+          content: m.content,
+          timestamp: new Date(m.created_at).getTime(),
+        }))
+      }
+    }
+  } catch {
+    // API 不通时保留欢迎消息（demo 后备）
   }
 })
-
-function ensureSessionId(): string {
-  const storedSessionId = getStoredSessionId()
-
-  if (storedSessionId) {
-    sessionId.value = storedSessionId
-    return storedSessionId
-  }
-
-  const mockSessionId = `mock_session_${Date.now()}`
-  saveSessionId(mockSessionId)
-  sessionId.value = mockSessionId
-
-  return mockSessionId
-}
 
 function sendQuick(question: string): void {
   inputText.value = question
   sendMessage()
 }
 
-function sendMessage(): void {
+async function sendMessage(): Promise<void> {
   const content = inputText.value.trim()
-  if (!content) return
-
-  const currentSessionId = ensureSessionId()
-
+  if (!content || !sessionId.value) return
   inputText.value = ""
 
-  messages.value.push({
-    id: `user-${Date.now()}`,
-    role: "user",
-    content,
-    timestamp: Date.now(),
-    session_id: currentSessionId,
-    tenant_slug: TENANT_SLUG
-  })
-
-  scrollToBottom()
-  mockAssistantReply(content, currentSessionId)
-}
-
-function mockAssistantReply(question: string, currentSessionId: string): void {
-  if (replyTimer) {
-    clearTimeout(replyTimer)
-    replyTimer = null
-  }
-
+  messages.value.push({ id: `user-${Date.now()}`, role: "user", content, timestamp: Date.now() })
   isThinking.value = true
   scrollToBottom()
 
-  replyTimer = setTimeout(() => {
-    isThinking.value = false
-
-    messages.value.push({
-      id: `assistant-${Date.now()}`,
-      role: "assistant",
-      content: getMockReply(question),
-      timestamp: Date.now(),
-      session_id: currentSessionId,
-      tenant_slug: TENANT_SLUG
+  try {
+    const res = await api.post<any>("/chat/messages", {
+      session_id: sessionId.value,
+      tenant_slug: TENANT_SLUG,
+      message: { role: "user", content },
     })
-
-    scrollToBottom()
-  }, 600)
-}
-
-function getMockReply(question: string): string {
-  if (question.includes("人工智能专业")) {
-    return "华南师范大学人工智能专业适合对算法、编程、智能系统和数据应用感兴趣的学生。你可以重点了解它的培养方向、课程设置、近年录取参考和未来就业去向。"
+    isThinking.value = false
+    if (res.data?.assistant_message) {
+      messages.value.push({
+        id: res.data.assistant_message.message_id || `ai-${Date.now()}`,
+        role: "assistant",
+        content: res.data.assistant_message.content,
+        timestamp: Date.now(),
+      })
+    }
+  } catch (e: any) {
+    isThinking.value = false
+    messages.value.push({
+      id: `err-${Date.now()}`,
+      role: "assistant",
+      content: e?.error?.message || "AI 服务暂时不可用，请稍后重试",
+      timestamp: Date.now(),
+    })
   }
-
-  if (question.includes("585")) {
-    return "以广东物理类 585 分为例，可以重点关注华南师范大学校内与计算机、人工智能、软件工程、数据科学相关的专业方向。具体还要结合当年招生计划、专业组、最低位次和你的专业偏好综合判断。"
-  }
-
-  if (question.includes("软件工程") && question.includes("人工智能")) {
-    return "软件工程更偏向系统开发、工程实践和项目落地；人工智能更偏向算法模型、智能应用和数据能力。喜欢编程实践和项目开发，可以优先了解软件工程；喜欢算法、模型和智能系统，可以重点了解人工智能。"
-  }
-
-  if (question.includes("招生咨询群")) {
-    return "你可以通过华南师范大学官方招生渠道了解招生咨询群信息。第一阶段演示中，也可以直接在这里继续提问，我会围绕华师招生政策、专业介绍和报考建议进行解答。"
-  }
-
-  return "这个问题可以继续展开。你可以补充你的省份、科类、分数、意向专业或最关心的问题，我会围绕华南师范大学的招生政策、专业方向和录取参考给你更具体的建议。"
+  scrollToBottom()
 }
 
 function scrollToBottom(): void {
@@ -254,13 +199,6 @@ function scrollToBottom(): void {
     scrollTop.value = Date.now()
   })
 }
-
-onUnmounted(() => {
-  if (replyTimer) {
-    clearTimeout(replyTimer)
-    replyTimer = null
-  }
-})
 </script>
 
 <style scoped>

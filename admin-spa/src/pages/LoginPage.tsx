@@ -15,7 +15,7 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
 
-  const tenantSlug = searchParams.get('tenant') || localStorage.getItem('tenantSlug') || ''
+  const tenantSlug = searchParams.get('tenant') || localStorage.getItem('tenantSlug') || 'scnu'
 
   const handleDemo = () => {
     const slug = tenantSlug || 'demo'
