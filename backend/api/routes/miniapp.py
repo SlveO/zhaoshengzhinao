@@ -143,18 +143,18 @@ async def send_chat_message(body: ChatMessageRequest):
 
     # SSE 流式响应
     async def event_stream():
-        yield f"event: thinking\ndata: {json.dumps({'message': '正在检索知识库...'})}\n\n"
-        yield f"event: sources\ndata: {json.dumps({'items': sources})}\n\n"
+        yield f"data: {json.dumps({'type': 'thinking', 'message': '正在检索知识库...'})}\n\n"
+        yield f"data: {json.dumps({'type': 'sources', 'items': sources})}\n\n"
 
         full_content = ""
         try:
             async for chunk in llm.astream(msgs):
                 token = chunk.content if hasattr(chunk, "content") else str(chunk)
                 full_content += token
-                yield f"event: token\ndata: {json.dumps({'text': token})}\n\n"
+                yield f"data: {json.dumps({'type': 'token', 'text': token})}\n\n"
         except Exception as exc:
             logging.error(f"LLM stream failed: {exc}")
-            yield f"event: error\ndata: {json.dumps({'code': 'LLM_FAILED', 'message': 'AI 服务暂时不可用'})}\n\n"
+            yield f"data: {json.dumps({'type': 'error', 'code': 'LLM_FAILED', 'message': 'AI 服务暂时不可用'})}\n\n"
             return
 
         assistant_msg = await save_message(body.session_id, "assistant", full_content)
@@ -173,12 +173,13 @@ async def send_chat_message(body: ChatMessageRequest):
         profile_summary = build_profile_summary(session) if session else None
 
         done_data = {
+            "type": "done",
             "session_id": body.session_id,
             "assistant_message": assistant_msg,
             "profile_updated": profile_updated,
             "profile_summary": profile_summary,
         }
-        yield f"event: done\ndata: {json.dumps(done_data)}\n\n"
+        yield f"data: {json.dumps(done_data)}\n\n"
 
     return StreamingResponse(
         event_stream(),
