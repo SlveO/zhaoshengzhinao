@@ -2,7 +2,12 @@
 C端小程序 REST API — 5 个端点。
 所有端点使用统一响应格式: {data: T | null, error: {code, message} | null}
 """
+import asyncio
+import json
+import logging
+
 from fastapi import APIRouter, Request, Query
+from starlette.responses import StreamingResponse
 from sqlalchemy import select
 from models import async_session
 from models.admission import AdmissionData
@@ -57,7 +62,7 @@ async def miniapp_enter(body: EnterRequest, request: Request):
     ).model_dump())
 
 
-# ─── API 2: 发送聊天消息 ───
+# ─── API 2: 发送聊天消息 (SSE 流式) ───
 
 @router.post("/chat/messages")
 async def send_chat_message(body: ChatMessageRequest):
@@ -66,31 +71,47 @@ async def send_chat_message(body: ChatMessageRequest):
         return err("SESSION_NOT_FOUND", "会话不存在或已过期")
 
     user_content = body.message.content
-
-    # 保存用户消息
     await save_message(body.session_id, "user", user_content)
 
-    # RAG 检索
-    knowledge_context = ""
-    try:
-        from knowledge_base.chroma_client import search_similar
-        results = search_similar(user_content, k=5, tenant_slug=body.tenant_slug)
-        if results:
-            lines = ["\n## 知识库检索结果 (仅供参考)"]
-            for i, r in enumerate(results[:5], 1):
-                lines.append(f"{i}. {r['document']}")
-            knowledge_context = "\n".join(lines)
-    except Exception:
-        pass
+    # 异步 RAG 检索（不阻塞事件循环）
+    async def do_rag():
+        knowledge_context = ""
+        sources = []
+        try:
+            from knowledge_base.chroma_client import search_similar
+            loop = asyncio.get_running_loop()
+            results = await loop.run_in_executor(
+                None, search_similar, user_content, 5, body.tenant_slug
+            )
+            if results:
+                lines = ["\n## 知识库检索结果 (仅供参考)"]
+                for i, r in enumerate(results[:5], 1):
+                    lines.append(f"{i}. {r['document']}")
+                    sources.append({
+                        "text": r["document"][:200],
+                        "source_title": r.get("metadata", {}).get("source_title", ""),
+                        "source_url": r.get("metadata", {}).get("source_url", ""),
+                        "score": round(1 - r.get("distance", 0), 4),
+                    })
+                knowledge_context = "\n".join(lines)
+        except Exception as e:
+            logging.warning(f"RAG search failed for session={body.session_id}: {e}")
+        return knowledge_context, sources
 
-    # 构建 System Prompt + 调用 LLM
+    knowledge_context, sources = await do_rag()
+
+    # 构建 System Prompt + History
     from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
     from langchain_openai import ChatOpenAI
     from config import settings
     from agents.conversation.prompts_b2b import B2B_SYSTEM_PROMPT
 
     existing_profile = build_profile_summary(session) or {}
-    slots_text = f"省份: {existing_profile.get('province', '未知')}, 科类: {existing_profile.get('subject_type', '未知')}, 分数: {existing_profile.get('score', '未知')}"
+    slots_text = (
+        f"省份: {existing_profile.get('province', '未知')}, "
+        f"科类: {existing_profile.get('subject_type', '未知')}, "
+        f"分数: {existing_profile.get('score', '未知')}"
+    )
 
     system_content = B2B_SYSTEM_PROMPT.format(
         university_name="华南师范大学",
@@ -101,7 +122,6 @@ async def send_chat_message(body: ChatMessageRequest):
     if knowledge_context:
         system_content += "\n" + knowledge_context
 
-    # 加载最近 10 条历史消息
     history_msgs = await get_chat_history(body.session_id, limit=10)
     history = []
     for m in history_msgs:
@@ -109,8 +129,6 @@ async def send_chat_message(body: ChatMessageRequest):
             history.append(HumanMessage(content=m["content"]))
         else:
             history.append(AIMessage(content=m["content"]))
-
-    # 移除最后一条（刚保存的 user 消息），避免重复
     if history and isinstance(history[-1], HumanMessage):
         history.pop()
 
@@ -123,35 +141,54 @@ async def send_chat_message(body: ChatMessageRequest):
         temperature=0.7,
     )
 
-    try:
-        ai_response = await llm.ainvoke(msgs)
-        ai_content = ai_response.content
-    except Exception:
-        return err("LLM_FAILED", "AI 服务暂时不可用，请稍后重试")
+    # SSE 流式响应
+    async def event_stream():
+        yield f"event: thinking\ndata: {json.dumps({'message': '正在检索知识库...'})}\n\n"
+        yield f"event: sources\ndata: {json.dumps({'items': sources})}\n\n"
 
-    # 保存 assistant 消息
-    assistant_msg = await save_message(body.session_id, "assistant", ai_content)
+        full_content = ""
+        try:
+            async for chunk in llm.astream(msgs):
+                token = chunk.content if hasattr(chunk, "content") else str(chunk)
+                full_content += token
+                yield f"event: token\ndata: {json.dumps({'text': token})}\n\n"
+        except Exception as exc:
+            logging.error(f"LLM stream failed: {exc}")
+            yield f"event: error\ndata: {json.dumps({'code': 'LLM_FAILED', 'message': 'AI 服务暂时不可用'})}\n\n"
+            return
 
-    # 抽取并更新档案
-    existing = {
-        "province": session.province or "",
-        "subject_type": session.subject_type or "",
-        "score": session.score or 0,
-    }
-    profile_updates = await extract_profile_from_message(user_content, ai_content, existing)
-    profile_updated = bool(profile_updates)
-    if profile_updated:
-        await update_session_profile(body.session_id, profile_updates)
-        session = await get_session(body.session_id)
+        assistant_msg = await save_message(body.session_id, "assistant", full_content)
 
-    profile_summary = build_profile_summary(session) if session else None
+        existing_dict = {
+            "province": session.province or "",
+            "subject_type": session.subject_type or "",
+            "score": session.score or 0,
+        }
+        profile_updates = await extract_profile_from_message(user_content, full_content, existing_dict)
+        profile_updated = bool(profile_updates)
+        if profile_updated:
+            await update_session_profile(body.session_id, profile_updates)
+            session = await get_session(body.session_id)
 
-    return ok(ChatMessageData(
-        session_id=body.session_id,
-        assistant_message=assistant_msg,
-        profile_updated=profile_updated,
-        profile_summary=profile_summary,
-    ).model_dump())
+        profile_summary = build_profile_summary(session) if session else None
+
+        done_data = {
+            "session_id": body.session_id,
+            "assistant_message": assistant_msg,
+            "profile_updated": profile_updated,
+            "profile_summary": profile_summary,
+        }
+        yield f"event: done\ndata: {json.dumps(done_data)}\n\n"
+
+    return StreamingResponse(
+        event_stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
 
 
 # ─── API 3: 获取学生档案 ───
