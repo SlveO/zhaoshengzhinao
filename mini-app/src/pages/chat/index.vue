@@ -183,6 +183,42 @@ async function sendMessage(): Promise<void> {
     ? "http://localhost:8000/api/v1"
     : (import.meta.env.VITE_API_BASE_URL as string) || "/api/v1"
 
+  // AbortController for SSE fetch (shared between SSE timeout and poll fallback)
+  const abortCtrl = new AbortController()
+  let sseReceived = false
+  let polling = false
+
+  // Polling fallback: if SSE doesn't deliver within 8s, poll /miniapp/enter
+  const pollTimer = setTimeout(async () => {
+    if (sseReceived) return
+    polling = true
+    const poll = async () => {
+      if (sseReceived) return
+      try {
+        const res = await api.post<any>("/miniapp/enter", {
+          session_id: sessionId.value,
+          tenant_slug: TENANT_SLUG,
+          scene: "miniapp_enter",
+        })
+        if (res.data?.chat_history?.length) {
+          const last = res.data.chat_history[res.data.chat_history.length - 1]
+          if (last.role === "assistant" && last.content) {
+            sseReceived = true
+            abortCtrl.abort()
+            isThinking.value = false
+            const msg = messages.value.find(m => m.id === aiId)
+            if (msg) msg.content = last.content
+            return
+          }
+        }
+        setTimeout(poll, 2000)
+      } catch {
+        setTimeout(poll, 2000)
+      }
+    }
+    poll()
+  }, 8000)
+
   try {
     const response = await fetch(`${apiBase}/chat/messages`, {
       method: "POST",
@@ -192,6 +228,7 @@ async function sendMessage(): Promise<void> {
         tenant_slug: TENANT_SLUG,
         message: { role: "user", content },
       }),
+      signal: abortCtrl.signal,
     })
 
     const reader = response.body!.getReader()
@@ -201,6 +238,8 @@ async function sendMessage(): Promise<void> {
     while (true) {
       const { value, done } = await reader.read()
       if (done) break
+      sseReceived = true
+      clearTimeout(pollTimer)
       buffer += decoder.decode(value, { stream: true })
       const lines = buffer.split("\n")
       buffer = lines.pop() || ""
@@ -231,9 +270,13 @@ async function sendMessage(): Promise<void> {
       scrollToBottom()
     }
   } catch {
-    isThinking.value = false
-    const msg = messages.value.find(m => m.id === aiId)
-    if (msg) msg.content = "AI 服务暂时不可用，请稍后重试"
+    clearTimeout(pollTimer)
+    // If poll already found the response, don't show error
+    if (!sseReceived) {
+      isThinking.value = false
+      const msg = messages.value.find(m => m.id === aiId)
+      if (msg) msg.content = "AI 服务暂时不可用，请稍后重试"
+    }
   }
 }
 
