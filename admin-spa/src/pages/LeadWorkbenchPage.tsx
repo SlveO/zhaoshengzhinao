@@ -1,5 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useMobileStore } from '../stores/mobileStore'
+import { Phone, MessageCircle, FileText, ArrowUpDown, Flame, BarChart3, Clock } from 'lucide-react'
+import BottomSheet from '../components/BottomSheet'
 
 type Priority = 'P0' | 'P1' | 'P2' | 'P3'
 type PageTab = 'pending' | 'processed'
@@ -62,6 +64,8 @@ export default function LeadWorkbenchPage() {
   const [processMethod, setProcessMethod] = useState<string>('已电话联系')
   const [processedPage, setProcessedPage] = useState(0)
   const [sortBy, setSortBy] = useState('按优先级降序')
+  const [sortSheetOpen, setSortSheetOpen] = useState(false)
+  const [priorityTarget, setPriorityTarget] = useState<string | null>(null)
 
   const selectedLead = leads.find((l) => l.id === selected)
 
@@ -161,12 +165,19 @@ export default function LeadWorkbenchPage() {
                   共 <b style={{ color: 'var(--color-brand-800)' }}>{leads.length}</b> 条待处理
                 </div>
               </div>
-              <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} style={{
-                padding: '5px 10px', border: '1px solid var(--color-border)',
-                borderRadius: 6, fontSize: 12, fontFamily: 'inherit', background: '#f8fafc',
-              }}>
-                <option>按优先级降序</option><option>按意向分排序</option><option>按考试分数排序</option><option>按时间最新</option>
-              </select>
+              <button
+                onClick={() => setSortSheetOpen(true)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 6,
+                  padding: '6px 12px', border: '1px solid var(--color-border)',
+                  borderRadius: 6, fontSize: 12, fontFamily: 'inherit',
+                  background: '#f8fafc', cursor: 'pointer',
+                  color: 'var(--color-text-secondary)',
+                }}
+              >
+                <ArrowUpDown size={14} />
+                {sortBy}
+              </button>
             </div>
             <div className="table-wrap">
               <table>
@@ -190,18 +201,17 @@ export default function LeadWorkbenchPage() {
                       onClick={() => { setSelected(selected === lead.id ? null : lead.id); setProcessMenu(null) }}
                     >
                       <td style={{ padding: '8px 0', textAlign: 'center' }} onClick={(e) => e.stopPropagation()}>
-                        <select
-                          value={lead.priority}
-                          onChange={(e) => updatePriority(lead.id, e.target.value as Priority)}
+                        <button
+                          onClick={() => setPriorityTarget(lead.id)}
                           style={{
-                            fontSize: 10, fontWeight: 600, padding: '2px 6px', borderRadius: 8,
+                            fontSize: 10, fontWeight: 600, padding: '3px 8px', borderRadius: 8,
                             border: '1px solid #e5e9f2', cursor: 'pointer', fontFamily: 'inherit',
                             background: PRIORITY_STYLE[lead.priority].bg,
                             color: PRIORITY_STYLE[lead.priority].color,
                           }}
                         >
-                          <option>P0</option><option>P1</option><option>P2</option><option>P3</option>
-                        </select>
+                          {lead.priority}
+                        </button>
                       </td>
                       <td style={{ padding: '10px 0' }}>
                         <span style={{ fontWeight: 600 }}>{lead.name}</span>
@@ -242,44 +252,18 @@ export default function LeadWorkbenchPage() {
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                             {!isMobile && '在线'}
                           </button>
-                          {/* Process button with dropdown */}
-                          <div style={{ position: 'relative' }}>
-                            <button
-                              onClick={() => setProcessMenu(processMenu === lead.id ? null : lead.id)}
-                              style={{
-                                padding: isMobile ? '4px 6px' : '4px 10px', background: '#22c55e', color: '#fff', border: 'none',
-                                borderRadius: 5, cursor: 'pointer', fontSize: 10, fontFamily: 'inherit',
-                                display: 'flex', alignItems: 'center', gap: 3,
-                              }}
-                            >
-                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
-                              {!isMobile && '已处理'}
-                            </button>
-                            {processMenu === lead.id && (
-                              <div style={{
-                                position: 'absolute', top: '100%', right: 0, marginTop: 4,
-                                background: '#fff', border: '1px solid var(--color-border)',
-                                borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-                                padding: 6, zIndex: 10, minWidth: 130,
-                              }}>
-                                <div style={{ fontSize: 9, color: 'var(--color-text-muted)', padding: '4px 8px 6px' }}>选择处理方式</div>
-                                {PROCESS_METHODS.map((m) => (
-                                  <button
-                                    key={m}
-                                    onClick={() => moveToProcessed(lead.id, m)}
-                                    style={{
-                                      display: 'block', width: '100%', padding: '6px 10px',
-                                      border: 'none', background: '#f8fafc', borderRadius: 4,
-                                      cursor: 'pointer', fontSize: 10, fontFamily: 'inherit',
-                                      textAlign: 'left', marginBottom: 2, color: 'var(--color-text-primary)',
-                                    }}
-                                  >
-                                    {m === '已电话联系' ? '📞' : m === '在线对话' ? '💬' : '📄'} {m}
-                                  </button>
-                                ))}
-                              </div>
-                            )}
-                          </div>
+                          {/* Process button */}
+                          <button
+                            onClick={() => setProcessMenu(processMenu === lead.id ? null : lead.id)}
+                            style={{
+                              padding: isMobile ? '4px 6px' : '4px 10px', background: '#22c55e', color: '#fff', border: 'none',
+                              borderRadius: 5, cursor: 'pointer', fontSize: 10, fontFamily: 'inherit',
+                              display: 'flex', alignItems: 'center', gap: 3,
+                            }}
+                          >
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            {!isMobile && '已处理'}
+                          </button>
                           <button
                             onClick={() => ignoreLead(lead.id)}
                             style={{
@@ -338,34 +322,17 @@ export default function LeadWorkbenchPage() {
                   </span>
                 </div>
                 <div style={{ display: 'flex', gap: 6 }}>
-                  {/* Process with method */}
-                  <div style={{ position: 'relative' }}>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <select
-                        value={processMethod}
-                        onChange={(e) => setProcessMethod(e.target.value)}
-                        style={{
-                          padding: '4px 8px', border: '1px solid #22c55e', background: '#fff',
-                          borderRadius: '5px 0 0 5px', fontSize: 10, fontFamily: 'inherit',
-                          cursor: 'pointer', color: '#166534', borderRight: 0,
-                        }}
-                      >
-                        {PROCESS_METHODS.map((m) => <option key={m}>{m}</option>)}
-                      </select>
-                      <button
-                        onClick={() => moveToProcessed(selectedLead.id, processMethod)}
-                        style={{
-                          padding: '4px 10px', background: '#22c55e', color: '#fff', border: 'none',
-                          borderRadius: '0 5px 5px 0', fontSize: 10, fontFamily: 'inherit',
-                          cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3,
-                          whiteSpace: 'nowrap',
-                        }}
-                      >
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        已处理
-                      </button>
-                    </div>
-                  </div>
+                  <button
+                    onClick={() => setProcessMenu(selectedLead.id)}
+                    className="btn btn-sm"
+                    style={{
+                      background: '#22c55e', color: '#fff', border: 'none',
+                      display: 'flex', alignItems: 'center', gap: 4, fontSize: 11,
+                    }}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    已处理
+                  </button>
                   <button
                     onClick={() => ignoreLead(selectedLead.id)}
                     className="btn btn-sm"
@@ -460,6 +427,108 @@ export default function LeadWorkbenchPage() {
           )}
         </div>
       )}
+
+      {/* Bottom Sheet: priority selector */}
+      <BottomSheet
+        open={!!priorityTarget}
+        title="更改优先级"
+        onClose={() => setPriorityTarget(null)}
+      >
+        {(['P0', 'P1', 'P2', 'P3'] as Priority[]).map((p) => {
+          const lead = leads.find((l) => l.id === priorityTarget)
+          const isActive = lead?.priority === p
+          return (
+            <button
+              key={p}
+              className="bs-row"
+              onClick={() => {
+                if (priorityTarget) updatePriority(priorityTarget, p)
+                setPriorityTarget(null)
+              }}
+              style={isActive ? { background: '#f8fafc' } : undefined}
+            >
+              <div className="bs-row-icon" style={{ background: PRIORITY_STYLE[p].bg, color: PRIORITY_STYLE[p].color, fontWeight: 700 }}>
+                {p}
+              </div>
+              <span className="bs-row-text" style={isActive ? { fontWeight: 600 } : undefined}>{p}</span>
+              {isActive && <span style={{ color: 'var(--color-brand-800)', fontWeight: 600, fontSize: 18 }}>✓</span>}
+            </button>
+          )
+        })}
+        <button className="bs-cancel" onClick={() => setPriorityTarget(null)}>取消</button>
+      </BottomSheet>
+
+      {/* Bottom Sheet: sort selector */}
+      <BottomSheet
+        open={sortSheetOpen}
+        title="排序方式"
+        onClose={() => setSortSheetOpen(false)}
+      >
+        {[
+          { label: '按优先级降序', icon: <ArrowUpDown size={20} />, bg: '#fee2e2', color: '#991b1b' },
+          { label: '按意向分排序', icon: <Flame size={20} />, bg: '#fef3c7', color: '#92400e' },
+          { label: '按考试分数排序', icon: <BarChart3 size={20} />, bg: '#dbeafe', color: '#1e40af' },
+          { label: '按时间最新', icon: <Clock size={20} />, bg: '#f3e8ff', color: '#7c3aed' },
+        ].map((opt) => {
+          const isActive = sortBy === opt.label
+          return (
+            <button
+              key={opt.label}
+              className="bs-row"
+              onClick={() => { setSortBy(opt.label); setSortSheetOpen(false) }}
+              style={isActive ? { background: '#f0f7ff' } : undefined}
+            >
+              <div className="bs-row-icon" style={{ background: opt.bg, color: opt.color }}>
+                {opt.icon}
+              </div>
+              <span className="bs-row-text" style={isActive ? { fontWeight: 600, color: 'var(--color-brand-800)' } : undefined}>
+                {opt.label}
+              </span>
+              {isActive && <span style={{ color: 'var(--color-brand-800)', fontWeight: 600, fontSize: 18 }}>✓</span>}
+            </button>
+          )
+        })}
+        <button className="bs-cancel" onClick={() => setSortSheetOpen(false)}>取消</button>
+      </BottomSheet>
+
+      {/* Bottom Sheet: process method selector */}
+      <BottomSheet
+        open={!!processMenu}
+        title="选择处理方式"
+        onClose={() => setProcessMenu(null)}
+      >
+        <button className="bs-row" onClick={() => {
+          const lead = leads.find((l) => l.id === processMenu)
+          if (lead) moveToProcessed(lead.id, '已电话联系')
+        }}>
+          <div className="bs-row-icon" style={{ background: '#dcfce7', color: '#166534' }}>
+            <Phone size={20} />
+          </div>
+          <span className="bs-row-text">已电话联系</span>
+          <svg className="bs-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <button className="bs-row" onClick={() => {
+          const lead = leads.find((l) => l.id === processMenu)
+          if (lead) moveToProcessed(lead.id, '在线对话')
+        }}>
+          <div className="bs-row-icon" style={{ background: '#dbeafe', color: '#1e40af' }}>
+            <MessageCircle size={20} />
+          </div>
+          <span className="bs-row-text">在线对话</span>
+          <svg className="bs-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <button className="bs-row" onClick={() => {
+          const lead = leads.find((l) => l.id === processMenu)
+          if (lead) moveToProcessed(lead.id, '已发材料')
+        }}>
+          <div className="bs-row-icon" style={{ background: '#fef3c7', color: '#92400e' }}>
+            <FileText size={20} />
+          </div>
+          <span className="bs-row-text">已发材料</span>
+          <svg className="bs-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <button className="bs-cancel" onClick={() => setProcessMenu(null)}>取消</button>
+      </BottomSheet>
     </div>
   )
 }

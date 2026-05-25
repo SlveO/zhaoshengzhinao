@@ -1,3 +1,7 @@
+import { useState } from 'react'
+import { Calendar } from 'lucide-react'
+import BottomSheet from '../components/BottomSheet'
+
 // TODO: replace with API GET /api/dashboard/channel-summary
 const MOCK_CHANNELS = [
   { name: '官网', icon: '🌐', leads: 2350, conversionRate: '12.6%', change: '+3.2%', up: true, pct: 60 },
@@ -7,17 +11,25 @@ const MOCK_CHANNELS = [
 ]
 
 export default function ChannelsPage() {
+  const [period, setPeriod] = useState('今天')
+  const [periodSheetOpen, setPeriodSheetOpen] = useState(false)
+
   return (
     <div>
       <div style={{ marginBottom: 16 }}>
-        <select style={{
-          padding: '6px 12px', border: '1px solid var(--color-border)',
-          borderRadius: 8, fontSize: 13, fontFamily: 'inherit', background: '#fff',
-        }}>
-          <option>今天</option>
-          <option>近7天</option>
-          <option>近30天</option>
-        </select>
+        <button
+          onClick={() => setPeriodSheetOpen(true)}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 5,
+            padding: '6px 12px', border: '1px solid var(--color-border)',
+            borderRadius: 8, fontSize: 13, fontFamily: 'inherit',
+            background: '#fff', cursor: 'pointer',
+            color: 'var(--color-text-secondary)',
+          }}
+        >
+          <Calendar size={14} />
+          {period}
+        </button>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
@@ -51,6 +63,31 @@ export default function ChannelsPage() {
           </div>
         ))}
       </div>
+
+      <BottomSheet
+        open={periodSheetOpen}
+        title="时间范围"
+        onClose={() => setPeriodSheetOpen(false)}
+      >
+        {['今天', '近7天', '近30天'].map((opt) => {
+          const isActive = period === opt
+          return (
+            <button
+              key={opt}
+              className="bs-row"
+              onClick={() => { setPeriod(opt); setPeriodSheetOpen(false) }}
+              style={isActive ? { background: '#f8fafc' } : undefined}
+            >
+              <div className="bs-row-icon" style={{ background: '#dbeafe', color: '#1e40af' }}>
+                <Calendar size={20} />
+              </div>
+              <span className="bs-row-text" style={isActive ? { fontWeight: 600 } : undefined}>{opt}</span>
+              {isActive && <span style={{ color: 'var(--color-brand-800)', fontWeight: 600, fontSize: 18 }}>✓</span>}
+            </button>
+          )
+        })}
+        <button className="bs-cancel" onClick={() => setPeriodSheetOpen(false)}>取消</button>
+      </BottomSheet>
     </div>
   )
 }

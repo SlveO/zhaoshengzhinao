@@ -1,5 +1,7 @@
 import { useState, useRef, useCallback } from 'react'
 import { useMobileStore } from '../stores/mobileStore'
+import { Calendar } from 'lucide-react'
+import BottomSheet from '../components/BottomSheet'
 
 // TODO: replace with API GET /api/strategy/report?view=
 interface ReportEntry {
@@ -123,6 +125,8 @@ interface Version {
 export default function ReportsPage() {
   const isMobile = useMobileStore((s) => s.isMobile)
   const [view, setView] = useState('weekly')
+  const [reportPeriod, setReportPeriod] = useState('2026年5月')
+  const [periodSheetOpen, setPeriodSheetOpen] = useState(false)
   const [editing, setEditing] = useState(false)
   const [data, setData] = useState<PerspectiveData>(structuredClone(REPORT_DATA.weekly))
   const [showHistory, setShowHistory] = useState(false)
@@ -367,12 +371,19 @@ export default function ReportsPage() {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <span style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>报告周期</span>
-          <select style={{
-            padding: '5px 10px', border: '1px solid var(--color-border)',
-            borderRadius: 6, fontSize: 12, fontFamily: 'inherit', background: '#f8fafc',
-          }}>
-            <option>2026年5月</option><option>2026年4月</option><option>2026年3月</option>
-          </select>
+          <button
+            onClick={() => setPeriodSheetOpen(true)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 5,
+              padding: '5px 10px', border: '1px solid var(--color-border)',
+              borderRadius: 6, fontSize: 12, fontFamily: 'inherit',
+              background: '#f8fafc', cursor: 'pointer',
+              color: 'var(--color-text-secondary)',
+            }}
+          >
+            <Calendar size={14} />
+            {reportPeriod}
+          </button>
           <span style={{ color: 'var(--color-border)', fontSize: 15 }}>|</span>
           <span style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>数据来源：近30天 AI 咨询记录</span>
         </div>
@@ -658,6 +669,31 @@ export default function ReportsPage() {
           )}
         </div>
       )}
+
+      <BottomSheet
+        open={periodSheetOpen}
+        title="报告周期"
+        onClose={() => setPeriodSheetOpen(false)}
+      >
+        {['2026年5月', '2026年4月', '2026年3月'].map((opt) => {
+          const isActive = reportPeriod === opt
+          return (
+            <button
+              key={opt}
+              className="bs-row"
+              onClick={() => { setReportPeriod(opt); setPeriodSheetOpen(false) }}
+              style={isActive ? { background: '#f8fafc' } : undefined}
+            >
+              <div className="bs-row-icon" style={{ background: '#dbeafe', color: '#1e40af' }}>
+                <Calendar size={20} />
+              </div>
+              <span className="bs-row-text" style={isActive ? { fontWeight: 600 } : undefined}>{opt}</span>
+              {isActive && <span style={{ color: 'var(--color-brand-800)', fontWeight: 600, fontSize: 18 }}>✓</span>}
+            </button>
+          )
+        })}
+        <button className="bs-cancel" onClick={() => setPeriodSheetOpen(false)}>取消</button>
+      </BottomSheet>
     </div>
   )
 }
