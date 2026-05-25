@@ -50,6 +50,13 @@
               :class="message.role === 'user' ? 'bubble-user' : 'bubble-ai'"
             >
               <text class="bubble-text">{{ message.content }}</text>
+              <view v-if="message.role === 'assistant' && sources.length > 0" class="sources-box">
+                <text class="sources-title">参考来源</text>
+                <view v-for="(s, i) in sources" :key="i" class="source-item">
+                  <text class="source-text">{{ s.text }}</text>
+                  <text v-if="s.source_title" class="source-label">{{ s.source_title }}</text>
+                </view>
+              </view>
             </view>
           </view>
 
@@ -106,7 +113,6 @@
 <script setup lang="ts">
 import { nextTick, ref } from "vue"
 import { onLoad } from "@dcloudio/uni-app"
-import { api } from "@/utils/api"
 import { getStoredSessionId, saveSessionId } from "@/utils/session"
 import { TENANT_SLUG } from "@/utils/config"
 
@@ -124,6 +130,7 @@ const sessionId = ref<string | null>(null)
 const inputText = ref("")
 const scrollTop = ref(0)
 const isThinking = ref(false)
+const sources = ref<any[]>([])
 const messages = ref<any[]>([
   { id: "welcome", role: "assistant", content: welcomeMessage, timestamp: Date.now() }
 ])
@@ -164,34 +171,69 @@ async function sendMessage(): Promise<void> {
   inputText.value = ""
 
   messages.value.push({ id: `user-${Date.now()}`, role: "user", content, timestamp: Date.now() })
+
+  const aiId = `ai-${Date.now()}`
+  messages.value.push({ id: aiId, role: "assistant", content: "", timestamp: Date.now() })
   isThinking.value = true
+  sources.value = []
   scrollToBottom()
 
+  const apiBase = process.env.NODE_ENV === "development"
+    ? "http://localhost:8000/api/v1"
+    : (import.meta.env.VITE_API_BASE_URL as string) || "/api/v1"
+
   try {
-    const res = await api.post<any>("/chat/messages", {
-      session_id: sessionId.value,
-      tenant_slug: TENANT_SLUG,
-      message: { role: "user", content },
+    const response = await fetch(`${apiBase}/chat/messages`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Tenant": TENANT_SLUG },
+      body: JSON.stringify({
+        session_id: sessionId.value,
+        tenant_slug: TENANT_SLUG,
+        message: { role: "user", content },
+      }),
     })
-    isThinking.value = false
-    if (res.data?.assistant_message) {
-      messages.value.push({
-        id: res.data.assistant_message.message_id || `ai-${Date.now()}`,
-        role: "assistant",
-        content: res.data.assistant_message.content,
-        timestamp: Date.now(),
-      })
+
+    const reader = response.body!.getReader()
+    const decoder = new TextDecoder()
+    let buffer = ""
+
+    while (true) {
+      const { value, done } = await reader.read()
+      if (done) break
+      buffer += decoder.decode(value, { stream: true })
+      const lines = buffer.split("\n")
+      buffer = lines.pop() || ""
+
+      for (const line of lines) {
+        if (line.startsWith("data: ")) {
+          try {
+            const evt = JSON.parse(line.slice(6))
+            if (evt.type === "token") {
+              const msg = messages.value.find(m => m.id === aiId)
+              if (msg) msg.content += evt.text
+            } else if (evt.type === "sources") {
+              sources.value = evt.items
+            } else if (evt.type === "done") {
+              isThinking.value = false
+              if (evt.assistant_message) {
+                const msg = messages.value.find(m => m.id === aiId)
+                if (msg) msg.id = evt.assistant_message.message_id || aiId
+              }
+            } else if (evt.type === "error") {
+              isThinking.value = false
+              const msg = messages.value.find(m => m.id === aiId)
+              if (msg) msg.content = evt.message || "AI 服务暂时不可用"
+            }
+          } catch { /* skip parse errors */ }
+        }
+      }
+      scrollToBottom()
     }
-  } catch (e: any) {
+  } catch {
     isThinking.value = false
-    messages.value.push({
-      id: `err-${Date.now()}`,
-      role: "assistant",
-      content: e?.error?.message || "AI 服务暂时不可用，请稍后重试",
-      timestamp: Date.now(),
-    })
+    const msg = messages.value.find(m => m.id === aiId)
+    if (msg) msg.content = "AI 服务暂时不可用，请稍后重试"
   }
-  scrollToBottom()
 }
 
 function scrollToBottom(): void {
@@ -609,5 +651,36 @@ function scrollToBottom(): void {
   background: linear-gradient(135deg, #dbe7f6 0%, #cbd8ea 100%);
   color: #ffffff;
   box-shadow: none;
+}
+
+.sources-box {
+  margin-top: 16rpx;
+  padding: 16rpx;
+  background: #f8f9fb;
+  border-radius: 12rpx;
+}
+
+.sources-title {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.source-item {
+  padding: 8rpx 0;
+  border-bottom: 1rpx solid #eee;
+}
+
+.source-text {
+  font-size: 22rpx;
+  color: #333;
+  line-height: 1.5;
+}
+
+.source-label {
+  font-size: 20rpx;
+  color: #999;
+  margin-top: 4rpx;
 }
 </style>
