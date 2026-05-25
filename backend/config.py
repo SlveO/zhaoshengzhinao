@@ -13,7 +13,12 @@ class Settings(BaseSettings):
     deepseek_model: str = "deepseek-v4-flash"
     embedding_model: str = "BAAI/bge-large-zh-v1.5"
     chroma_persist_dir: str = "./chroma_data"
-    cors_origins: str = "http://localhost:5173,http://localhost:3000,http://localhost:3001,http://localhost:3002"
+    cors_origins: str = (
+        "http://localhost:5173,http://localhost:3000,http://localhost:3001,"
+        "http://localhost:3002,http://localhost:5174,"
+        "https://zhaoshengzhinao.pages.dev,https://zhaoshengzhinao-mini-app.pages.dev,"
+        "https://slveo-gaokao-api.hf.space"
+    )
 
     class Config:
         env_file = ".env"

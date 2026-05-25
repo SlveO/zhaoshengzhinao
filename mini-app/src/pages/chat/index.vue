@@ -231,6 +231,14 @@ async function sendMessage(): Promise<void> {
       signal: abortCtrl.signal,
     })
 
+    if (!response.ok) {
+      isThinking.value = false
+      clearTimeout(pollTimer)
+      const msg = messages.value.find(m => m.id === aiId)
+      if (msg) msg.content = `请求失败 (${response.status})，请稍后重试`
+      return
+    }
+
     const reader = response.body!.getReader()
     const decoder = new TextDecoder()
     let buffer = ""
@@ -269,11 +277,14 @@ async function sendMessage(): Promise<void> {
       }
       scrollToBottom()
     }
+    // 流正常结束但未收到 done 事件（如后端返回了非 SSE 数据），确保气泡消失
+    if (isThinking.value) {
+      isThinking.value = false
+    }
   } catch {
     clearTimeout(pollTimer)
-    // If poll already found the response, don't show error
+    isThinking.value = false
     if (!sseReceived) {
-      isThinking.value = false
       const msg = messages.value.find(m => m.id === aiId)
       if (msg) msg.content = "AI 服务暂时不可用，请稍后重试"
     }
