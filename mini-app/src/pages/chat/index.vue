@@ -113,6 +113,7 @@
 <script setup lang="ts">
 import { nextTick, ref } from "vue"
 import { onLoad } from "@dcloudio/uni-app"
+import { api } from "@/utils/api"
 import { getStoredSessionId, saveSessionId } from "@/utils/session"
 import { TENANT_SLUG } from "@/utils/config"
 
