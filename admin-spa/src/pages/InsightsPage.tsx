@@ -5,6 +5,7 @@ import api from '../api/client'
 import type { TopicCloudItem, EmotionTimelineData, HotQuestionItem } from '../types'
 import { mockTopicCloud, mockHotQuestions, mockEmotionTimeline } from '../mock/insights'
 import StatusCard from '../components/StatusCard'
+import { useMobileStore } from '../stores/mobileStore'
 
 const EMOTION_COLORS: Record<string, string> = {
   positive: 'oklch(54% 0.14 155)',
@@ -17,6 +18,7 @@ const EMOTION_COLORS: Record<string, string> = {
 const ACCENT = 'oklch(58% 0.18 255)'
 
 export default function InsightsPage() {
+  const isMobile = useMobileStore((s) => s.isMobile)
   const [topicCloud, setTopicCloud] = useState<TopicCloudItem[] | null>(null)
   const [emotionTimeline, setEmotionTimeline] = useState<EmotionTimelineData | null>(null)
   const [hotQuestions, setHotQuestions] = useState<HotQuestionItem[] | null>(null)
@@ -115,7 +117,7 @@ export default function InsightsPage() {
           <div className="card">
             <div className="card-header"><h3>咨询热点 Top-10</h3></div>
             {hotQuestions && hotQuestions.length > 0 ? (
-              <ReactECharts option={hotOption} style={{ height: 340 }} />
+              <ReactECharts option={hotOption} style={{ height: isMobile ? 260 : 340 }} />
             ) : (
               <div className="view-status empty"><span>暂无数据</span></div>
             )}
@@ -123,7 +125,7 @@ export default function InsightsPage() {
           <div className="card">
             <div className="card-header"><h3>关键词词云</h3></div>
             {topicCloud && topicCloud.length > 0 ? (
-              <ReactECharts option={wordCloudOption} style={{ height: 340 }} />
+              <ReactECharts option={wordCloudOption} style={{ height: isMobile ? 260 : 340 }} />
             ) : (
               <div className="view-status empty"><span>暂无词云数据</span></div>
             )}
@@ -133,7 +135,7 @@ export default function InsightsPage() {
         <div className="card">
           <div className="card-header"><h3>情绪时间线</h3></div>
           {emotionTimeline && emotionTimeline.timeline.length > 0 ? (
-            <ReactECharts option={emotionOption} style={{ height: 300 }} />
+            <ReactECharts option={emotionOption} style={{ height: isMobile ? 240 : 300 }} />
           ) : (
             <div className="view-status empty"><span>暂无情绪数据</span></div>
           )}

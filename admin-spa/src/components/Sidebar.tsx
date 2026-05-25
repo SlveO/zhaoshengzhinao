@@ -7,6 +7,7 @@ import {
 import api from '../api/client'
 import type { TenantConfig } from '../types'
 import { useAuthStore } from '../stores/authStore'
+import { useMobileStore } from '../stores/mobileStore'
 
 interface MenuItem {
   path: string
@@ -34,6 +35,9 @@ export default function Sidebar() {
   const [config, setConfig] = useState<TenantConfig | null>(null)
   const [collapsed, setCollapsed] = useState(false)
   const logout = useAuthStore((s) => s.logout)
+  const sidebarOpen = useMobileStore((s) => s.sidebarOpen)
+  const isMobile = useMobileStore((s) => s.isMobile)
+  const closeSidebar = useMobileStore((s) => s.closeSidebar)
 
   useEffect(() => {
     api.get<TenantConfig>('/admin/tenants/me/config').then((r) => setConfig(r.data)).catch(() => {})
@@ -50,7 +54,7 @@ export default function Sidebar() {
   let lastSection = ''
 
   return (
-    <aside className={`sidebar${collapsed ? ' collapsed' : ''}`}>
+    <aside className={`sidebar${collapsed && !isMobile ? ' collapsed' : ''}${sidebarOpen ? ' open' : ''}`}>
       <div className="sidebar-brand">
         <div className="logo">{brandName[0]}</div>
         <div className="name">
@@ -59,7 +63,7 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <nav className="sidebar-nav">
+      <nav className="sidebar-nav" onClick={() => isMobile && closeSidebar()}>
         {visibleItems.map((item) => {
           const showSection = item.section !== lastSection
           lastSection = item.section

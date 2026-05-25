@@ -4,8 +4,10 @@ import api from '../api/client'
 import type { ProfileDashboard } from '../types'
 import { mockProfileDashboard } from '../mock/profileDashboard'
 import StatusCard from '../components/StatusCard'
+import { useMobileStore } from '../stores/mobileStore'
 
 export default function ProfileDashboardPage() {
+  const isMobile = useMobileStore((s) => s.isMobile)
   const [data, setData] = useState<ProfileDashboard | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -85,7 +87,7 @@ export default function ProfileDashboardPage() {
             <div className="chart-grid even">
               <div className="card">
                 <div className="card-header"><h3>RIASEC 职业兴趣雷达</h3></div>
-                <div ref={radarRef} style={{ height: 340 }} />
+                <div ref={radarRef} style={{ height: isMobile ? 260 : 340 }} />
               </div>
               <div className="card">
                 <div className="card-header"><h3>核心价值观分布</h3></div>
@@ -103,7 +105,7 @@ export default function ProfileDashboardPage() {
               </div>
             </div>
 
-            <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(3,1fr)', marginTop: 20 }}>
+            <div className="stat-grid" style={{ gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', marginTop: 20 }}>
               <div className="card" style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 32, fontWeight: 700, color: 'var(--green)' }}>{fullCount}</div>
                 <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>完整画像（3+ 维度已填充）</div>

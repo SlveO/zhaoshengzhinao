@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useMobileStore } from '../stores/mobileStore'
 
 type Priority = 'P0' | 'P1' | 'P2' | 'P3'
 type PageTab = 'pending' | 'processed'
@@ -51,6 +52,7 @@ const MOCK_LEADS: LeadItem[] = [
 const PAGE_SIZE = 10
 
 export default function LeadWorkbenchPage() {
+  const isMobile = useMobileStore((s) => s.isMobile)
   const [tab, setTab] = useState<PageTab>('pending')
   const [leads, setLeads] = useState<LeadItem[]>(MOCK_LEADS)
   const [processed, setProcessed] = useState<ProcessedItem[]>([])
@@ -126,7 +128,7 @@ export default function LeadWorkbenchPage() {
   return (
     <div>
       {/* Page Toggle */}
-      <div style={{ display: 'flex', gap: 2, background: '#f1f5f9', padding: 3, borderRadius: 10, width: 'fit-content', marginBottom: 14 }}>
+      <div className="page-tabs" style={{ display: 'flex', gap: 2, background: '#f1f5f9', padding: 3, borderRadius: 10, width: 'fit-content', marginBottom: 14 }}>
         {(['pending', 'processed'] as PageTab[]).map((t) => (
           <button
             key={t}
@@ -148,7 +150,7 @@ export default function LeadWorkbenchPage() {
       {tab === 'pending' ? (
         <>
           {/* Pending Leads Card */}
-          <div className="card" style={{ padding: 0, overflow: 'hidden', marginBottom: 14 }}>
+          <div className="card" style={{ padding: 0, marginBottom: 14 }}>
             <div style={{
               padding: '14px 18px', borderBottom: '1px solid var(--color-border)',
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -215,44 +217,43 @@ export default function LeadWorkbenchPage() {
                         </div>
                       </td>
                       <td style={{ padding: '10px 0', textAlign: 'center' }} onClick={(e) => e.stopPropagation()}>
-                        <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
+                        <div style={{ display: 'flex', gap: isMobile ? 2 : 4, justifyContent: 'center', flexWrap: 'wrap' }}>
                           <button
                             onClick={() => setShowPhone(showPhone === lead.id ? null : lead.id)}
                             style={{
-                              padding: '4px 10px', border: '1px solid #bfdbfe', background: '#fff',
+                              padding: isMobile ? '4px 6px' : '4px 10px', border: '1px solid #bfdbfe', background: '#fff',
                               borderRadius: 5, cursor: 'pointer', fontSize: 10, fontFamily: 'inherit',
                               color: 'var(--color-brand-800)', display: 'flex', alignItems: 'center', gap: 3,
                             }}
                           >
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            电话
+                            {!isMobile && '电话'}
                           </button>
                           <button
                             onClick={() => {
-                              // Mock: jump to chat
                               alert(`跳转到与 ${lead.name} 的在线对话窗口`)
                             }}
                             style={{
-                              padding: '4px 10px', border: '1px solid #bfdbfe', background: '#fff',
+                              padding: isMobile ? '4px 6px' : '4px 10px', border: '1px solid #bfdbfe', background: '#fff',
                               borderRadius: 5, cursor: 'pointer', fontSize: 10, fontFamily: 'inherit',
                               color: 'var(--color-brand-800)', display: 'flex', alignItems: 'center', gap: 3,
                             }}
                           >
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                            在线
+                            {!isMobile && '在线'}
                           </button>
                           {/* Process button with dropdown */}
                           <div style={{ position: 'relative' }}>
                             <button
                               onClick={() => setProcessMenu(processMenu === lead.id ? null : lead.id)}
                               style={{
-                                padding: '4px 10px', background: '#22c55e', color: '#fff', border: 'none',
+                                padding: isMobile ? '4px 6px' : '4px 10px', background: '#22c55e', color: '#fff', border: 'none',
                                 borderRadius: 5, cursor: 'pointer', fontSize: 10, fontFamily: 'inherit',
                                 display: 'flex', alignItems: 'center', gap: 3,
                               }}
                             >
                               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
-                              已处理
+                              {!isMobile && '已处理'}
                             </button>
                             {processMenu === lead.id && (
                               <div style={{
@@ -282,13 +283,13 @@ export default function LeadWorkbenchPage() {
                           <button
                             onClick={() => ignoreLead(lead.id)}
                             style={{
-                              padding: '4px 10px', border: '1px solid #fee2e2', background: '#fff',
+                              padding: isMobile ? '4px 6px' : '4px 10px', border: '1px solid #fee2e2', background: '#fff',
                               borderRadius: 5, cursor: 'pointer', fontSize: 10, fontFamily: 'inherit',
                               color: '#f5222d', display: 'flex', alignItems: 'center', gap: 3,
                             }}
                           >
                             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                            忽略
+                            {!isMobile && '忽略'}
                           </button>
                         </div>
                       </td>
@@ -378,17 +379,17 @@ export default function LeadWorkbenchPage() {
                   </button>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: 18 }}>
-                <div style={{ flex: 1.2 }}>
+              <div style={{ display: 'flex', gap: isMobile ? 12 : 18, flexDirection: isMobile ? 'column' : 'row' }}>
+                <div style={{ flex: isMobile ? undefined : 1.2 }}>
                   <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>{selectedLead.detail.reason}</div>
                 </div>
-                <div style={{ flex: 0.8, borderLeft: '1px solid var(--color-border)', paddingLeft: 16 }}>
+                <div style={{ flex: isMobile ? undefined : 0.8, borderLeft: isMobile ? 'none' : '1px solid var(--color-border)', borderTop: isMobile ? '1px solid var(--color-border)' : 'none', paddingLeft: isMobile ? 0 : 16, paddingTop: isMobile ? 10 : 0 }}>
                   <div style={{ fontSize: 10, color: 'var(--color-text-muted)', marginBottom: 2 }}>学生画像</div>
                   <div style={{ fontSize: 12, fontWeight: 500 }}>{selectedLead.detail.profile}</div>
                   <div style={{ fontSize: 10, color: 'var(--color-text-muted)', marginTop: 10, marginBottom: 2 }}>核心关注</div>
                   <div style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>{selectedLead.detail.coreInterests}</div>
                 </div>
-                <div style={{ flex: 0.8, borderLeft: '1px solid var(--color-border)', paddingLeft: 16 }}>
+                <div style={{ flex: isMobile ? undefined : 0.8, borderLeft: isMobile ? 'none' : '1px solid var(--color-border)', borderTop: isMobile ? '1px solid var(--color-border)' : 'none', paddingLeft: isMobile ? 0 : 16, paddingTop: isMobile ? 10 : 0 }}>
                   <div style={{ fontSize: 10, color: 'var(--color-text-muted)', marginBottom: 2 }}>推荐材料</div>
                   <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>{selectedLead.detail.materials}</div>
                 </div>
@@ -398,7 +399,7 @@ export default function LeadWorkbenchPage() {
         </>
       ) : (
         /* Processed Page */
-        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+        <div className="card" style={{ padding: 0 }}>
           <div style={{
             padding: '12px 16px', borderBottom: '1px solid var(--color-border)',
             background: '#f8fafc',

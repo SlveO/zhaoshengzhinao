@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useEffect } from 'react'
 import { useBrandConfig } from './hooks/useBrandConfig'
+import { useMobileStore } from './stores/mobileStore'
 import ProtectedRoute from './components/ProtectedRoute'
 import DashboardLayout from './components/DashboardLayout'
 import LoginPage from './pages/LoginPage'
@@ -17,6 +19,14 @@ import ModuleSettingsPage from './pages/ModuleSettingsPage'
 
 export default function App() {
   useBrandConfig()
+  const setSize = useMobileStore((s) => s.setSize)
+
+  useEffect(() => {
+    const onResize = () => setSize(window.innerWidth)
+    setSize(window.innerWidth)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [setSize])
 
   return (
     <BrowserRouter>

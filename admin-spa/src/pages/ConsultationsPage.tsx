@@ -60,7 +60,7 @@ export default function ConsultationsPage() {
         />
       </div>
 
-      <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+      <div className="card" style={{ padding: 0 }}>
         <div className="table-wrap">
           <table>
             <thead>
