@@ -165,19 +165,29 @@ export default function LeadWorkbenchPage() {
                   共 <b style={{ color: 'var(--color-brand-800)' }}>{leads.length}</b> 条待处理
                 </div>
               </div>
-              <button
-                onClick={() => setSortSheetOpen(true)}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 6,
-                  padding: '6px 12px', border: '1px solid var(--color-border)',
-                  borderRadius: 6, fontSize: 12, fontFamily: 'inherit',
-                  background: '#f8fafc', cursor: 'pointer',
-                  color: 'var(--color-text-secondary)',
-                }}
-              >
-                <ArrowUpDown size={14} />
-                {sortBy}
-              </button>
+              {(() => {
+                const sortIcon = {
+                  '按优先级降序': <ArrowUpDown size={14} />,
+                  '按意向分排序': <Flame size={14} />,
+                  '按考试分数排序': <BarChart3 size={14} />,
+                  '按时间最新': <Clock size={14} />,
+                }[sortBy]
+                return (
+                  <button
+                    onClick={() => setSortSheetOpen(true)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 6,
+                      padding: '6px 12px', border: '1px solid var(--color-border)',
+                      borderRadius: 6, fontSize: 12, fontFamily: 'inherit',
+                      background: '#f8fafc', cursor: 'pointer',
+                      color: 'var(--color-text-secondary)',
+                    }}
+                  >
+                    {sortIcon}
+                    {sortBy}
+                  </button>
+                )
+              })()}
             </div>
             <div className="table-wrap">
               <table>

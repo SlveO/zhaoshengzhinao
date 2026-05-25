@@ -26,6 +26,8 @@ export default function ProfileDashboardPage() {
   useEffect(() => {
     if (!radarRef.current || !data?.riasecDistribution?.length) return
     const chart = echarts.init(radarRef.current)
+    const onResize = () => chart.resize()
+    window.addEventListener('resize', onResize)
     chart.setOption({
       tooltip: {},
       legend: { bottom: 0, data: ['本校学生画像', '全国均值'] },
@@ -54,7 +56,10 @@ export default function ProfileDashboardPage() {
         ],
       }],
     })
-    return () => chart.dispose()
+    return () => {
+      window.removeEventListener('resize', onResize)
+      chart.dispose()
+    }
   }, [data])
 
   const completenessData = data?.completenessBreakdown
@@ -67,7 +72,7 @@ export default function ProfileDashboardPage() {
       <StatusCard loading={loading} error={error}>
         {data && (
           <>
-            <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(3,1fr)' }}>
+            <div className="stat-grid" style={{ gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3,1fr)' }}>
               <div className="stat-card">
                 <span className="stat-label">累计画像数</span>
                 <span className="stat-value">{data.totalProfiles}</span>
@@ -75,12 +80,12 @@ export default function ProfileDashboardPage() {
               <div className="stat-card">
                 <span className="stat-label">完整画像数</span>
                 <span className="stat-value">{fullCount + partialCount}</span>
-                <span className="stat-change up">+12%</span>
+                <span style={{ fontSize: 11, color: 'var(--color-success)', fontWeight: 500 }}>+12%</span>
               </div>
               <div className="stat-card">
                 <span className="stat-label">本月新增</span>
                 <span className="stat-value">{Math.floor(data.totalProfiles * 0.15)}</span>
-                <span className="stat-change up">+8%</span>
+                <span style={{ fontSize: 11, color: 'var(--color-success)', fontWeight: 500 }}>+8%</span>
               </div>
             </div>
 
@@ -95,10 +100,10 @@ export default function ProfileDashboardPage() {
                   {data.valuesDistribution.map((v) => (
                     <div key={v.value} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <span style={{ fontSize: 13, width: 72, flexShrink: 0 }}>{v.value}</span>
-                      <div style={{ flex: 1, background: 'var(--bg)', borderRadius: 100, height: 22, overflow: 'hidden' }}>
-                        <div style={{ width: `${v.percentage}%`, height: '100%', background: 'var(--accent)', borderRadius: 100, transition: 'width 0.3s' }} />
+                      <div style={{ flex: 1, background: '#e5e9f2', borderRadius: 100, height: 22, overflow: 'hidden' }}>
+                        <div style={{ width: `${v.percentage}%`, height: '100%', background: 'var(--color-brand-800)', borderRadius: 100, transition: 'width 0.3s' }} />
                       </div>
-                      <span style={{ fontSize: 12, color: 'var(--muted)', width: 36, textAlign: 'right' }}>{v.percentage}%</span>
+                      <span style={{ fontSize: 12, color: 'var(--color-text-muted)', width: 36, textAlign: 'right' }}>{v.percentage}%</span>
                     </div>
                   ))}
                 </div>
@@ -107,16 +112,16 @@ export default function ProfileDashboardPage() {
 
             <div className="stat-grid" style={{ gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', marginTop: 20 }}>
               <div className="card" style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 32, fontWeight: 700, color: 'var(--green)' }}>{fullCount}</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>完整画像（3+ 维度已填充）</div>
+                <div style={{ fontSize: 32, fontWeight: 700, color: 'var(--color-success)' }}>{fullCount}</div>
+                <div style={{ fontSize: 12, color: 'var(--color-text-muted)', marginTop: 4 }}>完整画像（3+ 维度已填充）</div>
               </div>
               <div className="card" style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 32, fontWeight: 700, color: 'var(--amber)' }}>{partialCount}</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>部分画像（1-2 维度已填充）</div>
+                <div style={{ fontSize: 32, fontWeight: 700, color: 'var(--color-warning)' }}>{partialCount}</div>
+                <div style={{ fontSize: 12, color: 'var(--color-text-muted)', marginTop: 4 }}>部分画像（1-2 维度已填充）</div>
               </div>
               <div className="card" style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 32, fontWeight: 700, color: 'var(--muted)' }}>{initialCount}</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>初始画像（仅基础信息）</div>
+                <div style={{ fontSize: 32, fontWeight: 700, color: 'var(--color-text-muted)' }}>{initialCount}</div>
+                <div style={{ fontSize: 12, color: 'var(--color-text-muted)', marginTop: 4 }}>初始画像（仅基础信息）</div>
               </div>
             </div>
           </>

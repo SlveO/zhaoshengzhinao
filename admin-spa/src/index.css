@@ -50,6 +50,15 @@ body {
   border-radius: var(--radius-card);
   padding: 22px 24px;
 }
+.card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.card-header h3 { font-size: 14px; font-weight: 600; margin: 0; }
+.card-header .badge {
+  background: #dbeafe; color: var(--color-brand-800);
+  padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 500;
+}
 
 /* ── Stat Card ── */
 .stat-grid {
