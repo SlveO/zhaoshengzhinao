@@ -52,10 +52,10 @@ Change to:
 
 Concretely: cut L140 `<LoginModal ... />` and paste it after `</view>` on L138 (closing tag of chat-page), before `</template>` on L141.
 
-- [ ] **Step 2: Verify template compiles**
+- [ ] **Step 2: Verify build succeeds**
 
-Run: `cd mini-app && npx vue-tsc --noEmit --skipLibCheck src/pages/chat/index.vue 2>&1 | head -5`
-Expected: no new errors (there may be pre-existing type warnings)
+Run: `cd mini-app && npm run build:h5 2>&1 | tail -5`
+Expected: Build complete, no errors. (vue-tsc on uni-app .vue files produces spurious errors due to custom components like `<view>`, `<text>`, `uni.*` APIs — build is the authoritative check for this project.)
 
 - [ ] **Step 3: Commit**
 
@@ -71,9 +71,9 @@ git commit -m "fix: move LoginModal outside v-if/v-else so it renders when showE
 **Files:**
 - Modify: `mini-app/src/pages/chat/index.vue:179-219` (onLoad function)
 
-**Context:** Current onLoad tries session restore, falls through to `showEntry.value = true`. New logic adds a fast path: if token exists AND `last_active_at` is within 10 minutes, skip entry overlay entirely. On API failure in fast path, fall back to entry overlay with LoginModal.
+**Context:** Current onLoad tries session restore, falls through to `showEntry.value = true`. New logic: only token + within 10min window bypasses entry. Everything else (no token, expired window, guest with stored session) must go through entry gating. On API failure in fast path, fall back to entry overlay with LoginModal.
 
-- [ ] **Step 1: Replace onLoad with gated entry logic**
+- [ ] **Step 1: Replace onLoad with two-branch gated entry logic**
 
 Replace the entire `onLoad` function (L179-219):
 
@@ -84,7 +84,7 @@ onLoad(async () => {
   const lastActive = uni.getStorageSync("last_active_at")
   const withinWindow = lastActive && (Date.now() - Number(lastActive)) < 10 * 60 * 1000
 
-  // Fast path: token valid + within 10min window, skip entry
+  // Fast path: token valid + within 10min window → skip entry, restore session
   if (token && withinWindow) {
     const headers: Record<string, string> = { "Authorization": `Bearer ${token}` }
     try {
@@ -114,54 +114,19 @@ onLoad(async () => {
         return
       }
     } catch {
-      // Token may be expired server-side, fall through to entry
+      // Token may be expired server-side → fall through to entry gating
       clearStoredSessionId()
     }
   }
 
-  // Slow path: try session restore (existing logic)
-  if (stored) {
-    try {
-      const headers: Record<string, string> = {}
-      if (token) headers["Authorization"] = `Bearer ${token}`
-
-      const res = await api.post<any>("/miniapp/enter", {
-        session_id: stored,
-        tenant_slug: TENANT_SLUG,
-      }, { headers })
-
-      if (res.data) {
-        sessionId.value = res.data.session_id
-        saveSessionId(res.data.session_id)
-        hasSession.value = true
-        showEntry.value = false
-        uni.setStorageSync("last_active_at", Date.now())
-        if (res.data.profile_summary) {
-          profileSummary.value = res.data.profile_summary
-        }
-        if (res.data.chat_history && res.data.chat_history.length) {
-          messages.value = res.data.chat_history.map((m: any) => ({
-            id: m.message_id || m.id,
-            role: m.role,
-            content: m.content,
-            timestamp: new Date(m.created_at).getTime(),
-          }))
-        }
-        nextTick(() => { scrollToBottom() })
-        return
-      }
-    } catch {
-      clearStoredSessionId()
-    }
-  }
-
-  // Entry gating: show overlay + auto-pop LoginModal
+  // All other cases → entry gating: show overlay + auto-pop LoginModal
+  // This includes: no token, expired window, guest with stored session, first visit
   showEntry.value = true
   showLogin.value = true
 })
 ```
 
-Note: `uni` is globally available in uni-app, no import needed.
+Key design decision: There is NO standalone slow path. A guest who visited 5 minutes ago has `last_active_at` (within window) and a stored session, but no token. They fail the `token && withinWindow` check and go to entry gating — exactly as the spec intended. The old stored session is discarded; `handleGuest()` or `onLoginSuccess()` will create a fresh session.
 
 - [ ] **Step 2: Commit**
 
@@ -262,7 +227,10 @@ cd D:\_Greatest_programmer\_Projects\gaokao_agents && docker compose build mini-
 - [ ] **Step 2: Verify build artifacts contain new code**
 
 ```bash
-docker compose exec mini-app sh -c "grep -l 'last_active_at' /usr/share/nginx/html/assets/*.js && echo 'FOUND: last_active_at' || echo 'NOT FOUND'"
+# uni-app H5 build outputs JS to static/js/, not assets/ — verify first
+docker compose exec mini-app sh -c "ls /usr/share/nginx/html/static/js/*.js 2>/dev/null | head -5 || ls /usr/share/nginx/html/assets/*.js 2>/dev/null | head -5"
+# Then grep in the correct directory
+docker compose exec mini-app sh -c "grep -rl 'last_active_at' /usr/share/nginx/html/static/js/ /usr/share/nginx/html/assets/ 2>/dev/null && echo 'FOUND: last_active_at' || echo 'NOT FOUND'"
 ```
 
 - [ ] **Step 3: Schedule visual-verifier**
@@ -273,6 +241,7 @@ Dispatch via `Agent({subagent_type: "visual-verifier", model: "haiku", descripti
 Verify login gating flow in mini-app.
 
 URL: http://localhost:3002 (fallback: http://localhost)
+Test credentials: phone=13800000001, password=123456
 
 Step 1: Clear storage and load page
 - browser_resize 375x812
@@ -281,33 +250,37 @@ Step 1: Clear storage and load page
 - browser_navigate to http://localhost:3002
 - browser_wait_for 3000
 - browser_snapshot
-- Verify: LoginModal should be visible (entry overlay + login form)
+- Verify: LoginModal should be visible (entry overlay + login form behind it)
 
 Step 2: Guest mode still works
-- Close LoginModal (click backdrop)
+- Close LoginModal (click backdrop or close button in snapshot)
 - browser_snapshot
-- Verify: guest mode button visible on entry overlay
-- browser_click guest mode button
+- Verify: "访客模式" button visible on entry overlay
+- browser_click "访客模式"
 - browser_wait_for 3000
 - browser_snapshot
-- Verify: chat page loaded
+- Verify: chat page loaded (message input visible)
 - browser_evaluate: return JSON.stringify({ lastActive: !!localStorage.getItem('last_active_at'), token: !!localStorage.getItem('token') })
-- Verify: last_active_at timestamp exists
+- Verify: last_active_at timestamp exists (guest mode also gets a window)
 
 Step 3: Login flow
 - browser_navigate to http://localhost:3002
 - browser_wait_for 3000
 - browser_snapshot
-- Login via LoginModal (phone: 13800000001, password: 123456)
+- Verify: LoginModal visible again (guest has no token, always shows entry)
+- Fill login form: phone=13800000001, password=123456, click login
+- browser_wait_for 3000
+- If login fails (user not found): switch to register tab, register with same credentials + nickname=testuser, click register
 - browser_wait_for 3000
 - browser_snapshot
 - Verify: chat page loaded
 
-Step 4: Fast path - revisit within window
+Step 4: Fast path - revisit within window (skip if Step 3 login+register both failed)
 - browser_navigate to http://localhost:3002
 - browser_wait_for 2000
 - browser_snapshot
-- Verify: directly to chat page (NOT entry overlay)
+- browser_evaluate: return JSON.stringify({ token: !!localStorage.getItem('token'), lastActive: localStorage.getItem('last_active_at') })
+- Verify: directly to chat page (NOT entry overlay), token exists, last_active_at recent
 
 Output: pass/fail for each step with snapshot summaries.
 ```
