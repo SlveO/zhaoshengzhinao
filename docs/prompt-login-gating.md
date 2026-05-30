@@ -9,41 +9,18 @@
 > **Spec**: @docs/superpowers/specs/2026-05-31-login-gating-design.md
 > **Plan**: @docs/superpowers/plans/2026-05-31-login-gating-plan.md
 >
-> **执行顺序**: Task 1 -> 2 -> 3 -> 4 -> 5 (串行，每 task commit 一次)
+> **执行顺序**: Task 1 -> 2 -> 3 -> 4 (串行，每 task commit 一次)
 > **修改文件**: `mini-app/src/pages/chat/index.vue`, `mini-app/src/pages/profile/index.vue`
+> **注意**: LoginModal (L140) 已是 `<template>` 直接子节点，正确放置。无需移动。
 
 ---
 
-## Task 1: 致命缺陷 -- LoginModal 移到 v-if/v-else 外
+## Task 1: 重构 onLoad 入口逻辑 -- 两分支决策树
 
-**Agent**: backend-dev 或 inline 直接编辑
-**文件**: `mini-app/src/pages/chat/index.vue` 模板部分 (L1-141)
-
-**问题**: LoginModal (L140) 在 `<view v-else class="chat-page">` 内部。`showEntry=true` 时 chat-page 不挂载，LoginModal 不在 DOM。`handleRegister()` 设置 `showLogin=true` 同样是无效操作 (已有 bug)。
-
-**修复**: 将 L140 的 `<LoginModal :visible="showLogin" @close="showLogin = false" @success="onLoginSuccess" />` 剪切，粘贴到 L138 `</view>` (chat-page 闭合标签) 之后、L141 `</template>` 之前。LoginModal 自身有 `v-if="visible"` 和 `position: fixed`，放在外层完全正常。
-
-改后结构:
-```html
-<template>
-  <view v-if="showEntry" class="entry-overlay">...</view>
-  <view v-else class="chat-page">...</view>
-  <LoginModal :visible="showLogin" @close="showLogin = false" @success="onLoginSuccess" />
-</template>
-```
-
-**验证**: `cd mini-app && npm run build:h5 2>&1 | tail -5` (不要用 vue-tsc -- uni-app 自定义组件会产生大量误报)
-
-**提交**: `git commit -m "fix: move LoginModal outside v-if/v-else so it renders when showEntry=true"`
-
----
-
-## Task 2: 重构 onLoad 入口逻辑 -- 两分支决策树
-
-**Agent**: backend-dev
+**Agent**: mini-app-dev
 **文件**: `mini-app/src/pages/chat/index.vue` onLoad 函数 (L179-219)
 
-**关键设计决策**: 只有 `token && withinWindow` 两条同时满足才跳过入口。没有独立的慢路径 -- 无 token 的访客即使有 stored session 也走入口门控。
+**关键设计决策**: 只有 `token && withinWindow` 两条同时满足才跳过入口。没有独立的慢路径 -- 无 token 的访客即使有 stored session 也走入口门控。API 失败时 fall through 到入口。
 
 替换整个 `onLoad` 函数:
 
@@ -102,9 +79,9 @@ onLoad(async () => {
 
 ---
 
-## Task 3: handleGuest + onLoginSuccess 成功路径写 last_active_at
+## Task 2: handleGuest + onLoginSuccess 成功路径写 last_active_at
 
-**Agent**: backend-dev
+**Agent**: mini-app-dev
 **文件**: `mini-app/src/pages/chat/index.vue` handleGuest (L225-244) + onLoginSuccess (L246-271)
 
 在 `handleGuest()` 的 `if (res.data)` 块内，`showEntry.value = false` 之后插入一行:
@@ -120,9 +97,9 @@ uni.setStorageSync("last_active_at", Date.now())
 
 ---
 
-## Task 4: Profile 页 onLoad 超时门控
+## Task 3: Profile 页 onLoad 超时门控
 
-**Agent**: backend-dev
+**Agent**: mini-app-dev
 **文件**: `mini-app/src/pages/profile/index.vue` onLoad + onShow (L127-133)
 
 替换 L127-133:
@@ -152,15 +129,15 @@ onShow(() => {
 
 ---
 
-## Task 5: 构建 + 产物验证 + visual-verifier
+## Task 4: 构建 + 产物验证 + visual-verifier
 
-### 5.1 重建 mini-app 镜像
+### 4.1 重建 mini-app 镜像
 
 ```bash
 docker compose build mini-app --no-cache && docker compose up -d mini-app
 ```
 
-### 5.2 构建产物关键词检查
+### 4.2 构建产物关键词检查
 
 ```bash
 # uni-app H5 build outputs to static/js/ not assets/
@@ -169,28 +146,28 @@ docker compose exec mini-app sh -c "ls /usr/share/nginx/html/static/js/*.js 2>/d
 docker compose exec mini-app sh -c "grep -rl 'last_active_at' /usr/share/nginx/html/static/js/ /usr/share/nginx/html/assets/ 2>/dev/null && echo 'FOUND: last_active_at' || echo 'NOT FOUND'"
 ```
 
-### 5.3 调度 visual-verifier 验证完整流程
+### 4.3 调度 visual-verifier 验证完整流程
 
 **调度**: `Agent({subagent_type: "visual-verifier", model: "haiku", description: "Verify login gating flow", prompt: "..."})`
 
 **Prompt:**
 
 ```
-Verify login gating flow in mini-app.
+Verify login gating flow and profile page UI elements in mini-app.
 
 URL: http://localhost:3002 (fallback: http://localhost)
 Test credentials: phone=13800000001, password=123456, nickname=testuser
 
-Step 1: Clear storage, verify LoginModal auto-pops
+Step 1: Clear storage, verify LoginModal auto-pops via showLogin=true
 - browser_resize 375x812
 - browser_navigate to http://localhost:3002
 - browser_evaluate: localStorage.clear()
 - browser_navigate to http://localhost:3002
 - browser_wait_for 3000
 - browser_snapshot
-- Verify: LoginModal visible (entry overlay behind it)
+- Verify: LoginModal visible (showLogin=true set by onLoad entry gating)
 
-Step 2: Guest mode still works
+Step 2: Guest mode works and sets last_active_at
 - Close LoginModal (click backdrop or close button in snapshot)
 - browser_snapshot
 - Verify: guest mode button visible on entry overlay
@@ -205,15 +182,15 @@ Step 3: Login flow
 - browser_navigate to http://localhost:3002
 - browser_wait_for 3000
 - browser_snapshot
-- Verify: LoginModal visible again (guest has no token)
+- Verify: LoginModal visible again (guest has no token, always shows entry)
 - Fill login form: phone=13800000001, password=123456, click submit
 - browser_wait_for 3000
-- If login fails: switch to register tab, fill phone=13800000001, password=123456, nickname=testuser, click register
+- If login fails: switch to register tab, fill same credentials + nickname=testuser, click register
 - browser_wait_for 3000
 - browser_snapshot
 - Verify: chat page loaded
 
-Step 4: Fast path - revisit within window
+Step 4: Fast path -- revisit within window
 - browser_navigate to http://localhost:3002
 - browser_wait_for 2000
 - browser_snapshot
@@ -221,7 +198,7 @@ Step 4: Fast path - revisit within window
 - Verify: directly to chat page (NOT entry overlay), token exists, last_active_at recent
 - Skip this step if Step 3 both login and register failed
 
-Step 5: Profile page with token - verify rebuild report fixes
+Step 5: Profile page with token -- verify rebuild report fixes
 - browser_navigate to http://localhost:3002/#/pages/profile/index
 - browser_wait_for 2000
 - browser_snapshot
@@ -231,7 +208,7 @@ Step 5: Profile page with token - verify rebuild report fixes
 Output: pass/fail for each step with snapshot summaries. For Step 5, confirm whether the rebuild report hidden UI elements are now visible.
 ```
 
-### 5.4 后端全量回归
+### 4.4 后端全量回归
 
 ```bash
 docker compose exec backend python -m pytest tests/ -q --tb=short 2>&1 | tail -3
@@ -248,10 +225,9 @@ docker compose exec backend python -m pytest tests/ -q --tb=short 2>&1 | tail -3
 # Mini-App Login Gating + 10min Window Report
 
 ## Code Changes
-- Task 1: LoginModal moved outside v-if/v-else (critical fix)
-- Task 2: onLoad two-branch decision tree (token+window=fast, rest=entry gate)
-- Task 3: handleGuest/onLoginSuccess write last_active_at
-- Task 4: Profile page onLoad timeout gate
+- Task 1: onLoad two-branch decision tree (token+window=fast, rest=entry gate)
+- Task 2: handleGuest/onLoginSuccess write last_active_at on success path
+- Task 3: Profile page onLoad timeout gate
 
 ## Build Artifacts
 - last_active_at: FOUND/NOT FOUND
@@ -261,7 +237,7 @@ docker compose exec backend python -m pytest tests/ -q --tb=short 2>&1 | tail -3
 
 ## Visual Verification
 
-### Step 1: LoginModal auto-pop (clear storage)
+### Step 1: LoginModal auto-pop (clear storage, showLogin=true)
 - Result: pass/fail
 
 ### Step 2: Guest mode
@@ -274,14 +250,14 @@ docker compose exec backend python -m pytest tests/ -q --tb=short 2>&1 | tail -3
 ### Step 4: Fast path (revisit within window)
 - Result: pass/fail
 
-### Step 5: Profile .logout-btn visible (token present)
+### Step 5: Profile page with token
 - .logout-btn DOM: yes/no
 - .profile-actions DOM: yes/no
 - token: present/absent
 - Result: pass/fail
 
 ## Rebuild Report Issue Resolution
-- .logout-btn visible: Y/N (needs token, new flow guides to login)
+- .logout-btn visible: Y/N (new flow guides to login, token present)
 - .profile-actions visible: Y/N
 - .profile-indicator visible: WARNING needs actual chat to produce profile data
 ```
