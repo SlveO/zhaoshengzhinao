@@ -1,5 +1,21 @@
 <template>
-  <view class="chat-page">
+  <view v-if="showEntry" class="entry-overlay">
+    <view class="entry-card">
+      <text class="entry-title">招生智脑</text>
+      <text class="entry-subtitle">AI 智能高考志愿咨询</text>
+      <view class="entry-buttons">
+        <button class="entry-btn entry-btn-primary" @tap="handleRegister">
+          注册 / 登录
+        </button>
+        <button class="entry-btn entry-btn-secondary" @tap="handleGuest">
+          访客模式
+        </button>
+      </view>
+      <text class="entry-hint">注册用户：对话记录保存 30 天 | 访客：保存 1 天</text>
+    </view>
+  </view>
+
+  <view v-else class="chat-page">
     <view class="chat-hero">
       <image
         class="hero-bg"
@@ -23,6 +39,13 @@
       <text class="scnu-watermark">SCNU</text>
       <text class="school-watermark">华南师范大学</text>
 
+      <view v-if="profileSummary" class="profile-indicator" @tap="goProfile">
+        <text class="profile-indicator-text">
+          已识别: {{ profileSummary.province || '' }} {{ profileSummary.subject_type || '' }} {{ profileSummary.score || '' }}分
+        </text>
+        <text class="profile-indicator-arrow">查看档案 ›</text>
+      </view>
+
       <scroll-view
         class="message-scroll"
         scroll-y
@@ -30,6 +53,8 @@
         :bounces="false"
         :scroll-top="scrollTop"
         :scroll-with-animation="true"
+        @scroll="onScroll"
+        @scrolltolower="onScrollToLower"
       >
         <view class="message-inner">
           <view
@@ -64,10 +89,13 @@
             <view class="avatar avatar-ai">
               <text>AI</text>
             </view>
-            <view class="bubble bubble-ai typing-bubble">
-              <text class="typing-dot" />
-              <text class="typing-dot" />
-              <text class="typing-dot" />
+            <view class="bubble bubble-ai">
+              <view class="typing-dots">
+                <text class="typing-dot" />
+                <text class="typing-dot" />
+                <text class="typing-dot" />
+              </view>
+              <text v-if="thinkingStatus" class="bubble-status">{{ thinkingStatus }}</text>
             </view>
           </view>
         </view>
@@ -108,14 +136,17 @@
       </view>
     </view>
   </view>
+
+  <LoginModal :visible="showLogin" @close="showLogin = false" @success="onLoginSuccess" />
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref } from "vue"
+import { nextTick, onMounted, onUnmounted, ref, watch } from "vue"
 import { onLoad } from "@dcloudio/uni-app"
-import { api } from "@/utils/api"
-import { getStoredSessionId, saveSessionId } from "@/utils/session"
+import { api, getToken } from "@/utils/api"
+import { getStoredSessionId, saveSessionId, clearStoredSessionId } from "@/utils/session"
 import { TENANT_SLUG } from "@/utils/config"
+import LoginModal from "@/components/LoginModal.vue"
 
 const welcomeMessage =
   "你好，我是华南师范大学招生咨询助手。你可以直接问我招生政策、专业介绍、录取参考、校园生活等问题。如果你愿意，也可以告诉我你的省份、科类、分数和意向专业，我会为你生成更适合的本校报考建议。"
@@ -130,35 +161,143 @@ const quickQuestions = [
 const sessionId = ref<string | null>(null)
 const inputText = ref("")
 const scrollTop = ref(0)
+const shouldAutoScroll = ref(true)
+const prevScrollTop = ref(0)
+let scrollTimer: ReturnType<typeof setTimeout> | null = null
+const profileSummary = ref<any>(null)
 const isThinking = ref(false)
+const thinkingStatus = ref("")
 const sources = ref<any[]>([])
 const messages = ref<any[]>([
   { id: "welcome", role: "assistant", content: welcomeMessage, timestamp: Date.now() }
 ])
 
+const hasSession = ref(false)
+const showLogin = ref(false)
+const showEntry = ref(true)
+
 onLoad(async () => {
+  const token = getToken()
   const stored = getStoredSessionId()
+  const lastActive = uni.getStorageSync("last_active_at")
+  const withinWindow = lastActive && (Date.now() - Number(lastActive)) < 10 * 60 * 1000
+
+  // Fast path: token valid + within 10min window -> skip entry, restore session
+  if (token && withinWindow) {
+    const headers: Record<string, string> = { "Authorization": `Bearer ${token}` }
+    try {
+      const res = await api.post<any>("/miniapp/enter", {
+        session_id: stored || null,
+        tenant_slug: TENANT_SLUG,
+      }, { headers })
+
+      if (res.data) {
+        sessionId.value = res.data.session_id
+        saveSessionId(res.data.session_id)
+        hasSession.value = true
+        showEntry.value = false
+        uni.setStorageSync("last_active_at", Date.now())
+        if (res.data.profile_summary) {
+          profileSummary.value = res.data.profile_summary
+        }
+        if (res.data.chat_history && res.data.chat_history.length) {
+          messages.value = res.data.chat_history.map((m: any) => ({
+            id: m.message_id || m.id,
+            role: m.role,
+            content: m.content,
+            timestamp: new Date(m.created_at).getTime(),
+          }))
+        }
+        nextTick(() => { scrollToBottom() })
+        return
+      }
+    } catch {
+      // Token may be expired server-side -> fall through to entry gating
+      clearStoredSessionId()
+    }
+  }
+
+  // All other cases -> entry gating: show overlay + auto-pop LoginModal
+  // Includes: no token, expired window, guest with stored session, first visit
+  showEntry.value = true
+  showLogin.value = true
+})
+
+async function handleRegister(): Promise<void> {
+  showLogin.value = true
+}
+
+async function handleGuest(): Promise<void> {
   try {
     const res = await api.post<any>("/miniapp/enter", {
-      session_id: stored || null,
+      session_id: null,
       tenant_slug: TENANT_SLUG,
-      scene: "miniapp_enter",
     })
     if (res.data) {
       sessionId.value = res.data.session_id
       saveSessionId(res.data.session_id)
-      if (res.data.chat_history?.length) {
-        messages.value = res.data.chat_history.map((m: any) => ({
-          id: m.message_id || m.id,
-          role: m.role,
-          content: m.content,
-          timestamp: new Date(m.created_at).getTime(),
-        }))
+      hasSession.value = true
+      showEntry.value = false
+      if (res.data.profile_summary) {
+        profileSummary.value = res.data.profile_summary
       }
     }
   } catch {
-    // API 不通时保留欢迎消息（demo 后备）
+    showEntry.value = false
+    hasSession.value = true
   }
+}
+
+async function onLoginSuccess(): Promise<void> {
+  showLogin.value = false
+  const token = getToken()
+  try {
+    const headers: Record<string, string> = {}
+    if (token) headers["Authorization"] = `Bearer ${token}`
+
+    const res = await api.post<any>("/miniapp/enter", {
+      session_id: null,
+      tenant_slug: TENANT_SLUG,
+    }, { headers })
+
+    if (res.data) {
+      sessionId.value = res.data.session_id
+      saveSessionId(res.data.session_id)
+      hasSession.value = true
+      showEntry.value = false
+      if (res.data.profile_summary) {
+        profileSummary.value = res.data.profile_summary
+      }
+    }
+  } catch {
+    showEntry.value = false
+    hasSession.value = true
+  }
+}
+
+const prefillQuestion = ref<string | null>(null)
+
+function handlePrefill(question: string): void {
+  prefillQuestion.value = question
+  trySendPrefill()
+}
+
+function trySendPrefill(): void {
+  if (prefillQuestion.value && sessionId.value) {
+    inputText.value = prefillQuestion.value
+    prefillQuestion.value = null
+    sendMessage()
+  }
+}
+
+watch(sessionId, () => trySendPrefill())
+
+onMounted(() => {
+  uni.$on("chat:prefill", handlePrefill)
+})
+
+onUnmounted(() => {
+  uni.$off("chat:prefill", handlePrefill)
 })
 
 function sendQuick(question: string): void {
@@ -176,7 +315,9 @@ async function sendMessage(): Promise<void> {
   const aiId = `ai-${Date.now()}`
   messages.value.push({ id: aiId, role: "assistant", content: "", timestamp: Date.now() })
   isThinking.value = true
+  thinkingStatus.value = "正在检索数据..."
   sources.value = []
+  shouldAutoScroll.value = true
   scrollToBottom()
 
   const apiBase = process.env.NODE_ENV === "development"
@@ -192,6 +333,7 @@ async function sendMessage(): Promise<void> {
   const pollTimer = setTimeout(async () => {
     if (sseReceived) return
     polling = true
+    thinkingStatus.value = "正在生成回答..."
     const poll = async () => {
       if (sseReceived) return
       try {
@@ -206,8 +348,10 @@ async function sendMessage(): Promise<void> {
             sseReceived = true
             abortCtrl.abort()
             isThinking.value = false
+            thinkingStatus.value = ""
             const msg = messages.value.find(m => m.id === aiId)
             if (msg) msg.content = last.content
+            scrollToBottom()
             return
           }
         }
@@ -239,9 +383,39 @@ async function sendMessage(): Promise<void> {
       return
     }
 
+    // HF Spaces proxy buffers SSE into a single JSON response
+    const contentType = response.headers.get("content-type") || ""
+    if (contentType.includes("application/json")) {
+      sseReceived = true
+      clearTimeout(pollTimer)
+      isThinking.value = false
+      thinkingStatus.value = ""
+      try {
+        const json = await response.json()
+        const data = json.data || json
+        const msg = messages.value.find(m => m.id === aiId)
+        if (json.error) {
+          if (msg) msg.content = json.error.message || "AI 服务暂时不可用"
+        } else if (data?.assistant_message?.content) {
+          if (msg) {
+            msg.id = data.assistant_message.message_id || aiId
+            msg.content = data.assistant_message.content
+          }
+        } else {
+          if (msg) msg.content = "AI 服务暂时不可用，请稍后重试"
+        }
+      } catch {
+        const msg = messages.value.find(m => m.id === aiId)
+        if (msg) msg.content = "AI 服务暂时不可用，请稍后重试"
+      }
+      scrollToBottom()
+      return
+    }
+
     const reader = response.body!.getReader()
     const decoder = new TextDecoder()
     let buffer = ""
+    let firstToken = true
 
     while (true) {
       const { value, done } = await reader.read()
@@ -257,18 +431,34 @@ async function sendMessage(): Promise<void> {
           try {
             const evt = JSON.parse(line.slice(6))
             if (evt.type === "token") {
+              if (firstToken) {
+                firstToken = false
+                thinkingStatus.value = "正在生成回答..."
+              }
               const msg = messages.value.find(m => m.id === aiId)
               if (msg) msg.content += evt.text
+            } else if (evt.type === "thinking") {
+              thinkingStatus.value = evt.message
             } else if (evt.type === "sources") {
               sources.value = evt.items
             } else if (evt.type === "done") {
               isThinking.value = false
+              thinkingStatus.value = ""
               if (evt.assistant_message) {
                 const msg = messages.value.find(m => m.id === aiId)
                 if (msg) msg.id = evt.assistant_message.message_id || aiId
               }
+              if (evt.profile_updated && evt.profile_summary) {
+                profileSummary.value = evt.profile_summary
+                uni.showToast({
+                  title: "已更新你的咨询档案",
+                  icon: "success",
+                  duration: 2000,
+                })
+              }
             } else if (evt.type === "error") {
               isThinking.value = false
+              thinkingStatus.value = ""
               const msg = messages.value.find(m => m.id === aiId)
               if (msg) msg.content = evt.message || "AI 服务暂时不可用"
             }
@@ -280,10 +470,12 @@ async function sendMessage(): Promise<void> {
     // 流正常结束但未收到 done 事件（如后端返回了非 SSE 数据），确保气泡消失
     if (isThinking.value) {
       isThinking.value = false
+      thinkingStatus.value = ""
     }
   } catch {
     clearTimeout(pollTimer)
     isThinking.value = false
+    thinkingStatus.value = ""
     if (!sseReceived) {
       const msg = messages.value.find(m => m.id === aiId)
       if (msg) msg.content = "AI 服务暂时不可用，请稍后重试"
@@ -291,10 +483,31 @@ async function sendMessage(): Promise<void> {
   }
 }
 
+function onScrollToLower(): void {
+  shouldAutoScroll.value = true
+}
+
+function onScroll(e: any): void {
+  const current = e.detail.scrollTop || 0
+  if (current < prevScrollTop.value - 15) {
+    shouldAutoScroll.value = false
+  }
+  prevScrollTop.value = current
+}
+
 function scrollToBottom(): void {
-  nextTick(() => {
-    scrollTop.value = Date.now()
-  })
+  if (!shouldAutoScroll.value) return
+  if (scrollTimer) return
+  scrollTimer = setTimeout(() => {
+    scrollTimer = null
+    nextTick(() => {
+      scrollTop.value = Date.now()
+    })
+  }, 80)
+}
+
+function goProfile(): void {
+  uni.switchTab({ url: "/pages/profile/index" })
 }
 </script>
 
@@ -573,12 +786,10 @@ function scrollToBottom(): void {
   color: #ffffff;
 }
 
-.typing-bubble {
+.typing-dots {
   display: flex;
   align-items: center;
-  width: 126rpx;
-  height: 66rpx;
-  padding: 0 28rpx;
+  height: 28rpx;
 }
 
 .typing-dot {
@@ -737,5 +948,112 @@ function scrollToBottom(): void {
   font-size: 20rpx;
   color: #999;
   margin-top: 4rpx;
+}
+
+.bubble-status {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #64748b;
+  animation: statusPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.entry-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.entry-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px 32px;
+  margin: 0 32px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.entry-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a2e;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.entry-subtitle {
+  font-size: 16px;
+  color: #666;
+  display: block;
+  margin-bottom: 32px;
+}
+
+.entry-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.entry-btn {
+  width: 100%;
+  height: 48px;
+  border-radius: 24px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 48px;
+  border: none;
+}
+
+.entry-btn-primary {
+  background: #667eea;
+  color: #fff;
+}
+
+.entry-btn-secondary {
+  background: #f0f0f5;
+  color: #333;
+}
+
+.entry-hint {
+  font-size: 12px;
+  color: #999;
+  margin-top: 24px;
+  display: block;
+}
+
+.profile-indicator {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8rpx 4rpx 0;
+  padding: 14rpx 24rpx;
+  border-radius: 20rpx;
+  background: rgba(37, 99, 235, 0.08);
+  border: 1rpx solid rgba(37, 99, 235, 0.15);
+}
+
+.profile-indicator-text {
+  font-size: 23rpx;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.profile-indicator-arrow {
+  font-size: 23rpx;
+  color: #60a5fa;
 }
 </style>
