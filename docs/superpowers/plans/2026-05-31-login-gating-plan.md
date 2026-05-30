@@ -233,6 +233,8 @@ Step 3: Login flow
 - browser_wait_for 3000
 - browser_snapshot
 - Verify: chat page loaded
+- browser_evaluate: return JSON.stringify({ allTokenKeys: Object.keys(localStorage).filter(function(k) { return k.toLowerCase().indexOf('token') !== -1 }), tokenVal: !!localStorage.getItem('token') })
+- Verify: at least one *token* key exists. Record all key names found -- if 'token' is absent but 'uni_token' is present, note the prefix for Steps 4-5.
 
 Step 4: Fast path -- revisit within 10min window
 - browser_navigate to http://localhost:3002
