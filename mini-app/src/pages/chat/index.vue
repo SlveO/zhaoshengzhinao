@@ -238,6 +238,7 @@ async function handleGuest(): Promise<void> {
       saveSessionId(res.data.session_id)
       hasSession.value = true
       showEntry.value = false
+      uni.setStorageSync("last_active_at", Date.now())
       if (res.data.profile_summary) {
         profileSummary.value = res.data.profile_summary
       }
@@ -265,6 +266,7 @@ async function onLoginSuccess(): Promise<void> {
       saveSessionId(res.data.session_id)
       hasSession.value = true
       showEntry.value = false
+      uni.setStorageSync("last_active_at", Date.now())
       if (res.data.profile_summary) {
         profileSummary.value = res.data.profile_summary
       }
