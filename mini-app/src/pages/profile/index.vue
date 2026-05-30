@@ -28,8 +28,14 @@
         </text>
       </view>
 
-      <button class="primary-btn" @tap="goChat">去 AI 咨询</button>
+      <button v-if="userStore.isGuest" class="primary-btn" @tap="showLogin = true">登录查看完整档案</button>
+      <view v-else class="profile-actions">
+        <button class="primary-btn" @tap="goChat">去 AI 咨询</button>
+        <button class="logout-btn" @tap="handleLogout">退出登录</button>
+      </view>
     </view>
+
+    <LoginModal :visible="showLogin" @close="showLogin = false" @success="onLoginSuccess" />
 
     <view class="demo-card glass-card">
       <view class="section-header">
@@ -88,30 +94,57 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue"
-import { onLoad } from "@dcloudio/uni-app"
+import { onLoad, onShow } from "@dcloudio/uni-app"
 import { api } from "@/utils/api"
-import { getStoredSessionId } from "@/utils/session"
+import { getStoredSessionId, clearStoredSessionId } from "@/utils/session"
+import { useUserStore } from "@/stores/user"
+import LoginModal from "@/components/LoginModal.vue"
+
+const userStore = useUserStore()
+const showLogin = ref(false)
 
 const studentInfo = ref<any>({ province: "", subject_type: "", score: 0, intent_majors: [], focus_points: ["专业实力", "就业方向", "录取参考"] })
 const hasProfile = ref(false)
 
 const sessionId = ref<string | null>(null)
 
-onLoad(async () => {
+async function loadProfile(): Promise<void> {
   const sid = getStoredSessionId()
   sessionId.value = sid
   if (sid) {
     try {
       const res = await api.get<any>(`/student/profile?session_id=${sid}`)
       if (res.data?.profile) {
-        studentInfo.value = res.data.profile
+        studentInfo.value = { ...studentInfo.value, ...res.data.profile }
         hasProfile.value = res.data.has_profile
       }
     } catch {
       // API 不通时保留默认空状态
     }
   }
+}
+
+onLoad(async () => {
+  const token = uni.getStorageSync("token")
+  const lastActive = uni.getStorageSync("last_active_at")
+  const expired = !lastActive || (Date.now() - Number(lastActive)) > 10 * 60 * 1000
+
+  if (!token || expired) {
+    uni.switchTab({ url: "/pages/chat/index" })
+    return
+  }
+
+  await loadProfile()
 })
+
+onShow(() => {
+  loadProfile()
+})
+
+function onLoginSuccess(): void {
+  showLogin.value = false
+  loadProfile()
+}
 
 const focusPoints = computed(() => studentInfo.value.focus_points || ["专业实力", "就业方向", "录取参考"])
 const intentMajorsText = computed(() => (studentInfo.value.intent_majors || []).join(" / "))
@@ -120,6 +153,15 @@ function goChat(): void {
   uni.switchTab({
     url: "/pages/chat/index"
   })
+}
+
+function handleLogout(): void {
+  userStore.logout()
+  clearStoredSessionId()
+  studentInfo.value = { province: "", subject_type: "", score: 0, intent_majors: [], focus_points: [] }
+  hasProfile.value = false
+  sessionId.value = null
+  uni.switchTab({ url: "/pages/chat/index" })
 }
 </script>
 
@@ -429,6 +471,33 @@ function goChat(): void {
   font-size: 23rpx;
   font-weight: 700;
   line-height: 1.35;
+}
+
+.profile-actions {
+  width: 100%;
+  margin-top: 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.profile-actions .primary-btn {
+  margin-top: 0;
+}
+
+.logout-btn {
+  width: 100%;
+  height: 78rpx;
+  line-height: 78rpx;
+  border-radius: 999rpx;
+  background: #f1f5f9;
+  color: #94a3b8;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.logout-btn::after {
+  border: none;
 }
 
 </style>
