@@ -64,6 +64,8 @@ gaokao_agents/
 │   └── seed/                 # 种子数据（schools.json, scores.json）
 ├── scripts/                  # 工具脚本（import_scnu_knowledge.py 等）
 ├── docs/
+│   ├── DEPLOYMENT.md         # Docker Compose 部署手册
+│   ├── OPERATIONS.md         # 日常运维手册
 │   └── ARCHITECTURE.md       # 本文档
 ├── docker-compose.yml        # 本地/VPS 全栈部署
 ├── docker-compose.prod.yml   # 生产 overlay（重启策略、日志、资源限制）
@@ -221,10 +223,16 @@ npm run dev:h5       # http://localhost:5174
 
 ---
 
-## 7. 相关链接
+## 7. 相关文档与链接
 
-- GitHub 仓库：https://github.com/SlveO/zhaoshengzhinao
-- HF Space 仓库：https://huggingface.co/spaces/SlveO/gaokao_api
+| 文档 | 内容 |
+|------|------|
+| `docs/DEPLOYMENT.md` | Docker Compose 部署详细步骤（HTTPS、常见问题） |
+| `docs/OPERATIONS.md` | 日常运维（备份恢复、索引重建、日志、发布回滚） |
+
+**线上地址：**
+- GitHub：https://github.com/SlveO/zhaoshengzhinao
+- HF Space：https://huggingface.co/spaces/SlveO/gaokao_api
 - Admin-SPA：https://zhaoshengzhinao.pages.dev
 - Mini-App：https://zhaoshengzhinao-mini-app.pages.dev
 - Backend API：https://slveo-gaokao-api.hf.space
