@@ -221,10 +221,12 @@ onLoad(async () => {
   // Includes: no token, expired window, guest with stored session, first visit
   showEntry.value = true
   showLogin.value = true
+  handlePrefill()
 })
 
 async function handleRegister(): Promise<void> {
   showLogin.value = true
+  handlePrefill()
 }
 
 async function handleGuest(): Promise<void> {
@@ -279,8 +281,11 @@ async function onLoginSuccess(): Promise<void> {
 
 const prefillQuestion = ref<string | null>(null)
 
-function handlePrefill(question: string): void {
-  prefillQuestion.value = question
+function handlePrefill(question?: string): void {
+  const q = question || uni.getStorageSync("chat_prefill")
+  if (!q) return
+  uni.removeStorageSync("chat_prefill")
+  prefillQuestion.value = q
   trySendPrefill()
 }
 
@@ -366,9 +371,15 @@ async function sendMessage(): Promise<void> {
   }, 8000)
 
   try {
+    const token = getToken()
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      "X-Tenant": TENANT_SLUG,
+    }
+    if (token) headers["Authorization"] = `Bearer ${token}`
     const response = await fetch(`${apiBase}/chat/messages`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "X-Tenant": TENANT_SLUG },
+      headers,
       body: JSON.stringify({
         session_id: sessionId.value,
         tenant_slug: TENANT_SLUG,
