@@ -121,6 +121,7 @@ const questionMap: Record<string, string> = {
 
 function handleEntryTap(title: string): void {
   const question = questionMap[title] || `请介绍一下${title}`
+  uni.setStorageSync("chat_prefill", question)   // fallback: first visit (chat not mounted)
   uni.$emit("chat:prefill", question)
   uni.switchTab({ url: "/pages/chat/index" })
 }
