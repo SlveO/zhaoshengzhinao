@@ -23,6 +23,7 @@ ENV MODELSCOPE_CACHE=/data/model-cache
 ENV SENTENCE_TRANSFORMERS_HOME=/data/model-cache
 
 # ChromaDB 向量库持久化
+RUN mkdir -p /app/uploads
 ENV CHROMA_PERSIST_DIR=/data/chroma
 
 # 单 worker 避免多进程重复加载模型撑爆内存
