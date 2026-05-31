@@ -91,7 +91,7 @@ export default function KnowledgeSettingsPage() {
       )}
 
       <StatusCard loading={loading} error={error}>
-        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+        <div className="card" style={{ padding: 0 }}>
           <div className="table-wrap">
             <table>
               <thead><tr><th>文档标题</th><th>类型</th><th>年份</th><th>索引状态</th><th>索引时间</th><th>操作</th></tr></thead>

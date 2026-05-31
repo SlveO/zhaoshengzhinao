@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import * as echarts from 'echarts'
+import { useMobileStore } from '../stores/mobileStore'
 
 // TODO: replace with API calls when backend ready
 const MOCK = {
@@ -35,6 +36,7 @@ const MOCK = {
 
 export default function DashboardPage() {
   const trendRef = useRef<HTMLDivElement>(null)
+  const isMobile = useMobileStore((s) => s.isMobile)
 
   useEffect(() => {
     if (!trendRef.current) return
@@ -63,21 +65,21 @@ export default function DashboardPage() {
       {/* Hero */}
       <div style={{
         background: 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)',
-        borderRadius: 12, padding: '28px 32px', marginBottom: 20,
+        borderRadius: 12, padding: isMobile ? '16px 20px' : '28px 32px', marginBottom: isMobile ? 12 : 20,
         position: 'relative', overflow: 'hidden',
       }}>
         <div style={{
           position: 'absolute', right: -20, top: -20,
-          opacity: 0.04, fontSize: 96, fontWeight: 900,
+          opacity: 0.04, fontSize: isMobile ? 48 : 96, fontWeight: 900,
           color: '#fff', letterSpacing: 8, lineHeight: 1,
         }}>
           ADMISSIONS
         </div>
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: '#fff', margin: '0 0 4px', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: isMobile ? 18 : 24, fontWeight: 700, color: '#fff', margin: '0 0 4px', letterSpacing: '-0.02em' }}>
             高校招生运营工作台
           </h1>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', margin: 0 }}>
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', margin: 0 }}>
             · 生源转化闭环 ·
           </p>
         </div>
@@ -104,7 +106,7 @@ export default function DashboardPage() {
           <span className="stat-detail">
             AI {MOCK.consultationSummary.aiHandled} · 人工 {MOCK.consultationSummary.humanHandled} · 均 {MOCK.consultationSummary.avgResponseSeconds}s
           </span>
-          <div ref={trendRef} style={{ height: 44, marginTop: 4 }} />
+          <div ref={trendRef} style={{ height: isMobile ? 36 : 44, marginTop: 4 }} />
         </div>
 
         {/* Intent Score */}
@@ -150,7 +152,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Bottom 2-column */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 10 : 16 }}>
         {/* News */}
         <div className="card">
           <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>招生动态</h3>

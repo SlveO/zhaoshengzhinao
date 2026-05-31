@@ -1,4 +1,7 @@
 import { useState, useRef, useCallback } from 'react'
+import { useMobileStore } from '../stores/mobileStore'
+import { Calendar } from 'lucide-react'
+import BottomSheet from '../components/BottomSheet'
 
 // TODO: replace with API GET /api/strategy/report?view=
 interface ReportEntry {
@@ -120,7 +123,10 @@ interface Version {
 }
 
 export default function ReportsPage() {
+  const isMobile = useMobileStore((s) => s.isMobile)
   const [view, setView] = useState('weekly')
+  const [reportPeriod, setReportPeriod] = useState('2026年5月')
+  const [periodSheetOpen, setPeriodSheetOpen] = useState(false)
   const [editing, setEditing] = useState(false)
   const [data, setData] = useState<PerspectiveData>(structuredClone(REPORT_DATA.weekly))
   const [showHistory, setShowHistory] = useState(false)
@@ -361,45 +367,54 @@ export default function ReportsPage() {
       <div style={{
         background: '#fff', border: '1px solid var(--color-border)', borderRadius: 10,
         padding: '12px 18px', marginBottom: 12, display: 'flex', alignItems: 'center',
-        gap: 14, justifyContent: 'space-between',
+        gap: 14, justifyContent: 'space-between', flexWrap: 'wrap',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <span style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>报告周期</span>
-          <select style={{
-            padding: '5px 10px', border: '1px solid var(--color-border)',
-            borderRadius: 6, fontSize: 12, fontFamily: 'inherit', background: '#f8fafc',
-          }}>
-            <option>2026年5月</option><option>2026年4月</option><option>2026年3月</option>
-          </select>
+          <button
+            onClick={() => setPeriodSheetOpen(true)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 5,
+              padding: '5px 10px', border: '1px solid var(--color-border)',
+              borderRadius: 6, fontSize: 12, fontFamily: 'inherit',
+              background: '#f8fafc', cursor: 'pointer',
+              color: 'var(--color-text-secondary)',
+            }}
+          >
+            <Calendar size={14} />
+            {reportPeriod}
+          </button>
           <span style={{ color: 'var(--color-border)', fontSize: 15 }}>|</span>
           <span style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>数据来源：近30天 AI 咨询记录</span>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button
-            className={`btn btn-sm${editing ? ' btn-primary' : ' btn-secondary'}`}
-            onClick={() => setEditing((v) => !v)}
-            style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11 }}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-            </svg>
-            {editing ? '退出编辑' : '编辑报告'}
-          </button>
-          <button className="btn btn-sm btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11 }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-            导出 PDF
-          </button>
-        </div>
+        {!isMobile && (
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              className={`btn btn-sm${editing ? ' btn-primary' : ' btn-secondary'}`}
+              onClick={() => setEditing((v) => !v)}
+              style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11 }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              {editing ? '退出编辑' : '编辑报告'}
+            </button>
+            <button className="btn btn-sm btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              导出 PDF
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Perspective tabs */}
       <div style={{ marginBottom: 14 }}>
         <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 8 }}>策略视角</div>
-        <div style={{ display: 'flex', gap: 2, background: '#f1f5f9', padding: 3, borderRadius: 10, width: 'fit-content' }}>
+        <div className="page-tabs" style={{ display: 'flex', gap: 2, background: '#f1f5f9', padding: 3, borderRadius: 10, width: 'fit-content' }}>
           {Object.entries(PERSPECTIVES).map(([k, v]) => (
             <button
               key={k}
@@ -420,7 +435,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Three columns */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 12 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr', gap: isMobile ? 8 : 12, marginBottom: 12 }}>
         {/* Concerns */}
         <div style={{
           background: '#fff', border: '1px solid var(--color-border)', borderRadius: 10,
@@ -512,10 +527,45 @@ export default function ReportsPage() {
         </div>
       </div>
 
+      {/* Mobile sticky action bar */}
+      {isMobile && (
+        <div style={{
+          position: 'sticky', bottom: 0, zIndex: 50,
+          background: '#fff', border: '1px solid var(--color-border)',
+          borderTopLeftRadius: 14, borderTopRightRadius: 14,
+          padding: '10px 16px', display: 'flex', gap: 10,
+          boxShadow: '0 -4px 16px rgba(15,23,42,0.08)',
+          marginBottom: 12,
+        }}>
+          <button
+            className={`btn${editing ? ' btn-primary' : ' btn-secondary'}`}
+            onClick={() => setEditing((v) => !v)}
+            style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: 13, padding: '10px 0' }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            {editing ? '完成编辑' : '编辑报告'}
+          </button>
+          <button
+            className="btn btn-secondary"
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: 13, padding: '10px 14px' }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            导出
+          </button>
+        </div>
+      )}
+
       {/* Bottom bar */}
       <div style={{
         background: '#fff', border: '1px solid var(--color-border)', borderRadius: 10,
         padding: '10px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        flexWrap: 'wrap', gap: 8,
       }}>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <span style={{ fontSize: 10, color: 'var(--color-text-muted)' }}>上次保存：5分钟前</span>
@@ -566,9 +616,11 @@ export default function ReportsPage() {
               ×
             </button>
           </div>
-          <div style={{ display: 'flex', maxHeight: 260 }}>
+          <div style={{ display: 'flex', maxHeight: isMobile ? undefined : 260, flexDirection: isMobile ? 'column' : 'row' }}>
             <div style={{
-              width: 200, borderRight: '1px solid #f1f5f9', overflowY: 'auto',
+              width: isMobile ? '100%' : 200, borderRight: isMobile ? 'none' : '1px solid #f1f5f9',
+              borderBottom: isMobile ? '1px solid #f1f5f9' : 'none',
+              overflowY: 'auto', maxHeight: isMobile ? 200 : undefined,
               flexShrink: 0, padding: '4px 0',
             }}>
               <div onClick={() => setSelectedVersion(null)} style={{
@@ -617,6 +669,31 @@ export default function ReportsPage() {
           )}
         </div>
       )}
+
+      <BottomSheet
+        open={periodSheetOpen}
+        title="报告周期"
+        onClose={() => setPeriodSheetOpen(false)}
+      >
+        {['2026年5月', '2026年4月', '2026年3月'].map((opt) => {
+          const isActive = reportPeriod === opt
+          return (
+            <button
+              key={opt}
+              className="bs-row"
+              onClick={() => { setReportPeriod(opt); setPeriodSheetOpen(false) }}
+              style={isActive ? { background: '#f8fafc' } : undefined}
+            >
+              <div className="bs-row-icon" style={{ background: '#dbeafe', color: '#1e40af' }}>
+                <Calendar size={20} />
+              </div>
+              <span className="bs-row-text" style={isActive ? { fontWeight: 600 } : undefined}>{opt}</span>
+              {isActive && <span style={{ color: 'var(--color-brand-800)', fontWeight: 600, fontSize: 18 }}>✓</span>}
+            </button>
+          )
+        })}
+        <button className="bs-cancel" onClick={() => setPeriodSheetOpen(false)}>取消</button>
+      </BottomSheet>
     </div>
   )
 }

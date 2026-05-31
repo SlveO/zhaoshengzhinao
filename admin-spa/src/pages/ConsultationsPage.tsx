@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { ListFilter, Calendar } from 'lucide-react'
+import BottomSheet from '../components/BottomSheet'
 
 // TODO: replace with API GET /api/consultations
 const MOCK_SESSIONS = [
@@ -15,8 +17,11 @@ const PAGE_SIZE = 5
 
 export default function ConsultationsPage() {
   const [statusFilter, setStatusFilter] = useState('')
+  const [period, setPeriod] = useState('今天')
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(0)
+  const [statusSheetOpen, setStatusSheetOpen] = useState(false)
+  const [periodSheetOpen, setPeriodSheetOpen] = useState(false)
 
   const filtered = MOCK_SESSIONS.filter((s) => {
     if (statusFilter && s.status !== statusFilter) return false
@@ -30,37 +35,40 @@ export default function ConsultationsPage() {
   return (
     <div>
       <div className="search-bar">
-        <select
-          value={statusFilter}
-          onChange={(e) => { setStatusFilter(e.target.value); setPage(0) }}
+        <button
+          onClick={() => setStatusSheetOpen(true)}
           style={{
-            padding: '8px 12px', border: '1px solid var(--color-border)',
-            borderRadius: 8, fontSize: 13, fontFamily: 'inherit',
-            background: '#f8fafc',
+            display: 'flex', alignItems: 'center', gap: 5,
+            padding: '7px 12px', border: '1px solid var(--color-border)',
+            borderRadius: 8, fontSize: 12, fontFamily: 'inherit',
+            background: '#f8fafc', cursor: 'pointer',
+            color: statusFilter ? 'var(--color-brand-800)' : 'var(--color-text-secondary)',
+            fontWeight: statusFilter ? 600 : 400,
           }}
         >
-          <option value="">全部状态</option>
-          <option value="已处理">已处理</option>
-          <option value="待处理">待处理</option>
-        </select>
-        <select
+          <ListFilter size={14} />
+          {statusFilter || '全部状态'}
+        </button>
+        <button
+          onClick={() => setPeriodSheetOpen(true)}
           style={{
-            padding: '8px 12px', border: '1px solid var(--color-border)',
-            borderRadius: 8, fontSize: 13, fontFamily: 'inherit',
-            background: '#f8fafc',
+            display: 'flex', alignItems: 'center', gap: 5,
+            padding: '7px 12px', border: '1px solid var(--color-border)',
+            borderRadius: 8, fontSize: 12, fontFamily: 'inherit',
+            background: '#f8fafc', cursor: 'pointer',
+            color: 'var(--color-text-secondary)',
           }}
         >
-          <option>今天</option>
-          <option>近7天</option>
-          <option>近30天</option>
-        </select>
+          <Calendar size={14} />
+          {period}
+        </button>
         <input
           type="text" placeholder="搜索学生或关键词…"
           value={search} onChange={(e) => { setSearch(e.target.value); setPage(0) }}
         />
       </div>
 
-      <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+      <div className="card" style={{ padding: 0 }}>
         <div className="table-wrap">
           <table>
             <thead>
@@ -111,6 +119,58 @@ export default function ConsultationsPage() {
         <span>第 {page + 1}/{totalPages || 1} 页</span>
         <button className="btn btn-secondary btn-sm" disabled={page >= totalPages - 1} onClick={() => setPage((p) => p + 1)}>下一页</button>
       </div>
+
+      <BottomSheet
+        open={statusSheetOpen}
+        title="咨询状态"
+        onClose={() => setStatusSheetOpen(false)}
+      >
+        {[
+          { label: '全部状态', value: '', bg: '#e5e9f2', color: '#64748b' },
+          { label: '已处理', value: '已处理', bg: '#dcfce7', color: '#166534' },
+          { label: '待处理', value: '待处理', bg: '#fef3c7', color: '#92400e' },
+        ].map((opt) => {
+          const isActive = statusFilter === opt.value
+          return (
+            <button
+              key={opt.value}
+              className="bs-row"
+              onClick={() => { setStatusFilter(opt.value); setPage(0); setStatusSheetOpen(false) }}
+              style={isActive ? { background: '#f8fafc' } : undefined}
+            >
+              <div className="bs-row-icon" style={{ background: opt.bg, color: opt.color, fontSize: 14 }}>●</div>
+              <span className="bs-row-text" style={isActive ? { fontWeight: 600 } : undefined}>{opt.label}</span>
+              {isActive && <span style={{ color: 'var(--color-brand-800)', fontWeight: 600, fontSize: 18 }}>✓</span>}
+            </button>
+          )
+        })}
+        <button className="bs-cancel" onClick={() => setStatusSheetOpen(false)}>取消</button>
+      </BottomSheet>
+
+      <BottomSheet
+        open={periodSheetOpen}
+        title="时间范围"
+        onClose={() => setPeriodSheetOpen(false)}
+      >
+        {['今天', '近7天', '近30天'].map((opt) => {
+          const isActive = period === opt
+          return (
+            <button
+              key={opt}
+              className="bs-row"
+              onClick={() => { setPeriod(opt); setPeriodSheetOpen(false) }}
+              style={isActive ? { background: '#f8fafc' } : undefined}
+            >
+              <div className="bs-row-icon" style={{ background: '#dbeafe', color: '#1e40af' }}>
+                <Calendar size={20} />
+              </div>
+              <span className="bs-row-text" style={isActive ? { fontWeight: 600 } : undefined}>{opt}</span>
+              {isActive && <span style={{ color: 'var(--color-brand-800)', fontWeight: 600, fontSize: 18 }}>✓</span>}
+            </button>
+          )
+        })}
+        <button className="bs-cancel" onClick={() => setPeriodSheetOpen(false)}>取消</button>
+      </BottomSheet>
     </div>
   )
 }
