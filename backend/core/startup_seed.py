@@ -57,6 +57,16 @@ async def _ensure_tenant_and_admin():
                     status="active",
                 )
                 db.add(tenant)
+            else:
+                # Merge missing modules into existing tenant config (hotfix for 403 on analytics)
+                existing_config = dict(tenant.config or {})
+                existing_modules = existing_config.get("modules", {})
+                default_modules = SCNU_TENANT_CONFIG.get("modules", {})
+                if any(k not in existing_modules for k in default_modules):
+                    merged = {**default_modules, **existing_modules}
+                    existing_config["modules"] = merged
+                    tenant.config = existing_config
+                    logger.info(f"Patched tenant config: added {[k for k in default_modules if k not in existing_modules]} modules")
 
             result = await db.execute(select(User).where(User.username == "admin"))
             user = result.scalar_one_or_none()
