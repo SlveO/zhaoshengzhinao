@@ -87,6 +87,42 @@ async def _run_index():
             print(f"Indexed {len(docs)} documents into Chroma.")
 
 
+# ── Auto-import knowledge data on first boot ──
+
+async def _auto_import_knowledge():
+    """If TenantData is empty and knowledge JSON exists, import it."""
+    from pathlib import Path
+
+    knowledge_file = Path("/app/data/approved/scnu_comprehensive_knowledge.json")
+    if not knowledge_file.exists():
+        logger.info("Knowledge data file not found, skipping auto-import.")
+        return
+
+    from models import async_session as _as
+    from sqlalchemy import select, func
+    from tenants.models import TenantData
+
+    async with _as() as db:
+        count = await db.execute(select(func.count()).select_from(TenantData))
+        if count.scalar() > 0:
+            logger.info(f"TenantData already has {count.scalar()} rows, skipping auto-import.")
+            return
+
+    logger.info("TenantData empty — running knowledge auto-import...")
+    try:
+        import subprocess, sys
+        result = subprocess.run(
+            [sys.executable, "/app/scripts/import_scnu_knowledge.py"],
+            capture_output=True, text=True, timeout=120
+        )
+        if result.returncode == 0:
+            logger.info("Knowledge auto-import complete.")
+        else:
+            logger.warning(f"Knowledge auto-import failed: {result.stderr}")
+    except Exception as e:
+        logger.warning(f"Knowledge auto-import failed: {e}")
+
+
 # ── Lifespan ──
 
 @asynccontextmanager
@@ -96,6 +132,8 @@ async def lifespan(app: FastAPI):
 
     from core.startup_seed import _ensure_tenant_and_admin
     await _ensure_tenant_and_admin()
+
+    await _auto_import_knowledge()
 
     if await _seed_if_empty():
         try:

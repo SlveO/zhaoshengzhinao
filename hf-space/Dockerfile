@@ -11,6 +11,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/ .
 
+# 知识库数据 + 导入脚本（容器首次启动时自动导入到 TenantData）
+COPY data/approved/ /app/data/approved/
+COPY scripts/import_scnu_knowledge.py /app/scripts/import_scnu_knowledge.py
+
 # HF Spaces 固定端口
 EXPOSE 7860
 
