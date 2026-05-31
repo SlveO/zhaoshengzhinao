@@ -31,14 +31,23 @@ async def update_brand_config(
     return merged.config.get("brand", {})
 
 
+UPLOAD_DIR = os.environ.get("UPLOAD_DIR", "/app/uploads")
+
 @router.post("/brand-config/logo")
 async def upload_logo(
     file: UploadFile = File(...),
     tenant=Depends(get_current_tenant),
     _user=Depends(get_current_tenant_user),
 ):
-    # Stub: save to file store (Phase 2)
-    return {"logo_url": f"/uploads/{tenant.slug}/logo.png", "_stub": True}
+    tenant_dir = os.path.join(UPLOAD_DIR, tenant.slug)
+    if not os.path.exists(tenant_dir):
+        os.makedirs(tenant_dir)
+    ext = os.path.splitext(file.filename or ".png")[1] or ".png"
+    filename = f"{uuid.uuid4()}{ext}"
+    filepath = os.path.join(tenant_dir, filename)
+    with open(filepath, "wb") as f:
+        f.write(await file.read())
+    return {"logo_url": f"/uploads/{tenant.slug}/{filename}"}
 
 
 # ── Knowledge Base ──
@@ -110,6 +119,8 @@ async def upload_document(
                 except Exception:
                     pass
             result = {"success": True, "imported": 1, "errors": [], "total_rows": 1}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Upload failed: {e}")
     finally:
         os.unlink(tmp_path)
 

@@ -78,3 +78,8 @@ export interface ModuleItem {
   depends: string[]
   enabled: boolean
 }
+export interface IndexStatus {
+  indexed_count: number
+  total_count: number
+  is_indexing: boolean
+}

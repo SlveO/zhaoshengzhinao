@@ -13,6 +13,12 @@ TENANT_PUBLIC_PATHS = {
     "/api/v1/auth/login",
     "/api/v1/auth/register",
     "/api/v1/auth/refresh",
+    # C-end miniapp routes use tenant_slug from request body, not X-Tenant header
+    "/api/v1/miniapp/enter",
+    "/api/v1/chat/messages",
+    "/api/v1/student/profile",
+    "/api/v1/recommendations",
+    "/api/v1/majors/analysis",
 }
 
 

@@ -4,6 +4,7 @@ import uuid
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
 
@@ -93,6 +94,9 @@ async def lifespan(app: FastAPI):
     await init_db()
     print("Database tables created.")
 
+    from core.startup_seed import _ensure_tenant_and_admin
+    await _ensure_tenant_and_admin()
+
     if await _seed_if_empty():
         try:
             await _run_seed()
@@ -118,15 +122,15 @@ async def lifespan(app: FastAPI):
             count = col.count()
             if count == 0:
                 logger.warning("scnu_colleges collection is empty, running index...")
-                from knowledge.indexer import index_tenant_data
-                index_tenant_data("scnu")
+                from knowledge.indexer import reindex_tenant
+                await reindex_tenant("scnu")
                 logger.info("scnu_colleges indexed successfully")
             else:
                 logger.info(f"scnu_colleges collection has {count} documents")
         except Exception:
             logger.warning("scnu_colleges collection not found, running index...")
-            from knowledge.indexer import index_tenant_data
-            index_tenant_data("scnu")
+            from knowledge.indexer import reindex_tenant
+            await reindex_tenant("scnu")
             logger.info("scnu_colleges indexed successfully")
     except Exception as e:
         logger.warning(f"ChromaDB index check failed: {e}")
@@ -178,6 +182,7 @@ app.include_router(tenant_router, prefix="/api/v1/admin/tenants", tags=["tenants
 app.include_router(analytics_router, prefix="/api/v1/admin/analytics", tags=["analytics"])
 app.include_router(admin_router, prefix="/api/v1/admin", tags=["admin"])
 
+app.mount("/uploads", StaticFiles(directory="/app/uploads"), name="uploads")
 
 @app.get("/api/health")
 async def health():

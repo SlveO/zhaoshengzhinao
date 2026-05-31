@@ -108,12 +108,21 @@ const infoEntries: InfoEntry[] = [
   }
 ]
 
+const questionMap: Record<string, string> = {
+  "学校概况": "请介绍一下华南师范大学的学校概况和办学特色",
+  "学院介绍": "华南师范大学有哪些学院？请介绍一下各学院的方向",
+  "专业介绍": "请介绍华南师范大学的专业设置和培养方向",
+  "招生政策": "华南师范大学的招生政策是怎样的？有哪些录取要求？",
+  "招生计划": "华南师范大学今年的招生计划是怎样的？各专业招多少人？",
+  "招生联系方式": "华南师范大学的招生联系方式有哪些？怎么联系招办？",
+  "招生咨询群": "怎么加入华南师范大学的招生咨询群？有官方答疑吗？",
+  "校园生活": "华南师范大学的校园生活怎么样？住宿、社团、食堂条件如何？"
+}
+
 function handleEntryTap(title: string): void {
-  uni.showToast({
-    title: `请前往 AI 咨询了解${title}`,
-    icon: "none",
-    duration: 1600
-  })
+  const question = questionMap[title] || `请介绍一下${title}`
+  uni.$emit("chat:prefill", question)
+  uni.switchTab({ url: "/pages/chat/index" })
 }
 
 function goChat(): void {

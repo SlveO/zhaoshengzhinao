@@ -7,8 +7,12 @@ import uuid
 from pathlib import Path
 
 _backend_dir = str(Path(__file__).resolve().parent.parent / "backend")
+# Inside Docker the backend code lives at /app directly, not /app/backend
+if not Path(_backend_dir).is_dir():
+    _backend_dir = str(Path(__file__).resolve().parent.parent)
 sys.path.insert(0, _backend_dir)
-os.chdir(_backend_dir)
+if Path(_backend_dir).is_dir():
+    os.chdir(_backend_dir)
 
 from sqlalchemy import text  # noqa: E402
 from models import async_session  # noqa: E402
@@ -35,6 +39,9 @@ SCNU_TENANT = {
             "region_distribution": True,
             "competitive_analysis": True,
             "dialogue_quality": True,
+            "topic_cloud": True,
+            "emotion_timeline": True,
+            "hot_questions": True,
             "annual_report": False,
             "multi_department": False,
             "role_management": False,

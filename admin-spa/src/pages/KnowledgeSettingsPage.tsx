@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import api from '../api/client'
-import type { DocumentItem } from '../types'
+import type { DocumentItem, IndexStatus } from '../types'
 import { mockDocuments } from '../mock/knowledgeBase'
 import StatusCard from '../components/StatusCard'
 import Modal from '../components/Modal'
@@ -16,9 +16,12 @@ export default function KnowledgeSettingsPage() {
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState('')
+  const [uploadType, setUploadType] = useState('admission_score')
   const [page, setPage] = useState(0)
   const [deleteTarget, setDeleteTarget] = useState<DocumentItem | null>(null)
   const [message, setMessage] = useState('')
+  const [indexStatus, setIndexStatus] = useState<IndexStatus | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const fetchDocs = () => {
     api.get<{ documents: DocumentItem[] }>('/admin/knowledge/documents')
@@ -52,16 +55,40 @@ export default function KnowledgeSettingsPage() {
     }
   }
 
-  const handleUpload = () => {
-    const newDoc: DocumentItem = {
-      id: 'd' + Date.now(),
-      title: '新上传文档_' + new Date().toLocaleDateString('zh-CN'),
-      data_type: 'admission_score',
-      year: 2026,
-      indexed_at: new Date().toISOString(),
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('data_type', uploadType)
+    try {
+      await api.post('/admin/knowledge/documents', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      setMessage('文档上传成功')
+      fetchDocs()
+    } catch {
+      setMessage('上传失败')
+    } finally {
+      if (fileInputRef.current) fileInputRef.current.value = ''
     }
-    setDocs((prev) => [newDoc, ...prev])
-    setMessage('文档上传成功')
+  }
+
+  const handleReindex = async () => {
+    try {
+      setIndexStatus({ indexed_count: 0, total_count: docs.length, is_indexing: true })
+      await api.post('/admin/knowledge/reindex')
+      setMessage('重新索引已触发')
+      fetchDocs()
+      setIndexStatus(null)
+    } catch {
+      setMessage('重新索引失败')
+      setIndexStatus(null)
+    }
   }
 
   return (
@@ -71,7 +98,9 @@ export default function KnowledgeSettingsPage() {
         <span className="pill green">
           已索引 {docs.filter((d) => d.indexed_at).length} / 共 {docs.length}
         </span>
-        <button className="btn btn-secondary btn-sm">重新索引</button>
+        <button className="btn btn-secondary btn-sm" onClick={handleReindex} disabled={indexStatus?.is_indexing}>
+          {indexStatus?.is_indexing ? '索引中…' : '重新索引'}
+        </button>
       </div>
 
       <div className="search-bar">
@@ -80,7 +109,11 @@ export default function KnowledgeSettingsPage() {
           <option value="">全部类型</option>
           {Object.entries(TYPE_NAMES).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
         </select>
-        <button className="btn btn-primary btn-sm" onClick={handleUpload}>上传文档</button>
+        <select value={uploadType} onChange={(e) => setUploadType(e.target.value)} style={{ padding: '7px 10px', border: '1px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', background: 'var(--surface)' }}>
+          {Object.entries(TYPE_NAMES).map(([k, v]) => <option key={k} value={k}>上传为：{v}</option>)}
+        </select>
+        <input ref={fileInputRef} type="file" accept=".json,.csv,.xlsx,.xls,.txt" style={{ display: 'none' }} onChange={handleFileChange} />
+        <button className="btn btn-primary btn-sm" onClick={handleUploadClick}>上传文档</button>
       </div>
 
       {message && (

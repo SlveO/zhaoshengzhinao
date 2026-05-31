@@ -29,7 +29,7 @@ export default function App() {
   }, [setSize])
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/admin">
       <Routes>
         <Route path="/login" element={<LoginPage />} />
 

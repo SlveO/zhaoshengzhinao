@@ -30,14 +30,10 @@ _schema_created = False
 
 @pytest.fixture(scope="session")
 def event_loop():
-    """Session-scoped event loop — all async fixtures/tests share this loop."""
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-
-    # Reload models so the engine is created within the session event loop
     import models
     importlib.reload(models)
-
     yield loop
     loop.close()
 
@@ -70,14 +66,29 @@ async def setup_db():
             )
         _schema_created = True
 
+    # Ensure expires_at column exists (migration 006 may not have run on test DB)
+    async with engine.begin() as conn:
+        await conn.execute(text(
+            "ALTER TABLE consult_sessions ADD COLUMN IF NOT EXISTS expires_at TIMESTAMPTZ"
+        ))
+
     yield
+
+    await engine.dispose()
 
     async with async_session() as db:
         for table in ["event_logs", "session_profiles", "tenant_data", "tenant_users",
                        "departments", "tenants", "recommendation_feedback",
-                       "recommendations", "user_profiles", "users"]:
-            await db.execute(text(f"DELETE FROM {table}"))
-        await db.commit()
+                       "recommendations", "user_profiles", "users",
+                       "chat_messages", "consult_sessions", "admission_data", "colleges"]:
+            try:
+                await db.execute(text(f"DELETE FROM {table}"))
+            except Exception:
+                pass
+        try:
+            await db.commit()
+        except Exception:
+            await db.rollback()
 
 
 @pytest.fixture
@@ -239,10 +250,8 @@ def app_client(monkeypatch):
     from main import app
 
     monkeypatch.setattr(app.router, "lifespan_context", _noop_lifespan)
-    app.dependency_overrides = {}
     with TestClient(app) as client:
         yield client
-    app.dependency_overrides = {}
 
 
 @pytest_asyncio.fixture
@@ -250,8 +259,6 @@ async def async_client(monkeypatch):
     from main import app
 
     monkeypatch.setattr(app.router, "lifespan_context", _noop_lifespan)
-    app.dependency_overrides = {}
     transport = httpx.ASGITransport(app=app)
     async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
         yield client
-    app.dependency_overrides = {}

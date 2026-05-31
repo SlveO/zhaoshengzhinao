@@ -5,6 +5,7 @@ C端小程序 REST API — 5 个端点。
 import asyncio
 import json
 import logging
+import uuid
 
 from fastapi import APIRouter, Request, Query
 from starlette.responses import StreamingResponse
@@ -23,6 +24,8 @@ from services.consult_service import (
     extract_profile_from_message, build_profile_summary,
 )
 from tenants.service import resolve_tenant
+from core.event_writer import write_event
+from utils.jwt import decode_token
 
 router = APIRouter(prefix="/api/v1", tags=["miniapp"])
 
@@ -47,7 +50,27 @@ async def miniapp_enter(body: EnterRequest, request: Request):
         brand = tenant.config.get("brand", {})
         tenant_name = brand.get("name", tenant_name)
 
-    session, is_new = await get_or_create_session(body.session_id, tenant_slug)
+    # Optional JWT parse: guest if absent or invalid
+    user_id = None
+    auth_header = request.headers.get("Authorization", "")
+    if auth_header.startswith("Bearer "):
+        try:
+            payload = decode_token(auth_header[7:])
+            if payload:
+                user_id = uuid.UUID(payload["user_id"])
+        except Exception:
+            pass
+
+    session, is_new = await get_or_create_session(body.session_id, tenant_slug, user_id)
+    if is_new and tenant:
+        try:
+            await write_event(
+                tenant.id, "chat_session_started",
+                session_id=session.id,
+                payload={"user_id": str(user_id)} if user_id else None,
+            )
+        except Exception:
+            logging.warning("Failed to write chat_session_started event")
     chat_history = await get_chat_history(session.session_id)
     profile_summary = build_profile_summary(session)
 
@@ -70,8 +93,25 @@ async def send_chat_message(body: ChatMessageRequest):
     if not session:
         return err("SESSION_NOT_FOUND", "会话不存在或已过期")
 
+    # Resolve tenant for event logging
+    tenant = await resolve_tenant(body.tenant_slug)
+    tenant_id = tenant.id if tenant else None
+
     user_content = body.message.content
     await save_message(body.session_id, "user", user_content)
+
+    # Event: user message received
+    if tenant_id:
+        try:
+            await write_event(
+                tenant_id, "chat_message_sent",
+                session_id=session.id,
+                payload={"message_length": len(user_content)},
+            )
+        except Exception as e:
+            logging.warning(f"Event chat_message_sent failed for session={body.session_id}: {e}")
+    else:
+        logging.debug(f"Skipped event chat_message_sent for session={body.session_id}: no tenant_id")
 
     # 异步 RAG 检索（不阻塞事件循环）
     async def do_rag():
@@ -99,6 +139,20 @@ async def send_chat_message(body: ChatMessageRequest):
         return knowledge_context, sources
 
     knowledge_context, sources = await do_rag()
+
+    # Event: RAG retrieval completed
+    if tenant_id:
+        top_score = sources[0]["score"] if sources else 0
+        try:
+            await write_event(
+                tenant_id, "chat_rag_completed",
+                session_id=session.id,
+                payload={"sources_count": len(sources), "top_score": top_score},
+            )
+        except Exception as e:
+            logging.warning(f"Event chat_rag_completed failed for session={body.session_id}: {e}")
+    else:
+        logging.debug(f"Skipped event chat_rag_completed for session={body.session_id}: no tenant_id")
 
     # 构建 System Prompt + History
     from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
@@ -154,6 +208,16 @@ async def send_chat_message(body: ChatMessageRequest):
                 yield f"data: {json.dumps({'type': 'token', 'text': token})}\n\n"
         except Exception as exc:
             logging.error(f"LLM stream failed: {exc}")
+            # Event: chat error
+            try:
+                if tenant_id:
+                    await write_event(
+                        tenant_id, "chat_error",
+                        session_id=session.id,
+                        payload={"error_code": "LLM_FAILED", "error_message": str(exc)[:200]},
+                    )
+            except Exception as e:
+                    logging.warning(f"Event chat_error failed for session={body.session_id}: {e}")
             yield f"data: {json.dumps({'type': 'error', 'code': 'LLM_FAILED', 'message': 'AI 服务暂时不可用'})}\n\n"
             return
 
@@ -166,11 +230,12 @@ async def send_chat_message(body: ChatMessageRequest):
         }
         profile_updates = await extract_profile_from_message(user_content, full_content, existing_dict)
         profile_updated = bool(profile_updates)
+        updated_session = session
         if profile_updated:
             await update_session_profile(body.session_id, profile_updates)
-            session = await get_session(body.session_id)
+            updated_session = await get_session(body.session_id)
 
-        profile_summary = build_profile_summary(session) if session else None
+        profile_summary = build_profile_summary(updated_session) if updated_session else None
 
         done_data = {
             "type": "done",
@@ -180,6 +245,17 @@ async def send_chat_message(body: ChatMessageRequest):
             "profile_summary": profile_summary,
         }
         yield f"data: {json.dumps(done_data)}\n\n"
+
+        # Event: chat response completed
+        try:
+            if tenant_id:
+                await write_event(
+                    tenant_id, "chat_response_completed",
+                    session_id=session.id,
+                    payload={"response_length": len(full_content), "profile_updated": profile_updated},
+                )
+        except Exception as e:
+            logging.warning(f"Event chat_response_completed failed for session={body.session_id}: {e}")
 
     return StreamingResponse(
         event_stream(),
@@ -251,6 +327,7 @@ async def get_recommendations(body: RecommendationRequest):
         majors = result.scalars().all()
 
     student_score = profile_snapshot.get("score", 0) or session.score or 0
+    intent_majors = profile_snapshot.get("intent_majors", []) or []
     items = []
     for m in majors:
         if student_score > 0:
@@ -264,6 +341,23 @@ async def get_recommendations(body: RecommendationRequest):
             match_score = min(95, max(50, 70 + diff))
         else:
             risk_level, risk_label, match_score = "match", "参考", 75
+
+        # Intent major boost
+        if intent_majors and student_score > 0:
+            for intent in intent_majors:
+                if intent in (m.major_name or ""):
+                    match_score = min(98, match_score + 8)
+                    break
+
+        reasons = [
+            f"该专业{risk_label}你的分数水平" if student_score > 0 else "建议填写分数后获得更精准推荐",
+            "属于华南师范大学招生专业",
+        ]
+        if intent_majors and student_score > 0:
+            for intent in intent_majors:
+                if intent in (m.major_name or ""):
+                    reasons.append(f"符合你的意向方向「{intent}」")
+                    break
 
         items.append({
             "id": f"rec_{m.id}",
@@ -279,10 +373,7 @@ async def get_recommendations(body: RecommendationRequest):
             "min_score": m.min_score or 0,
             "min_rank": m.min_rank or 0,
             "subjects": m.subject_requirements or "物理+不限",
-            "reasons": [
-                f"该专业{risk_label}你的分数水平" if student_score > 0 else "建议填写分数后获得更精准推荐",
-                "属于华南师范大学招生专业",
-            ],
+            "reasons": reasons,
         })
 
     # 保存推荐结果

@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm *)",
+      "Bash(pytest *)",
+      "Bash(ruff *)",
+      "Bash(alembic *)",
+      "Bash(python scripts/seed_db.py)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(docker compose *)",
+      "Bash(mkdir *)",
+      "Bash(find *)",
+      "Bash(ls *)",
+      "Bash(*ralph-loop*)"
+    ]
+  }
+}

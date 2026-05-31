@@ -13,8 +13,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 _backend_dir = str(Path(__file__).resolve().parent.parent / "backend")
+# Inside Docker the backend code lives at /app directly, not /app/backend
+if not Path(_backend_dir).is_dir():
+    _backend_dir = str(Path(__file__).resolve().parent.parent)
 sys.path.insert(0, _backend_dir)
-os.chdir(_backend_dir)
+if Path(_backend_dir).is_dir():
+    os.chdir(_backend_dir)
 
 from sqlalchemy import select, text  # noqa: E402
 

@@ -46,6 +46,10 @@ services:
       - uploads:/app/uploads
       - modelscope_cache:/app/.cache/modelscope
       - huggingface_cache:/app/.cache/huggingface
+      - ./scripts:/app/scripts:ro
+      - ./data/raw:/app/data/raw:ro
+      - ./data/approved:/app/data/approved:ro
+      - ./backend/tests:/app/tests:ro
     depends_on:
       db:
         condition: service_healthy

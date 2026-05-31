@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import api from '../api/client'
 import type { BrandConfig } from '../types'
 import StatusCard from '../components/StatusCard'
@@ -19,12 +19,29 @@ export default function BrandSettingsPage() {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const logoInputRef = useRef<HTMLInputElement>(null)
+  const faviconInputRef = useRef<HTMLInputElement>(null)
+  const bgInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     api.get<BrandConfig>('/admin/brand-config')
       .then((r) => setBrand({ ...DEFAULTS, ...r.data }))
       .catch((e) => setError(e?.message || '获取品牌配置失败'))
   }, [])
+
+  const handleFileUpload = async (file: File, setter: (url: string) => void) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    try {
+      const res = await api.post<{ logo_url: string }>('/admin/brand-config/logo', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      setter(res.data.logo_url)
+      setMessage('文件上传成功')
+    } catch {
+      setMessage('上传失败')
+    }
+  }
 
   const handleSave = async (e: FormEvent) => {
     e.preventDefault()
@@ -77,9 +94,9 @@ export default function BrandSettingsPage() {
                       <input value={brand.secondary_color} onChange={(e) => update({ secondary_color: e.target.value })} style={{ flex: 1 }} />
                     </div>
                   </div>
-                  <div className="field"><label>Logo URL</label><input value={brand.logo_url} onChange={(e) => update({ logo_url: e.target.value })} placeholder="https://..." /></div>
-                  <div className="field"><label>Favicon URL</label><input value={brand.favicon_url || ''} onChange={(e) => update({ favicon_url: e.target.value })} placeholder="https://..." /></div>
-                  <div className="field"><label>登录背景图 URL</label><input value={brand.login_bg_url || ''} onChange={(e) => update({ login_bg_url: e.target.value })} placeholder="https://..." /></div>
+                  <div className="field"><label>Logo URL</label><div className="field-row"><input value={brand.logo_url} onChange={(e) => update({ logo_url: e.target.value })} placeholder="https://..." style={{ flex: 1 }} /><input ref={logoInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFileUpload(f, (url) => update({ logo_url: url })); }} /><button type="button" className="btn btn-secondary btn-sm" onClick={() => logoInputRef.current?.click()}>上传</button></div></div>
+                  <div className="field"><label>Favicon URL</label><div className="field-row"><input value={brand.favicon_url || ''} onChange={(e) => update({ favicon_url: e.target.value })} placeholder="https://..." style={{ flex: 1 }} /><input ref={faviconInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFileUpload(f, (url) => update({ favicon_url: url })); }} /><button type="button" className="btn btn-secondary btn-sm" onClick={() => faviconInputRef.current?.click()}>上传</button></div></div>
+                  <div className="field"><label>登录背景图 URL</label><div className="field-row"><input value={brand.login_bg_url || ''} onChange={(e) => update({ login_bg_url: e.target.value })} placeholder="https://..." style={{ flex: 1 }} /><input ref={bgInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFileUpload(f, (url) => update({ login_bg_url: url })); }} /><button type="button" className="btn btn-secondary btn-sm" onClick={() => bgInputRef.current?.click()}>上传</button></div></div>
                   <div className="field" style={{ gridColumn: '1 / -1' }}><label>欢迎语</label><textarea value={brand.welcome_text || ''} onChange={(e) => update({ welcome_text: e.target.value })} /></div>
                 </div>
                 <div className="btn-group" style={{ marginTop: 20 }}>

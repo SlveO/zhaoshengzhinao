@@ -17,5 +17,9 @@ class ConsultSession(Base):
     intent_majors: Mapped[dict] = mapped_column(JSONB, default=list)
     focus_points: Mapped[dict] = mapped_column(JSONB, default=list)
     consult_stage: Mapped[str] = mapped_column(String(30), default="new")
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.clock_timestamp())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.clock_timestamp(), onupdate=func.clock_timestamp())
+    expires_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True,
+        comment="Session expiry: null = never expires"
+    )

@@ -30,8 +30,9 @@ data/raw/
 # Superpowers session cache
 .superpowers/
 
-# Claude config (local only)
-.claude/
+# Claude config — personal only
+.claude/settings.local.json
+.claude/worktrees/
 
 # Netlify
 .netlify

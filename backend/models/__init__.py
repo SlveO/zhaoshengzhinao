@@ -50,5 +50,6 @@ async def init_db():
     from . import recommendation_feedback  # noqa: F401
     from . import consult_session  # noqa: F401
     from . import chat_message    # noqa: F401
+    import tenants.models          # noqa: F401
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

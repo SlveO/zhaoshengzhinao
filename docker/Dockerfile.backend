@@ -17,8 +17,10 @@ RUN addgroup --system app && adduser --system --ingroup app app \
 
 COPY backend/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
+RUN playwright install chromium --with-deps
 
 COPY backend/ /app/
+COPY pytest.ini /app/pytest.ini
 COPY data/seed/ /app/data/seed/
 
 RUN mkdir -p /app/chroma_data /app/uploads /app/.cache/modelscope /app/.cache/huggingface && chown -R app:app /app

@@ -123,6 +123,13 @@
       </button>
     </view>
 
+    <view v-if="userStore.isGuest && !hasSession" class="login-prompt glass-card" @tap="showLogin = true">
+      <text class="login-prompt-text">登录后可获取个性化专业推荐</text>
+      <text class="login-prompt-link">点击登录</text>
+    </view>
+
+    <LoginModal :visible="showLogin" @close="showLogin = false" @success="onLoginSuccess" />
+
     <view class="bottom-tip">
       <text>后续可由后端结合招生计划、专业组和咨询档案实时生成建议。</text>
     </view>
@@ -131,9 +138,11 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue"
-import { onLoad } from "@dcloudio/uni-app"
+import { onLoad, onShow } from "@dcloudio/uni-app"
 import { api } from "@/utils/api"
 import { getStoredSessionId } from "@/utils/session"
+import { useUserStore } from "@/stores/user"
+import LoginModal from "@/components/LoginModal.vue"
 
 type RiskLevel = "reach" | "match" | "safe"
 
@@ -142,6 +151,8 @@ interface RiskMeta {
   className: string
 }
 
+const userStore = useUserStore()
+const showLogin = ref(false)
 const studentInfo = ref<any>({ province: "", subject_type: "", score: 0, intent_majors: [] })
 const recommendations = ref<any[]>([])
 const disclaimer = ref("以下建议为华南师范大学校内专业报考参考，不代表录取承诺。")
@@ -149,7 +160,7 @@ const disclaimer = ref("以下建议为华南师范大学校内专业报考参�
 const sessionId = ref<string | null>(null)
 const hasSession = computed(() => Boolean(sessionId.value))
 
-onLoad(async () => {
+async function loadRecommendations(): Promise<void> {
   const sid = getStoredSessionId()
   sessionId.value = sid
   if (sid) {
@@ -166,7 +177,34 @@ onLoad(async () => {
       // API 不通时保留空列表
     }
   }
+}
+
+async function loadProfile(): Promise<void> {
+  const sid = getStoredSessionId()
+  if (!sid) return
+  try {
+    const res = await api.get<any>(`/student/profile?session_id=${sid}`)
+    if (res.data?.profile) {
+      studentInfo.value = { ...studentInfo.value, ...res.data.profile }
+    }
+  } catch {
+    // API unreachable — keep existing defaults
+  }
+}
+
+onLoad(async () => {
+  await Promise.all([loadProfile(), loadRecommendations()])
 })
+
+onShow(() => {
+  loadProfile()
+  loadRecommendations()
+})
+
+function onLoginSuccess(): void {
+  showLogin.value = false
+  loadRecommendations()
+}
 
 const intentMajorsText = computed(() => (studentInfo.value.intent_majors || []).join(" / "))
 
@@ -611,5 +649,26 @@ function goAnalysis(item: any): void {
   font-size: 23rpx;
   font-weight: 700;
   line-height: 1.35;
+}
+
+.login-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  margin-top: 24rpx;
+  padding: 24rpx;
+  cursor: pointer;
+}
+
+.login-prompt-text {
+  font-size: 25rpx;
+  color: #64748b;
+}
+
+.login-prompt-link {
+  font-size: 25rpx;
+  color: #1d4ed8;
+  font-weight: 700;
 }
 </style>
