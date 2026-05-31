@@ -28,8 +28,10 @@ export default function App() {
     return () => window.removeEventListener('resize', onResize)
   }, [setSize])
 
+  const basename = (import.meta.env.VITE_BASE_PATH || '/').replace(/\/+$/, '') || '/'
+
   return (
-    <BrowserRouter basename="/admin">
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
 
