@@ -10,7 +10,7 @@ interface ApiResponse<T = any> {
   error: { code: string; message: string } | null;
 }
 
-function getToken(): string | null {
+export function getToken(): string | null {
   try {
     return uni.getStorageSync("token") || null;
   } catch {
@@ -94,14 +94,16 @@ async function request<T = any>(
   method: "GET" | "POST" | "PUT" | "DELETE",
   path: string,
   data?: any,
+  options?: { headers?: Record<string, string> },
   retry = true,
 ): Promise<ApiResponse<T>> {
+  const headers = { ...buildHeaders(), ...(options?.headers || {}) };
   return new Promise((resolve, reject) => {
     uni.request({
       url: `${BASE_URL}${path}`,
       method,
       data,
-      header: buildHeaders(),
+      header: headers,
       success: async (res: any) => {
         const body = res.data as ApiResponse<T>;
         if (res.statusCode >= 200 && res.statusCode < 300) {
@@ -109,7 +111,7 @@ async function request<T = any>(
         } else if (res.statusCode === 401 && retry) {
           const newToken = await tryRefreshToken();
           if (newToken) {
-            resolve(request<T>(method, path, data, false));
+            resolve(request<T>(method, path, data, options, false));
           } else {
             clearTokens();
             reject(body.error || { code: "AUTH_EXPIRED", message: "登录已过期，请重新登录" });
@@ -126,10 +128,10 @@ async function request<T = any>(
 }
 
 export const api = {
-  get: <T = any>(path: string) => request<T>("GET", path),
-  post: <T = any>(path: string, data?: any) => request<T>("POST", path, data),
-  put: <T = any>(path: string, data?: any) => request<T>("PUT", path, data),
-  del: <T = any>(path: string) => request<T>("DELETE", path),
+  get: <T = any>(path: string, options?: { headers?: Record<string, string> }) => request<T>("GET", path, undefined, options),
+  post: <T = any>(path: string, data?: any, options?: { headers?: Record<string, string> }) => request<T>("POST", path, data, options),
+  put: <T = any>(path: string, data?: any, options?: { headers?: Record<string, string> }) => request<T>("PUT", path, data, options),
+  del: <T = any>(path: string, options?: { headers?: Record<string, string> }) => request<T>("DELETE", path, undefined, options),
 };
 
 export const chatApi = {
