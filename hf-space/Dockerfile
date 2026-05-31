@@ -22,4 +22,4 @@ ENV SENTENCE_TRANSFORMERS_HOME=/data/model-cache
 ENV CHROMA_PERSIST_DIR=/data/chroma
 
 # 单 worker 避免多进程重复加载模型撑爆内存
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860", "--workers", "1", "--timeout-keep-alive", "300"]
+CMD ["sh", "-c", "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 7860 --workers 1 --timeout-keep-alive 300"]
