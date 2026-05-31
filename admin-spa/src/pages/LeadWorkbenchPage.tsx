@@ -14,7 +14,7 @@ const PRIORITY_STYLE: Record<Priority, { bg: string; color: string }> = {
   P3: { bg: '#f1f5f9', color: '#64748b' },
 }
 
-const PROCESS_METHODS = ['已电话联系', '在线对话', '已发材料'] as const
+
 const PROCESS_STYLE: Record<string, { bg: string; color: string }> = {
   '已电话联系': { bg: '#dcfce7', color: '#166534' },
   '在线对话': { bg: '#dbeafe', color: '#1e40af' },
@@ -61,7 +61,7 @@ export default function LeadWorkbenchPage() {
   const [selected, setSelected] = useState<string | null>(null)
   const [showPhone, setShowPhone] = useState<string | null>(null)
   const [processMenu, setProcessMenu] = useState<string | null>(null)
-  const [processMethod, setProcessMethod] = useState<string>('已电话联系')
+  const processMethod = '已电话联系'
   const [processedPage, setProcessedPage] = useState(0)
   const [sortBy, setSortBy] = useState('按优先级降序')
   const [sortSheetOpen, setSortSheetOpen] = useState(false)
