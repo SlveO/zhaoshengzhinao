@@ -1,26 +1,52 @@
 # CLAUDE.md
 
-B2B multi-tenant SaaS for Chinese university admissions ("招生智脑").
+B2B multi-tenant SaaS for Chinese university admissions ("招生智脑"). Three subsystems on free-tier infra.
 
-See `.claude/rules/` for detailed guidance:
-- `quick-start.md` — startup commands, testing, lint, DB
-- `architecture.md` — subsystems, middleware chain, tenant model
-- `conversation-agent.md` — LangGraph agent, chat implementations, guard chain
-- `recommendation.md` — recommendation engine pipeline
-- `admin-analytics.md` — event logging, analytics modules
-- `miniapp.md` — mini-app tenant builds, SSE + polling
-- `conventions.md` — coding conventions (DeepSeek, auth, CORS, API clients)
-- `session-state.md` — cross-compression session state, single-writer pattern
+**Active branch:** `feat/admin-redesign-v2`
 
-## Write/Edit file operations (HARD RULE — always apply)
-The Write and Edit tools are UNSTABLE on DeepSeek-backed models (Opus, Haiku). **Never use them directly.**
+## Architecture
 
-Instead, use Bash heredoc for ALL file creation:
+| Subsystem | Directory | Stack | Production |
+|-----------|-----------|-------|-------------|
+| Backend API | `backend/` | FastAPI + LangGraph + ChromaDB | [HF Spaces](https://slveo-gaokao-api.hf.space) |
+| Admin-SPA | `admin-spa/` | React 19 + Vite + Zustand | [CF Pages](https://zhaoshengzhinao.pages.dev) |
+| Mini-App | `mini-app/` | Vue 3 + uni-app | [CF Pages](https://zhaoshengzhinao-mini-app.pages.dev) |
+
+External: Supabase (PostgreSQL), Upstash (Redis), DeepSeek (LLM).
+
+## Deployment
+
+- **CF Pages (admin-spa, mini-app):** Auto-deploys on `git push`. `VITE_*` env vars inlined at build time — "Retry deployment" after change.
+- **HF Space (backend):** Own git repo at `huggingface.co/spaces/SlveO/gaokao_api`. Push to GitHub does NOT update it. Clone HF repo → copy `backend/` + `hf-space/Dockerfile` + `data/approved/` + `scripts/` → push.
+- **Local:** `docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build`
+
+Docs: `docs/ARCHITECTURE.md` | `docs/DEPLOYMENT.md` | `docs/OPERATIONS.md`
+
+## Quick Start
+
+```bash
+cd backend && pip install -r requirements.txt && uvicorn main:app --reload --port 8000
+cd admin-spa && npm install && npm run dev      # http://localhost:5173
+cd mini-app && npm install && npm run dev:h5     # http://localhost:5174
+```
+
+## Key Conventions
+
+- API needs `X-Tenant: scnu` header (admin URLs: `?tenant=scnu`)
+- Middleware: TenantResolution → UserAuth → ModuleGate (403 if module disabled)
+- Backend lifespan: init_db → ensure_tenant → auto-import knowledge → seed+index → warmup
+- Mini-app chat: raw `fetch` for SSE (not `api` wrapper — needs ReadableStream)
+- Mini-app cross-tab: `uni.setStorageSync` (fallback) + `uni.$emit` (fast path)
+- Auth: JWT Bearer, login via `/api/v1/auth/login`, guest sessions expire 1d
+
+See `.claude/rules/` for detailed guidance on agents, analytics, recommendations, testing.
+
+## Write/Edit file operations (HARD RULE)
+
+Write and Edit tools are UNSTABLE on DeepSeek models (Opus, Haiku). Use Bash heredoc for file creation:
 ```bash
 cat > filepath << 'ENDOFFILE'
-...content exactly as written...
+...content...
 ENDOFFILE
 ```
-For editing, use Bash sed or python3 string replace.
-
-If Bash fails, spawn tool-writer Sonnet sub-agent: `Agent({subagent_type:"tool-writer", model:"sonnet", prompt:"Write file <path> with content: ..."})`. Max 2 retries, then record to reports/block.md.
+For editing, use Bash sed or python3 string replace. Fallback: spawn `tool-writer` Sonnet sub-agent. Max 2 retries, then record to reports/block.md.
