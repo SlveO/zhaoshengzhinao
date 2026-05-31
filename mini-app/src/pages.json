@@ -1,6 +1,14 @@
 {
   "pages": [
     {
+      "path": "pages/school/index",
+      "style": {
+        "navigationBarTitleText": "学校信息",
+        "navigationBarBackgroundColor": "#1A56DB",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
       "path": "pages/chat/index",
       "style": {
         "navigationStyle": "custom",
@@ -11,14 +19,6 @@
       "path": "pages/recommendations/index",
       "style": {
         "navigationBarTitleText": "报考建议",
-        "navigationBarBackgroundColor": "#1A56DB",
-        "navigationBarTextStyle": "white"
-      }
-    },
-    {
-      "path": "pages/school/index",
-      "style": {
-        "navigationBarTitleText": "学校信息",
         "navigationBarBackgroundColor": "#1A56DB",
         "navigationBarTextStyle": "white"
       }
@@ -53,16 +53,16 @@
     "borderStyle": "black",
     "list": [
       {
+        "pagePath": "pages/school/index",
+        "text": "学校信息"
+      },
+      {
         "pagePath": "pages/chat/index",
         "text": "AI咨询"
       },
       {
         "pagePath": "pages/recommendations/index",
         "text": "报考建议"
-      },
-      {
-        "pagePath": "pages/school/index",
-        "text": "学校信息"
       },
       {
         "pagePath": "pages/profile/index",
