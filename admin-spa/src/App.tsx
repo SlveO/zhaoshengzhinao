@@ -17,9 +17,10 @@ import ModuleSettingsPage from './pages/ModuleSettingsPage'
 
 export default function App() {
   useBrandConfig()
+  const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || undefined
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
 

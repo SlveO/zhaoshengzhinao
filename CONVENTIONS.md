@@ -92,6 +92,8 @@ GET    /api/v1/colleges/{id}          # 院校详情
 
 GET    /api/v1/industries             # 行业数据（全局）
 GET    /api/v1/industries/mappings    # 专业→行业映射（全局）
+
+GET    /api/v1/knowledge/search       # 租户知识库 RAG 检索（学生端/LLM 工具可用）
 ```
 
 ### 2.3 管理端 API（Admin SPA + Analytics 轨道消费）
@@ -180,7 +182,47 @@ interface ProfileDashboard {
 }
 ```
 
-### 2.5 WebSocket 消息协议
+### 2.5 接口契约：Tenant Knowledge Search → LLM/RAG 调用方
+
+用于按当前租户检索 ChromaDB 知识库。学生端或外部大模型工具调用时必须传 `X-Tenant` 请求头；管理端调试也可使用 `?tenant=scnu`。
+
+```
+GET /api/v1/knowledge/search?q=<query>&k=5&data_type=campus_life
+```
+
+请求参数：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `q` | string | 是 | 用户问题或检索 query，1-500 字 |
+| `k` | integer | 否 | 返回条数，默认 5，范围 1-20 |
+| `data_type` | string | 否 | 限定知识类型，如 `admission_score` / `curriculum` / `employment` / `campus_life` |
+
+响应：
+
+```typescript
+interface KnowledgeSearchResponse {
+  query: string
+  tenant: string
+  results: {
+    id: string
+    text: string
+    metadata: Record<string, string | number | boolean>
+    score: number | null
+    source_url: string
+    source_title: string
+  }[]
+}
+```
+
+示例：
+
+```bash
+curl "http://localhost:8000/api/v1/knowledge/search?q=华南师范大学住宿费多少&k=5&data_type=campus_life" \
+  -H "X-Tenant: scnu"
+```
+
+### 2.6 WebSocket 消息协议
 
 ```json
 // Client → Server
