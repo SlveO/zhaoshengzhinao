@@ -78,3 +78,58 @@ export interface ModuleItem {
   depends: string[]
   enabled: boolean
 }
+
+// ── Distribution ──
+
+export interface DistributionChannel {
+  id: string
+  name: string
+  channel_type: string
+  webhook_url_masked: string
+  config: Record<string, any>
+  status: string
+  last_test_at: string | null
+  error_message: string | null
+  created_at: string
+}
+
+export interface DistributionFile {
+  id: string
+  original_filename: string
+  file_size: number
+  mime_type: string | null
+  created_by: string | null
+  created_at: string
+}
+
+export interface DistributionTask {
+  id: string
+  name: string
+  file_id: string
+  channel_id: string
+  schedule_type: string
+  schedule_config: Record<string, any>
+  scheduled_at: string | null
+  status: string
+  message_text: string | null
+  created_at: string
+  file_name?: string
+  channel_name?: string
+}
+
+export interface DistributionLog {
+  id: string
+  task_id: string
+  channel_id: string
+  file_id: string
+  status: string
+  attempt: number
+  request_payload: Record<string, any> | null
+  response_body: Record<string, any> | null
+  error_message: string | null
+  duration_ms: number | null
+  created_at: string
+  task_name?: string
+  channel_name?: string
+  file_name?: string
+}

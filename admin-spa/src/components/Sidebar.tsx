@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import {
   LayoutDashboard, Users, MessageSquare, User, BarChart3, FileText, Radio,
-  BookOpen, Palette, Bot, Blocks, ChevronLeft, ChevronRight, LogOut,
+  BookOpen, Palette, Bot, Blocks, ChevronLeft, ChevronRight, LogOut, Send,
 } from 'lucide-react'
 import api from '../api/client'
 import type { TenantConfig } from '../types'
@@ -28,6 +28,9 @@ const MENU_ITEMS: MenuItem[] = [
   { path: '/brand', label: '品牌配置', icon: <Palette size={18} />, module: null, section: '管理' },
   { path: '/agent-settings', label: 'Agent 设置', icon: <Bot size={18} />, module: null, section: '管理' },
   { path: '/modules', label: '模块管理', icon: <Blocks size={18} />, module: null, section: '管理' },
+  { path: '/distribution/tasks', label: '文件分发', icon: <Send size={18} />, module: 'distribution', section: '分发' },
+  { path: '/distribution/channels', label: '分发渠道', icon: <Radio size={18} />, module: 'distribution', section: '分发' },
+  { path: '/distribution/logs', label: '分发日志', icon: <FileText size={18} />, module: 'distribution', section: '分发' },
 ]
 
 export default function Sidebar() {

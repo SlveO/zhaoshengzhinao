@@ -48,6 +48,7 @@ async def setup_db():
     from models import Base, engine, async_session
     from models import admission, college, industry, mapping, profile, recommendation, recommendation_feedback, user  # noqa: F401
     from tenants import models as tenant_models  # noqa: F401
+    from distribution import models as distribution_models  # noqa: F401
 
     if not _schema_created:
         async with engine.begin() as conn:
@@ -75,7 +76,9 @@ async def setup_db():
     async with async_session() as db:
         for table in ["event_logs", "session_profiles", "tenant_data", "tenant_users",
                        "departments", "tenants", "recommendation_feedback",
-                       "recommendations", "user_profiles", "users"]:
+                       "recommendations", "user_profiles", "users",
+                       "distribution_file_access_tokens", "distribution_logs",
+                       "distribution_tasks", "distribution_files", "distribution_channels"]:
             await db.execute(text(f"DELETE FROM {table}"))
         await db.commit()
 
@@ -95,6 +98,7 @@ def tenant_config() -> dict[str, Any]:
         "hot_questions": True,
         "multi_department": True,
         "role_management": True,
+        "distribution": True,
     }
     return {
         "brand": {"name": "Test University", "short_name": "TestU", "primary_color": "#2563eb"},

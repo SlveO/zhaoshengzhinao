@@ -457,6 +457,35 @@ table tbody tr.selected { background: #dbeafe; }
   border-radius: var(--radius-btn); border: 1px solid var(--color-border);
 }
 
+/* ── Upload Zone ── */
+.upload-zone {
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+.upload-zone:hover {
+  border-color: var(--color-brand-400);
+  background: #f8faff;
+}
+.upload-progress-wrap {
+  width: 100%;
+}
+.upload-progress {
+  height: 6px;
+  background: #e5e9f2;
+  border-radius: 3px;
+  overflow: hidden;
+  width: 100%;
+}
+.upload-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-brand-400), var(--color-brand-700));
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .login-container { flex-direction: column; width: 94vw; }

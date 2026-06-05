@@ -14,6 +14,9 @@ import KnowledgeSettingsPage from './pages/KnowledgeSettingsPage'
 import BrandSettingsPage from './pages/BrandSettingsPage'
 import AgentSettingsPage from './pages/AgentSettingsPage'
 import ModuleSettingsPage from './pages/ModuleSettingsPage'
+import DistributionTasksPage from './pages/DistributionTasksPage'
+import DistributionChannelsPage from './pages/DistributionChannelsPage'
+import DistributionLogsPage from './pages/DistributionLogsPage'
 
 export default function App() {
   useBrandConfig()
@@ -44,6 +47,9 @@ export default function App() {
           <Route path="brand" element={<BrandSettingsPage />} />
           <Route path="agent-settings" element={<AgentSettingsPage />} />
           <Route path="modules" element={<ModuleSettingsPage />} />
+          <Route path="distribution/tasks" element={<DistributionTasksPage />} />
+          <Route path="distribution/channels" element={<DistributionChannelsPage />} />
+          <Route path="distribution/logs" element={<DistributionLogsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -95,7 +95,14 @@ async def lifespan(app: FastAPI):
     else:
         print("Skipping seed and index (already seeded).")
 
+    from distribution.scheduler import start_scheduler, shutdown_scheduler
+    start_scheduler()
+    print("Distribution scheduler started.")
+
     yield
+
+    shutdown_scheduler()
+    print("Distribution scheduler stopped.")
 
 
 # ── App ──
@@ -143,6 +150,11 @@ from admin.router import router as admin_router  # noqa: E402
 app.include_router(tenant_router, prefix="/api/v1/admin/tenants", tags=["tenants"])
 app.include_router(analytics_router, prefix="/api/v1/admin/analytics", tags=["analytics"])
 app.include_router(admin_router, prefix="/api/v1/admin", tags=["admin"])
+
+# ── Distribution Routes ──
+from distribution.router import router as distribution_router  # noqa: E402
+
+app.include_router(distribution_router, prefix="/api/v1/distribution", tags=["distribution"])
 
 
 @app.get("/api/health")
