@@ -19,6 +19,7 @@ TENANT_PUBLIC_PATHS = {
     "/api/v1/student/profile",
     "/api/v1/recommendations",
     "/api/v1/majors/analysis",
+    "/api/v1/distribution/files",  # Token-gated file download, no tenant header needed
 }
 
 

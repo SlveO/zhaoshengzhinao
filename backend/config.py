@@ -13,6 +13,11 @@ class Settings(BaseSettings):
     deepseek_model: str = "deepseek-v4-flash"
     embedding_model: str = "BAAI/bge-large-zh-v1.5"
     chroma_persist_dir: str = "./chroma_data"
+    uploads_dir: str = "./uploads"
+    # File distribution
+    file_store_dir: str = "./file_store"
+    webhook_encryption_key: str = ""  # Fernet key, must be set in production
+    max_upload_size_mb: int = 20
     cors_origins: str = (
         "http://localhost:5173,http://localhost:3000,http://localhost:3001,"
         "http://localhost:3002,http://localhost:5174,"

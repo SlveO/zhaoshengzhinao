@@ -22,6 +22,7 @@ class ModuleKey(Enum):
     TOPIC_CLOUD = "topic_cloud"
     EMOTION_TIMELINE = "emotion_timeline"
     HOT_QUESTIONS = "hot_questions"
+    DISTRIBUTION = "distribution"
 
 
 # Modules that require other modules to be enabled first
@@ -52,6 +53,7 @@ MODULE_ROUTE_MAP: dict[str, ModuleKey] = {
     "/api/v1/admin/analytics/hot-questions": ModuleKey.HOT_QUESTIONS,
     "/api/v1/admin/departments": ModuleKey.MULTI_DEPARTMENT,
     "/api/v1/admin/roles": ModuleKey.ROLE_MANAGEMENT,
+    "/api/v1/distribution": ModuleKey.DISTRIBUTION,
 }
 
 

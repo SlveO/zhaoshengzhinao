@@ -51,5 +51,9 @@ async def init_db():
     from . import consult_session  # noqa: F401
     from . import chat_message    # noqa: F401
     import tenants.models          # noqa: F401
+    from distribution.models import (  # noqa: F401
+        DistributionChannel, DistributionFile, DistributionTask,
+        DistributionLog, DistributionFileAccessToken,
+    )
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

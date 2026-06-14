@@ -21,6 +21,10 @@ database_url = os.environ.get("DATABASE_URL", config.get_main_option("sqlalchemy
 from models import Base  # noqa: E402
 from models import college, admission, user, profile, recommendation, industry, mapping, recommendation_feedback  # noqa: E402, F401
 from tenants.models import Tenant, TenantUser, TenantData, Department, SessionProfile  # noqa: E402, F401
+from distribution.models import (  # noqa: E402, F401
+    DistributionChannel, DistributionFile, DistributionTask,
+    DistributionLog, DistributionFileAccessToken,
+)
 
 target_metadata = Base.metadata
 

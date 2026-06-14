@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import uuid
 from contextlib import asynccontextmanager
 
@@ -19,8 +20,6 @@ logger = logging.getLogger(__name__)
 # ── Seed / Index helpers (unchanged) ──
 
 def _load_json(path: str) -> list:
-    import os
-
     base = os.environ.get("DATA_DIR", "data/seed")
     filepath = os.path.join(base, path)
     with open(filepath, encoding="utf-8") as f:
@@ -173,7 +172,14 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning(f"ChromaDB index check failed: {e}")
 
+    from distribution.scheduler import start_scheduler, shutdown_scheduler
+    start_scheduler()
+    print("Distribution scheduler started.")
+
     yield
+
+    shutdown_scheduler()
+    print("Distribution scheduler stopped.")
 
 
 # ── App ──
@@ -220,7 +226,13 @@ app.include_router(tenant_router, prefix="/api/v1/admin/tenants", tags=["tenants
 app.include_router(analytics_router, prefix="/api/v1/admin/analytics", tags=["analytics"])
 app.include_router(admin_router, prefix="/api/v1/admin", tags=["admin"])
 
-app.mount("/uploads", StaticFiles(directory="/app/uploads"), name="uploads")
+# ── Distribution Routes ──
+from distribution.router import router as distribution_router  # noqa: E402
+
+app.include_router(distribution_router, prefix="/api/v1/distribution", tags=["distribution"])
+
+app.mount("/uploads", StaticFiles(directory=os.path.abspath(settings.uploads_dir)), name="uploads")
+
 
 @app.get("/api/health")
 async def health():
