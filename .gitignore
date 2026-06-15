@@ -1,5 +1,6 @@
 __pycache__/
 *.pyc
+test.db
 .env
 node_modules/
 dist/
@@ -43,6 +44,7 @@ backend/file_store/
 
 # Local tool cache
 .remember/
+.agents/
 
 # Netlify
 .netlify
@@ -53,6 +55,12 @@ Thumbs.db
 
 # Stale prototypes — kept locally only
 landing-preview/
+
+# Research cache
+reports/
+
+# Duplicate skills cache
+data/skills/
 
 # Screenshots
 *.png
