@@ -19,7 +19,7 @@ External: Supabase (PostgreSQL), Upstash (Redis), DeepSeek (LLM).
 - **HF Space (backend):** Own git repo at `https://huggingface.co/spaces/SlveO/gaokao_api`. Push to GitHub does NOT update it. Clone HF repo → copy `backend/` + `hf-space/Dockerfile` + `data/approved/` + `scripts/` → push.
 - **Local:** `docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build`
 
-Docs: `docs/ARCHITECTURE.md` | `docs/DEPLOYMENT.md` | `docs/OPERATIONS.md` | `docs/DEVELOPER.md`
+Docs: `docs/ARCHITECTURE.md` | `docs/DEPLOYMENT.md` | `docs/OPERATIONS.md` | `docs/DEVELOPER.md` | `docs/EXECUTION_PLAN.md` | `docs/DEVELOPMENT_ROADMAP.md`
 
 ## Quick Start
 
@@ -40,6 +40,7 @@ Demo login: `admin` / `admin123` at `http://localhost:3001?tenant=scnu`
 - Mini-app cross-tab: `uni.setStorageSync` (fallback) + `uni.$emit` (fast path)
 - Auth: JWT Bearer, login via `/api/v1/auth/login`, guest sessions expire 1d
 - File Distribution: channels (企业微信群机器人), scheduled tasks (APScheduler), webhook URLs encrypted at rest (Fernet)
+- Testing: implementation and test code MUST be written by different sub-agent instances (HARD RULE); AAA pattern mandatory; LLM tests require mock/benchmark/snapshot layers; no PR merges without tests for new modules
 
 See `.claude/rules/` for detailed guidance on agents, analytics, recommendations, testing, distribution.
 
@@ -56,6 +57,9 @@ See `.claude/rules/` for detailed guidance on agents, analytics, recommendations
 | `backend/models/` | SQLAlchemy ORM models |
 | `backend/core/` | Middleware (tenant, auth, module gate), event writer, guard chain |
 | `backend/analytics/` | SQL aggregation queries per analytics module |
+| `backend/tests/unit/` | Unit tests (pure logic, no I/O) |
+| `backend/tests/integration/` | Integration tests (real DB, mock LLM) |
+| `backend/tests/benchmarks/` | Accuracy benchmarks (ground truth datasets) |
 | `backend/config.py` | Pydantic-settings env config |
 | `admin-spa/src/api/` | Axios client + endpoint modules |
 | `admin-spa/src/stores/` | Zustand stores (auth, mobile) |
