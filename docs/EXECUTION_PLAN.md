@@ -208,3 +208,66 @@ Phase 3 (Week 3-4):
 | 意向评分 | 创建 5 个不同画像的测试对话 -> GET /api/v1/admin/leads | 意向分和优先级与预期一致 |
 | 回归测试 | pytest backend/tests/ -x --tb=short | 全部通过 |
 | 前端看板 | 浏览器访问 admin-spa -> LeadWorkbench 显示真实数据 | 无 mock 残留 |
+
+---
+
+## 测试规范（所有模块适用，强制）
+
+> 详细测试规范见 `.claude/rules/testing.md`。以下为执行计划中的关键要求摘要。
+
+### 独立子代理编写测试（HARD RULE）
+
+实现代码和测试代码必须由不同的子代理实例编写，防止测试迎合实现。
+
+```
+工作流：
+  1. 业务子代理（如 backend-dev）编写实现代码
+  2. 独立的测试编写子代理（新 Agent 调用，同类型或不同类型）阅读代码后编写测试
+  3. 测试编写子代理不得修改实现代码
+  4. 测试编写子代理使用 test-runner 验证测试通过
+```
+
+### AAA 模式（强制）
+
+每个测试函数必须遵循 Arrange-Act-Assert 结构，并用 `# Arrange` / `# Act` / `# Assert` 注释分隔。
+
+### 测试隔离（强制）
+
+测试互不依赖，执行顺序不影响结果。DB/Redis 状态由 `setup_db` fixture 在每个测试后清理。
+
+### 边界条件覆盖（强制）
+
+每个模块必须覆盖：正常路径、空/缺失输入、超长输入、格式错误、并发安全、租户隔离。
+
+### LLM 测试特殊要求
+
+- **Mock LLM 测试**（单元/集成）：验证 prompt 构造、JSON 解析、重试逻辑、错误处理
+- **真实 LLM 测试**（benchmarks）：使用 ground truth 数据集，LLM-as-judge 评分
+- **快照测试**（regression）：关键 prompt 输出保存 baseline，修改后对比差异
+
+### 覆盖率阈值
+
+| 类别 | 目录 | 目标 |
+|------|------|------|
+| 单元测试 | `tests/unit/` | 纯逻辑 90%+ |
+| 集成测试 | `tests/integration/` | API 端点 80%+ |
+| E2E 测试 | `tests/e2e/` | 核心用户旅程 100% |
+| 准确度测试 | `tests/benchmarks/` | 评测框架 100% |
+
+### CI 质量门禁
+
+- lint: 0 errors → **block merge**
+- unit + integration tests: 100% pass → **block merge**
+- accuracy: < 95% → warning（需 PR 中解释）
+- coverage: 低于阈值 → warning
+
+### 新增模块测试门槛
+
+- 任何新增 `backend/services/*.py` 必须有 `tests/unit/test_*.py`
+- 任何新增 API 端点必须有 `tests/integration/test_*.py`
+- PR 中无测试的新模块不得合并
+
+### 测试审查清单
+
+提交测试代码前确认：AAA 模式、测试独立、正反向覆盖、边界条件、LLM mock、精确断言、规范命名、无 sleep()、fixture 派生数据
+
