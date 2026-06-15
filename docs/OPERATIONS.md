@@ -1,6 +1,6 @@
 # Operations Runbook
 
-> Last updated: 2026-05-23. Covers the Docker Compose deployment introduced in the infrastructure hardening pass.
+> Last updated: 2026-06-16.
 
 ## Daily Commands
 
@@ -55,7 +55,7 @@ Always stop write traffic or take a maintenance window before restoring.
 For tenant data already imported into PostgreSQL:
 
 ```bash
-docker compose exec backend python -m scripts.index_chroma
+docker compose exec backend python scripts/index_chroma.py
 ```
 
 For SCNU tenant onboarding data, use the project import scripts from the repository docs and then trigger the admin reindex endpoint:

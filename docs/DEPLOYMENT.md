@@ -1,6 +1,6 @@
 # Deployment Guide
 
-> Last updated: 2026-05-23. This guide covers the current hardened demo deployment. Phase 5 data expansion is not part of this deployment pass.
+> Last updated: 2026-06-16.
 
 ## Local Docker Compose
 
@@ -16,7 +16,7 @@ cp .env.example .env
 JWT_SECRET=replace-with-a-long-random-secret
 DEEPSEEK_API_KEY=sk-...
 DEEPSEEK_BASE_URL=https://api.deepseek.com/v1
-DEEPSEEK_MODEL=deepseek-chat
+DEEPSEEK_MODEL=deepseek-v4-flash
 ```
 
 3. Build and start all services. Prefer Docker Compose v2; if the host only has the legacy binary, replace `docker compose` with `docker-compose`.
