@@ -10,4 +10,12 @@ export default defineConfig({
       "@tenant": path.resolve(__dirname, "src/tenant.config.ts"),
     },
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:8000",
+        changeOrigin: true,
+      },
+    },
+  },
 });

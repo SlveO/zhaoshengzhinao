@@ -8,4 +8,5 @@
 - Database engine is lazy-initialized via proxy pattern in `backend/models/__init__.py`
 - `.env` file goes at repo root; `backend/.env` overrides for backend-specific settings
 - Seed data JSON files are read from `$DATA_DIR` (defaults to `data/seed/`)
+- Distribution webhook URLs are encrypted at rest with Fernet; never log or serialize raw webhook URLs
 - Admin SPA pages use mock data as fallback when API calls fail — the UI degrades gracefully for demo purposes

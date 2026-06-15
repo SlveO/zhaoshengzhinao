@@ -226,13 +226,12 @@ app.include_router(tenant_router, prefix="/api/v1/admin/tenants", tags=["tenants
 app.include_router(analytics_router, prefix="/api/v1/admin/analytics", tags=["analytics"])
 app.include_router(admin_router, prefix="/api/v1/admin", tags=["admin"])
 
-# ── Distribution Routes ──
+# Distribution Routes
 from distribution.router import router as distribution_router  # noqa: E402
 
 app.include_router(distribution_router, prefix="/api/v1/distribution", tags=["distribution"])
 
 app.mount("/uploads", StaticFiles(directory=os.path.abspath(settings.uploads_dir)), name="uploads")
-
 
 @app.get("/api/health")
 async def health():

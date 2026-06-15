@@ -328,7 +328,7 @@ async function sendMessage(): Promise<void> {
   scrollToBottom()
 
   const apiBase = process.env.NODE_ENV === "development"
-    ? "http://localhost:8000/api/v1"
+    ? "/api/v1"
     : (import.meta.env.VITE_API_BASE_URL as string) || "/api/v1"
 
   // AbortController for SSE fetch (shared between SSE timeout and poll fallback)

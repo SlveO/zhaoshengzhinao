@@ -18,6 +18,8 @@ backend/tests/
 └── e2e/            # Full API flow through FastAPI TestClient
 ```
 
+> **Note:** Frontend test infrastructure (Vitest + React Testing Library for admin-spa, uni-app tests for mini-app) is planned but not yet set up. Testing rules below apply to backend only.
+
 ## Python Testing
 
 - Framework: pytest with `asyncio_mode=auto` (configured in `pytest.ini`)
@@ -33,13 +35,6 @@ backend/tests/
 - Files: `test_<module_name>.py`
 - Functions: `test_<action>_<scenario>_<expected_result>()`
 - Example: `test_evidence_accumulator_3_dimensions_transitions_to_focus()`
-
-## Frontend Testing
-
-- Admin SPA: Vitest + React Testing Library
-- Mini-app: uni-app test utilities (when available), manual H5 testing as fallback
-- Component tests: render + user interaction + state assertion
-- API mocking: mock Axios/uni.request at the request level
 
 ## Coverage Thresholds
 

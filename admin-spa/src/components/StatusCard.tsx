@@ -19,7 +19,7 @@ export default function StatusCard({ loading, error, empty, emptyMessage = '暂�
     )
   }
 
-  if (error) {
+  if (error && !children) {
     return (
       <div className="view-status error">
         <span>{error}</span>
@@ -30,7 +30,7 @@ export default function StatusCard({ loading, error, empty, emptyMessage = '暂�
     )
   }
 
-  if (empty) {
+  if (empty && !children) {
     return (
       <div className="view-status empty">
         <span style={{ fontSize: 32, opacity: 0.4, marginBottom: 8 }}>📭</span>
@@ -39,5 +39,28 @@ export default function StatusCard({ loading, error, empty, emptyMessage = '暂�
     )
   }
 
-  return <>{children}</>
+  return (
+    <>
+      {error && (
+        <div
+          style={{
+            background: 'var(--color-warning-surface, #fef3c7)',
+            color: 'var(--color-warning-text, #92400e)',
+            padding: '8px 14px',
+            borderRadius: 8,
+            fontSize: 12,
+            marginBottom: 16,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+          }}
+        >
+          <span style={{ opacity: 0.7, fontWeight: 500 }}>⚠ Demo 模式</span>
+          <span style={{ opacity: 0.7 }}>—</span>
+          <span style={{ opacity: 0.85 }}>API 不可用，当前显示模拟数据</span>
+        </div>
+      )}
+      {children}
+    </>
+  )
 }

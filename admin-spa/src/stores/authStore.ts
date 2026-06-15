@@ -37,7 +37,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.setItem('user', JSON.stringify({ id: user_id, username: uname }))
       set({ token: access_token, role: 'demo', user: { id: user_id, username: uname } })
     } catch {
-      set({ token: null, user: null })
+      // Backend unavailable — enter demo mode with a fake token so ProtectedRoute passes
+      const demoToken = 'demo_token_offline'
+      const demoUser = { id: 'demo', username: '体验管理员' }
+      localStorage.setItem('token', demoToken)
+      localStorage.setItem('role', 'demo')
+      localStorage.setItem('user', JSON.stringify(demoUser))
+      set({ token: demoToken, role: 'demo', user: demoUser })
     }
   },
 

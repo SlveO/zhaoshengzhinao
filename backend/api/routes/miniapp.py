@@ -8,7 +8,7 @@ import logging
 import uuid
 
 from fastapi import APIRouter, Request, Query
-from starlette.responses import StreamingResponse
+from fastapi.responses import StreamingResponse
 from sqlalchemy import select
 from models import async_session
 from models.admission import AdmissionData

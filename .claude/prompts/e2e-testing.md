@@ -1,6 +1,6 @@
 # Session Prompt — 端到端测试与问题修复
 
-> 分支: feat/admin-redesign-v2 | Docker 已运行 | admin-spa 已重建
+> 分支: main | Docker 已运行 | admin-spa 已重建
 
 ## 开始前
 

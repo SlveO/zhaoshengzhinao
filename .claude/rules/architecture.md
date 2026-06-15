@@ -1,12 +1,13 @@
 # Architecture
 
-This is a **B2B multi-tenant SaaS** platform for Chinese university admissions ("招生智脑"). Three subsystems:
+This is a **B2B multi-tenant SaaS** platform for Chinese university admissions ("招生智脑"). Four subsystems:
 
 | System | Stack | Port | Audience |
 |--------|-------|------|----------|
 | backend | Python 3.11 / FastAPI / LangGraph | 8000 | API for admin + student apps |
 | admin-spa | React 19 / TypeScript / Vite / Tailwind CSS 4 / ECharts | 3001 | University admissions staff |
 | mini-app | Vue 3 / uni-app (H5 + 微信小程序) | 3002 | High school students |
+| distribution | Python 3.11 / FastAPI / APScheduler | — | Admin (file push) |
 
 Databases: PostgreSQL (primary), ChromaDB (vector search for college info), Redis (session state + rate limiting).
 
@@ -23,3 +24,7 @@ All three use `ContextVar` context variables (`_current_tenant`, `_current_user`
 ## Tenant-aware ChromaDB
 
 Each tenant has its own ChromaDB collection named `{tenant_slug}_colleges`. The `backend/knowledge/` module handles indexing tenant data (admission scores, majors) into vector embeddings. The old `backend/knowledge_base/` provides the global/historical ChromaDB client.
+
+## File Distribution
+
+`backend/distribution/` manages file pushing to external channels. Only `wechat_group` (企业微信群机器人) channel type is currently supported. Scheduled via APScheduler polling every 30s. Webhook URLs encrypted at rest (Fernet). See `rules/distribution.md` for detailed conventions.

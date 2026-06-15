@@ -17,6 +17,13 @@ backend/chroma_data/
 chroma_data/
 data/raw/
 
+# Model cache
+backend/.cache/
+
+# Runtime uploads / file store
+backend/uploads/
+backend/file_store/
+
 # IDE
 .vscode/
 .idea/
@@ -34,6 +41,9 @@ data/raw/
 .claude/settings.local.json
 .claude/worktrees/
 
+# Local tool cache
+.remember/
+
 # Netlify
 .netlify
 
@@ -44,8 +54,6 @@ Thumbs.db
 # Stale prototypes — kept locally only
 landing-preview/
 
-# Playwright screenshots
-dashboard-fixed.png
-dashboard-layout-fix.png
-insights-page.png
+# Screenshots
+*.png
 *.zip

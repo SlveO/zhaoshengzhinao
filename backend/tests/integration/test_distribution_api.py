@@ -2,26 +2,57 @@
 from __future__ import annotations
 
 import uuid
+import asyncio
 import os
 import tempfile
 
 import pytest
+import pytest_asyncio
 from core.tenant_context import get_current_tenant_user
 
 
 # Helper: override auth so write endpoints work without a real JWT
+# Use "test-key-" prefix with hex-only suffix to pass webhook regex: key=[a-f0-9\-]+
+HEX_KEY = "abcdef12-3456-7890-abcd-ef1234567890"
+
+
 def _fake_user():
     from tenants.models import TenantUser
     return TenantUser(
-        id=uuid.uuid4(),
+        id=uuid.UUID("44444444-4444-4444-4444-444444444444"),
         tenant_id=uuid.UUID("11111111-1111-1111-1111-111111111111"),
-        user_id=uuid.uuid4(),
+        user_id=uuid.UUID("33333333-3333-3333-3333-333333333333"),
         role="admin",
     )
 
 
+@pytest_asyncio.fixture(autouse=True)
+async def _seed_test_user(test_tenant):
+    """Create User + TenantUser rows so FK constraints are satisfied."""
+    from models import async_session
+    from models.user import User
+    from tenants.models import TenantUser
+    from utils.security import hash_password
+    
+    async with async_session() as db:
+        user = User(
+            id=uuid.UUID('33333333-3333-3333-3333-333333333333'),
+            username='admin',
+            password_hash=hash_password('admin123'),
+        )
+        await db.merge(user)
+        tu = TenantUser(
+            id=uuid.UUID('44444444-4444-4444-4444-444444444444'),
+            tenant_id=test_tenant.id,
+            user_id=uuid.UUID('33333333-3333-3333-3333-333333333333'),
+            role='admin',
+        )
+        await db.merge(tu)
+        await db.commit()
+
+
 @pytest.fixture(autouse=True)
-def override_auth(async_client):
+def override_auth(async_client, _seed_test_user):
     """Auto-override get_current_tenant_user for all distribution tests."""
     from main import app
     app.dependency_overrides[get_current_tenant_user] = _fake_user
@@ -39,7 +70,7 @@ async def test_create_channel(async_client, test_tenant):
         json={
             "name": "测试群",
             "channel_type": "wechat_group",
-            "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=test-key-12345678",
+            "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=abcdef12-3456-7890-abcd-ef1234567890",
         },
         headers={"X-Tenant": "test"},
     )
@@ -47,12 +78,12 @@ async def test_create_channel(async_client, test_tenant):
     data = resp.json()
     assert data["name"] == "测试群"
     assert "****" in data["webhook_url_masked"] or "..." in data["webhook_url_masked"]
-    # Verify webhook URL is NOT returned in plaintext
-    assert "test-key-12345678" not in str(data)
+    # Verify webhook URL is NOT returned in plaintext (the raw key is abcdef12...)
+    assert "abcdef12" not in str(data)
 
 
 @pytest.mark.asyncio
-async def test_create_channel_invalid_webhook(async_client):
+async def test_create_channel_invalid_webhook(async_client, test_tenant):
     resp = await async_client.post(
         "/api/v1/distribution/channels",
         json={
@@ -73,7 +104,7 @@ async def test_list_channels(async_client, test_tenant):
         json={
             "name": "List Test Channel",
             "channel_type": "wechat_group",
-            "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=list-test-key-12",
+            "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=12345678-1234-1234-1234-123456789012",
         },
         headers={"X-Tenant": "test"},
     )
@@ -95,7 +126,7 @@ async def test_list_channels_tenant_isolation(async_client, test_tenant, other_t
         json={
             "name": "Tenant A Channel",
             "channel_type": "wechat_group",
-            "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=tenant-a-key-12",
+            "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
         },
         headers={"X-Tenant": "test"},
     )
@@ -117,7 +148,7 @@ async def test_delete_channel(async_client, test_tenant):
         json={
             "name": "To Delete",
             "channel_type": "wechat_group",
-            "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=delete-me-key-12",
+            "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=dddddddd-dddd-dddd-dddd-dddddddddddd",
         },
         headers={"X-Tenant": "test"},
     )
@@ -167,7 +198,7 @@ async def test_upload_file(async_client, test_tenant):
 
 
 @pytest.mark.asyncio
-async def test_upload_file_rejects_exe(async_client):
+async def test_upload_file_rejects_exe(async_client, test_tenant):
     content = b"MZ\x00\x00 fake exe"
     resp = await async_client.post(
         "/api/v1/distribution/files/upload",
@@ -189,6 +220,9 @@ async def test_list_files(async_client, test_tenant):
         "/api/v1/distribution/files",
         headers={"X-Tenant": "test"},
     )
+    import sys
+    if resp.status_code != 200:
+        print(f"DEBUG list_files: status={resp.status_code}, body={resp.text[:500]}", file=sys.stderr)
     assert resp.status_code == 200
     data = resp.json()
     assert data["total"] >= 1
@@ -229,7 +263,7 @@ async def test_create_and_trigger_task(async_client, test_tenant):
         json={
             "name": "Task Test Channel",
             "channel_type": "wechat_group",
-            "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=task-test-key-0001",
+            "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=11111111-1111-1111-1111-111111111111",
         },
         headers={"X-Tenant": "test"},
     )
@@ -276,7 +310,7 @@ async def test_task_cross_tenant_isolation(async_client, test_tenant, other_tena
         json={
             "name": "Isolated Channel",
             "channel_type": "wechat_group",
-            "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=isolated-key-0012",
+            "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=22222222-2222-2222-2222-222222222222",
         },
         headers={"X-Tenant": "test"},
     )
@@ -323,7 +357,7 @@ async def test_pause_resume_task(async_client, test_tenant):
         json={
             "name": "Pause Test Channel",
             "channel_type": "wechat_group",
-            "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=pause-key-000012",
+            "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=bbbbbbbb-0000-0000-0000-000000000001",
         },
         headers={"X-Tenant": "test"},
     )

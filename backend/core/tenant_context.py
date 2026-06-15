@@ -19,8 +19,12 @@ TENANT_PUBLIC_PATHS = {
     "/api/v1/student/profile",
     "/api/v1/recommendations",
     "/api/v1/majors/analysis",
-    "/api/v1/distribution/files",  # Token-gated file download, no tenant header needed
 }
+
+# Paths that don't require tenant if they match a specific suffix.
+# Used for token-gated routes with dynamic segments.
+# e.g. /api/v1/distribution/files/{id}/download — authenticated by token, not tenant.
+TENANT_PUBLIC_PATH_SUFFIXES = {"/download"}
 
 
 def get_current_tenant():

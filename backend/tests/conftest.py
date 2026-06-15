@@ -96,25 +96,12 @@ async def setup_db():
 
 @pytest.fixture
 def tenant_config() -> dict[str, Any]:
-    modules = {
-        "funnel": True,
-        "profile_dashboard": True,
-        "major_heatmap": True,
-        "region_distribution": True,
-        "competitive_analysis": True,
-        "dialogue_quality": True,
-        "annual_report": True,
-        "topic_cloud": True,
-        "emotion_timeline": True,
-        "hot_questions": True,
-        "multi_department": True,
-        "role_management": True,
-        "distribution": True,
-    }
-    return {
-        "brand": {"name": "Test University", "short_name": "TestU", "primary_color": "#2563eb"},
-        "modules": modules,
-    }
+    """Derive test config from production SCNU_TENANT_CONFIG — single source of truth for module list."""
+    import copy
+    from core.startup_seed import SCNU_TENANT_CONFIG
+    config = copy.deepcopy(SCNU_TENANT_CONFIG)
+    config["brand"] = {"name": "Test University", "short_name": "TestU", "primary_color": "#2563eb"}
+    return config
 
 
 @pytest_asyncio.fixture
@@ -131,7 +118,7 @@ async def test_tenant(tenant_config):
         status="active",
     )
     async with async_session() as db:
-        db.add(tenant)
+        await db.merge(tenant)
         await db.commit()
     return tenant
 
@@ -150,7 +137,7 @@ async def other_tenant(tenant_config):
         status="active",
     )
     async with async_session() as db:
-        db.add(tenant)
+        await db.merge(tenant)
         await db.commit()
     return tenant
 

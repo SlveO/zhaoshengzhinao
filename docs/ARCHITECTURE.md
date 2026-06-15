@@ -33,6 +33,7 @@ gaokao_agents/
 │   ├── knowledge/            # 知识库索引与检索
 │   ├── tenants/              # B2B 多租户（TenantData, 模块开关）
 │   ├── analytics/            # 分析看板（画像、洞察）
+│   ├── distribution/         # 文件分发（渠道配置、定时发布、企业微信集成）
 │   ├── core/                 # 中间件（租户解析、用户认证、模块门控）
 │   ├── config.py             # 环境变量配置（pydantic-settings）
 │   ├── main.py               # FastAPI app 入口 + lifespan 启动逻辑
@@ -81,7 +82,7 @@ gaokao_agents/
 
 ### 3.1 Cloudflare Pages（前端 — 自动）
 
-**触发方式：** `git push origin feat/admin-redesign-v2`
+**触发方式：** `git push origin main`
 
 **机制：**
 - Cloudflare Pages 在仪表板中连接到 GitHub 仓库
@@ -178,6 +179,14 @@ Nginx 路由：`/api/*` → backend:8000，`/admin/*` → admin-spa:80，`/*` �
 2. **UserAuthMiddleware** — JWT Bearer token 验证（`/api/v1/auth/` 跳过）
 3. **ModuleGateMiddleware** — 检查 `tenant.config.modules` 开关，未启用返回 403
 
+### File Distribution Module (`backend/distribution/`)
+
+- **Channels**: `wechat_group` type — 企业微信群机器人 webhook
+- **Scheduling**: `once`, `daily`, `weekly`, `monthly` via APScheduler (poll every 30s)
+- **Security**: Webhook URLs encrypted at rest with Fernet; file downloads gated by single-use access tokens
+- **WeChat flow**: optional caption → upload media → send file message (retry: 1s/5s/25s)
+- **Tables**: `distribution_channels`, `distribution_files`, `distribution_tasks`, `distribution_logs`, `distribution_file_access_tokens`
+
 ---
 
 ## 5. 常见陷阱
@@ -212,11 +221,11 @@ uvicorn main:app --reload --port 8000
 
 # Admin-SPA
 cd admin-spa && npm install
-npm run dev          # http://localhost:5173
+npm run dev -- --port 3001
 
 # Mini-App
 cd mini-app && npm install
-npm run dev:h5       # http://localhost:5174
+npm run dev:h5 -- --port 3002
 ```
 
 本地需 `.env` 文件（见 `.env.example`）配置数据库和 API 密钥。
@@ -229,6 +238,7 @@ npm run dev:h5       # http://localhost:5174
 |------|------|
 | `docs/DEPLOYMENT.md` | Docker Compose 部署详细步骤（HTTPS、常见问题） |
 | `docs/OPERATIONS.md` | 日常运维（备份恢复、索引重建、日志、发布回滚） |
+| `docs/DEVELOPER.md` | 开发者上手指南（环境、分支、CI） |
 
 **线上地址：**
 - GitHub：https://github.com/SlveO/zhaoshengzhinao

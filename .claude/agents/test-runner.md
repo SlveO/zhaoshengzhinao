@@ -19,9 +19,7 @@ pytest backend/tests/unit/test_evidence_accumulator.py -v --tb=short
 # With coverage
 pytest backend/tests/ --cov=backend --cov-report=term-missing
 
-# Frontend (if applicable)
-cd admin-spa && npm test
-cd mini-app && npm test
+# Frontend tests not yet set up (no vitest config in admin-spa, no test scripts in mini-app)
 ```
 
 ## Output Format (always this structure)

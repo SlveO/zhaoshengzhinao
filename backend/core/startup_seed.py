@@ -30,6 +30,7 @@ SCNU_TENANT_CONFIG = {
         "topic_cloud": True,
         "emotion_timeline": True,
         "hot_questions": True,
+        "distribution": True,
     },
     "knowledge_base": {"doc_count": 0, "last_updated": None},
     "mini_program": {"app_id": "", "app_secret_encrypted": ""},
