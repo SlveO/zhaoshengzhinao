@@ -1,0 +1,12 @@
+[
+  {"id":"kqa_001","question":"华南师范大学2025年计算机科学与技术专业录取分数线是多少？","expected_answer":"该专业2025年在广东省物理类录取最低分约为610分","source_doc":"data/approved/scnu_admission_2025.json","category":"admission_score"},
+  {"id":"kqa_002","question":"华师软件工程专业需要多少分？","expected_answer":"软件工程专业2025年在广东物理类录取最低分约为605分","source_doc":"data/approved/scnu_admission_2025.json","category":"admission_score"},
+  {"id":"kqa_003","question":"人工智能专业录取分数线","expected_answer":"人工智能专业2025年在广东物理类录取最低分约为615分","source_doc":"data/approved/scnu_admission_2025.json","category":"admission_score"},
+  {"id":"kqa_004","question":"电子信息工程多少分能上？","expected_answer":"电子信息工程2025年在广东物理类录取最低分约为595分","source_doc":"data/approved/scnu_admission_2025.json","category":"admission_score"},
+  {"id":"kqa_005","question":"数学与应用数学专业的录取分数","expected_answer":"数学与应用数学专业2025年在广东物理类录取最低分约为600分","source_doc":"data/approved/scnu_admission_2025.json","category":"admission_score"},
+  {"id":"kqa_006","question":"华师经济学专业分数线","expected_answer":"经济学专业2025年在广东历史类录取最低分约为585分","source_doc":"data/approved/scnu_admission_2025.json","category":"admission_score"},
+  {"id":"kqa_007","question":"法学专业录取分数多少？","expected_answer":"法学专业2025年在广东历史类录取最低分约为590分","source_doc":"data/approved/scnu_admission_2025.json","category":"admission_score"},
+  {"id":"kqa_008","question":"心理学专业需要多少分？","expected_answer":"心理学专业2025年在广东物理类录取最低分约为590分","source_doc":"data/approved/scnu_admission_2025.json","category":"admission_score"},
+  {"id":"kqa_009","question":"汉语言文学专业分数线","expected_answer":"汉语言文学专业2025年在广东历史类录取最低分约为580分","source_doc":"data/approved/scnu_admission_2025.json","category":"admission_score"},
+  {"id":"kqa_010","question":"化学专业录取分数线是多少？","expected_answer":"化学专业2025年在广东物理类录取最低分约为585分","source_doc":"data/approved/scnu_admission_2025.json","category":"admission_score"}
+]
