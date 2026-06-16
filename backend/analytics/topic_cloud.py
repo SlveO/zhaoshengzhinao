@@ -49,5 +49,18 @@ async def get_topic_cloud(tenant_id: str, days: int = 30) -> list[dict]:
                     continue
                 word_freq[w] = word_freq.get(w, 0) + 1
 
+    # Additional source: concerns from session_profiles.profile_json
+    concern_rows = await db.execute(text("""
+        SELECT jsonb_array_elements_text(profile_json->'concerns') AS concern_word
+        FROM session_profiles
+        WHERE tenant_id = :tid
+          AND profile_json->'concerns' IS NOT NULL
+          AND jsonb_array_length(profile_json->'concerns') > 0
+    """), {"tid": tenant_id})
+    for row in concern_rows:
+        w = row.concern_word.strip()
+        if len(w) >= 2:
+            word_freq[w] = word_freq.get(w, 0) + 2  # concerns weighted x2
+
     sorted_words = sorted(word_freq.items(), key=lambda x: x[1], reverse=True)[:50]
     return [{"word": w, "count": c} for w, c in sorted_words]
