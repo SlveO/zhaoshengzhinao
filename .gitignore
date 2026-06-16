@@ -65,3 +65,6 @@ data/skills/
 # Screenshots
 *.png
 *.zip
+
+# Extracted profile JSON backups (dev phase)
+data/extracted_profiles/
