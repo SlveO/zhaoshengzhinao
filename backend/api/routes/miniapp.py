@@ -23,6 +23,7 @@ from services.consult_service import (
     save_message, update_session_profile,
     extract_profile_from_message, build_profile_summary,
 )
+from services.profile_bridge import should_extract, bridge_profile_to_session_profiles
 from tenants.service import resolve_tenant
 from core.event_writer import write_event
 from utils.jwt import decode_token
@@ -223,6 +224,17 @@ async def send_chat_message(body: ChatMessageRequest):
 
         assistant_msg = await save_message(body.session_id, "assistant", full_content)
 
+        # B1: LLM profile extraction bridge (every 3 turns)
+        profile_bridge_ran = False
+        try:
+            if tenant_id and await should_extract(body.session_id):
+                profile_bridge_ran = await bridge_profile_to_session_profiles(
+                    session, tenant_id, user_content, full_content
+                )
+        except Exception as e:
+            logging.warning(f"Profile bridge failed for session={body.session_id}: {e}")
+
+        # Fallback: regex extraction for basic fields
         existing_dict = {
             "province": session.province or "",
             "subject_type": session.subject_type or "",
@@ -241,7 +253,7 @@ async def send_chat_message(body: ChatMessageRequest):
             "type": "done",
             "session_id": body.session_id,
             "assistant_message": assistant_msg,
-            "profile_updated": profile_updated,
+            "profile_updated": profile_updated or profile_bridge_ran,
             "profile_summary": profile_summary,
         }
         yield f"data: {json.dumps(done_data)}\n\n"
