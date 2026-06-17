@@ -1,0 +1,119 @@
+[
+  {
+    "sessionId": "session_demo_001",
+    "tenantId": "tenant_scnu",
+    "studentId": "stu_demo_001",
+    "messages": [
+      {
+        "id": "msg_6c7f66e47100",
+        "tenantId": "tenant_scnu",
+        "studentId": "stu_demo_001",
+        "sessionId": "session_demo_001",
+        "role": "user",
+        "content": "我是广东物理类考生，585分，想问人工智能专业稳不稳？",
+        "createdAt": "2026-06-17T17:19:31.569231+00:00"
+      },
+      {
+        "id": "msg_ac742cc95f4d",
+        "tenantId": "tenant_scnu",
+        "studentId": "stu_demo_001",
+        "sessionId": "session_demo_001",
+        "role": "assistant",
+        "content": "你的分数有一定竞争力，可以重点关注人工智能、软件工程等专业，同时建议参考近三年专业分数线。",
+        "createdAt": "2026-06-17T17:19:31.569231+00:00"
+      },
+      {
+        "id": "msg_e9e7de81d56c",
+        "tenantId": "tenant_scnu",
+        "studentId": "stu_demo_001",
+        "sessionId": "session_demo_001",
+        "role": "user",
+        "content": "那软件工程和计算机哪个录取概率更高？有招生群吗？",
+        "createdAt": "2026-06-17T17:19:31.625043+00:00"
+      },
+      {
+        "id": "msg_7465189f9b81",
+        "tenantId": "tenant_scnu",
+        "studentId": "stu_demo_001",
+        "sessionId": "session_demo_001",
+        "role": "assistant",
+        "content": "可以继续关注软件工程和计算机科学与技术，招生群信息建议以学校官方招生办发布为准。",
+        "createdAt": "2026-06-17T17:19:31.625043+00:00"
+      }
+    ],
+    "startedAt": "2026-06-17T17:19:31.569231+00:00",
+    "updatedAt": "2026-06-17T17:19:31.625043+00:00"
+  },
+  {
+    "sessionId": "session_demo_002",
+    "tenantId": "tenant_scnu",
+    "studentId": "stu_demo_002",
+    "messages": [
+      {
+        "id": "msg_5ce2952b3658",
+        "tenantId": "tenant_scnu",
+        "studentId": "stu_demo_002",
+        "sessionId": "session_demo_002",
+        "role": "user",
+        "content": "我是湖南历史类，560分，想了解汉语言文学，宿舍条件怎么样？",
+        "createdAt": "2026-06-17T17:19:31.642033+00:00"
+      },
+      {
+        "id": "msg_9daf3bf22d89",
+        "tenantId": "tenant_scnu",
+        "studentId": "stu_demo_002",
+        "sessionId": "session_demo_002",
+        "role": "assistant",
+        "content": "汉语言文学适合对中文、教育和文化方向感兴趣的考生，宿舍安排以学校当年通知为准。",
+        "createdAt": "2026-06-17T17:19:31.642033+00:00"
+      },
+      {
+        "id": "msg_c1a4f3f37662",
+        "tenantId": "tenant_scnu",
+        "studentId": "stu_demo_002",
+        "sessionId": "session_demo_002",
+        "role": "user",
+        "content": "入学后可以转专业吗？",
+        "createdAt": "2026-06-17T17:19:31.658710+00:00"
+      },
+      {
+        "id": "msg_74adb42f7d7d",
+        "tenantId": "tenant_scnu",
+        "studentId": "stu_demo_002",
+        "sessionId": "session_demo_002",
+        "role": "assistant",
+        "content": "转专业通常需要满足学校相关条件，建议关注教务部门发布的最新政策。",
+        "createdAt": "2026-06-17T17:19:31.658710+00:00"
+      }
+    ],
+    "startedAt": "2026-06-17T17:19:31.642033+00:00",
+    "updatedAt": "2026-06-17T17:19:31.658710+00:00"
+  },
+  {
+    "sessionId": "session_demo_003",
+    "tenantId": "tenant_scnu",
+    "studentId": "stu_demo_003",
+    "messages": [
+      {
+        "id": "msg_6b5555a1c019",
+        "tenantId": "tenant_scnu",
+        "studentId": "stu_demo_003",
+        "sessionId": "session_demo_003",
+        "role": "user",
+        "content": "广西物理类530分，电子信息工程就业前景怎么样，往年分数线高吗？",
+        "createdAt": "2026-06-17T17:19:31.676291+00:00"
+      },
+      {
+        "id": "msg_bfe04f77c798",
+        "tenantId": "tenant_scnu",
+        "studentId": "stu_demo_003",
+        "sessionId": "session_demo_003",
+        "role": "assistant",
+        "content": "电子信息工程偏工程技术方向，就业面较广，建议结合往年分数线和位次综合判断。",
+        "createdAt": "2026-06-17T17:19:31.676291+00:00"
+      }
+    ],
+    "startedAt": "2026-06-17T17:19:31.676291+00:00",
+    "updatedAt": "2026-06-17T17:19:31.676291+00:00"
+  }
+]

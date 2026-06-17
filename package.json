@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "data-link:demo": "py -X utf8 scripts/data_link_demo.py",
+    "data-link:interactive": "py -X utf8 scripts/data_link_interactive.py",
+    "test:data-link": "set PYTHONPATH=backend&& py -X utf8 tests/test_data_link.py"
+  },
+  "private": true
+}
