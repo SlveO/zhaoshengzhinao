@@ -1,5 +1,4 @@
 import asyncio
-import importlib
 import os
 import uuid
 from contextlib import asynccontextmanager
@@ -31,8 +30,6 @@ _schema_created = False
 def event_loop():
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    import models
-    importlib.reload(models)
     yield loop
     loop.close()
 
