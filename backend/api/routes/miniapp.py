@@ -15,7 +15,7 @@ from models.admission import AdmissionData
 from models.college import College
 from schemas.miniapp import (
     EnterRequest, ChatMessageRequest, RecommendationRequest,
-    EnterData, ChatMessageData, StudentProfileData,
+    EnterData, StudentProfileData,
     RecommendationData, MajorAnalysisData,
 )
 from services.consult_service import (

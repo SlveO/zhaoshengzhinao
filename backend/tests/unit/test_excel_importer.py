@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock, patch
 import openpyxl
 import pytest
 
-from data.onboarding.excel_importer import import_excel, IMPORT_CONFIG
+from data.onboarding.excel_importer import import_excel
 
 
 def _create_test_excel(headers: list[str], rows: list[list]) -> str:
@@ -84,7 +84,7 @@ class TestImportExcel:
         try:
             with patch("data.onboarding.excel_importer.async_session") as mock_session, \
                  patch("data.onboarding.excel_importer.index_tenant_data",
-                       new_callable=AsyncMock) as mock_index:
+                       new_callable=AsyncMock):
                 mock_db = AsyncMock()
                 mock_session.return_value.__aenter__.return_value = mock_db
 
@@ -114,7 +114,7 @@ class TestImportExcel:
         try:
             with patch("data.onboarding.excel_importer.async_session") as mock_session, \
                  patch("data.onboarding.excel_importer.index_tenant_data",
-                       new_callable=AsyncMock) as mock_index:
+                       new_callable=AsyncMock):
                 mock_db = AsyncMock()
                 mock_session.return_value.__aenter__.return_value = mock_db
 
@@ -141,7 +141,7 @@ class TestImportExcel:
         try:
             with patch("data.onboarding.excel_importer.async_session") as mock_session, \
                  patch("data.onboarding.excel_importer.index_tenant_data",
-                       new_callable=AsyncMock) as mock_index:
+                       new_callable=AsyncMock):
                 mock_db = AsyncMock()
                 mock_session.return_value.__aenter__.return_value = mock_db
 
@@ -167,7 +167,7 @@ class TestImportExcel:
         try:
             with patch("data.onboarding.excel_importer.async_session") as mock_session, \
                  patch("data.onboarding.excel_importer.index_tenant_data",
-                       new_callable=AsyncMock) as mock_index:
+                       new_callable=AsyncMock):
                 mock_db = AsyncMock()
                 mock_session.return_value.__aenter__.return_value = mock_db
 

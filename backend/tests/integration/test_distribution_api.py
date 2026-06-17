@@ -2,9 +2,7 @@
 from __future__ import annotations
 
 import uuid
-import asyncio
 import os
-import tempfile
 
 import pytest
 import pytest_asyncio
@@ -285,7 +283,6 @@ async def test_create_and_trigger_task(async_client, test_tenant):
     data = task_resp.json()
     assert data["name"] == "Integration Test Task"
     assert data["file_name"] is not None
-    task_id = data["id"]
 
     # 4. List tasks
     list_resp = await async_client.get(

@@ -1,0 +1,101 @@
+[
+  {
+    "studentId": "stu_demo_001",
+    "tenantId": "tenant_scnu",
+    "interestedMajors": [
+      "人工智能",
+      "软件工程",
+      "计算机科学与技术"
+    ],
+    "concerns": [
+      "录取概率",
+      "专业分数线",
+      "招生群"
+    ],
+    "tags": [
+      "广东考生",
+      "物理类",
+      "585分",
+      "高意向",
+      "关注人工智能",
+      "关注软件工程",
+      "关注计算机科学与技术",
+      "关注录取概率",
+      "关注专业分数线",
+      "关注招生群",
+      "有联系意向"
+    ],
+    "intentScore": 100,
+    "intentLevel": "high",
+    "consultationCount": 2,
+    "firstConsultedAt": "2026-06-17T17:19:31.569231+00:00",
+    "lastConsultedAt": "2026-06-17T17:19:31.625043+00:00",
+    "province": "广东",
+    "subjectType": "物理类",
+    "score": 585,
+    "rank": null,
+    "contactIntent": true
+  },
+  {
+    "studentId": "stu_demo_002",
+    "tenantId": "tenant_scnu",
+    "interestedMajors": [
+      "汉语言文学",
+      "教育学"
+    ],
+    "concerns": [
+      "宿舍",
+      "转专业"
+    ],
+    "tags": [
+      "湖南考生",
+      "历史类",
+      "560分",
+      "高意向",
+      "关注汉语言文学",
+      "关注教育学",
+      "关注宿舍",
+      "关注转专业"
+    ],
+    "intentScore": 70,
+    "intentLevel": "high",
+    "consultationCount": 2,
+    "firstConsultedAt": "2026-06-17T17:19:31.642033+00:00",
+    "lastConsultedAt": "2026-06-17T17:19:31.658710+00:00",
+    "province": "湖南",
+    "subjectType": "历史类",
+    "score": 560,
+    "rank": null,
+    "contactIntent": false
+  },
+  {
+    "studentId": "stu_demo_003",
+    "tenantId": "tenant_scnu",
+    "interestedMajors": [
+      "电子信息工程"
+    ],
+    "concerns": [
+      "专业分数线",
+      "就业前景"
+    ],
+    "tags": [
+      "广西考生",
+      "物理类",
+      "530分",
+      "高意向",
+      "关注电子信息工程",
+      "关注专业分数线",
+      "关注就业前景"
+    ],
+    "intentScore": 75,
+    "intentLevel": "high",
+    "consultationCount": 1,
+    "firstConsultedAt": "2026-06-17T17:19:31.676291+00:00",
+    "lastConsultedAt": "2026-06-17T17:19:31.676291+00:00",
+    "province": "广西",
+    "subjectType": "物理类",
+    "score": 530,
+    "rank": null,
+    "contactIntent": false
+  }
+]

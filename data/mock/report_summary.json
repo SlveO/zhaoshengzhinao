@@ -1,0 +1,108 @@
+{
+  "tenantId": "tenant_scnu",
+  "generatedAt": "2026-06-17T17:19:31.692621+00:00",
+  "totalStudents": 3,
+  "highIntentCount": 3,
+  "mediumIntentCount": 0,
+  "lowIntentCount": 0,
+  "hotMajors": [
+    {
+      "name": "人工智能",
+      "count": 1
+    },
+    {
+      "name": "软件工程",
+      "count": 1
+    },
+    {
+      "name": "计算机科学与技术",
+      "count": 1
+    },
+    {
+      "name": "汉语言文学",
+      "count": 1
+    },
+    {
+      "name": "教育学",
+      "count": 1
+    },
+    {
+      "name": "电子信息工程",
+      "count": 1
+    }
+  ],
+  "hotConcerns": [
+    {
+      "name": "专业分数线",
+      "count": 2
+    },
+    {
+      "name": "录取概率",
+      "count": 1
+    },
+    {
+      "name": "招生群",
+      "count": 1
+    },
+    {
+      "name": "宿舍",
+      "count": 1
+    },
+    {
+      "name": "转专业",
+      "count": 1
+    },
+    {
+      "name": "就业前景",
+      "count": 1
+    }
+  ],
+  "provinceDistribution": [
+    {
+      "name": "广东",
+      "count": 1
+    },
+    {
+      "name": "湖南",
+      "count": 1
+    },
+    {
+      "name": "广西",
+      "count": 1
+    }
+  ],
+  "scoreRangeDistribution": [
+    {
+      "range": "600分以上",
+      "count": 0
+    },
+    {
+      "range": "580-599",
+      "count": 1
+    },
+    {
+      "range": "560-579",
+      "count": 1
+    },
+    {
+      "range": "540-559",
+      "count": 0
+    },
+    {
+      "range": "520-539",
+      "count": 1
+    },
+    {
+      "range": "500-519",
+      "count": 0
+    },
+    {
+      "range": "500分以下",
+      "count": 0
+    },
+    {
+      "range": "未知",
+      "count": 0
+    }
+  ]
+}

@@ -1,8 +1,8 @@
-import pytest
-import sys, os
+import sys
+import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from agents.conversation.evidence_accumulator import (
-    EvidenceAccumulator, RIASEC_DIMS, VALUES_CATEGORIES, compute_completeness
+    EvidenceAccumulator, compute_completeness
 )
 
 

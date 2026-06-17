@@ -4,7 +4,7 @@ Revision ID: 005
 Revises: 004
 Create Date: 2026-06-05
 """
-from typing import Sequence, Union
+from typing import Union
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import UUID, JSONB

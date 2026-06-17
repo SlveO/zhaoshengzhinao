@@ -109,7 +109,8 @@ async def _auto_import_knowledge():
 
     logger.info("TenantData empty — running knowledge auto-import...")
     try:
-        import subprocess, sys
+        import subprocess
+        import sys
         result = subprocess.run(
             [sys.executable, "/app/scripts/import_scnu_knowledge.py"],
             capture_output=True, text=True, timeout=120
@@ -231,7 +232,9 @@ from distribution.router import router as distribution_router  # noqa: E402
 
 app.include_router(distribution_router, prefix="/api/v1/distribution", tags=["distribution"])
 
-app.mount("/uploads", StaticFiles(directory=os.path.abspath(settings.uploads_dir)), name="uploads")
+uploads_dir = os.path.abspath(settings.uploads_dir)
+os.makedirs(uploads_dir, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
 
 @app.get("/api/health")
 async def health():

@@ -9,8 +9,7 @@ from __future__ import annotations
 import hashlib
 import secrets
 import os
-from datetime import datetime, timedelta, timezone
-from uuid import UUID, uuid4
+from uuid import UUID
 
 from cryptography.fernet import Fernet
 
@@ -54,7 +53,7 @@ def _get_fernet() -> Fernet:
     if not key:
         # In dev, generate a key and warn. In production, this must be set.
         key = Fernet.generate_key().decode()
-        print(f"[WARNING] WEBHOOK_ENCRYPTION_KEY not set. Generated ephemeral key (will not survive restart).")
+        print("[WARNING] WEBHOOK_ENCRYPTION_KEY not set. Generated ephemeral key (will not survive restart).")
     elif isinstance(key, str):
         key = key.encode()
     _fernet_instance = Fernet(key)

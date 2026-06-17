@@ -12,7 +12,6 @@ Guards can be sync or async — run_guards() handles both.
 
 from __future__ import annotations
 
-import asyncio
 from abc import ABC, abstractmethod
 
 

@@ -4,7 +4,6 @@ E2E test using sync_playwright API (not mcp__playwright__*).
 Covers: enter -> chat -> profile populated in UI.
 """
 
-import re
 import pytest
 from playwright.sync_api import sync_playwright, Page, Browser
 

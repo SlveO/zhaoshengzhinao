@@ -4,10 +4,9 @@ Revision ID: 004
 Revises: 003
 Create Date: 2026-05-18
 """
-from typing import Sequence, Union
+from typing import Union
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects.postgresql import UUID, JSONB
 
 revision: str = "004"
 down_revision: Union[str, None] = "003"

@@ -70,7 +70,7 @@ async def seed():
             "VALUES ($1::uuid, $2::uuid, $3::uuid, 'admin')",
             uuid.uuid4(), t_id, u_id,
         )
-        print(f"Linked admin user to scnu tenant as admin")
+        print("Linked admin user to scnu tenant as admin")
 
     await conn.close()
     print("Seed complete.")

@@ -17,6 +17,9 @@ _archive/
 backend/chroma_data/
 chroma_data/
 data/raw/
+data/manual_test/
+*.log
+*.tmp
 
 # Model cache
 backend/.cache/

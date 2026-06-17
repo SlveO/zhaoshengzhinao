@@ -1,7 +1,6 @@
 import uuid
-from unittest.mock import AsyncMock, MagicMock, patch, call
+from unittest.mock import AsyncMock, MagicMock, patch
 
-import pytest
 
 from core.module_registry import ModuleKey
 

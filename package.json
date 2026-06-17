@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "data-link:demo": "node scripts/run_data_link_command.js demo",
+    "data-link:interactive": "node scripts/run_data_link_command.js interactive",
+    "test:data-link": "node scripts/run_data_link_command.js test"
+  },
+  "private": true
+}
