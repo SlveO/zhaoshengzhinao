@@ -26,12 +26,58 @@ OTHER_TENANT_ID = uuid.UUID("22222222-2222-2222-2222-222222222222")
 _schema_created = False
 
 
-@pytest.fixture(scope="session")
-def event_loop():
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    yield loop
-    loop.close()
+class _CompatEventLoopPolicy(asyncio.DefaultEventLoopPolicy):
+    """Provide a loop for legacy sync tests while pytest-asyncio owns async tests."""
+
+    def get_event_loop(self):
+        try:
+            return super().get_event_loop()
+        except RuntimeError:
+            loop = self.new_event_loop()
+            self.set_event_loop(loop)
+            return loop
+
+
+@pytest.fixture(scope="session", autouse=True)
+def event_loop_policy():
+    previous_policy = asyncio.get_event_loop_policy()
+    policy = _CompatEventLoopPolicy()
+    asyncio.set_event_loop_policy(policy)
+    yield policy
+    asyncio.set_event_loop_policy(previous_policy)
+
+
+_CLEANUP_TABLES = [
+    "event_logs",
+    "distribution_file_access_tokens",
+    "distribution_logs",
+    "distribution_tasks",
+    "distribution_files",
+    "distribution_channels",
+    "session_profiles",
+    "tenant_data",
+    "tenant_users",
+    "departments",
+    "recommendation_feedback",
+    "recommendations",
+    "user_profiles",
+    "chat_messages",
+    "consult_sessions",
+    "admission_data",
+    "colleges",
+    "tenants",
+    "users",
+]
+
+
+async def _cleanup_db(async_session):
+    async with async_session() as db:
+        for table in _CLEANUP_TABLES:
+            try:
+                await db.execute(text(f"DELETE FROM {table}"))
+                await db.commit()
+            except Exception:
+                await db.rollback()
 
 
 @pytest_asyncio.fixture(autouse=True)
@@ -69,25 +115,12 @@ async def setup_db():
             "ALTER TABLE consult_sessions ADD COLUMN IF NOT EXISTS expires_at TIMESTAMPTZ"
         ))
 
+    await _cleanup_db(async_session)
+
     yield
 
+    await _cleanup_db(async_session)
     await engine.dispose()
-
-    async with async_session() as db:
-        for table in ["event_logs", "session_profiles", "tenant_data", "tenant_users",
-                       "departments", "tenants", "recommendation_feedback",
-                       "recommendations", "user_profiles", "users",
-                       "chat_messages", "consult_sessions", "admission_data", "colleges",
-                       "distribution_file_access_tokens", "distribution_logs",
-                       "distribution_tasks", "distribution_files", "distribution_channels"]:
-            try:
-                await db.execute(text(f"DELETE FROM {table}"))
-            except Exception:
-                pass
-        try:
-            await db.commit()
-        except Exception:
-            await db.rollback()
 
 
 @pytest.fixture

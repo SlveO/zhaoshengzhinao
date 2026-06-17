@@ -115,11 +115,26 @@ def test_schema_validation():
 
 def test_import_services():
     """验证 Service 层可正常导入"""
+    from services.consult_service import (
+        extract_profile_from_message,
+        get_chat_history,
+        get_or_create_session,
+        get_session,
+        save_message,
+        update_session_profile,
+    )
+
     # 验证所有函数都是 async (callable + coroutine)
     import inspect
-    for name in ["get_or_create_session", "get_session", "get_chat_history",
-                 "save_message", "update_session_profile", "extract_profile_from_message"]:
-        fn = locals()[name]
+    service_functions = {
+        "get_or_create_session": get_or_create_session,
+        "get_session": get_session,
+        "get_chat_history": get_chat_history,
+        "save_message": save_message,
+        "update_session_profile": update_session_profile,
+        "extract_profile_from_message": extract_profile_from_message,
+    }
+    for name, fn in service_functions.items():
         assert inspect.iscoroutinefunction(fn), f"{name} 应为 async function"
     print("  PASS test_import_services")
 
