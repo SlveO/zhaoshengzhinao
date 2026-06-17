@@ -149,8 +149,8 @@ async def tenant_admin_user(test_tenant):
     tenant_user_id = uuid.UUID("44444444-4444-4444-4444-444444444444")
     async with async_session() as db:
         user = User(id=user_id, username="admin", password_hash=hash_password("admin123"))
-        db.add(user)
-        db.add(TenantUser(id=tenant_user_id, tenant_id=test_tenant.id, user_id=user_id, role="admin"))
+        await db.merge(user)
+        await db.merge(TenantUser(id=tenant_user_id, tenant_id=test_tenant.id, user_id=user_id, role="admin"))
         await db.commit()
     return {"user_id": user_id, "username": "admin"}
 
