@@ -297,7 +297,7 @@ export default function ReportsPage() {
             onBlur={(e) => {
               const text = e.currentTarget.textContent || ''
               // Strip zero-width space if user left it empty
-              updateDesc(col, idx, text.replace(/​/g, ''))
+              updateDesc(col, idx, text.replace(/\u200b/g, ''))
             }}
             style={{
               fontSize: 11, color: 'var(--color-text-secondary)', marginTop: 2,
@@ -309,12 +309,12 @@ export default function ReportsPage() {
                 e.currentTarget.style.borderBottomColor = '#bfdbfe'
                 // Insert zero-width space if empty so cursor lands inside
                 if (!e.currentTarget.textContent || e.currentTarget.textContent === '') {
-                  e.currentTarget.innerHTML = '​'
+                  e.currentTarget.innerHTML = '\u200b'
                 }
               }
             }}
           >
-            {item.desc || (editing ? '​' : '')}
+            {item.desc || (editing ? '\u200b' : '')}
           </div>
         </div>
         {/* Delete button — always visible in edit mode */}
