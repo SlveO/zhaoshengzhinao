@@ -1,5 +1,6 @@
 """Profile Analyzer — standalone LLM agent that extracts evidence from conversation turns."""
-import json, re
+import json
+import re
 from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_openai import ChatOpenAI
 from config import settings

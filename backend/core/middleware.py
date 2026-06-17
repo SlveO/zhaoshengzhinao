@@ -3,10 +3,9 @@ from __future__ import annotations
 
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
-from fastapi import HTTPException
 
 from core.tenant_context import TENANT_PUBLIC_PATHS, TENANT_PUBLIC_PATH_SUFFIXES, set_current_tenant
-from core.module_registry import MODULE_ROUTE_MAP, ModuleKey
+from core.module_registry import MODULE_ROUTE_MAP
 from tenants.service import resolve_tenant
 
 

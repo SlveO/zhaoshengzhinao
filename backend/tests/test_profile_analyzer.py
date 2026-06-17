@@ -1,5 +1,6 @@
-import pytest, json
-import sys, os
+import json
+import sys
+import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from agents.conversation.profile_analyzer import (
     build_analysis_prompt, parse_analysis_response

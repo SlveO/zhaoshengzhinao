@@ -6,7 +6,8 @@ Integration tests use real test DB + middleware chain, mock only external APIs.
 import uuid
 import pytest
 
-import sys, os
+import sys
+import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from conftest import TEST_TENANT_ID
 

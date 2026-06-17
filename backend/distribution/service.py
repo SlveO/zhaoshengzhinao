@@ -5,7 +5,7 @@ import os
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import select, func, and_, or_
+from sqlalchemy import select, func
 
 from models import async_session
 from distribution.models import (
@@ -18,9 +18,7 @@ from distribution.models import (
 from distribution.security import (
     encrypt_webhook_url,
     decrypt_webhook_url,
-    mask_webhook_url,
     generate_access_token,
-    validate_file_upload,
     compute_file_hash,
 )
 from config import settings
@@ -230,7 +228,6 @@ async def create_access_token(file_id: uuid.UUID, channel_id: uuid.UUID | None =
 
 async def validate_access_token(token_str: str) -> DistributionFile | None:
     """Validate an access token and return the associated file."""
-    from datetime import datetime as dt, timezone as tz, timedelta
     async with async_session() as db:
         result = await db.execute(
             select(DistributionFileAccessToken).where(
@@ -399,22 +396,22 @@ async def get_logs(tenant_id: uuid.UUID, page: int = 1, page_size: int = 20,
             .limit(page_size)
         )
         logs = list(result.scalars().all())
-        return [_log_to_dict(l) for l in logs], total
+        return [_log_to_dict(log) for log in logs], total
 
 
-def _log_to_dict(l: DistributionLog) -> dict:
+def _log_to_dict(log: DistributionLog) -> dict:
     return {
-        "id": str(l.id),
-        "task_id": str(l.task_id),
-        "channel_id": str(l.channel_id),
-        "file_id": str(l.file_id),
-        "status": str(l.status) if hasattr(l.status, "value") else l.status,
-        "attempt": l.attempt,
-        "request_payload": l.request_payload,
-        "response_body": l.response_body,
-        "error_message": l.error_message,
-        "duration_ms": l.duration_ms,
-        "created_at": l.created_at,
+        "id": str(log.id),
+        "task_id": str(log.task_id),
+        "channel_id": str(log.channel_id),
+        "file_id": str(log.file_id),
+        "status": str(log.status) if hasattr(log.status, "value") else log.status,
+        "attempt": log.attempt,
+        "request_payload": log.request_payload,
+        "response_body": log.response_body,
+        "error_message": log.error_message,
+        "duration_ms": log.duration_ms,
+        "created_at": log.created_at,
     }
 
 

@@ -5,9 +5,10 @@ Integration tests use real test DB + ChromaDB, mock only external embeddings.
 
 import uuid
 import pytest
-from unittest.mock import AsyncMock, patch, MagicMock
+from unittest.mock import AsyncMock, patch
 
-import sys, os
+import sys
+import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from conftest import TEST_TENANT_ID
 

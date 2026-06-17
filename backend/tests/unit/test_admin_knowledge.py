@@ -42,7 +42,6 @@ def override_deps(monkeypatch):
     monkeypatch.setattr(mw, "resolve_tenant", AsyncMock(return_value=MockTenant()))
     _current_tenant.set(MockTenant())
     _current_user.set(MockUser())
-    from main import app
     yield
     _current_tenant.set(None)
     _current_user.set(None)

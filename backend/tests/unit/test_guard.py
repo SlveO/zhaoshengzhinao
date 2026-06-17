@@ -1,6 +1,5 @@
 """Unit tests for pluggable guard system."""
 import asyncio
-import pytest
 from core.guard import (
     ContentLengthGuard,
     MessageLimitGuard,

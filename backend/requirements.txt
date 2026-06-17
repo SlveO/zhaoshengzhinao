@@ -21,3 +21,4 @@ tenacity==9.1.2
 jieba==0.42.1
 playwright
 apscheduler==3.11.0
+openpyxl==3.1.5

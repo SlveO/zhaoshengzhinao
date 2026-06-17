@@ -134,7 +134,7 @@ async def delete_document(
     _user=Depends(get_current_tenant_user),
 ):
     from models import async_session
-    from sqlalchemy import select, delete
+    from sqlalchemy import select
     from tenants.models import TenantData
     from knowledge.client import get_chroma_client
 

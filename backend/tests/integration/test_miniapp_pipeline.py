@@ -6,7 +6,8 @@ Integration tests use real test DB (dockerized PostgreSQL), mock only external L
 import uuid
 import pytest
 
-import sys, os
+import sys
+import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from conftest import TEST_TENANT_ID
 
@@ -193,7 +194,6 @@ class TestDualModeSessionTTL:
         resp1 = await async_client.post("/api/v1/miniapp/enter", json={"tenant_slug": "scnu"})
         old_id = resp1.json()["data"]["session_id"]
 
-        from services.consult_service import get_session
         from datetime import datetime, timedelta, timezone
         from models import async_session as dbs
         from sqlalchemy import update
@@ -225,7 +225,6 @@ class TestRecommendationsWithIntent:
         """GET /student/profile 的 profile 包含 intent_majors 字段"""
         from models import async_session
         from models.consult_session import ConsultSession
-        import uuid
 
         async with async_session() as db:
             session = ConsultSession(
@@ -259,7 +258,6 @@ class TestRecommendationsWithIntent:
         from models.consult_session import ConsultSession
         from models.college import College
         from models.admission import AdmissionData
-        import uuid
 
         async with async_session() as db:
             college = College(
@@ -308,7 +306,6 @@ class TestRecommendationsWithIntent:
         from models.consult_session import ConsultSession
         from models.college import College
         from models.admission import AdmissionData
-        import uuid
 
         async with async_session() as db:
             college = College(
@@ -341,4 +338,4 @@ class TestRecommendationsWithIntent:
         data = resp.json().get("data")
         for item in data.get("items", []):
             assert not any("意向方向" in r for r in item.get("reasons", [])), \
-                f"intent_majors 为空不应出现意向方向理由"
+                "intent_majors 为空不应出现意向方向理由"

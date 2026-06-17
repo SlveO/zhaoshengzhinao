@@ -1,5 +1,5 @@
 """Annual report — aggregate all analytics modules into a structured report."""
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 
 from analytics.funnel import get_funnel
 from analytics.profile_dashboard import get_profile_dashboard

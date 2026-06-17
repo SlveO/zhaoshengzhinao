@@ -1,7 +1,6 @@
 """Unit tests for EvidenceAccumulator — actual API."""
-import pytest
 from agents.conversation.evidence_accumulator import (
-    EvidenceAccumulator, compute_completeness,
+    EvidenceAccumulator,
 )
 
 RIASEC_KEYS = ["riasec_R", "riasec_I", "riasec_A", "riasec_S", "riasec_E", "riasec_C"]

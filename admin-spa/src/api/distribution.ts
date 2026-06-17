@@ -1,7 +1,4 @@
 import api from './client'
-import type {
-  DistributionChannel, DistributionFile, DistributionTask, DistributionLog,
-} from '../types'
 
 export const distributionApi = {
   // ── Channels ──

@@ -109,7 +109,8 @@ async def _auto_import_knowledge():
 
     logger.info("TenantData empty — running knowledge auto-import...")
     try:
-        import subprocess, sys
+        import subprocess
+        import sys
         result = subprocess.run(
             [sys.executable, "/app/scripts/import_scnu_knowledge.py"],
             capture_output=True, text=True, timeout=120

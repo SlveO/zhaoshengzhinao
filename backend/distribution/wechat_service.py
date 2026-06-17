@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import time
 import os
-from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 
 import httpx
@@ -93,9 +92,7 @@ async def upload_file_to_wechat(webhook_url: str, file_path: str) -> str | None:
 
     upload_url = f"{WECHAT_WEBHOOK_BASE}/upload_media?key={key}&type=file"
     file_name = os.path.basename(file_path)
-    file_size = os.path.getsize(file_path)
 
-    last_error = None
     for attempt in range(1, MAX_RETRIES + 1):
         try:
             async with httpx.AsyncClient(timeout=_webhook_timeout()) as client:
@@ -108,8 +105,7 @@ async def upload_file_to_wechat(webhook_url: str, file_path: str) -> str | None:
                 if data.get("errcode") == 0:
                     return data.get("media_id")
                 return None  # WeChat error — don't retry
-        except (httpx.HTTPError, OSError) as e:
-            last_error = e
+        except (httpx.HTTPError, OSError):
             if attempt < MAX_RETRIES:
                 time.sleep(RETRY_BACKOFF[attempt - 1])
     return None

@@ -1,7 +1,7 @@
 """Tenant (organization), TenantUser, TenantData, Department, and SessionProfile models."""
 import uuid
 
-from sqlalchemy import Column, String, Integer, Enum, DateTime, ForeignKey, Text
+from sqlalchemy import Column, String, Integer, Enum, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.sql import func
 

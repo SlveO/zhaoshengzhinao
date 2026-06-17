@@ -9,7 +9,7 @@ rules, and fall back to rules if the LLM call or JSON parsing fails.
 from __future__ import annotations
 
 from services.data_link import ExtractedStudentInfo, _merge_user_and_ai_info, extractStudentInfo
-from services.data_link_llm import LLMExtractionError, LLMExtractor, load_llm_config
+from services.data_link_llm import LLMExtractor, load_llm_config
 
 
 class RuleBasedExtractor:

@@ -1,6 +1,6 @@
 import io
 from contextlib import asynccontextmanager
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from fastapi.testclient import TestClient
@@ -107,7 +107,7 @@ class TestBrandEndpoints:
             assert "logo_url" in data
 
     def test_upload_creates_directory_if_missing(self, client):
-        with patch("os.path.exists", return_value=False) as mock_exists, \
+        with patch("os.path.exists", return_value=False), \
              patch("os.makedirs") as mock_makedirs, \
              patch("builtins.open"):
             resp = client.post(

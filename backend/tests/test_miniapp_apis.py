@@ -5,7 +5,6 @@ C端 5 API 完整测试套件
         Layer 2 (需DB) — 需要 PostgreSQL + Docker 运行
 """
 import sys
-import json
 import asyncio
 
 
@@ -40,9 +39,7 @@ def test_recommendation_model_extended():
 def test_import_schemas():
     """验证 Schema 层可正常导入"""
     from schemas.miniapp import (
-        EnterRequest, ChatMessageRequest, RecommendationRequest,
-        EnterData, ChatMessageData, StudentProfileData,
-        RecommendationData, MajorAnalysisData,
+        EnterRequest,
     )
     # 测试请求模型默认值
     req = EnterRequest()
@@ -118,11 +115,6 @@ def test_schema_validation():
 
 def test_import_services():
     """验证 Service 层可正常导入"""
-    from services.consult_service import (
-        get_or_create_session, get_session, get_chat_history,
-        save_message, update_session_profile,
-        extract_profile_from_message, build_profile_summary,
-    )
     # 验证所有函数都是 async (callable + coroutine)
     import inspect
     for name in ["get_or_create_session", "get_session", "get_chat_history",
@@ -245,7 +237,6 @@ def test_ok_err_helpers():
 
 def test_route_conflicts():
     """验证 miniapp 路由与现有路由无冲突"""
-    from api.routes.miniapp import router as miniapp_router
     from api.routes.recommendation import router as rec_router
     from api.routes.chat import router as chat_router
 
@@ -265,7 +256,7 @@ def test_route_conflicts():
     # 方法不同 → 不冲突
     miniapp_rec_path = ("POST", "/api/v1/recommendations")
     assert miniapp_rec_path not in rec_flat, \
-        f"路由冲突: miniapp POST /recommendations 与现有路由重叠"
+        "路由冲突: miniapp POST /recommendations 与现有路由重叠"
 
     # 现有 chat 路由 (prefix /api/v1/chat, 含 WebSocket 路由)
     chat_flat = set()
@@ -275,7 +266,7 @@ def test_route_conflicts():
 
     miniapp_chat_path = ("POST", "/api/v1/chat/messages")
     assert miniapp_chat_path not in chat_flat, \
-        f"路由冲突: miniapp POST /chat/messages 与现有 WebSocket 路由重叠"
+        "路由冲突: miniapp POST /chat/messages 与现有 WebSocket 路由重叠"
 
     print("  PASS test_route_conflicts")
 
@@ -381,7 +372,7 @@ async def test_message_persistence():
     roles = [m["role"] for m in history[-3:]]
     assert roles == ["user", "assistant", "user"], f"消息顺序错误: {roles}"
 
-    print(f"  PASS test_message_persistence (3 messages)")
+    print("  PASS test_message_persistence (3 messages)")
 
 
 # ═══════════════════════════════════════════
@@ -456,7 +447,6 @@ if __name__ == "__main__":
 
     # Layer 2 只在有数据库时运行
     try:
-        from models import async_session
         l2_pass, l2_fail = run_layer2()
     except Exception as e:
         print(f"\n  Layer 2 SKIPPED — 数据库不可用 ({e})")

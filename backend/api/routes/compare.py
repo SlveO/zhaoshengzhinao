@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from models import get_db, async_session
 from models.user import User
-from api.deps import get_current_user, get_optional_user
+from api.deps import get_optional_user
 from services.profile_service import get_latest_profile
 from recommendation.cross_college import cross_college_recommendations
 from tenants.models import Tenant

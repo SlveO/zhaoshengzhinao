@@ -174,7 +174,7 @@ class TestLeadExtraction:
             mock_async_session.return_value.__aenter__.return_value = mock_db
 
             tenant_a_id = uuid.UUID("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
-            leads = await extract_leads(tenant_a_id)
+            await extract_leads(tenant_a_id)
 
             # Verify the query was called with the correct tenant_id
             call_args = mock_db.execute.call_args
