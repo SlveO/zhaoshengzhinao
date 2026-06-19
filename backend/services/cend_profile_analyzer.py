@@ -34,8 +34,6 @@ RIASEC_DIMS = {
 
 RIASEC_KEYS = list(RIASEC_DIMS.keys())
 
-VALUES_CATEGORIES = ["社会贡献", "个人成长", "工作稳定", "薪资水平"]
-
 # ---------------------------------------------------------------------------
 # System prompt
 # ---------------------------------------------------------------------------
@@ -440,7 +438,7 @@ async def analyze_cend_turn(
     user_msg: str,
     ai_reply: str,
     existing_profile: Optional[dict] = None,
-    conversation_history: Optional[list] = None,
+    _conversation_history: Optional[list] = None,
     max_retries: int = 2,
 ) -> CendExtractionResult:
     """Call DeepSeek LLM to extract structured student profile from a conversation turn.

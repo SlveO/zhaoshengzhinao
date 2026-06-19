@@ -121,13 +121,13 @@ async def get_chat_message_count(session_id: str) -> int:
 
 
 async def should_extract(session_id: str) -> bool:
-    """Return True if user message count > 0 AND count % 3 == 0 (every 3rd turn)."""
-    try:
-        count = await get_chat_message_count(session_id)
-        return count > 0 and count % 3 == 0
-    except Exception as exc:
-        logger.error(f"should_extract failed for session={session_id}: {exc}")
-        return False
+    """Return True if user message count > 0 AND count % 3 == 0 (every 3rd turn).
+
+    get_chat_message_count handles its own exceptions internally, so no
+    try/except is needed here.
+    """
+    count = await get_chat_message_count(session_id)
+    return count > 0 and count % 3 == 0
 
 
 async def load_existing_profile_json(
@@ -219,8 +219,8 @@ async def bridge_profile_to_session_profiles(
             consult_updates["subject_type"] = basic["subject_type"]
         if basic.get("score"):
             consult_updates["score"] = basic["score"]
-        if merged_result.values:
-            consult_updates["intent_majors"] = merged_result.values[:5]
+        if merged_result.interests.get("preferred_subjects"):
+            consult_updates["intent_majors"] = merged_result.interests.get("preferred_subjects", [])[:10]
         if consult_updates:
             try:
                 await update_session_profile(session_id_str, consult_updates)
