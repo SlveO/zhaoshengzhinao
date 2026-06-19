@@ -5,6 +5,7 @@ Reuses profile_analyzer.py's JSON parsing pattern with a dedicated C-end prompt 
 Produces a 7-field structured profile from student dialogue.
 """
 
+import asyncio
 import json
 import re
 from dataclasses import dataclass, field
@@ -14,6 +15,9 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_openai import ChatOpenAI
 
 from config import settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Constants (mirror evidence_accumulator for convenience, avoid circular imports)
@@ -437,18 +441,21 @@ async def analyze_cend_turn(
     ai_reply: str,
     existing_profile: Optional[dict] = None,
     conversation_history: Optional[list] = None,
+    max_retries: int = 2,
 ) -> CendExtractionResult:
-    """Call DeepSeek LLM to extract structured student profile from a single conversation turn.
+    """Call DeepSeek LLM to extract structured student profile from a conversation turn.
+
+    Implements retry with exponential backoff (1s -> 2s) per project code-style rules.
 
     Args:
         user_msg: The student's latest message.
         ai_reply: The AI assistant's latest reply.
         existing_profile: Previously accumulated profile dict (from prior turns).
         conversation_history: Reserved for future use (full message history).
+        max_retries: Maximum retry attempts on LLM failure (default 2).
 
     Returns:
-        CendExtractionResult populated from the LLM response, or an empty/default
-        result on error.
+        CendExtractionResult populated from the LLM response, or empty/default on error.
     """
     llm = ChatOpenAI(
         model=settings.deepseek_model,
@@ -461,8 +468,23 @@ async def analyze_cend_turn(
     system_msg = SystemMessage(content=system_content)
     human_msg = HumanMessage(content="请分析上述对话并输出JSON。")
 
-    try:
-        response = await llm.ainvoke([system_msg, human_msg])
-        return parse_cend_response(response.content)
-    except Exception:
-        return CendExtractionResult()
+    last_exc = None
+    for attempt in range(max_retries + 1):
+        try:
+            response = await llm.ainvoke([system_msg, human_msg])
+            return parse_cend_response(response.content)
+        except Exception as exc:
+            last_exc = exc
+            if attempt < max_retries:
+                delay = 2 ** attempt  # 1s, 2s
+                logger.warning(
+                    f"C-end profile analysis attempt {attempt + 1} failed: {exc}. "
+                    f"Retrying in {delay}s..."
+                )
+                await asyncio.sleep(delay)
+            else:
+                logger.error(
+                    f"C-end profile analysis failed after {max_retries + 1} attempts: {exc}",
+                    exc_info=True,
+                )
+    return CendExtractionResult()

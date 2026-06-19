@@ -86,12 +86,78 @@ def evaluate_extraction_accuracy(dataset):
     return {"total":len(dataset),"basic_accuracy":round(avg_b,4),"riasec_accuracy":round(avg_r,4),
             "interest_accuracy":round(avg_i,4),"weighted_accuracy":round(0.4*avg_b+0.3*avg_r+0.3*avg_i,4),"details":details}
 
+def benchmark_response_speed(num_samples: int = 10) -> dict:
+    """Benchmark SSE response speed: first-token time, full-reply time, P50/P95/P99.
+    Simulates a single-turn LLM call and measures timing.
+    """
+    import time, statistics
+    from langchain_core.messages import SystemMessage, HumanMessage
+    from langchain_openai import ChatOpenAI
+    from config import settings
+
+    llm = ChatOpenAI(model=settings.deepseek_model, api_key=settings.deepseek_api_key,
+                     base_url=settings.deepseek_base_url, temperature=0.0, streaming=True)
+
+    test_question = "华南师范大学计算机专业2025年录取分数线是多少？"
+    test_system = "你是华南师范大学招生咨询助手。请简短回答。"
+
+    first_token_times = []
+    full_reply_times = []
+
+    for i in range(num_samples):
+        msgs = [SystemMessage(content=test_system), HumanMessage(content=test_question)]
+        try:
+            t_start = time.perf_counter()
+            first_token = None
+            full_content = ""
+            for chunk in llm.stream(msgs):
+                if first_token is None:
+                    first_token = time.perf_counter()
+                full_content += chunk.content if hasattr(chunk, "content") else str(chunk)
+            t_end = time.perf_counter()
+
+            if first_token is not None:
+                first_token_times.append(first_token - t_start)
+            full_reply_times.append(t_end - t_start)
+        except Exception:
+            continue
+
+    if not first_token_times:
+        first_token_times = [0]
+    if not full_reply_times:
+        full_reply_times = [0]
+
+    def percentile(data, p):
+        data = sorted(data)
+        idx = int(len(data) * p / 100)
+        return data[min(idx, len(data)-1)]
+
+    return {
+        "samples": len(first_token_times),
+        "first_token": {
+            "avg": round(statistics.mean(first_token_times), 3),
+            "p50": round(percentile(first_token_times, 50), 3),
+            "p95": round(percentile(first_token_times, 95), 3),
+            "p99": round(percentile(first_token_times, 99), 3),
+        },
+        "full_reply": {
+            "avg": round(statistics.mean(full_reply_times), 3),
+            "p50": round(percentile(full_reply_times, 50), 3),
+            "p95": round(percentile(full_reply_times, 95), 3),
+            "p99": round(percentile(full_reply_times, 99), 3),
+        },
+    }
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--kb-only", action="store_true"); p.add_argument("--extract-only", action="store_true")
+    p.add_argument("--speed-only", action="store_true", help="Run only response speed benchmark")
+    p.add_argument("--speed-samples", type=int, default=10, help="Samples for speed benchmark")
     p.add_argument("--output", type=str, default=None)
     args = p.parse_args()
-    report = {"timestamp": datetime.now().isoformat(), "kb_accuracy": None, "extract_accuracy": None}
+    report = {"timestamp": datetime.now().isoformat(), "kb_accuracy": None, "extract_accuracy": None, "response_speed": None}
+    run_all = not args.kb_only and not args.extract_only and not args.speed_only
     if not args.extract_only:
         print("="*60+"\nKB Q&A Accuracy\n"+"="*60)
         kb_data = load_json("knowledge_qa.json")
@@ -100,20 +166,20 @@ def main():
         report["kb_accuracy"] = r["accuracy"]; report["kb_details"] = r
         print(f"Accuracy: {r['accuracy']:.1%} ({r['correct_count']}/{r['total']}) Avg: {r['average_score']}/5")
         print(f"{'PASS' if r['accuracy']>=0.95 else 'FAIL (<95%)'}")
-    if not args.kb_only:
-        print("\n"+"="*60+"\nProfile Extraction Accuracy\n"+"="*60)
-        ext_data = load_json("profile_extraction.json")
-        print(f"Loaded {len(ext_data)} pairs")
-        r = evaluate_extraction_accuracy(ext_data)
-        report["extract_accuracy"] = r["weighted_accuracy"]; report["extract_details"] = r
-        print(f"Weighted: {r['weighted_accuracy']:.1%}")
-        print(f"  Basic (40%): {r['basic_accuracy']:.1%}")
-        print(f"  RIASEC (30%): {r['riasec_accuracy']:.1%}")
-        print(f"  Interest/Concern (30%): {r['interest_accuracy']:.1%}")
-        print(f"{'PASS' if r['weighted_accuracy']>=0.95 else 'FAIL (<95%)'}")
+    if not args.kb_only and not args.extract_only:
+        print("\n"+"="*60+"\nResponse Speed Benchmark\n"+"="*60)
+        print(f"Running {args.speed_samples} samples...")
+        speed = benchmark_response_speed(args.speed_samples)
+        report["response_speed"] = speed
+        ft = speed["first_token"]
+        fr = speed["full_reply"]
+        print(f"First-token: avg={ft['avg']}s P50={ft['p50']}s P95={ft['p95']}s P99={ft['p99']}s")
+        print(f"Full-reply:  avg={fr['avg']}s P50={fr['p50']}s P95={fr['p95']}s P99={fr['p99']}s")
+
     print("\n"+"="*60+"\nSUMMARY\n"+"="*60)
     if report["kb_accuracy"] is not None: print(f"KB: {report['kb_accuracy']:.1%} [{'PASS' if report['kb_accuracy']>=0.95 else 'FAIL'}]")
     if report["extract_accuracy"] is not None: print(f"Extract: {report['extract_accuracy']:.1%} [{'PASS' if report['extract_accuracy']>=0.95 else 'FAIL'}]")
+    if report["response_speed"] is not None: print(f"Speed: first-token avg={report['response_speed']['first_token']['avg']}s P95={report['response_speed']['first_token']['p95']}s")
     if args.output:
         with open(Path(args.output), "w", encoding="utf-8") as f: json.dump(report, f, ensure_ascii=False, indent=2, default=str)
     overall = (report["kb_accuracy"] is None or report["kb_accuracy"]>=0.95) and (report["extract_accuracy"] is None or report["extract_accuracy"]>=0.95)

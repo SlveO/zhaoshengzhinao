@@ -1,7 +1,2529 @@
 [
-  {"id":"pe_001","conversation":[{"role":"user","content":"你好，我是广东的高考生，学物理的"},{"role":"assistant","content":"你好！请问你大概考了多少分呢？"},{"role":"user","content":"考了600分，对计算机和人工智能比较感兴趣"},{"role":"assistant","content":"600分很不错！"}],"expected_extraction":{"basic":{"province":"广东","subject_type":"物理类","score":600},"interests":{"preferred_subjects":["计算机","人工智能"],"strong_subjects":[],"hobbies":[]},"concerns":[],"riasec":{"R":0,"I":0,"A":0,"S":0,"E":0,"C":0},"values":[],"region_pref":{"province":"","city":""},"extra":{}}},
-  {"id":"pe_002","conversation":[{"role":"user","content":"老师好，我是湖南的历史类考生"},{"role":"assistant","content":"你好！请问你的分数怎么样？"},{"role":"user","content":"考了580分，比较想去师范类专业"},{"role":"assistant","content":"师范类专业很适合"},{"role":"user","content":"我语文和英语比较好，喜欢跟人打交道"}],"expected_extraction":{"basic":{"province":"湖南","subject_type":"历史类","score":580},"interests":{"preferred_subjects":["师范"],"strong_subjects":["语文","英语"],"hobbies":[]},"concerns":[],"riasec":{"R":0,"I":0,"A":0,"S":7,"E":0,"C":0},"values":[],"region_pref":{"province":"","city":""},"extra":{}}},
-  {"id":"pe_003","conversation":[{"role":"user","content":"浙江的，选的物理化学地理，630分"},{"role":"assistant","content":"浙江630分很优秀！"},{"role":"user","content":"我一直很想学医"},{"role":"assistant","content":"学医是一个很有意义的志向"}],"expected_extraction":{"basic":{"province":"浙江","subject_type":"物理类","score":630},"interests":{"preferred_subjects":["临床医学"],"strong_subjects":["物理","化学","地理"],"hobbies":[]},"concerns":[],"riasec":{"R":0,"I":0,"A":0,"S":8,"E":0,"C":0},"values":[],"region_pref":{"province":"","city":""},"extra":{}}},
-  {"id":"pe_004","conversation":[{"role":"user","content":"我是四川的理科生，考了550分"},{"role":"assistant","content":"四川的同学你好！"},{"role":"user","content":"比较迷茫，平时喜欢动手做东西也喜欢研究问题"},{"role":"assistant","content":"喜欢动手和研究说明你可能偏实践型"},{"role":"user","content":"对，高中参加了机器人社团也喜欢数学竞赛"}],"expected_extraction":{"basic":{"province":"四川","subject_type":"物理类","score":550},"interests":{"preferred_subjects":[],"strong_subjects":["数学"],"hobbies":["机器人"]},"concerns":["专业选择迷茫"],"riasec":{"R":7,"I":6,"A":0,"S":0,"E":0,"C":0},"values":[],"region_pref":{"province":"","city":""},"extra":{}}},
-  {"id":"pe_005","conversation":[{"role":"user","content":"我是广东考生，历史类590分"},{"role":"assistant","content":"想去哪里读大学呢？"},{"role":"user","content":"想留在广东最好在广州"},{"role":"assistant","content":"广州是个好选择"},{"role":"user","content":"金融和经济，想去银行工作，薪资待遇很重要"}],"expected_extraction":{"basic":{"province":"广东","subject_type":"历史类","score":590},"interests":{"preferred_subjects":["金融","经济学"],"strong_subjects":[],"hobbies":[]},"concerns":["就业前景","薪资待遇"],"riasec":{"R":0,"I":0,"A":0,"S":0,"E":6,"C":5},"values":["薪资水平"],"region_pref":{"province":"广东","city":"广州"},"extra":{}}}
+  {
+    "id": "pe_001",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东物理类620分"
+      },
+      {
+        "role": "assistant",
+        "content": "不错"
+      },
+      {
+        "role": "user",
+        "content": "对计算机和软件感兴趣"
+      },
+      {
+        "role": "assistant",
+        "content": "好方向"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "物理类",
+        "score": 620
+      },
+      "interests": {
+        "preferred_subjects": [
+          "计算机",
+          "软件工程"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_002",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "湖南历史类565"
+      },
+      {
+        "role": "assistant",
+        "content": "了解"
+      },
+      {
+        "role": "user",
+        "content": "想去师范"
+      },
+      {
+        "role": "assistant",
+        "content": "很适合"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "湖南",
+        "subject_type": "历史类",
+        "score": 565
+      },
+      "interests": {
+        "preferred_subjects": [
+          "师范"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_003",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "浙江物理化学地理645分"
+      },
+      {
+        "role": "assistant",
+        "content": "优秀"
+      },
+      {
+        "role": "user",
+        "content": "想学医"
+      },
+      {
+        "role": "assistant",
+        "content": "医学有前景"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "浙江",
+        "subject_type": "物理类",
+        "score": 645
+      },
+      "interests": {
+        "preferred_subjects": [
+          "临床医学"
+        ],
+        "strong_subjects": [
+          "物理",
+          "化学",
+          "地理"
+        ],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_004",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "四川理科530"
+      },
+      {
+        "role": "assistant",
+        "content": "了解"
+      },
+      {
+        "role": "user",
+        "content": "喜欢动手做东西"
+      },
+      {
+        "role": "assistant",
+        "content": "动手型"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "四川",
+        "subject_type": "物理类",
+        "score": 530
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 6,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_005",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "河南理科580"
+      },
+      {
+        "role": "assistant",
+        "content": "了解"
+      },
+      {
+        "role": "user",
+        "content": "对电子信息有兴趣"
+      },
+      {
+        "role": "assistant",
+        "content": "好方向"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "河南",
+        "subject_type": "物理类",
+        "score": 580
+      },
+      "interests": {
+        "preferred_subjects": [
+          "电子信息工程"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_006",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "江苏物理类610"
+      },
+      {
+        "role": "assistant",
+        "content": "不错"
+      },
+      {
+        "role": "user",
+        "content": "比较迷茫不知学什么"
+      },
+      {
+        "role": "assistant",
+        "content": "慢慢聊"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "江苏",
+        "subject_type": "物理类",
+        "score": 610
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "专业选择迷茫"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_007",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "湖北历史类575"
+      },
+      {
+        "role": "assistant",
+        "content": "了解"
+      },
+      {
+        "role": "user",
+        "content": "想学法学"
+      },
+      {
+        "role": "assistant",
+        "content": "法学不错"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "湖北",
+        "subject_type": "历史类",
+        "score": 575
+      },
+      "interests": {
+        "preferred_subjects": [
+          "法学"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_008",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "山东理科635"
+      },
+      {
+        "role": "assistant",
+        "content": "优秀"
+      },
+      {
+        "role": "user",
+        "content": "喜欢数学和物理"
+      },
+      {
+        "role": "assistant",
+        "content": "基础好"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "山东",
+        "subject_type": "物理类",
+        "score": 635
+      },
+      "interests": {
+        "preferred_subjects": [
+          "数学"
+        ],
+        "strong_subjects": [
+          "数学",
+          "物理"
+        ],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 7,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_009",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "北京理科555"
+      },
+      {
+        "role": "assistant",
+        "content": "北京考生"
+      },
+      {
+        "role": "user",
+        "content": "想学机械"
+      },
+      {
+        "role": "assistant",
+        "content": "机械工程"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "北京",
+        "subject_type": "物理类",
+        "score": 555
+      },
+      "interests": {
+        "preferred_subjects": [
+          "机械工程"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 6,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_010",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "上海历史类588"
+      },
+      {
+        "role": "assistant",
+        "content": "了解"
+      },
+      {
+        "role": "user",
+        "content": "对新闻传播感兴趣"
+      },
+      {
+        "role": "assistant",
+        "content": "热门"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "上海",
+        "subject_type": "历史类",
+        "score": 588
+      },
+      "interests": {
+        "preferred_subjects": [
+          "新闻传播"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "上海"
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_011",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "福建理科598"
+      },
+      {
+        "role": "assistant",
+        "content": "了解"
+      },
+      {
+        "role": "user",
+        "content": "想报土木"
+      },
+      {
+        "role": "assistant",
+        "content": "土木工程"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "福建",
+        "subject_type": "物理类",
+        "score": 598
+      },
+      "interests": {
+        "preferred_subjects": [
+          "土木工程"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_012",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "安徽历史类582"
+      },
+      {
+        "role": "assistant",
+        "content": "了解"
+      },
+      {
+        "role": "user",
+        "content": "想学英语"
+      },
+      {
+        "role": "assistant",
+        "content": "需要积累"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "安徽",
+        "subject_type": "历史类",
+        "score": 582
+      },
+      "interests": {
+        "preferred_subjects": [
+          "英语"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_013",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "江西理科572"
+      },
+      {
+        "role": "assistant",
+        "content": "了解"
+      },
+      {
+        "role": "user",
+        "content": "想学材料科学"
+      },
+      {
+        "role": "assistant",
+        "content": "基础学科"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "江西",
+        "subject_type": "物理类",
+        "score": 572
+      },
+      "interests": {
+        "preferred_subjects": [
+          "材料"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_014",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "重庆理科605"
+      },
+      {
+        "role": "assistant",
+        "content": "不错"
+      },
+      {
+        "role": "user",
+        "content": "人工智能方向"
+      },
+      {
+        "role": "assistant",
+        "content": "热门"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "重庆",
+        "subject_type": "物理类",
+        "score": 605
+      },
+      "interests": {
+        "preferred_subjects": [
+          "人工智能"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_015",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广西历史类562"
+      },
+      {
+        "role": "assistant",
+        "content": "了解"
+      },
+      {
+        "role": "user",
+        "content": "想学会计"
+      },
+      {
+        "role": "assistant",
+        "content": "实用"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广西",
+        "subject_type": "历史类",
+        "score": 562
+      },
+      "interests": {
+        "preferred_subjects": [
+          "会计学"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "工作稳定"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_016",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东物理类600"
+      },
+      {
+        "role": "assistant",
+        "content": "兴趣？"
+      },
+      {
+        "role": "user",
+        "content": "喜欢写代码做项目，参加过竞赛"
+      },
+      {
+        "role": "assistant",
+        "content": "编程强"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "物理类",
+        "score": 600
+      },
+      "interests": {
+        "preferred_subjects": [
+          "计算机"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 8,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 6
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_017",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东历史类570"
+      },
+      {
+        "role": "assistant",
+        "content": "方向？"
+      },
+      {
+        "role": "user",
+        "content": "喜欢帮别人做志愿者想当老师"
+      },
+      {
+        "role": "assistant",
+        "content": "有意义"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "历史类",
+        "score": 570
+      },
+      "interests": {
+        "preferred_subjects": [
+          "师范"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 8,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "社会贡献"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_018",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "浙江物理类610"
+      },
+      {
+        "role": "assistant",
+        "content": "兴趣？"
+      },
+      {
+        "role": "user",
+        "content": "喜欢修理电器研究数学难题"
+      },
+      {
+        "role": "assistant",
+        "content": "动手强"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "浙江",
+        "subject_type": "物理类",
+        "score": 610
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 7,
+        "I": 7,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_019",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "湖南历史类585"
+      },
+      {
+        "role": "assistant",
+        "content": "方向？"
+      },
+      {
+        "role": "user",
+        "content": "喜欢画画设计父母希望学会计"
+      },
+      {
+        "role": "assistant",
+        "content": "纠结中"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "湖南",
+        "subject_type": "历史类",
+        "score": 585
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 7,
+        "S": 0,
+        "E": 0,
+        "C": 4
+      },
+      "values": [
+        "个人成长"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_020",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "四川物理类560"
+      },
+      {
+        "role": "assistant",
+        "content": "兴趣？"
+      },
+      {
+        "role": "user",
+        "content": "学生会部长喜欢组织活动"
+      },
+      {
+        "role": "assistant",
+        "content": "领导型"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "四川",
+        "subject_type": "物理类",
+        "score": 560
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 5,
+        "E": 8,
+        "C": 0
+      },
+      "values": [
+        "社会贡献"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_021",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "河南物理类590"
+      },
+      {
+        "role": "assistant",
+        "content": "兴趣？"
+      },
+      {
+        "role": "user",
+        "content": "做事有条理喜欢整理"
+      },
+      {
+        "role": "assistant",
+        "content": "条理型"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "河南",
+        "subject_type": "物理类",
+        "score": 590
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [
+          "数学"
+        ],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 5,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 8
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_022",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "湖北历史类595"
+      },
+      {
+        "role": "assistant",
+        "content": "方向？"
+      },
+      {
+        "role": "user",
+        "content": "喜欢写作阅读文学社成员"
+      },
+      {
+        "role": "assistant",
+        "content": "文艺"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "湖北",
+        "subject_type": "历史类",
+        "score": 595
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 7,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "个人成长"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_023",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "江苏物理类625"
+      },
+      {
+        "role": "assistant",
+        "content": "很强"
+      },
+      {
+        "role": "user",
+        "content": "机器人竞赛拿奖也喜欢分析数据"
+      },
+      {
+        "role": "assistant",
+        "content": "全面"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "江苏",
+        "subject_type": "物理类",
+        "score": 625
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [
+          "物理",
+          "数学"
+        ],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 7,
+        "I": 8,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 5
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_024",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "福建物理类575"
+      },
+      {
+        "role": "assistant",
+        "content": "兴趣？"
+      },
+      {
+        "role": "user",
+        "content": "喜欢和人打交道也喜欢研究"
+      },
+      {
+        "role": "assistant",
+        "content": "均衡"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "福建",
+        "subject_type": "物理类",
+        "score": 575
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 6,
+        "A": 0,
+        "S": 6,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_025",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "山东历史类580"
+      },
+      {
+        "role": "assistant",
+        "content": "方向？"
+      },
+      {
+        "role": "user",
+        "content": "想学新闻做记者沟通重要"
+      },
+      {
+        "role": "assistant",
+        "content": "明确"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "山东",
+        "subject_type": "历史类",
+        "score": 580
+      },
+      "interests": {
+        "preferred_subjects": [
+          "新闻"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 5,
+        "S": 5,
+        "E": 5,
+        "C": 0
+      },
+      "values": [
+        "社会贡献"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_026",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "安徽物理类555"
+      },
+      {
+        "role": "assistant",
+        "content": "兴趣？"
+      },
+      {
+        "role": "user",
+        "content": "喜欢打篮球和生物实验"
+      },
+      {
+        "role": "assistant",
+        "content": "广泛"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "安徽",
+        "subject_type": "物理类",
+        "score": 555
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [
+          "生物学"
+        ],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 5,
+        "I": 5,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_027",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "江西历史类568"
+      },
+      {
+        "role": "assistant",
+        "content": "方向？"
+      },
+      {
+        "role": "user",
+        "content": "想做管理有领导力"
+      },
+      {
+        "role": "assistant",
+        "content": "管理型"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "江西",
+        "subject_type": "历史类",
+        "score": 568
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 6,
+        "E": 7,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_028",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "重庆物理类605"
+      },
+      {
+        "role": "assistant",
+        "content": "兴趣？"
+      },
+      {
+        "role": "user",
+        "content": "对新能源环保感兴趣"
+      },
+      {
+        "role": "assistant",
+        "content": "有远见"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "重庆",
+        "subject_type": "物理类",
+        "score": 605
+      },
+      "interests": {
+        "preferred_subjects": [
+          "环境科学"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 4,
+        "I": 6,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "社会贡献"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_029",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东物理类588"
+      },
+      {
+        "role": "assistant",
+        "content": "兴趣？"
+      },
+      {
+        "role": "user",
+        "content": "喜欢做实验对化学感兴趣"
+      },
+      {
+        "role": "assistant",
+        "content": "研究型"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "物理类",
+        "score": 588
+      },
+      "interests": {
+        "preferred_subjects": [
+          "化学"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 6,
+        "I": 7,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "学术氛围"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_030",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "浙江历史类592"
+      },
+      {
+        "role": "assistant",
+        "content": "方向？"
+      },
+      {
+        "role": "user",
+        "content": "想学法律做律师喜欢辩论"
+      },
+      {
+        "role": "assistant",
+        "content": "清晰"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "浙江",
+        "subject_type": "历史类",
+        "score": 592
+      },
+      "interests": {
+        "preferred_subjects": [
+          "法学"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 5,
+        "A": 0,
+        "S": 0,
+        "E": 6,
+        "C": 5
+      },
+      "values": [
+        "薪资水平"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_031",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东物理类600"
+      },
+      {
+        "role": "assistant",
+        "content": "看重什么？"
+      },
+      {
+        "role": "user",
+        "content": "工作稳定很重要"
+      },
+      {
+        "role": "assistant",
+        "content": "务实"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "物理类",
+        "score": 600
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "工作稳定"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_032",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东物理类600"
+      },
+      {
+        "role": "assistant",
+        "content": "看重什么？"
+      },
+      {
+        "role": "user",
+        "content": "希望工资高给家里减负"
+      },
+      {
+        "role": "assistant",
+        "content": "担当"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "物理类",
+        "score": 600
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "薪资水平"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_033",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东物理类600"
+      },
+      {
+        "role": "assistant",
+        "content": "看重什么？"
+      },
+      {
+        "role": "user",
+        "content": "想做对社会有贡献的事"
+      },
+      {
+        "role": "assistant",
+        "content": "理想"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "物理类",
+        "score": 600
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "社会贡献"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_034",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东物理类600"
+      },
+      {
+        "role": "assistant",
+        "content": "看重什么？"
+      },
+      {
+        "role": "user",
+        "content": "希望有挑战能不断成长"
+      },
+      {
+        "role": "assistant",
+        "content": "上进"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "物理类",
+        "score": 600
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "个人成长"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_035",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东物理类600"
+      },
+      {
+        "role": "assistant",
+        "content": "看重什么？"
+      },
+      {
+        "role": "user",
+        "content": "专业要对口不能浪费"
+      },
+      {
+        "role": "assistant",
+        "content": "务实"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "物理类",
+        "score": 600
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "专业对口"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_036",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东物理类600"
+      },
+      {
+        "role": "assistant",
+        "content": "看重什么？"
+      },
+      {
+        "role": "user",
+        "content": "想工作生活能平衡"
+      },
+      {
+        "role": "assistant",
+        "content": "规划"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "物理类",
+        "score": 600
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "工作生活平衡"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_037",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东物理类600"
+      },
+      {
+        "role": "assistant",
+        "content": "看重什么？"
+      },
+      {
+        "role": "user",
+        "content": "想去创新型企业"
+      },
+      {
+        "role": "assistant",
+        "content": "追求"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "物理类",
+        "score": 600
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "创新机会"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_038",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东物理类600"
+      },
+      {
+        "role": "assistant",
+        "content": "看重什么？"
+      },
+      {
+        "role": "user",
+        "content": "学术氛围很重要"
+      },
+      {
+        "role": "assistant",
+        "content": "环境"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "物理类",
+        "score": 600
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "学术氛围"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_039",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东物理类600"
+      },
+      {
+        "role": "assistant",
+        "content": "看重什么？"
+      },
+      {
+        "role": "user",
+        "content": "想留在家乡发展"
+      },
+      {
+        "role": "assistant",
+        "content": "念家"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "物理类",
+        "score": 600
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "地域偏好"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_040",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东物理类600"
+      },
+      {
+        "role": "assistant",
+        "content": "看重什么？"
+      },
+      {
+        "role": "user",
+        "content": "能做喜欢的事也帮到别人"
+      },
+      {
+        "role": "assistant",
+        "content": "情怀"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "物理类",
+        "score": 600
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "个人成长",
+        "社会贡献"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_041",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东历史类580"
+      },
+      {
+        "role": "assistant",
+        "content": "想去哪里？"
+      },
+      {
+        "role": "user",
+        "content": "想留在广东最好在广州"
+      },
+      {
+        "role": "assistant",
+        "content": "本地"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "历史类",
+        "score": 580
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "广东",
+        "city": "广州"
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_042",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东历史类580"
+      },
+      {
+        "role": "assistant",
+        "content": "想去哪里？"
+      },
+      {
+        "role": "user",
+        "content": "想去北京或者上海"
+      },
+      {
+        "role": "assistant",
+        "content": "大城市"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "历史类",
+        "score": 580
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "北京",
+        "city": "上海"
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_043",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东历史类580"
+      },
+      {
+        "role": "assistant",
+        "content": "想去哪里？"
+      },
+      {
+        "role": "user",
+        "content": "不想离家太远就在省内"
+      },
+      {
+        "role": "assistant",
+        "content": "就近"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "历史类",
+        "score": 580
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "广东",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_044",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东历史类580"
+      },
+      {
+        "role": "assistant",
+        "content": "想去哪里？"
+      },
+      {
+        "role": "user",
+        "content": "想去江浙沪那边"
+      },
+      {
+        "role": "assistant",
+        "content": "长三角"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "历史类",
+        "score": 580
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "江苏",
+        "city": "上海"
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_045",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东历史类580"
+      },
+      {
+        "role": "assistant",
+        "content": "想去哪里？"
+      },
+      {
+        "role": "user",
+        "content": "无所谓去哪里学校好就行"
+      },
+      {
+        "role": "assistant",
+        "content": "开放"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "历史类",
+        "score": 580
+      },
+      "interests": {
+        "preferred_subjects": [],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 0
+      },
+      "values": [],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_046",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "广东物理类620，喜欢编程和数学，参加过竞赛"
+      },
+      {
+        "role": "assistant",
+        "content": "理科很强！"
+      },
+      {
+        "role": "user",
+        "content": "想学计算机，看重薪资和成长空间"
+      },
+      {
+        "role": "assistant",
+        "content": "很务实的目标"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "广东",
+        "subject_type": "物理类",
+        "score": 620
+      },
+      "interests": {
+        "preferred_subjects": [
+          "计算机"
+        ],
+        "strong_subjects": [
+          "数学"
+        ],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 8,
+        "A": 0,
+        "S": 0,
+        "E": 0,
+        "C": 6
+      },
+      "values": [
+        "薪资水平",
+        "个人成长"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_047",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "湖南历史类585，想当老师，喜欢语文和历史"
+      },
+      {
+        "role": "assistant",
+        "content": "师范很适合你！"
+      },
+      {
+        "role": "user",
+        "content": "希望工作稳定有寒暑假，最好在省内"
+      },
+      {
+        "role": "assistant",
+        "content": "很实际的考量"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "湖南",
+        "subject_type": "历史类",
+        "score": 585
+      },
+      "interests": {
+        "preferred_subjects": [
+          "师范"
+        ],
+        "strong_subjects": [
+          "语文",
+          "历史"
+        ],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 5,
+        "S": 7,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "工作稳定"
+      ],
+      "region_pref": {
+        "province": "湖南",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_048",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "浙江630分，喜欢做实验和研究，想学医"
+      },
+      {
+        "role": "assistant",
+        "content": "医学需要高分，你很合适！"
+      },
+      {
+        "role": "user",
+        "content": "觉得社会贡献很重要，去好学校不挑城市"
+      },
+      {
+        "role": "assistant",
+        "content": "有理想！"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "浙江",
+        "subject_type": "物理类",
+        "score": 630
+      },
+      "interests": {
+        "preferred_subjects": [
+          "临床医学"
+        ],
+        "strong_subjects": [
+          "物理",
+          "化学",
+          "生物"
+        ],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 8,
+        "A": 0,
+        "S": 6,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "社会贡献",
+        "学术氛围"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_049",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "四川550分，喜欢动手做东西，也喜欢团队合作"
+      },
+      {
+        "role": "assistant",
+        "content": "实践型选手！"
+      },
+      {
+        "role": "user",
+        "content": "想学机械或者自动化，希望就业好一些"
+      },
+      {
+        "role": "assistant",
+        "content": "工科很适合你"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "四川",
+        "subject_type": "物理类",
+        "score": 550
+      },
+      "interests": {
+        "preferred_subjects": [
+          "机械工程",
+          "自动化"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 7,
+        "I": 0,
+        "A": 0,
+        "S": 5,
+        "E": 0,
+        "C": 0
+      },
+      "values": [
+        "薪资水平"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  },
+  {
+    "id": "pe_050",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "河南历史类590，喜欢沟通和组织活动，做过学生会干部"
+      },
+      {
+        "role": "assistant",
+        "content": "领导型人才！"
+      },
+      {
+        "role": "user",
+        "content": "想学管理或者法律，工作稳定和成长空间都重要"
+      },
+      {
+        "role": "assistant",
+        "content": "目标很清晰"
+      }
+    ],
+    "expected_extraction": {
+      "basic": {
+        "province": "河南",
+        "subject_type": "历史类",
+        "score": 590
+      },
+      "interests": {
+        "preferred_subjects": [
+          "工商管理",
+          "法学"
+        ],
+        "strong_subjects": [],
+        "hobbies": []
+      },
+      "concerns": [],
+      "riasec": {
+        "R": 0,
+        "I": 0,
+        "A": 0,
+        "S": 5,
+        "E": 8,
+        "C": 0
+      },
+      "values": [
+        "工作稳定",
+        "个人成长"
+      ],
+      "region_pref": {
+        "province": "",
+        "city": ""
+      },
+      "extra": {}
+    }
+  }
 ]
