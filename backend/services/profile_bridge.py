@@ -10,6 +10,7 @@ import json
 import logging
 import os
 import uuid
+from pathlib import Path
 from typing import Optional
 
 from sqlalchemy import select, func
@@ -33,7 +34,36 @@ logger = logging.getLogger(__name__)
 # Helpers
 # ---------------------------------------------------------------------------
 
-_JSON_BACKUP_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "extracted_profiles")
+_JSON_BACKUP_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    "data", "extracted_profiles"
+)
+
+
+def _compute_confidence(result: CendExtractionResult) -> dict:
+    """Derive a confidence score from extraction completeness.
+
+    Returns a dict with per-layer confidence suitable for SessionProfile.confidence_json.
+    """
+    riasec_count = sum(1 for v in result.riasec.values() if v > 0)
+    basic_count = sum(1 for v in result.basic.values() if v)
+    has_values = 1 if result.values else 0
+    has_concerns = 1 if result.concerns else 0
+    has_interests = 1 if any(result.interests.get(k, []) for k in ("preferred_subjects", "strong_subjects", "hobbies")) else 0
+
+    layers_filled = basic_count + has_interests + has_concerns + riasec_count + has_values
+    # Max possible: basic(3) + interests(1) + concerns(1) + riasec(6) + values(1) = 12
+    overall = round(min(layers_filled / 12, 1.0), 2)
+
+    return {
+        "overall": overall,
+        "basic": round(basic_count / 3, 2),
+        "interests": 1.0 if has_interests else 0.0,
+        "concerns": 1.0 if has_concerns else 0.0,
+        "riasec": round(riasec_count / 6, 2),
+        "values": 1.0 if has_values else 0.0,
+        "completeness": result.completeness,
+    }
 
 
 def _ensure_backup_dir() -> None:
@@ -240,7 +270,7 @@ async def bridge_profile_to_session_profiles(
 
                 if profile_row:
                     profile_row.profile_json = merged_json
-                    profile_row.confidence_json = merged_result.extra if merged_result.extra else {}
+                    profile_row.confidence_json = _compute_confidence(merged_result)
                     profile_row.completeness = merged_result.completeness
                 else:
                     profile_row = SessionProfile(
@@ -248,7 +278,7 @@ async def bridge_profile_to_session_profiles(
                         session_id=session_uuid,
                         user_id=session.user_id,
                         profile_json=merged_json,
-                        confidence_json=merged_result.extra if merged_result.extra else {},
+                        confidence_json=_compute_confidence(merged_result),
                         completeness=merged_result.completeness,
                     )
                     db.add(profile_row)

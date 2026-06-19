@@ -466,13 +466,11 @@ async def analyze_cend_turn(
     system_msg = SystemMessage(content=system_content)
     human_msg = HumanMessage(content="请分析上述对话并输出JSON。")
 
-    last_exc = None
     for attempt in range(max_retries + 1):
         try:
             response = await llm.ainvoke([system_msg, human_msg])
             return parse_cend_response(response.content)
         except Exception as exc:
-            last_exc = exc
             if attempt < max_retries:
                 delay = 2 ** attempt  # 1s, 2s
                 logger.warning(
