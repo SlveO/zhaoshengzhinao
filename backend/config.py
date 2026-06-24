@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     max_upload_size_mb: int = 20
     cors_origins: str = (
         "http://localhost:5173,http://localhost:3000,http://localhost:3001,"
-        "http://localhost:3002,http://localhost:5174,"
+        "http://localhost:3002,http://localhost:3003,http://localhost:5174,"
         "https://zhaoshengzhinao.pages.dev,https://zhaoshengzhinao-mini-app.pages.dev,"
         "https://slveo-gaokao-api.hf.space"
     )
