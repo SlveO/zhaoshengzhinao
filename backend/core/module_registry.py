@@ -2,7 +2,7 @@
 
 Each analytics/admin module can be independently toggled per tenant
 via tenant.config.modules. Dependencies are enforced — e.g. you
-cannot enable competitive_analysis without funnel + profile_dashboard.
+cannot enable competitive_analysis without profile_dashboard.
 """
 from enum import Enum
 
@@ -10,7 +10,6 @@ from fastapi import HTTPException
 
 
 class ModuleKey(Enum):
-    FUNNEL = "funnel"
     PROFILE_DASHBOARD = "profile_dashboard"
     MAJOR_HEATMAP = "major_heatmap"
     REGION_DISTRIBUTION = "region_distribution"
@@ -27,10 +26,8 @@ class ModuleKey(Enum):
 
 # Modules that require other modules to be enabled first
 MODULE_DEPENDENCIES: dict[ModuleKey, list[ModuleKey]] = {
-    ModuleKey.MAJOR_HEATMAP: [ModuleKey.FUNNEL],
-    ModuleKey.COMPETITIVE_ANALYSIS: [ModuleKey.FUNNEL, ModuleKey.PROFILE_DASHBOARD],
+    ModuleKey.COMPETITIVE_ANALYSIS: [ModuleKey.PROFILE_DASHBOARD],
     ModuleKey.ANNUAL_REPORT: [
-        ModuleKey.FUNNEL,
         ModuleKey.PROFILE_DASHBOARD,
         ModuleKey.MAJOR_HEATMAP,
         ModuleKey.REGION_DISTRIBUTION,
@@ -41,7 +38,6 @@ MODULE_DEPENDENCIES: dict[ModuleKey, list[ModuleKey]] = {
 
 # Route prefix → ModuleKey mapping for automatic gating
 MODULE_ROUTE_MAP: dict[str, ModuleKey] = {
-    "/api/v1/admin/analytics/funnel": ModuleKey.FUNNEL,
     "/api/v1/admin/analytics/profile-dashboard": ModuleKey.PROFILE_DASHBOARD,
     "/api/v1/admin/analytics/major-heatmap": ModuleKey.MAJOR_HEATMAP,
     "/api/v1/admin/analytics/region-distribution": ModuleKey.REGION_DISTRIBUTION,

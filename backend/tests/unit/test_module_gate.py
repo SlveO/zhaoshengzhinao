@@ -10,22 +10,22 @@ class Tenant:
 
 
 def test_module_gate_allows_enabled_module():
-    tenant = Tenant({"funnel": True})
+    tenant = Tenant({"profile_dashboard": True})
 
-    check_module_enabled(tenant, ModuleKey.FUNNEL)
+    check_module_enabled(tenant, ModuleKey.PROFILE_DASHBOARD)
 
 
 def test_module_gate_blocks_disabled_module():
-    tenant = Tenant({"funnel": False})
+    tenant = Tenant({"profile_dashboard": False})
 
     with pytest.raises(HTTPException) as exc:
-        check_module_enabled(tenant, ModuleKey.FUNNEL)
+        check_module_enabled(tenant, ModuleKey.PROFILE_DASHBOARD)
 
     assert exc.value.status_code == 403
 
 
 def test_module_gate_enforces_dependencies():
-    tenant = Tenant({"competitive_analysis": True, "funnel": True, "profile_dashboard": False})
+    tenant = Tenant({"competitive_analysis": True, "profile_dashboard": False})
 
     with pytest.raises(HTTPException) as exc:
         check_module_enabled(tenant, ModuleKey.COMPETITIVE_ANALYSIS)

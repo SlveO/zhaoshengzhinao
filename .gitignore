@@ -28,6 +28,7 @@ backend/file_store/
 # IDE
 .vscode/
 .idea/
+.trae/
 
 # Cloudflare Wrangler cache
 .wrangler/

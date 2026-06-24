@@ -19,7 +19,6 @@ DEFAULT_TENANT = {
             "welcome_text": "欢迎使用招生智脑！我是你的AI招生顾问。",
         },
         "modules": {
-            "funnel": True,
             "profile_dashboard": True,
             "major_heatmap": False,
             "region_distribution": False,
@@ -51,7 +50,6 @@ PILOT_TENANTS = [
                 "welcome_text": "欢迎了解广东工业大学！我是你的专属AI招生顾问，有什么想了解的？",
             },
             "modules": {
-                "funnel": True,
                 "profile_dashboard": True,
                 "major_heatmap": True,
                 "region_distribution": False,

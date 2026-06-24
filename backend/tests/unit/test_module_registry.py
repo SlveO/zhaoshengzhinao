@@ -9,27 +9,25 @@ class FakeTenant:
 
 
 def test_module_with_no_dependencies_passes():
-    tenant = FakeTenant({"funnel": True})
-    check_module_enabled(tenant, ModuleKey.FUNNEL)  # should not raise
+    tenant = FakeTenant({"profile_dashboard": True})
+    check_module_enabled(tenant, ModuleKey.PROFILE_DASHBOARD)  # should not raise
 
 
 def test_module_not_enabled_raises_403():
-    tenant = FakeTenant({"funnel": False})
+    tenant = FakeTenant({"profile_dashboard": False})
     with pytest.raises(Exception) as exc:
-        check_module_enabled(tenant, ModuleKey.FUNNEL)
+        check_module_enabled(tenant, ModuleKey.PROFILE_DASHBOARD)
     assert exc.value.status_code == 403
     assert "not enabled" in exc.value.detail
 
 
-def test_competitive_analysis_requires_funnel_and_profile():
+def test_competitive_analysis_requires_profile():
     deps = MODULE_DEPENDENCIES[ModuleKey.COMPETITIVE_ANALYSIS]
-    assert ModuleKey.FUNNEL in deps
     assert ModuleKey.PROFILE_DASHBOARD in deps
 
 
 def test_competitive_analysis_passes_when_all_deps_enabled():
     tenant = FakeTenant({
-        "funnel": True,
         "profile_dashboard": True,
         "competitive_analysis": True,
     })
@@ -38,7 +36,6 @@ def test_competitive_analysis_passes_when_all_deps_enabled():
 
 def test_competitive_analysis_fails_when_dep_missing():
     tenant = FakeTenant({
-        "funnel": True,
         "profile_dashboard": False,
         "competitive_analysis": True,
     })
@@ -48,10 +45,9 @@ def test_competitive_analysis_fails_when_dep_missing():
     assert "profile_dashboard" in exc.value.detail
 
 
-def test_annual_report_requires_five_deps():
+def test_annual_report_requires_four_deps():
     deps = MODULE_DEPENDENCIES[ModuleKey.ANNUAL_REPORT]
-    assert len(deps) == 5
-    assert ModuleKey.FUNNEL in deps
+    assert len(deps) == 4
     assert ModuleKey.PROFILE_DASHBOARD in deps
     assert ModuleKey.MAJOR_HEATMAP in deps
     assert ModuleKey.REGION_DISTRIBUTION in deps

@@ -1,7 +1,7 @@
 """Seed 50 simulated student conversations for demo analytics.
 
 Generates realistic event_logs and session_profiles so the admin
-dashboard shows non-zero data for funnel, profile dashboard, etc.
+dashboard shows non-zero data for profile dashboard, etc.
 """
 import asyncio
 import json

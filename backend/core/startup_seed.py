@@ -18,7 +18,6 @@ SCNU_TENANT_CONFIG = {
         "welcome_text": "欢迎了解华南师范大学！艰苦奋斗、严谨治学、求实创新、为人师表。我是你的专属AI招生顾问~",
     },
     "modules": {
-        "funnel": True,
         "profile_dashboard": True,
         "major_heatmap": True,
         "region_distribution": True,

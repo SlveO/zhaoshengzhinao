@@ -4,54 +4,12 @@ Integration tests use real test DB, mock only external APIs.
 """
 
 import uuid
-from datetime import datetime, timezone, timedelta
 
 import pytest
 
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from conftest import TEST_TENANT_ID
-
-
-@pytest.mark.asyncio
-async def test_funnel_returns_correct_structure(async_client, test_tenant, tenant_admin_user, seed_event):
-    """Pipeline stage: Admin Analytics — funnel endpoint returns stages + conversionRates."""
-    # Seed funnel events
-    now = datetime.now(timezone.utc)
-    for event_type in ["page.viewed", "chat.message_sent", "profile.updated"]:
-        await seed_event(
-            event_type,
-            tenant_id=TEST_TENANT_ID,
-            payload={"completeness": "L2"} if event_type == "profile.updated" else {},
-            created_at=now,
-        )
-
-    from core.tenant_context import _current_tenant, _current_user
-    from tenants.models import Tenant
-    from models.user import User
-
-    # Set auth context
-    async def _set_context():
-        from models import async_session
-        async with async_session() as db:
-            from sqlalchemy import select
-            t = (await db.execute(select(Tenant).where(Tenant.id == TEST_TENANT_ID))).scalar_one()
-            u = (await db.execute(select(User).where(User.username == "admin"))).scalar_one()
-            _current_tenant.set(t)
-            _current_user.set(u)
-
-    await _set_context()
-
-    resp = await async_client.get(
-        "/api/v1/admin/analytics/funnel",
-        headers={"X-Tenant": "test"},
-    )
-    assert resp.status_code == 200
-    data = resp.json()
-    assert "stages" in data
-    assert "conversionRates" in data
-    assert "visitors" in data["stages"]
-    assert "conversations" in data["stages"]
 
 
 @pytest.mark.asyncio
@@ -110,34 +68,6 @@ async def test_topic_cloud_returns_structure(async_client, test_tenant, tenant_a
         headers={"X-Tenant": "test"},
     )
     assert resp.status_code == 200
-
-
-@pytest.mark.asyncio
-async def test_funnel_with_zero_events(async_client, test_tenant, tenant_admin_user):
-    """Pipeline stage: Admin Analytics — funnel returns zeros when no events seeded."""
-    from core.tenant_context import _current_tenant, _current_user
-    from tenants.models import Tenant
-    from models.user import User
-
-    async def _set_context():
-        from models import async_session
-        async with async_session() as db:
-            from sqlalchemy import select
-            t = (await db.execute(select(Tenant).where(Tenant.id == TEST_TENANT_ID))).scalar_one()
-            u = (await db.execute(select(User).where(User.username == "admin"))).scalar_one()
-            _current_tenant.set(t)
-            _current_user.set(u)
-
-    await _set_context()
-
-    resp = await async_client.get(
-        "/api/v1/admin/analytics/funnel",
-        headers={"X-Tenant": "test"},
-    )
-    assert resp.status_code == 200
-    data = resp.json()
-    assert data["stages"]["visitors"] == 0
-    assert data["conversionRates"]["visitorToConversation"] == 0
 
 
 @pytest.mark.asyncio

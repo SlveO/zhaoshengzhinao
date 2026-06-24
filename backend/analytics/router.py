@@ -15,15 +15,6 @@ def _require(module: ModuleKey):
     return gate
 
 
-@router.get("/funnel")
-async def funnel(
-    tenant=Depends(_require(ModuleKey.FUNNEL)),
-    days: int = Query(default=365, ge=1, le=1095),
-):
-    from analytics.funnel import get_funnel
-    return await get_funnel(str(tenant.id), days=days)
-
-
 @router.get("/profile-dashboard")
 async def profile_dashboard(
     tenant=Depends(_require(ModuleKey.PROFILE_DASHBOARD)),

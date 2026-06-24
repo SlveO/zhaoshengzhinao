@@ -30,7 +30,7 @@ async def test_enabled_module_returns_200(async_client, test_tenant, tenant_admi
     await _set_context()
 
     resp = await async_client.get(
-        "/api/v1/admin/analytics/funnel",
+        "/api/v1/admin/analytics/profile-dashboard",
         headers={"X-Tenant": "test"},
     )
     assert resp.status_code == 200
@@ -44,12 +44,11 @@ async def test_disabled_module_returns_403(async_client, tenant_admin_user):
     from core.tenant_context import _current_tenant, _current_user
     from models.user import User
 
-    # Create tenant with funnel disabled
+    # Create tenant with profile_dashboard disabled
     config = {
-        "brand": {"name": "NoFunnel U", "short_name": "NFU", "primary_color": "#000"},
+        "brand": {"name": "NoDash U", "short_name": "NDU", "primary_color": "#000"},
         "modules": {
-            "funnel": False,
-            "profile_dashboard": True,
+            "profile_dashboard": False,
             "major_heatmap": True,
             "region_distribution": True,
             "competitive_analysis": True,
@@ -64,8 +63,8 @@ async def test_disabled_module_returns_403(async_client, tenant_admin_user):
     async with async_session() as db:
         t = Tenant(
             id=tenant_id,
-            name="NoFunnel University",
-            slug="nofunnel",
+            name="NoDashboard University",
+            slug="nodash",
             config=config,
             subscription_tier="basic",
             status="active",
@@ -80,8 +79,8 @@ async def test_disabled_module_returns_403(async_client, tenant_admin_user):
         _current_user.set(u)
 
     resp = await async_client.get(
-        "/api/v1/admin/analytics/funnel",
-        headers={"X-Tenant": "nofunnel"},
+        "/api/v1/admin/analytics/profile-dashboard",
+        headers={"X-Tenant": "nodash"},
     )
     assert resp.status_code == 403
 
@@ -94,12 +93,11 @@ async def test_dependency_module_missing_returns_403(async_client, tenant_admin_
     from core.tenant_context import _current_tenant, _current_user
     from models.user import User
 
-    # competitive_analysis enabled but funnel (dependency) disabled
+    # competitive_analysis enabled but profile_dashboard (dependency) disabled
     config = {
         "brand": {"name": "DepTest U", "short_name": "DTU", "primary_color": "#000"},
         "modules": {
-            "funnel": False,
-            "profile_dashboard": True,
+            "profile_dashboard": False,
             "competitive_analysis": True,
             "major_heatmap": False,
             "region_distribution": True,
@@ -134,7 +132,7 @@ async def test_dependency_module_missing_returns_403(async_client, tenant_admin_
         headers={"X-Tenant": "deptest"},
     )
     assert resp.status_code == 403
-    assert "funnel" in resp.json()["error"]["message"].lower() or "requires" in resp.json()["error"]["message"].lower()
+    assert "profile_dashboard" in resp.json()["error"]["message"].lower() or "requires" in resp.json()["error"]["message"].lower()
 
 
 @pytest.mark.asyncio

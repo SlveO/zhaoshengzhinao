@@ -1,7 +1,6 @@
 """Annual report — aggregate all analytics modules into a structured report."""
 from datetime import datetime, timezone, timedelta
 
-from analytics.funnel import get_funnel
 from analytics.profile_dashboard import get_profile_dashboard
 from analytics.major_heatmap import get_major_heatmap
 from analytics.region_distribution import get_region_distribution
@@ -9,7 +8,6 @@ from analytics.competitive_analysis import get_competitive_analysis
 
 
 async def get_annual_report(tenant_id: str, days: int = 365) -> dict:
-    funnel = await get_funnel(tenant_id, days=days)
     dashboard = await get_profile_dashboard(tenant_id, days=days)
     heatmap = await get_major_heatmap(tenant_id, days=days)
     regions = await get_region_distribution(tenant_id, days=days)
@@ -18,18 +16,6 @@ async def get_annual_report(tenant_id: str, days: int = 365) -> dict:
     year = datetime.now(timezone.utc).year
 
     sections = []
-
-    sections.append({
-        "title": "招生漏斗概览",
-        "content": (
-            f"本周期内共有 {funnel['stages']['visitors']} 名访客，"
-            f"其中 {funnel['stages']['conversations']} 次对话 session，"
-            f"{funnel['stages']['deepConsultations']} 次深度画像建档，"
-            f"{funnel['stages']['intentExpressed']} 名意向表达。"
-            f"访客到对话转化率 {funnel['conversionRates']['visitorToConversation']}%。"
-        ),
-        "charts": ["funnel_chart"],
-    })
 
     top_majors = heatmap.get("majors", [])[:5]
     sections.append({
@@ -74,7 +60,6 @@ async def get_annual_report(tenant_id: str, days: int = 365) -> dict:
 
     summary = (
         f"{year}年度招生分析报告："
-        f"累计服务 {funnel['stages']['visitors']} 名潜在学生，"
         f"完成 {dashboard.get('totalProfiles', 0)} 份学生画像，"
         f"覆盖 {len(heatmap.get('majors', []))} 个专业方向和 {len(regions.get('regions', []))} 个省份。"
     )

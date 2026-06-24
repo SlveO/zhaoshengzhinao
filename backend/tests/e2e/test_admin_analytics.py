@@ -60,14 +60,3 @@ class TestAdminAnalytics:
 
             error_403 = page.locator("text=/403|Forbidden|无权限/")
             assert error_403.count() == 0, "Insights page returned 403"
-
-    def test_funnel_page_loads(self, page: Page):
-        """Pipeline stage: Admin Analytics — funnel analytics page loads without errors."""
-        self._login(page)
-
-        funnel_link = page.locator("text=/漏斗|Funnel|转化/").first
-        if funnel_link.is_visible(timeout=3000):
-            funnel_link.click()
-            page.wait_for_timeout(3000)
-
-            assert True  # If we got here, page loaded without hard errors

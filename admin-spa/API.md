@@ -859,7 +859,6 @@ GET /api/v1/admin/tenants/me/config
 {
   "brand": { "name": "华南师范大学", "short_name": "SCNU", "..." },
   "modules": {
-    "funnel": true,
     "profile_dashboard": true,
     "topic_cloud": true,
     "knowledge": true,
@@ -887,7 +886,6 @@ PUT /api/v1/admin/tenants/me/config
 ```json
 {
   "modules": {
-    "funnel": true,
     "profile_dashboard": false,
     "topic_cloud": true
   }
@@ -901,14 +899,13 @@ PUT /api/v1/admin/tenants/me/config
 **模块 key 定义**：
 | Key | 名称 | 说明 | 依赖 |
 |-----|------|------|------|
-| `funnel` | 招生漏斗 | 分析从访问到报考的全链路转化 | - |
 | `profile_dashboard` | 画像看板 | 学生兴趣画像与价值观分布 | - |
 | `topic_cloud` | 增强分析 | 词云、情绪时间线、咨询热点 | - |
 | `knowledge` | 知识库 | 院校专属知识文档管理 | - |
 | `brand` | 品牌配置 | 院校品牌色、Logo、欢迎语 | - |
 | `agent` | AI 对话 | 智能体提示词、风格与主动推荐 | - |
 | `recommendation` | 专业推荐 | 基于画像的专业匹配推荐 | profile_dashboard |
-| `reports` | 招生报告 | 招生优化报告生成中心 | funnel, topic_cloud |
+| `reports` | 招生报告 | 招生优化报告生成中心 | topic_cloud |
 | `multi_department` | 多院系管理 | 多院系数据分权管理 | knowledge |
 | `role_management` | 角色权限 | 细粒度角色与权限控制 | multi_department |
 

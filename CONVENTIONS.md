@@ -112,7 +112,6 @@ POST   /api/v1/admin/knowledge/reindex     # 触发重新索引
 GET    /api/v1/admin/knowledge/index-status # 索引状态
 
 # 分析面板（按模块开关控制访问）
-GET    /api/v1/admin/analytics/funnel            # 招生漏斗
 GET    /api/v1/admin/analytics/profile-dashboard  # 画像看板
 GET    /api/v1/admin/analytics/major-heatmap      # 专业热度
 GET    /api/v1/admin/analytics/region-distribution # 地域分布
@@ -153,24 +152,6 @@ interface BrandConfig {
   logoUrl: string
   faviconUrl: string
   loginBgUrl: string | null
-}
-
-// GET /api/v1/admin/analytics/funnel 响应
-interface FunnelData {
-  period: { start: string; end: string }
-  stages: {
-    visitors: number
-    conversations: number
-    deepConsultations: number
-    intentExpressed: number
-    enrolled: number
-  }
-  conversionRates: {
-    visitorToConversation: number
-    conversationToDeep: number
-    deepToIntent: number
-    intentToEnrolled: number
-  }
 }
 
 // GET /api/v1/admin/analytics/profile-dashboard 响应

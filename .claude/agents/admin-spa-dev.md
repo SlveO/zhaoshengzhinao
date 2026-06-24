@@ -21,7 +21,7 @@ You are a frontend developer specializing in the admin SPA. Before writing code,
 
 **Mock data fallback**: All pages use mock data when API calls fail — UI degrades gracefully for demo purposes.
 
-**Pages**: Analytics dashboards, recommendation modules, profile dashboards, major heatmaps, region distributions, funnel analysis, competitive analysis, annual reports.
+**Pages**: Analytics dashboards, recommendation modules, profile dashboards, major heatmaps, region distributions, competitive analysis, annual reports.
 
 **Module gating**: Admin analytics endpoints gated by `tenant.config.modules` JSONB with dependency chains.
 

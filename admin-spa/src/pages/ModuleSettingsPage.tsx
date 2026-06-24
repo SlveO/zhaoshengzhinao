@@ -4,14 +4,13 @@ import type { ModuleItem } from '../types'
 import StatusCard from '../components/StatusCard'
 
 const MODULE_DEFS: ModuleItem[] = [
-  { key: 'funnel', name: '招生漏斗', desc: '分析从访问到报考的全链路转化', depends: [], enabled: true },
   { key: 'profile_dashboard', name: '画像看板', desc: '学生兴趣画像与价值观分布', depends: [], enabled: true },
   { key: 'topic_cloud', name: '增强分析', desc: '词云、情绪时间线、咨询热点', depends: [], enabled: true },
   { key: 'knowledge', name: '知识库', desc: '院校专属知识文档管理', depends: [], enabled: true },
   { key: 'brand', name: '品牌配置', desc: '院校品牌色、Logo、欢迎语', depends: [], enabled: true },
   { key: 'agent', name: 'AI 对话', desc: '智能体提示词、风格与主动推荐', depends: [], enabled: true },
   { key: 'recommendation', name: '专业推荐', desc: '基于画像的专业匹配推荐', depends: ['profile_dashboard'], enabled: true },
-  { key: 'reports', name: '招生报告', desc: '招生优化报告生成中心', depends: ['funnel', 'topic_cloud'], enabled: true },
+  { key: 'reports', name: '招生报告', desc: '招生优化报告生成中心', depends: ['topic_cloud'], enabled: true },
   { key: 'multi_department', name: '多院系管理', desc: '多院系数据分权管理', depends: ['knowledge'], enabled: false },
   { key: 'role_management', name: '角色权限', desc: '细粒度角色与权限控制', depends: ['multi_department'], enabled: false },
 ]
