@@ -9,7 +9,7 @@ from loguru import logger
 from tenacity import (
     stop_after_attempt, wait_exponential, retry_if_exception, RetryError,
 )
-from tenacity._asyncio import AsyncRetrying
+from tenacity import AsyncRetrying
 
 from scrapers.config import DATA_RAW, ScraperConfig
 
