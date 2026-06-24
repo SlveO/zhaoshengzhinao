@@ -1,0 +1,702 @@
+[
+  {
+    "id": "kqa_001",
+    "question": "华南师范大学计算机科学与技术专业2025年录取分数线是多少？",
+    "expected_answer": "计算机科学与技术专业2025年在广东省物理类录取最低分约为610分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_002",
+    "question": "华南师范大学软件工程专业2025年录取分数线是多少？",
+    "expected_answer": "软件工程专业2025年在广东省物理类录取最低分约为605分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_003",
+    "question": "华南师范大学人工智能专业2025年录取分数线是多少？",
+    "expected_answer": "人工智能专业2025年在广东省物理类录取最低分约为615分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_004",
+    "question": "华南师范大学电子信息工程专业2025年录取分数线是多少？",
+    "expected_answer": "电子信息工程专业2025年在广东省物理类录取最低分约为595分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_005",
+    "question": "华南师范大学数学与应用数学专业2025年录取分数线是多少？",
+    "expected_answer": "数学与应用数学专业2025年在广东省物理类录取最低分约为600分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_006",
+    "question": "华南师范大学经济学专业2025年录取分数线是多少？",
+    "expected_answer": "经济学专业2025年在广东省物理类录取最低分约为585分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_007",
+    "question": "华南师范大学法学专业2025年录取分数线是多少？",
+    "expected_answer": "法学专业2025年在广东省物理类录取最低分约为590分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_008",
+    "question": "华南师范大学心理学专业2025年录取分数线是多少？",
+    "expected_answer": "心理学专业2025年在广东省物理类录取最低分约为590分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_009",
+    "question": "华南师范大学汉语言文学专业2025年录取分数线是多少？",
+    "expected_answer": "汉语言文学专业2025年在广东省物理类录取最低分约为580分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_010",
+    "question": "华南师范大学化学专业2025年录取分数线是多少？",
+    "expected_answer": "化学专业2025年在广东省物理类录取最低分约为585分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_011",
+    "question": "华南师范大学物理学专业2025年录取分数线是多少？",
+    "expected_answer": "物理学专业2025年在广东省物理类录取最低分约为600分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_012",
+    "question": "华南师范大学生物科学专业2025年录取分数线是多少？",
+    "expected_answer": "生物科学专业2025年在广东省物理类录取最低分约为592分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_013",
+    "question": "华南师范大学英语专业2025年录取分数线是多少？",
+    "expected_answer": "英语专业2025年在广东省物理类录取最低分约为588分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_014",
+    "question": "华南师范大学历史学专业2025年录取分数线是多少？",
+    "expected_answer": "历史学专业2025年在广东省物理类录取最低分约为582分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_015",
+    "question": "华南师范大学地理科学专业2025年录取分数线是多少？",
+    "expected_answer": "地理科学专业2025年在广东省物理类录取最低分约为578分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_016",
+    "question": "华南师范大学通信工程专业2025年录取分数线是多少？",
+    "expected_answer": "通信工程专业2025年在广东省物理类录取最低分约为598分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_017",
+    "question": "华南师范大学自动化专业2025年录取分数线是多少？",
+    "expected_answer": "自动化专业2025年在广东省物理类录取最低分约为603分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_018",
+    "question": "华南师范大学机械工程专业2025年录取分数线是多少？",
+    "expected_answer": "机械工程专业2025年在广东省物理类录取最低分约为593分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_019",
+    "question": "华南师范大学临床医学专业2025年录取分数线是多少？",
+    "expected_answer": "临床医学专业2025年在广东省物理类录取最低分约为620分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_020",
+    "question": "华南师范大学药学专业2025年录取分数线是多少？",
+    "expected_answer": "药学专业2025年在广东省物理类录取最低分约为595分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_021",
+    "question": "华南师范大学金融学专业2025年录取分数线是多少？",
+    "expected_answer": "金融学专业2025年在广东省历史类录取最低分约为588分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_022",
+    "question": "华南师范大学会计学专业2025年录取分数线是多少？",
+    "expected_answer": "会计学专业2025年在广东省历史类录取最低分约为583分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_023",
+    "question": "华南师范大学工商管理专业2025年录取分数线是多少？",
+    "expected_answer": "工商管理专业2025年在广东省历史类录取最低分约为580分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_024",
+    "question": "华南师范大学网络工程专业2025年录取分数线是多少？",
+    "expected_answer": "网络工程专业2025年在广东省历史类录取最低分约为602分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_025",
+    "question": "华南师范大学数据科学专业2025年录取分数线是多少？",
+    "expected_answer": "数据科学专业2025年在广东省历史类录取最低分约为612分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_026",
+    "question": "华南师范大学环境科学专业2025年录取分数线是多少？",
+    "expected_answer": "环境科学专业2025年在广东省历史类录取最低分约为586分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_027",
+    "question": "华南师范大学统计学专业2025年录取分数线是多少？",
+    "expected_answer": "统计学专业2025年在广东省历史类录取最低分约为593分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_028",
+    "question": "华南师范大学思想政治教育专业2025年录取分数线是多少？",
+    "expected_answer": "思想政治教育专业2025年在广东省历史类录取最低分约为575分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_029",
+    "question": "华南师范大学学前教育专业2025年录取分数线是多少？",
+    "expected_answer": "学前教育专业2025年在广东省历史类录取最低分约为570分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_030",
+    "question": "华南师范大学体育教育专业2025年录取分数线是多少？",
+    "expected_answer": "体育教育专业2025年在广东省历史类录取最低分约为555分",
+    "source_doc": "data/approved/scnu_admission_2025.json",
+    "category": "admission_score"
+  },
+  {
+    "id": "kqa_031",
+    "question": "计算机科学与技术专业主要学什么课程？",
+    "expected_answer": "该专业主要学习程序设计、数据结构、操作系统、计算机网络、数据库原理、软件工程等核心课程",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_032",
+    "question": "软件工程专业的培养方向是什么？",
+    "expected_answer": "侧重培养软件开发、项目管理、软件测试等能力，课程包括软件需求分析、软件设计、软件测试等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_033",
+    "question": "人工智能专业需要什么基础？",
+    "expected_answer": "需要扎实的数学基础（高等数学、线性代数、概率论）和编程基础（Python），核心课程包括机器学习、深度学习等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_034",
+    "question": "电子信息工程专业学哪些内容？",
+    "expected_answer": "学习电路分析、信号与系统、数字信号处理、通信原理、嵌入式系统等内容",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_035",
+    "question": "心理学的课程设置是怎样的？",
+    "expected_answer": "课程包括普通心理学、实验心理学、发展心理学、社会心理学、心理统计与测量等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_036",
+    "question": "法学专业要学哪些法律？",
+    "expected_answer": "核心课程包括法理学、宪法学、民法学、刑法学、行政法学、经济法学、国际法学等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_037",
+    "question": "汉语言文学专业的学习内容",
+    "expected_answer": "学习中国古代文学、中国现当代文学、外国文学、语言学概论、古代汉语、现代汉语等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_038",
+    "question": "金融学专业学什么？",
+    "expected_answer": "学习微观经济学、宏观经济学、金融学原理、投资学、公司金融、国际金融等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_039",
+    "question": "数据科学专业的课程",
+    "expected_answer": "学习数据挖掘、机器学习、统计分析、大数据技术、Python编程、数据可视化等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_040",
+    "question": "英语专业除了语言还学什么？",
+    "expected_answer": "除了听说读写译等语言技能外，还学习英美文学、语言学、跨文化交际、翻译理论与实践等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_041",
+    "question": "化学专业的实验课程多吗？",
+    "expected_answer": "实验课程占比约40%，包括无机化学实验、有机化学实验、分析化学实验、物理化学实验等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_042",
+    "question": "学前教育专业学什么？",
+    "expected_answer": "学习学前儿童发展心理学、学前教育学、幼儿园课程、幼儿游戏与指导、学前卫生学等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_043",
+    "question": "体育教育专业课程设置",
+    "expected_answer": "学习运动解剖学、运动生理学、体育心理学、学校体育学、各运动项目教学法等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_044",
+    "question": "生物科学专业有哪些方向？",
+    "expected_answer": "分植物生物学、动物生物学、微生物学、生物化学与分子生物学、细胞生物学等方向",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_045",
+    "question": "思想政治教育专业学什么？",
+    "expected_answer": "学习马克思主义哲学、政治经济学、思想政治教育原理、政治学原理等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_046",
+    "question": "通信工程和电子信息工程区别",
+    "expected_answer": "通信工程侧重通信系统和网络，电子信息工程侧重电子设备和信息处理，两者有交叉但侧重点不同",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_047",
+    "question": "统计学专业对数学要求高吗？",
+    "expected_answer": "对数学要求较高，核心课程包括数学分析、高等代数、概率论、数理统计、回归分析等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_048",
+    "question": "环境科学专业学什么？",
+    "expected_answer": "学习环境化学、环境生物学、环境监测、环境影响评价、环境规划与管理等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_049",
+    "question": "会计学专业学哪些内容？",
+    "expected_answer": "学习基础会计、中级财务会计、成本会计、管理会计、审计学、财务管理等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_050",
+    "question": "工商管理专业培养目标",
+    "expected_answer": "培养具备管理、经济、法律等方面知识和能力，能在企事业单位从事管理工作的人才",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_051",
+    "question": "自动化专业学什么技术？",
+    "expected_answer": "学习自动控制原理、传感器与检测技术、过程控制系统、运动控制系统、PLC编程等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_052",
+    "question": "物理学专业需要哪些基础？",
+    "expected_answer": "需要扎实的数学物理基础，课程包括理论力学、电动力学、量子力学、热力学与统计物理",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_053",
+    "question": "机械工程专业课程",
+    "expected_answer": "学习机械制图、机械原理、机械设计、机械制造基础、液压与气压传动等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_054",
+    "question": "网络工程和软件工程的区别",
+    "expected_answer": "网络工程侧重网络规划设计、网络安全与管理；软件工程侧重软件开发流程、质量保证与管理",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_055",
+    "question": "师范类专业和非师范有什么区别？",
+    "expected_answer": "师范类增加教育学、心理学、教学法等教育类课程，需完成教育实习，毕业后可获取教师资格证",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_056",
+    "question": "地理科学专业学什么？",
+    "expected_answer": "学习自然地理学、人文地理学、地图学、遥感概论、地理信息系统等课程",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_057",
+    "question": "历史学专业有哪些方向？",
+    "expected_answer": "分中国史、世界史两大方向，学习史学理论、中国古代史、中国近现代史、世界史等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_058",
+    "question": "临床医学专业五年制学习安排",
+    "expected_answer": "前两年以基础医学课程为主，第三四年进入临床医学课程学习，第五年为临床实习",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_059",
+    "question": "药学专业主要课程",
+    "expected_answer": "学习药理学、药剂学、药物化学、药物分析、生药学、临床药物治疗学等",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_060",
+    "question": "高年级有实习机会吗？",
+    "expected_answer": "大部分专业在大三、大四安排了专业实习和实践环节，部分专业还有校企合作项目",
+    "source_doc": "data/approved/scnu_curriculum.json",
+    "category": "curriculum"
+  },
+  {
+    "id": "kqa_061",
+    "question": "计算机专业毕业生就业方向",
+    "expected_answer": "可从事软件开发、系统架构、数据分析、人工智能、网络安全等方向，就业率保持在95%以上",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_062",
+    "question": "软件工程就业前景",
+    "expected_answer": "毕业生主要进入互联网企业、金融科技、政府IT部门等，起薪普遍较高，晋升路径清晰",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_063",
+    "question": "师范生毕业后一定要当老师吗？",
+    "expected_answer": "不一定，除中小学教师外，还可到教育机构、出版社、教育行政部门工作，部分选择考研深造",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_064",
+    "question": "心理学专业就业怎么样？",
+    "expected_answer": "毕业生可从事心理咨询、人力资源管理、用户体验研究、教育测评等，近年就业范围持续拓宽",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_065",
+    "question": "法学专业就业方向有哪些？",
+    "expected_answer": "可进入律所、法院、检察院、企业法务、合规部门，或参加公务员考试进入政府法制部门",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_066",
+    "question": "金融专业毕业生去向",
+    "expected_answer": "主要进入银行、证券、保险、基金公司等金融机构，部分进入企业财务部门和政府部门",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_067",
+    "question": "人工智能专业就业前景",
+    "expected_answer": "是目前就业最热门的领域之一，可进入科技企业、研究院所从事算法开发、数据分析等工作",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_068",
+    "question": "英语专业除了当老师还能做什么？",
+    "expected_answer": "可从事翻译、外贸、跨境电商、涉外商务、国际会展、外交外事等，复合型英语人才需求旺盛",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_069",
+    "question": "生物科学就业除了做科研还有什么？",
+    "expected_answer": "还可进入生物医药企业、环保公司、食品企业、检测机构、科普教育等，也有部分考取公务员",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_070",
+    "question": "电子信息类专业就业薪资",
+    "expected_answer": "平均起薪6000-9000元/月，三年后普遍过万，优秀毕业生可达15k以上",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_071",
+    "question": "会计学就业方向",
+    "expected_answer": "可进入会计事务所、企业财务部、银行、税务部门，考取CPA后竞争力更强",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_072",
+    "question": "学前教育专业就业率",
+    "expected_answer": "就业率超过98%，毕业生主要进入幼儿园、早教机构、儿童发展中心等",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_073",
+    "question": "考研对就业有多大影响？",
+    "expected_answer": "研究生学历在高校、研究机构、部分企业研发岗位有明显优势，但IT类应用型专业本科就业也很好",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_074",
+    "question": "体育教育专业就业方向",
+    "expected_answer": "主要到中小学担任体育教师，也可到体育培训机构、健身俱乐部、体育管理部门工作",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_075",
+    "question": "华师毕业生在广东就业竞争力如何？",
+    "expected_answer": "在广东教育系统和企事业单位高度认可，师范类在珠三角中小学有稳定的就业渠道",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_076",
+    "question": "通信工程就业现状",
+    "expected_answer": "可到运营商（移动/联通/电信）、设备商（华为/中兴等）、互联网企业从事通信相关工作",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_077",
+    "question": "环境科学就业前景",
+    "expected_answer": "随着国家对环保的重视，环境科学毕业生需求增长，可从事环境监测、评价、规划、管理等工作",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_078",
+    "question": "药学专业就业方向",
+    "expected_answer": "可到制药企业、医院药房、药品检验机构、药店连锁、科研院所从事药物研发、生产、检验等工作",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_079",
+    "question": "简历上华师的学历竞争力够吗？",
+    "expected_answer": "华师是211/双一流高校，在广东地区有较强竞争力，建议积累项目经验和实习",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_080",
+    "question": "跨专业就业难吗？",
+    "expected_answer": "部分专业壁垒不高，通过辅修、考证、实习可以跨专业就业，计算机、金融等接受跨专业人才较多",
+    "source_doc": "data/approved/scnu_employment.json",
+    "category": "employment"
+  },
+  {
+    "id": "kqa_081",
+    "question": "华师有几个校区？",
+    "expected_answer": "有三个校区：石牌校区（广州天河）、大学城校区（广州番禺）、南海校区（佛山南海）",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_082",
+    "question": "华师的宿舍条件怎么样？",
+    "expected_answer": "宿舍以4-6人间为主，配备空调、热水器、独立卫浴，大学城校区设施较新，条件优良",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_083",
+    "question": "学校食堂怎么样？",
+    "expected_answer": "食堂品类丰富，各校区有多个食堂，涵盖粤菜、川菜、面食、西式简餐等，价格实惠",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_084",
+    "question": "校园环境怎么样？",
+    "expected_answer": "校园环境优美，石牌校区底蕴厚重绿树成荫，大学城校区现代开阔，南海校区安静宜学",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_085",
+    "question": "学校有社团活动吗？",
+    "expected_answer": "有超过100个学生社团，涵盖学术科技、文化艺术、体育竞技、公益服务、创新创业等类别",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_086",
+    "question": "学校的图书馆怎么样？",
+    "expected_answer": "藏书丰富，纸质馆藏超过300万册，电子资源丰富，座位充足，自习环境好",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_087",
+    "question": "有没有交换生项目？",
+    "expected_answer": "与多所海外高校有交换生项目，包括美国、英国、日本、韩国、澳大利亚等国家的合作院校",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_088",
+    "question": "校园附近生活方便吗？",
+    "expected_answer": "三个校区周边生活配套设施完善，石牌和大学城校区附近有大型商场、医院、地铁站等",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_089",
+    "question": "学校的网络条件怎么样？",
+    "expected_answer": "校园网覆盖全校，宿舍和教学楼均有WiFi，带宽满足日常学习和娱乐需要",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_090",
+    "question": "学校有校车吗？",
+    "expected_answer": "石牌校区和大学城校区之间有校车往返，方便跨校区学生上课和办事",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_091",
+    "question": "大一能带电脑吗？",
+    "expected_answer": "可以，学校提倡合理使用，图书馆和宿舍都有网络接口",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_092",
+    "question": "学校的奖学金多吗？",
+    "expected_answer": "设有国家奖学金、国家励志奖学金、学校奖学金、企业资助奖学金等多种奖学金",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_093",
+    "question": "学校有双学位吗？",
+    "expected_answer": "部分专业可申请辅修或双学位，如计算机+金融、英语+法学等跨学科组合",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_094",
+    "question": "每年有什么大型活动？",
+    "expected_answer": "校园文化节、社团嘉年华、辩论赛、十大歌手、迎新晚会、毕业晚会等活动贯穿全年",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_095",
+    "question": "有勤工俭学机会吗？",
+    "expected_answer": "提供图书馆助理、实验室助理、行政助理等校内勤工助学岗位",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_096",
+    "question": "学校有什么运动设施？",
+    "expected_answer": "有标准田径场、室内体育馆、游泳馆、篮球场、羽毛球场、乒乓球室、健身房等",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_097",
+    "question": "学校运动会多吗？",
+    "expected_answer": "每年举办校运会、趣味运动会、球类联赛等体育赛事",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_098",
+    "question": "周末可以回家或者出去玩吗？",
+    "expected_answer": "可以，没有限制，石牌和大学城校区靠近地铁站，去广州市区很方便",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_099",
+    "question": "华师有什么特色文化？",
+    "expected_answer": "以师范文化为底色，注重人文素养和社会责任感培养，'艰苦奋斗、严谨治学'是学校传统",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  },
+  {
+    "id": "kqa_100",
+    "question": "不同校区之间专业分布是怎样的？",
+    "expected_answer": "石牌校区以文理科基础学科为主，大学城校区以应用型专业为主，南海校区以新兴交叉学科为主",
+    "source_doc": "data/approved/scnu_campus.json",
+    "category": "campus_life"
+  }
+]
