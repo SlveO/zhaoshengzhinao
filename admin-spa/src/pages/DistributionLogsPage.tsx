@@ -35,12 +35,6 @@ export default function DistributionLogsPage() {
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const pageItems = filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
 
-  const formatBytes = (bytes: number) => {
-    if (bytes < 1024) return `${bytes}B`
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)}KB`
-    return `${(bytes / (1024 * 1024)).toFixed(1)}MB`
-  }
-
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>

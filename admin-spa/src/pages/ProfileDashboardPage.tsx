@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import * as echarts from 'echarts'
 import api from '../api/client'
 import type { ProfileDashboard } from '../types'
-import { mockProfileDashboard } from '../mock/profileDashboard'
 import StatusCard from '../components/StatusCard'
 import { useMobileStore } from '../stores/mobileStore'
 
@@ -18,7 +17,6 @@ export default function ProfileDashboardPage() {
       .then((r) => setData(r.data ?? null))
       .catch((e) => {
         setError(e?.message || '获取数据失败')
-        setData(mockProfileDashboard)
       })
       .finally(() => setLoading(false))
   }, [])

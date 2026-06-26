@@ -3,7 +3,6 @@ import ReactECharts from 'echarts-for-react'
 import 'echarts-wordcloud'
 import api from '../api/client'
 import type { TopicCloudItem, EmotionTimelineData, HotQuestionItem } from '../types'
-import { mockTopicCloud, mockHotQuestions, mockEmotionTimeline } from '../mock/insights'
 import StatusCard from '../components/StatusCard'
 import { useMobileStore } from '../stores/mobileStore'
 
@@ -38,9 +37,6 @@ export default function InsightsPage() {
       if (rejected.length === 3) {
         const firstErr = (rejected[0] as PromiseRejectedResult).reason
         setError(firstErr?.message || '获取分析数据失败')
-        setTopicCloud(mockTopicCloud)
-        setHotQuestions(mockHotQuestions)
-        setEmotionTimeline(mockEmotionTimeline(days))
         return
       }
       if (tc.status === 'fulfilled') setTopicCloud(tc.value.data)
