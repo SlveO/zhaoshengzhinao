@@ -7,12 +7,18 @@ from agents.conversation.state import Stage, STAGE_ORDER
 from agents.conversation.agent import _build_system_prompt, _detect_emotion
 from agents.conversation.slot_filler import slots_summary
 from agents.conversation.profile_analyzer import analyze_turn
-from agents.conversation.prompts_b2b import B2B_SYSTEM_PROMPT
+import logging
 from agents.conversation.evidence_accumulator import EvidenceAccumulator
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from config import settings
 from core.guard import run_guards
+from services.prompt_service import load_prompt
+from services.consult_context_service import build_consult_context
+from services.recommend_retrieval_service import retrieve_for_chat, format_rag_context
+from services.persona_service import build_persona_greeting, apply_persona_style, has_legacy_custom_prompt
+
+_logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -201,24 +207,55 @@ async def chat_websocket(ws: WebSocket, session_id: str):
             # Build system prompt — persona overrides B2B/B2C defaults
             slots_text = slots_summary(acc.export_snapshot())
             emotion = _detect_emotion(user_content)
-            if persona.get("custom_prompt"):
+            if has_legacy_custom_prompt(persona):
                 system_content = persona["custom_prompt"].format(
                     stage=current_stage.value,
                     slots_summary=slots_text,
                 )
             elif uni_name:
-                system_content = B2B_SYSTEM_PROMPT.format(
+                # 动态加载 B2B 提示词（DB 优先，代码默认值回退）
+                b2b_template = await load_prompt("b2b_system", tenant_slug)
+                # 注入咨询历史上下文（仅注册用户）
+                consult_context = ""
+                user_id_state = state_data.get("user_id")
+                if user_id_state:
+                    try:
+                        consult_context = await build_consult_context(
+                            user_id=user_id_state,
+                            tenant_slug=tenant_slug,
+                        )
+                    except Exception as e:
+                        _logger.warning(f"build_consult_context failed: {e}")
+                        consult_context = ""
+                # RAG 检索学校官方信息，注入 B2B prompt 的 {knowledge_context}
+                try:
+                    rag_sources = await retrieve_for_chat(
+                        user_content=user_content,
+                        tenant_slug=tenant_slug,
+                        user_slots=acc.export_snapshot(),
+                        top_k=3,
+                    )
+                    knowledge_context = format_rag_context(rag_sources)
+                except Exception as e:
+                    _logger.warning(f"retrieve_for_chat failed: {e}")
+                    knowledge_context = ""
+                system_content = b2b_template.format(
                     university_name=uni_name,
                     university_short=uni_short or uni_name,
                     stage=current_stage.value,
                     slots_summary=slots_text,
+                    consult_context=consult_context,
+                    knowledge_context=knowledge_context,
                 )
+                # Prepend persona greeting (assistant_name + opening)
+                if uni_short:
+                    system_content = build_persona_greeting(persona, uni_short) + "\n\n" + system_content
             else:
                 system_content = _build_system_prompt(current_stage.value, slots_text, blind_spots, emotion)
-            # Append persona style hint
-            style = persona.get("style", "casual")
-            if style == "formal":
-                system_content += "\n\n请使用正式、专业的语气。"
+                if uni_short:
+                    system_content = build_persona_greeting(persona, uni_short) + "\n\n" + system_content
+            # Append persona style hint (formal only; casual is default)
+            system_content = apply_persona_style(system_content, persona)
             if blind_spots:
                 hint_text = "、".join(blind_spots)
                 system_content += f"\n\n## 当前未探索领域\n以下维度尚无证据：{hint_text}。在后续对话中自然地引导学生谈论这些方面。"
