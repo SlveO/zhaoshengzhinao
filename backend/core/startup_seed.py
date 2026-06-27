@@ -4,7 +4,7 @@ import logging
 import os
 import uuid
 
-from sqlalchemy import select
+from sqlalchemy import select, text
 
 logger = logging.getLogger(__name__)
 
@@ -37,13 +37,23 @@ SCNU_TENANT_CONFIG = {
 
 
 async def _ensure_tenant_and_admin():
-    """Ensure scnu tenant and admin user exist (idempotent)."""
+    """Ensure scnu tenant and admin user exist (idempotent).
+
+    Seeds two accounts:
+      - admin / admin123  → developer account (is_developer=True, full menu + DB panel)
+      - scnu / 2026scnu   → college admin account (is_developer=False, restricted menu)
+    """
     try:
         from models import async_session
         from tenants.models import Tenant, TenantUser
         from models.user import User
 
         async with async_session() as db:
+            # Ensure is_developer column exists (hotfix for prod DBs without migration)
+            await db.execute(text(
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS is_developer BOOLEAN DEFAULT FALSE"
+            ))
+
             result = await db.execute(select(Tenant).where(Tenant.slug == "scnu"))
             tenant = result.scalar_one_or_none()
 
@@ -68,24 +78,29 @@ async def _ensure_tenant_and_admin():
                     tenant.config = existing_config
                     logger.info(f"Patched tenant config: added {[k for k in default_modules if k not in existing_modules]} modules")
 
+            # ── admin 账号（开发者）──
             result = await db.execute(select(User).where(User.username == "admin"))
-            user = result.scalar_one_or_none()
+            admin_user = result.scalar_one_or_none()
 
-            if not user:
+            if not admin_user:
                 salt = os.urandom(16).hex()
                 password_hash = salt + ":" + hashlib.sha256(
                     (salt + "admin123").encode()
                 ).hexdigest()
-                user = User(
+                admin_user = User(
                     username="admin",
                     password_hash=password_hash,
+                    is_developer=True,
                 )
-                db.add(user)
+                db.add(admin_user)
+            else:
+                # 升级老库：把 admin 标记为开发者
+                admin_user.is_developer = True
 
             result = await db.execute(
                 select(TenantUser).where(
                     TenantUser.tenant_id == tenant.id,
-                    TenantUser.user_id == user.id,
+                    TenantUser.user_id == admin_user.id,
                 )
             )
             link = result.scalar_one_or_none()
@@ -93,12 +108,46 @@ async def _ensure_tenant_and_admin():
             if not link:
                 link = TenantUser(
                     tenant_id=tenant.id,
-                    user_id=user.id,
+                    user_id=admin_user.id,
                     role="admin",
                 )
                 db.add(link)
 
+            # ── scnu 账号（院校管理员，非开发者）──
+            result = await db.execute(select(User).where(User.username == "scnu"))
+            scnu_user = result.scalar_one_or_none()
+
+            if not scnu_user:
+                salt = os.urandom(16).hex()
+                password_hash = salt + ":" + hashlib.sha256(
+                    (salt + "2026scnu").encode()
+                ).hexdigest()
+                scnu_user = User(
+                    username="scnu",
+                    password_hash=password_hash,
+                    is_developer=False,
+                )
+                db.add(scnu_user)
+            else:
+                scnu_user.is_developer = False
+
+            result = await db.execute(
+                select(TenantUser).where(
+                    TenantUser.tenant_id == tenant.id,
+                    TenantUser.user_id == scnu_user.id,
+                )
+            )
+            scnu_link = result.scalar_one_or_none()
+
+            if not scnu_link:
+                scnu_link = TenantUser(
+                    tenant_id=tenant.id,
+                    user_id=scnu_user.id,
+                    role="admin",
+                )
+                db.add(scnu_link)
+
             await db.commit()
-            logger.info("Tenant and admin user ensured.")
+            logger.info("Tenant and users ensured (admin=developer, scnu=college admin).")
     except Exception as e:
         logger.error(f"Startup seed failed: {e}")

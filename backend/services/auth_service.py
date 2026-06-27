@@ -6,11 +6,11 @@ from utils.security import hash_password, verify_password
 from utils.jwt import create_token
 from config import settings
 
-async def register_user(db: AsyncSession, username: str, password: str, region: str, score: int, subjects: str) -> User | None:
+async def register_user(db: AsyncSession, username: str, password: str, region: str, score: int, subjects: str, rank: int | None = None) -> User | None:
     existing = await db.execute(select(User).where(User.username == username))
     if existing.scalar_one_or_none():
         return None
-    user = User(id=uuid.uuid4(), username=username, password_hash=hash_password(password), region=region, score=score, subjects=subjects)
+    user = User(id=uuid.uuid4(), username=username, password_hash=hash_password(password), region=region, score=score, subjects=subjects, rank=rank)
     db.add(user)
     await db.commit()
     await db.refresh(user)
@@ -21,10 +21,20 @@ async def authenticate_user(db: AsyncSession, username: str, password: str) -> d
     user = result.scalar_one_or_none()
     if not user or not verify_password(password, user.password_hash):
         return None
-    return {"user_id": str(user.id), "username": user.username}
-
-def generate_tokens(user_id: str, username: str) -> dict:
     return {
-        "access_token": create_token(user_id, username, settings.access_token_expire_minutes),
-        "refresh_token": create_token(user_id, username, settings.refresh_token_expire_days * 24 * 60),
+        "user_id": str(user.id),
+        "username": user.username,
+        "is_developer": bool(getattr(user, "is_developer", False)) or username == settings.dev_admin_username,
+    }
+
+def generate_tokens(user_id: str, username: str, is_developer: bool = False) -> dict:
+    return {
+        "access_token": create_token(
+            user_id, username, settings.access_token_expire_minutes,
+            extra_claims={"is_developer": is_developer},
+        ),
+        "refresh_token": create_token(
+            user_id, username, settings.refresh_token_expire_days * 24 * 60,
+            extra_claims={"is_developer": is_developer},
+        ),
     }
