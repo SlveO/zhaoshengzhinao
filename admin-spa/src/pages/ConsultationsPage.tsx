@@ -1,36 +1,128 @@
-import { useState } from 'react'
-import { ListFilter, Calendar } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ListFilter, Calendar, X } from 'lucide-react'
+import api from '../api/client'
 import BottomSheet from '../components/BottomSheet'
 
-// TODO: replace with API GET /api/consultations
-const MOCK_SESSIONS = [
-  { id: 'c1', student: '张同学', profile: '广东·物理类', time: '10:24', duration: '8分钟', topic: '计算机专业就业前景咨询', handler: 'AI', status: '已处理' },
-  { id: 'c2', student: '李同学', profile: '湖南·历史类', time: '09:15', duration: '15分钟', topic: '师范类选课建议与保研率', handler: '人工', status: '已处理' },
-  { id: 'c3', student: '王同学', profile: '江西·物理类', time: '08:50', duration: '5分钟', topic: '学费标准与奖学金政策', handler: 'AI', status: '待处理' },
-  { id: 'c4', student: '赵同学', profile: '广东·物理类', time: '昨天 16:20', duration: '12分钟', topic: '电子信息类实验条件咨询', handler: '人工', status: '已处理' },
-  { id: 'c5', student: '陈同学', profile: '福建·历史类', time: '昨天 14:05', duration: '7分钟', topic: '法学专业司法考试情况', handler: 'AI', status: '已处理' },
-  { id: 'c6', student: '刘同学', profile: '广西·物理类', time: '昨天 11:30', duration: '20分钟', topic: '数据科学就业方向与实习', handler: '人工', status: '已处理' },
-  { id: 'c7', student: '周同学', profile: '四川·物理类', time: '前天 15:45', duration: '4分钟', topic: '校园环境和宿舍条件', handler: 'AI', status: '已处理' },
-]
+interface ConsultRow {
+  session_id: string
+  session_string: string
+  student_name: string
+  province: string
+  subjects: string
+  score: number
+  rank: number | null
+  intent_majors: string[]
+  consult_summary: string
+  consult_started_at: string | null
+  follow_status: string
+  follow_note: string
+}
 
-const PAGE_SIZE = 5
+interface ConsultDetail {
+  session: ConsultRow & {
+    focus_points: string[]
+    consult_started_at: string | null
+    followed_at: string | null
+  }
+  messages: { id: string; role: string; content: string; created_at: string }[]
+}
+
+const PAGE_SIZE = 10
 
 export default function ConsultationsPage() {
   const [statusFilter, setStatusFilter] = useState('')
-  const [period, setPeriod] = useState('今天')
+  const [period, setPeriod] = useState('')
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(0)
   const [statusSheetOpen, setStatusSheetOpen] = useState(false)
   const [periodSheetOpen, setPeriodSheetOpen] = useState(false)
+  const [rows, setRows] = useState<ConsultRow[]>([])
+  const [total, setTotal] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [selected, setSelected] = useState<ConsultDetail | null>(null)
+  const [detailOpen, setDetailOpen] = useState(false)
+  const [detailLoading, setDetailLoading] = useState(false)
+  const [followNote, setFollowNote] = useState('')
+  const [followStatusUpdating, setFollowStatusUpdating] = useState(false)
+  const [regenerating, setRegenerating] = useState(false)
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null)
 
-  const filtered = MOCK_SESSIONS.filter((s) => {
-    if (statusFilter && s.status !== statusFilter) return false
-    if (search && !s.student.includes(search) && !s.topic.includes(search)) return false
-    return true
-  })
+  async function load() {
+    setLoading(true)
+    setError(null)
+    try {
+      const params: any = { page: page + 1, page_size: PAGE_SIZE }
+      if (statusFilter) params.status = statusFilter
+      if (period) params.period = period
+      if (search) params.search = search
+      const res = await api.get('/admin/consultations', { params })
+      setRows(res.data?.data || [])
+      setTotal(res.data?.total || 0)
+    } catch (e: any) {
+      setError(e?.message || '加载失败')
+    } finally {
+      setLoading(false)
+    }
+  }
 
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
-  const pageData = filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
+  useEffect(() => { load() }, [page, statusFilter, period, search])
+
+  async function openDetail(row: ConsultRow) {
+    setDetailOpen(true)
+    setDetailLoading(true)
+    setSelected(null)
+    try {
+      const res = await api.get(`/admin/consultations/${row.session_id}`)
+      setSelected(res.data)
+      setFollowNote(res.data?.session?.follow_note || '')
+    } catch (e: any) {
+      setError(e?.message || '加载详情失败')
+    } finally {
+      setDetailLoading(false)
+    }
+  }
+
+  async function updateFollowStatus(status: string) {
+    if (!selected) return
+    setFollowStatusUpdating(true)
+    try {
+      await api.patch(`/admin/consultations/${selected.session.session_id}/follow-status`, {
+        status,
+        note: followNote,
+      })
+      // Refresh detail
+      const res = await api.get(`/admin/consultations/${selected.session.session_id}`)
+      setSelected(res.data)
+      load()  // Refresh list
+    } catch (e: any) {
+      setError(e?.message || '更新失败')
+    } finally {
+      setFollowStatusUpdating(false)
+    }
+  }
+
+  async function regenerateSummary() {
+    if (!selected || regenerating) return
+    setRegenerating(true)
+    setToast(null)
+    try {
+      await api.post(`/admin/consultations/${selected.session.session_id}/regenerate-summary`)
+      const res = await api.get(`/admin/consultations/${selected.session.session_id}`)
+      setSelected(res.data)
+      setToast({ msg: '咨询摘要已重新生成', type: 'success' })
+    } catch (e: any) {
+      const msg = e?.message || '重新生成摘要失败'
+      setError(msg)
+      setToast({ msg, type: 'error' })
+    } finally {
+      setRegenerating(false)
+      // 自动 3 秒后清掉 toast
+      setTimeout(() => setToast(null), 3000)
+    }
+  }
+
+  const totalPages = Math.ceil(total / PAGE_SIZE)
 
   return (
     <div>
@@ -47,7 +139,10 @@ export default function ConsultationsPage() {
           }}
         >
           <ListFilter size={14} />
-          {statusFilter || '全部状态'}
+          {statusFilter === 'pending' ? '待跟进' :
+           statusFilter === 'processed' ? '已处理' :
+           statusFilter === 'ignored' ? '已忽略' :
+           statusFilter === 'no_consult' ? '未咨询' : '全部状态'}
         </button>
         <button
           onClick={() => setPeriodSheetOpen(true)}
@@ -56,89 +151,94 @@ export default function ConsultationsPage() {
             padding: '7px 12px', border: '1px solid var(--color-border)',
             borderRadius: 8, fontSize: 12, fontFamily: 'inherit',
             background: '#f8fafc', cursor: 'pointer',
-            color: 'var(--color-text-secondary)',
+            color: period ? 'var(--color-brand-800)' : 'var(--color-text-secondary)',
+            fontWeight: period ? 600 : 400,
           }}
         >
           <Calendar size={14} />
-          {period}
+          {period === 'today' ? '今天' :
+           period === '7d' ? '近7天' :
+           period === '30d' ? '近30天' : '全部时间'}
         </button>
         <input
-          type="text" placeholder="搜索学生或关键词…"
+          type="text" placeholder="搜索学生或摘要…"
           value={search} onChange={(e) => { setSearch(e.target.value); setPage(0) }}
         />
       </div>
+
+      {error && (
+        <div style={{ padding: 12, color: 'var(--color-danger)', fontSize: 13, marginBottom: 8 }}>
+          {error}
+        </div>
+      )}
 
       <div className="card" style={{ padding: 0 }}>
         <div className="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>学生</th><th>时间</th><th>主题摘要</th><th>处理方式</th><th>状态</th>
+                <th>学生</th>
+                <th>省份</th>
+                <th>选科</th>
+                <th>分数</th>
+                <th>位次</th>
+                <th>咨询摘要</th>
+                <th>咨询时间</th>
+                <th>状态</th>
               </tr>
             </thead>
             <tbody>
-              {pageData.map((s) => (
-                <tr key={s.id} style={{ cursor: 'pointer' }}>
-                  <td>
-                    <span style={{ fontWeight: 500 }}>{s.student}</span>
-                    <div style={{ fontSize: 11, color: 'var(--color-text-muted)', marginTop: 1 }}>{s.profile}</div>
-                  </td>
-                  <td>
-                    {s.time}
-                    <div style={{ fontSize: 11, color: 'var(--color-text-muted)', marginTop: 1 }}>{s.duration}</div>
-                  </td>
-                  <td style={{ maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.topic}</td>
-                  <td>
-                    <span className={`pill${s.handler === 'AI' ? ' pill-blue' : ' pill-amber'}`}>
-                      {s.handler === 'AI' ? 'AI 处理' : '人工处理'}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`pill${s.status === '已处理' ? ' pill-green' : ' pill-amber'}`}>
-                      {s.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-              {pageData.length === 0 && (
+              {loading ? (
+                <tr><td colSpan={8} style={{ textAlign: 'center', padding: 32, color: 'var(--color-text-muted)' }}>加载中…</td></tr>
+              ) : rows.length === 0 ? (
                 <tr>
-                  <td colSpan={5} style={{ textAlign: 'center', color: 'var(--color-text-muted)', padding: 32 }}>
+                  <td colSpan={8} style={{ textAlign: 'center', color: 'var(--color-text-muted)', padding: 32 }}>
                     暂无咨询记录
                   </td>
                 </tr>
-              )}
+              ) : rows.map((s) => (
+                <tr key={s.session_id} style={{ cursor: 'pointer' }} onClick={() => openDetail(s)}>
+                  <td><span style={{ fontWeight: 500 }}>{s.student_name}</span></td>
+                  <td>{s.province || '—'}</td>
+                  <td>{s.subjects || '—'}</td>
+                  <td>{s.score || '—'}</td>
+                  <td>{s.rank ?? '—'}</td>
+                  <td style={{ maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {s.consult_summary || '（无摘要）'}
+                  </td>
+                  <td style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+                    {s.consult_started_at ? formatDateTime(s.consult_started_at) : '—'}
+                  </td>
+                  <td><StatusPill status={s.follow_status} /></td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
       </div>
 
       <div className="pagination">
-        <span>共 {filtered.length} 条</span>
+        <span>共 {total} 条</span>
         <button className="btn btn-secondary btn-sm" disabled={page === 0} onClick={() => setPage(0)}>首页</button>
         <button className="btn btn-secondary btn-sm" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>上一页</button>
         <span>第 {page + 1}/{totalPages || 1} 页</span>
         <button className="btn btn-secondary btn-sm" disabled={page >= totalPages - 1} onClick={() => setPage((p) => p + 1)}>下一页</button>
       </div>
 
-      <BottomSheet
-        open={statusSheetOpen}
-        title="咨询状态"
-        onClose={() => setStatusSheetOpen(false)}
-      >
+      {/* Status Filter Sheet */}
+      <BottomSheet open={statusSheetOpen} title="咨询状态" onClose={() => setStatusSheetOpen(false)}>
         {[
-          { label: '全部状态', value: '', bg: '#e5e9f2', color: '#64748b' },
-          { label: '已处理', value: '已处理', bg: '#dcfce7', color: '#166534' },
-          { label: '待处理', value: '待处理', bg: '#fef3c7', color: '#92400e' },
+          { label: '全部状态', value: '' },
+          { label: '待跟进', value: 'pending' },
+          { label: '已处理', value: 'processed' },
+          { label: '已忽略', value: 'ignored' },
+          { label: '未咨询', value: 'no_consult' },
         ].map((opt) => {
           const isActive = statusFilter === opt.value
           return (
-            <button
-              key={opt.value}
-              className="bs-row"
+            <button key={opt.value} className="bs-row"
               onClick={() => { setStatusFilter(opt.value); setPage(0); setStatusSheetOpen(false) }}
-              style={isActive ? { background: '#f8fafc' } : undefined}
-            >
-              <div className="bs-row-icon" style={{ background: opt.bg, color: opt.color, fontSize: 14 }}>●</div>
+              style={isActive ? { background: '#f8fafc' } : undefined}>
               <span className="bs-row-text" style={isActive ? { fontWeight: 600 } : undefined}>{opt.label}</span>
               {isActive && <span style={{ color: 'var(--color-brand-800)', fontWeight: 600, fontSize: 18 }}>✓</span>}
             </button>
@@ -147,30 +247,209 @@ export default function ConsultationsPage() {
         <button className="bs-cancel" onClick={() => setStatusSheetOpen(false)}>取消</button>
       </BottomSheet>
 
-      <BottomSheet
-        open={periodSheetOpen}
-        title="时间范围"
-        onClose={() => setPeriodSheetOpen(false)}
-      >
-        {['今天', '近7天', '近30天'].map((opt) => {
-          const isActive = period === opt
+      {/* Period Filter Sheet */}
+      <BottomSheet open={periodSheetOpen} title="时间范围" onClose={() => setPeriodSheetOpen(false)}>
+        {[
+          { label: '全部时间', value: '' },
+          { label: '今天', value: 'today' },
+          { label: '近7天', value: '7d' },
+          { label: '近30天', value: '30d' },
+        ].map((opt) => {
+          const isActive = period === opt.value
           return (
-            <button
-              key={opt}
-              className="bs-row"
-              onClick={() => { setPeriod(opt); setPeriodSheetOpen(false) }}
-              style={isActive ? { background: '#f8fafc' } : undefined}
-            >
+            <button key={opt.value} className="bs-row"
+              onClick={() => { setPeriod(opt.value); setPage(0); setPeriodSheetOpen(false) }}
+              style={isActive ? { background: '#f8fafc' } : undefined}>
               <div className="bs-row-icon" style={{ background: '#dbeafe', color: '#1e40af' }}>
                 <Calendar size={20} />
               </div>
-              <span className="bs-row-text" style={isActive ? { fontWeight: 600 } : undefined}>{opt}</span>
+              <span className="bs-row-text" style={isActive ? { fontWeight: 600 } : undefined}>{opt.label}</span>
               {isActive && <span style={{ color: 'var(--color-brand-800)', fontWeight: 600, fontSize: 18 }}>✓</span>}
             </button>
           )
         })}
         <button className="bs-cancel" onClick={() => setPeriodSheetOpen(false)}>取消</button>
       </BottomSheet>
+
+      {/* Detail Drawer */}
+      {detailOpen && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 200,
+          display: 'flex', justifyContent: 'flex-end',
+        }} onClick={() => setDetailOpen(false)}>
+          <div style={{
+            width: '100%', maxWidth: 560, background: '#fff', height: '100%',
+            overflowY: 'auto', padding: 24, boxSizing: 'border-box',
+          }} onClick={(e) => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600 }}>咨询详情</h3>
+              <button onClick={() => setDetailOpen(false)} style={{
+                border: 'none', background: 'none', cursor: 'pointer', padding: 4,
+              }}><X size={20} /></button>
+            </div>
+
+            {detailLoading ? (
+              <div style={{ textAlign: 'center', color: '#888', padding: 24 }}>加载中…</div>
+            ) : selected ? (
+              <>
+                {/* Basic info */}
+                <div style={{ marginBottom: 16, padding: 12, background: '#f8fafc', borderRadius: 8 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, fontSize: 13 }}>
+                    <div><span style={{ color: '#888' }}>学生：</span>{selected.session.student_name}</div>
+                    <div><span style={{ color: '#888' }}>省份：</span>{selected.session.province || '—'}</div>
+                    <div><span style={{ color: '#888' }}>选科：</span>{selected.session.subjects || '—'}</div>
+                    <div><span style={{ color: '#888' }}>分数：</span>{selected.session.score || '—'}</div>
+                    <div><span style={{ color: '#888' }}>位次：</span>{selected.session.rank ?? '—'}</div>
+                    <div><span style={{ color: '#888' }}>意向专业：</span>{selected.session.intent_majors?.join('、') || '—'}</div>
+                    <div><span style={{ color: '#888' }}>关注点：</span>{selected.session.focus_points?.join('、') || '—'}</div>
+                  </div>
+                </div>
+
+                {/* Consultation summary */}
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <h4 style={{ margin: 0, fontSize: 14, fontWeight: 600 }}>咨询摘要</h4>
+                    <button
+                      onClick={regenerateSummary}
+                      disabled={regenerating}
+                      style={{
+                        border: '1px solid var(--color-border)',
+                        background: regenerating ? '#f3f4f6' : '#fff',
+                        padding: '4px 12px',
+                        borderRadius: 6,
+                        fontSize: 12,
+                        cursor: regenerating ? 'not-allowed' : 'pointer',
+                        color: regenerating ? '#9ca3af' : 'inherit',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 6,
+                      }}
+                    >
+                      {regenerating && (
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            width: 12,
+                            height: 12,
+                            border: '2px solid #d1d5db',
+                            borderTopColor: '#2563eb',
+                            borderRadius: '50%',
+                            animation: 'spin 0.8s linear infinite',
+                          }}
+                        />
+                      )}
+                      {regenerating ? '生成中...' : '重新生成'}
+                    </button>
+                  </div>
+                  {regenerating && (
+                    <div style={{
+                      marginBottom: 8, padding: '6px 10px', background: '#eff6ff',
+                      border: '1px solid #bfdbfe', borderRadius: 6,
+                      fontSize: 12, color: '#1e40af',
+                    }}>
+                      正在调用 AI 重新生成咨询摘要，请稍候…
+                    </div>
+                  )}
+                  {toast && (
+                    <div style={{
+                      marginBottom: 8, padding: '6px 10px',
+                      background: toast.type === 'success' ? '#ecfdf5' : '#fef2f2',
+                      border: `1px solid ${toast.type === 'success' ? '#a7f3d0' : '#fecaca'}`,
+                      borderRadius: 6,
+                      fontSize: 12,
+                      color: toast.type === 'success' ? '#065f46' : '#991b1b',
+                    }}>
+                      {toast.msg}
+                    </div>
+                  )}
+                  <div style={{ padding: 12, background: '#f9fafb', borderRadius: 8, fontSize: 13, lineHeight: 1.6, color: '#333' }}>
+                    {selected.session.consult_summary || '（暂无摘要，需对话 4 轮以上自动生成）'}
+                  </div>
+                </div>
+
+                {/* Chat messages */}
+                <div style={{ marginBottom: 16 }}>
+                  <h4 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>对话记录</h4>
+                  <div style={{ maxHeight: 320, overflowY: 'auto', padding: 8, background: '#f9fafb', borderRadius: 8 }}>
+                    {selected.messages.length === 0 ? (
+                      <div style={{ textAlign: 'center', color: '#888', padding: 16 }}>暂无对话记录</div>
+                    ) : selected.messages.map((m) => (
+                      <div key={m.id} style={{
+                        marginBottom: 8, padding: 8, borderRadius: 6,
+                        background: m.role === 'user' ? '#dbeafe' : '#fff',
+                        fontSize: 13,
+                      }}>
+                        <div style={{ fontSize: 11, color: '#888', marginBottom: 2 }}>
+                          {m.role === 'user' ? '学生' : 'AI'} · {formatDateTime(m.created_at)}
+                        </div>
+                        <div>{m.content}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Follow-up */}
+                <div>
+                  <h4 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>跟进操作</h4>
+                  <textarea
+                    value={followNote}
+                    onChange={(e) => setFollowNote(e.target.value)}
+                    placeholder="添加跟进备注…"
+                    style={{
+                      width: '100%', minHeight: 80, padding: 8,
+                      border: '1px solid var(--color-border)', borderRadius: 6,
+                      fontSize: 13, fontFamily: 'inherit', resize: 'vertical', boxSizing: 'border-box',
+                    }}
+                  />
+                  <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                    <button
+                      onClick={() => updateFollowStatus('processed')}
+                      disabled={followStatusUpdating}
+                      style={{
+                        flex: 1, padding: '8px 0', border: 'none', borderRadius: 6,
+                        background: '#16a34a', color: '#fff', fontSize: 13, cursor: 'pointer',
+                      }}
+                    >标记已处理</button>
+                    <button
+                      onClick={() => updateFollowStatus('ignored')}
+                      disabled={followStatusUpdating}
+                      style={{
+                        flex: 1, padding: '8px 0', border: 'none', borderRadius: 6,
+                        background: '#f3f4f6', color: '#666', fontSize: 13, cursor: 'pointer',
+                      }}
+                    >忽略</button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div style={{ textAlign: 'center', color: '#888', padding: 24 }}>加载失败</div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
+}
+
+function StatusPill({ status }: { status: string }) {
+  const map: Record<string, { label: string; cls: string }> = {
+    pending: { label: '待跟进', cls: 'pill-amber' },
+    processed: { label: '已处理', cls: 'pill-green' },
+    ignored: { label: '已忽略', cls: 'pill' },
+  }
+  const cfg = map[status] || map.pending
+  return <span className={`pill ${cfg.cls}`}>{cfg.label}</span>
+}
+
+function formatDateTime(iso: string): string {
+  try {
+    const d = new Date(iso)
+    const m = String(d.getMonth() + 1).padStart(2, '0')
+    const day = String(d.getDate()).padStart(2, '0')
+    const hh = String(d.getHours()).padStart(2, '0')
+    const mm = String(d.getMinutes()).padStart(2, '0')
+    return `${m}-${day} ${hh}:${mm}`
+  } catch {
+    return iso
+  }
 }
