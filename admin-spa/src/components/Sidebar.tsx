@@ -1,8 +1,9 @@
 import { NavLink } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import {
-  LayoutDashboard, Users, MessageSquare, User, BarChart3, FileText, Radio,
-  BookOpen, Palette, Bot, Blocks, ChevronLeft, ChevronRight, LogOut, Send,
+  LayoutDashboard, MessageSquare, User, BarChart3,
+  BookOpen, Bot, ChevronLeft, ChevronRight, LogOut,
+  Database,
 } from 'lucide-react'
 import api from '../api/client'
 import type { TenantConfig } from '../types'
@@ -19,25 +20,18 @@ interface MenuItem {
 
 const MENU_ITEMS: MenuItem[] = [
   { path: '/dashboard', label: '工作台', icon: <LayoutDashboard size={18} />, module: null, section: '导航' },
-  { path: '/leads', label: '线索管理', icon: <Users size={18} />, module: null, section: '导航' },
   { path: '/consultations', label: '咨询管理', icon: <MessageSquare size={18} />, module: null, section: '导航' },
   { path: '/profile', label: '画像看板', icon: <User size={18} />, module: 'profile_dashboard', section: '导航' },
   { path: '/insights', label: '洞察分析', icon: <BarChart3 size={18} />, module: 'topic_cloud', section: '导航' },
-  { path: '/reports', label: '招生报告', icon: <FileText size={18} />, module: null, section: '导航' },
-  { path: '/channels', label: '渠道管理', icon: <Radio size={18} />, module: null, section: '导航' },
   { path: '/knowledge', label: '知识库', icon: <BookOpen size={18} />, module: null, section: '管理' },
-  { path: '/brand', label: '品牌配置', icon: <Palette size={18} />, module: null, section: '管理' },
   { path: '/agent-settings', label: 'Agent 设置', icon: <Bot size={18} />, module: null, section: '管理' },
-  { path: '/modules', label: '模块管理', icon: <Blocks size={18} />, module: null, section: '管理' },
-  { path: '/distribution/tasks', label: '文件分发', icon: <Send size={18} />, module: 'distribution', section: '分发' },
-  { path: '/distribution/channels', label: '分发渠道', icon: <Radio size={18} />, module: 'distribution', section: '分发' },
-  { path: '/distribution/logs', label: '分发日志', icon: <FileText size={18} />, module: 'distribution', section: '分发' },
 ]
 
 export default function Sidebar() {
   const [config, setConfig] = useState<TenantConfig | null>(null)
   const [collapsed, setCollapsed] = useState(false)
   const logout = useAuthStore((s) => s.logout)
+  const isDeveloper = useAuthStore((s) => s.user?.is_developer ?? false)
   const sidebarOpen = useMobileStore((s) => s.sidebarOpen)
   const isMobile = useMobileStore((s) => s.isMobile)
   const closeSidebar = useMobileStore((s) => s.closeSidebar)
@@ -83,17 +77,69 @@ export default function Sidebar() {
             </div>
           )
         })}
+        {isDeveloper && (
+          <div>
+            <div className="nav-section">开发者</div>
+            <NavLink
+              to="/db"
+              className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}
+            >
+              <span className="nav-icon"><Database size={18} /></span>
+              <span>数据库管理</span>
+            </NavLink>
+          </div>
+        )}
       </nav>
 
       <div className="sidebar-footer">
-        <button className="collapse-btn" onClick={() => {
-          setCollapsed((v) => !v)
-          document.getElementById('main')?.classList.toggle('expanded')
-        }} title={collapsed ? '展开' : '收起'}>
-          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+        <button
+          className="collapse-btn"
+          onClick={() => {
+            setCollapsed((v) => !v)
+            document.getElementById('main')?.classList.toggle('expanded')
+          }}
+          title={collapsed ? '展开侧边栏' : '收起侧边栏'}
+          aria-label={collapsed ? '展开侧边栏' : '收起侧边栏'}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 36,
+            height: 36,
+            borderRadius: '50%',
+            background: collapsed ? 'var(--color-brand-800, #1e40af)' : 'var(--color-bg-elevated, #f3f4f6)',
+            color: collapsed ? '#fff' : 'var(--color-text-primary, #1f2937)',
+            border: '1px solid var(--color-border, #e5e7eb)',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+          }}
+        >
+          {collapsed ? (
+            <ChevronRight size={22} strokeWidth={2.5} />
+          ) : (
+            <ChevronLeft size={22} strokeWidth={2.5} />
+          )}
         </button>
         <div style={{ flex: 1 }} />
-        <button className="collapse-btn" onClick={logout} title="退出登录">
+        <button
+          className="collapse-btn"
+          onClick={logout}
+          title="退出登录"
+          aria-label="退出登录"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 32,
+            height: 32,
+            borderRadius: '50%',
+            background: 'transparent',
+            color: 'var(--color-text-muted, #6b7280)',
+            border: '1px solid var(--color-border, #e5e7eb)',
+            cursor: 'pointer',
+          }}
+        >
           <LogOut size={16} />
         </button>
       </div>
