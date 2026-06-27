@@ -45,19 +45,18 @@ export interface LoginResponse {
   token_type: string
   user_id: string
   username: string
+  is_developer?: boolean
+}
+
+export interface AuthUser {
+  id: string
+  username: string
+  is_developer?: boolean
 }
 
 export interface TopicCloudItem {
   word: string
   count: number
-}
-
-export interface EmotionTimelineData {
-  timeline: {
-    emotion: string
-    data: { date: string; count: number }[]
-  }[]
-  dates: string[]
 }
 
 export interface HotQuestionItem {
@@ -66,9 +65,13 @@ export interface HotQuestionItem {
 }
 
 export interface PersonaConfig {
-  custom_prompt: string
+  // 新版字段（招生老师图形化配置）
+  assistant_name: string
+  greeting: string
   style: 'casual' | 'formal'
   proactive_recommend: boolean
+  // 旧版字段（向后兼容；存在时后端优先使用 custom_prompt）
+  custom_prompt?: string
 }
 
 export interface ModuleItem {
