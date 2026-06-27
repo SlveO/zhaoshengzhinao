@@ -4,61 +4,32 @@ import type { LoginResponse } from '../types'
 
 interface AuthState {
   token: string | null
-  user: { id: string; username: string } | null
-  role: 'demo' | 'admin'
+  user: { id: string; username: string; is_developer?: boolean } | null
+  role: 'admin'
   login: (username: string, password: string, tenantSlug: string) => Promise<void>
-  loginDemo: (tenantSlug: string) => Promise<void>
   logout: () => void
-  setRole: (role: 'demo' | 'admin') => void
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   token: localStorage.getItem('token'),
   user: JSON.parse(localStorage.getItem('user') || 'null'),
-  role: (localStorage.getItem('role') as 'demo' | 'admin') || 'demo',
+  role: 'admin',
 
   login: async (username: string, password: string, tenantSlug: string) => {
     localStorage.setItem('tenantSlug', tenantSlug)
     const res = await api.post<LoginResponse>('/auth/login', { username, password })
-    const { access_token, user_id, username: uname } = res.data
+    const { access_token, user_id, username: uname, is_developer } = res.data
+    const userObj = { id: user_id, username: uname, is_developer: is_developer ?? false }
     localStorage.setItem('token', access_token)
     localStorage.setItem('role', 'admin')
-    localStorage.setItem('user', JSON.stringify({ id: user_id, username: uname }))
-    set({ token: access_token, role: 'admin', user: { id: user_id, username: uname } })
-  },
-
-  loginDemo: async (tenantSlug: string) => {
-    localStorage.setItem('tenantSlug', tenantSlug)
-    try {
-      const res = await api.post<LoginResponse>('/auth/login', { username: 'admin', password: 'admin123' })
-      const { access_token, user_id, username: uname } = res.data
-      localStorage.setItem('token', access_token)
-      localStorage.setItem('role', 'demo')
-      localStorage.setItem('user', JSON.stringify({ id: user_id, username: uname }))
-      set({ token: access_token, role: 'demo', user: { id: user_id, username: uname } })
-    } catch {
-      // Backend unavailable — enter demo mode with a fake token so ProtectedRoute passes
-      const demoToken = 'demo_token_offline'
-      const demoUser = { id: 'demo', username: '体验管理员' }
-      localStorage.setItem('token', demoToken)
-      localStorage.setItem('role', 'demo')
-      localStorage.setItem('user', JSON.stringify(demoUser))
-      set({ token: demoToken, role: 'demo', user: demoUser })
-    }
+    localStorage.setItem('user', JSON.stringify(userObj))
+    set({ token: access_token, role: 'admin', user: userObj })
   },
 
   logout: () => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
     localStorage.removeItem('role')
-    set({ token: null, user: null, role: 'demo' })
-  },
-
-  setRole: (role: 'demo' | 'admin') => {
-    localStorage.setItem('role', role)
-    set({
-      role,
-      user: { id: role === 'admin' ? 'admin' : 'demo', username: role === 'admin' ? '管理员' : '体验管理员' },
-    })
+    set({ token: null, user: null, role: 'admin' })
   },
 }))
