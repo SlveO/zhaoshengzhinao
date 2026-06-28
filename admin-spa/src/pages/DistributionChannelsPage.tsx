@@ -58,8 +58,8 @@ export default function DistributionChannelsPage() {
       if (res.data.ok) {
         setChannels((prev) => prev.map((c) => c.id === editingChannel.id ? { ...c, status: 'active', last_test_at: new Date().toISOString() } : c))
       }
-    } catch (e: any) {
-      setTestResult({ ok: false, error: e?.message || '测试失败' })
+    } catch (e) {
+      setTestResult({ ok: false, error: e instanceof Error ? e.message : '测试失败' })
     }
     setTesting(false)
   }

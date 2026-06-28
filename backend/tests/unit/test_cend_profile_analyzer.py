@@ -41,7 +41,7 @@ class TestCendExtractionResultToProfileJson:
     def test_output_is_json_serializable(self):
         # Arrange
         result = CendExtractionResult(
-            basic={"province": "广东", "subject_type": "物理", "score": 600},
+            basic={"intent_majors": ["计算机"], "focus_points": ["就业"]},
             concerns=["计算机", "电子"],
             riasec={"R": 5, "I": 8, "A": 2, "S": 4, "E": 6, "C": 3},
         )
@@ -87,7 +87,7 @@ class TestParseCendResponse:
     def test_valid_json_parses_to_fields(self):
         # Arrange
         payload = {
-            "basic": {"province": "广东", "subject_type": "物理", "score": 600},
+            "basic": {"intent_majors": ["计算机"], "focus_points": ["就业"]},
             "interests": {"preferred_subjects": ["数学"], "strong_subjects": ["物理"], "hobbies": ["编程"]},
             "concerns": ["计算机", "AI"],
             "riasec": {"R": 5, "I": 9, "A": 2, "S": 3, "E": 6, "C": 4},
@@ -98,7 +98,7 @@ class TestParseCendResponse:
         # Act
         result = parse_cend_response(json.dumps(payload))
         # Assert
-        assert result.basic["province"] == "广东"
+        assert result.basic["intent_majors"] == ["计算机"]
         assert result.concerns == ["计算机", "AI"]
         assert result.riasec["I"] == 9
 

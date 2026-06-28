@@ -6,6 +6,7 @@ class RegisterRequest(BaseModel):
     region: str = ""
     score: int = 0
     subjects: str = ""
+    rank: int | None = None
 
 class LoginRequest(BaseModel):
     username: str
@@ -16,3 +17,5 @@ class TokenResponse(BaseModel):
     refresh_token: str
     user_id: str
     username: str
+    is_developer: bool = False
+    role: str | None = None

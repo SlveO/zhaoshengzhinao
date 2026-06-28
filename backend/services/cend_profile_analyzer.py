@@ -63,11 +63,7 @@ CEND_ANALYZER_PROMPT = """你是一位专业的招生咨询分析员。你的任
 ## 输出格式
 严格按 JSON 格式输出（不要 markdown 代码块标记）:
 {{
-  "basic": {{
-    "province": "省份或null",
-    "subject_type": "物理类/历史类/未知/null",
-    "score": 分数或null
-  }},
+  "basic": {{}},
   "interests": {{
     "preferred_subjects": ["偏好的科目"],
     "strong_subjects": ["擅长的科目"],
@@ -88,7 +84,9 @@ CEND_ANALYZER_PROMPT = """你是一位专业的招生咨询分析员。你的任
     "city": "意向城市或null"
   }},
   "extra": {{}}
-}}"""
+}}
+
+注意：省份、选科、分数、位次由学生在表单中填入，不需要从对话中抽取。`basic` 字段保留为空对象即可。"""
 
 # ---------------------------------------------------------------------------
 # Dataclass

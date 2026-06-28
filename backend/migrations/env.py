@@ -14,8 +14,13 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Use DATABASE_URL from environment, falling back to alembic.ini
-database_url = os.environ.get("DATABASE_URL", config.get_main_option("sqlalchemy.url"))
+# Use DATABASE_URL from config.settings (loads .env via pydantic-settings),
+# falling back to DATABASE_URL env var, then alembic.ini
+try:
+    from config import settings as _settings
+    database_url = _settings.database_url
+except Exception:
+    database_url = os.environ.get("DATABASE_URL", config.get_main_option("sqlalchemy.url"))
 
 # Import all models so Base.metadata is populated
 from models import Base  # noqa: E402

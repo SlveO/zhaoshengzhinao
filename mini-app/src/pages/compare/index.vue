@@ -36,8 +36,8 @@
         </view>
 
         <view class="student-item">
-          <text class="item-label">科类</text>
-          <text class="item-value">{{ studentInfo.subject_type }}</text>
+          <text class="item-label">选科</text>
+          <text class="item-value">{{ studentInfo.subjects }}</text>
         </view>
 
         <view class="student-item">
@@ -147,7 +147,7 @@ interface PageQuery {
   major?: string
 }
 
-const studentInfo = ref<any>({ province: "", subject_type: "", score: 0, intent_majors: [] })
+const studentInfo = ref<any>({ province: "", subjects: "", score: 0, intent_majors: [] })
 const selectedMajorName = ref("人工智能")
 const sessionId = ref<string | null>(null)
 const hasSession = computed(() => Boolean(sessionId.value))

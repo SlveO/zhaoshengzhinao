@@ -49,6 +49,7 @@ async def init_db():
     from . import mapping       # noqa: F401
     from . import recommendation_feedback  # noqa: F401
     from . import consult_session  # noqa: F401
+    from . import prompt_template  # noqa: F401
     from . import chat_message    # noqa: F401
     import tenants.models          # noqa: F401
     from distribution.models import (  # noqa: F401

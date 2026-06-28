@@ -1,6 +1,13 @@
 {
   "pages": [
     {
+      "path": "pages/auth/index",
+      "style": {
+        "navigationStyle": "custom",
+        "disableScroll": true
+      }
+    },
+    {
       "path": "pages/school/index",
       "style": {
         "navigationBarTitleText": "学校信息",
@@ -10,6 +17,13 @@
     },
     {
       "path": "pages/chat/index",
+      "style": {
+        "navigationStyle": "custom",
+        "disableScroll": true
+      }
+    },
+    {
+      "path": "pages/consult/index",
       "style": {
         "navigationStyle": "custom",
         "disableScroll": true
@@ -57,16 +71,16 @@
         "text": "学校信息"
       },
       {
+        "pagePath": "pages/consult/index",
+        "text": "AI 咨询"
+      },
+      {
         "pagePath": "pages/chat/index",
-        "text": "AI咨询"
+        "text": "个性化推荐"
       },
       {
         "pagePath": "pages/recommendations/index",
         "text": "报考建议"
-      },
-      {
-        "pagePath": "pages/profile/index",
-        "text": "我的"
       }
     ]
   },

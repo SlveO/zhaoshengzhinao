@@ -4,7 +4,7 @@ import logging
 import os
 import uuid
 
-from sqlalchemy import select, text
+from sqlalchemy import select
 
 logger = logging.getLogger(__name__)
 
@@ -40,8 +40,10 @@ async def _ensure_tenant_and_admin():
     """Ensure scnu tenant and admin user exist (idempotent).
 
     Seeds two accounts:
-      - admin / admin123  → developer account (is_developer=True, full menu + DB panel)
-      - scnu / 2026scnu   → college admin account (is_developer=False, restricted menu)
+      - admin / admin123  → developer (tenant_users.role='developer', full menu + DB panel)
+      - scnu / 2026scnu   → college admin (tenant_users.role='admin', restricted menu)
+
+    注意:users 表仅存账号+密码(学生表),开发者/院校管理员身份由 tenant_users.role 区分。
     """
     try:
         from models import async_session
@@ -49,11 +51,6 @@ async def _ensure_tenant_and_admin():
         from models.user import User
 
         async with async_session() as db:
-            # Ensure is_developer column exists (hotfix for prod DBs without migration)
-            await db.execute(text(
-                "ALTER TABLE users ADD COLUMN IF NOT EXISTS is_developer BOOLEAN DEFAULT FALSE"
-            ))
-
             result = await db.execute(select(Tenant).where(Tenant.slug == "scnu"))
             tenant = result.scalar_one_or_none()
 
@@ -90,12 +87,8 @@ async def _ensure_tenant_and_admin():
                 admin_user = User(
                     username="admin",
                     password_hash=password_hash,
-                    is_developer=True,
                 )
                 db.add(admin_user)
-            else:
-                # 升级老库：把 admin 标记为开发者
-                admin_user.is_developer = True
 
             result = await db.execute(
                 select(TenantUser).where(
@@ -109,11 +102,14 @@ async def _ensure_tenant_and_admin():
                 link = TenantUser(
                     tenant_id=tenant.id,
                     user_id=admin_user.id,
-                    role="admin",
+                    role="developer",
                 )
                 db.add(link)
+            else:
+                # 升级老库:把 admin 的 role 标记为 developer
+                link.role = "developer"
 
-            # ── scnu 账号（院校管理员，非开发者）──
+            # ── scnu 账号（院校管理员）──
             result = await db.execute(select(User).where(User.username == "scnu"))
             scnu_user = result.scalar_one_or_none()
 
@@ -125,11 +121,8 @@ async def _ensure_tenant_and_admin():
                 scnu_user = User(
                     username="scnu",
                     password_hash=password_hash,
-                    is_developer=False,
                 )
                 db.add(scnu_user)
-            else:
-                scnu_user.is_developer = False
 
             result = await db.execute(
                 select(TenantUser).where(

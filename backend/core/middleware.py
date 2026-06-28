@@ -79,6 +79,8 @@ class UserAuthMiddleware(BaseHTTPMiddleware):
             from utils.jwt import decode_token
             payload = decode_token(token)
             if payload:
+                from core.tenant_context import set_current_jwt_payload
+                set_current_jwt_payload(payload)
                 from models import async_session
                 from sqlalchemy import select
                 from tenants.models import TenantUser as TUModel
@@ -96,46 +98,7 @@ class UserAuthMiddleware(BaseHTTPMiddleware):
 
 
 class ModuleGateMiddleware(BaseHTTPMiddleware):
-    """Check that the tenant has the required module enabled for admin analytics routes."""
+    """Module gate disabled per admin data overhaul spec §4.9. All modules always enabled."""
 
     async def dispatch(self, request: Request, call_next):
-        path = request.url.path.rstrip("/")
-
-        # Only gate specific admin analytics paths
-        module = None
-        for prefix, mod in MODULE_ROUTE_MAP.items():
-            if path.startswith(prefix):
-                module = mod
-                break
-
-        if module is not None:
-            from core.tenant_context import _current_tenant
-            from core.module_registry import MODULE_DEPENDENCIES
-            tenant = _current_tenant.get()
-            if tenant:
-                modules = (tenant.config or {}).get("modules", {})
-                if not modules.get(module.value, False):
-                    from fastapi.responses import JSONResponse
-                    return JSONResponse(
-                        status_code=403,
-                        content={
-                            "error": {
-                                "code": "MODULE_DISABLED",
-                                "message": f"Module '{module.value}' is not enabled for this tenant",
-                            }
-                        },
-                    )
-                for dep in MODULE_DEPENDENCIES.get(module, []):
-                    if not modules.get(dep.value, False):
-                        from fastapi.responses import JSONResponse
-                        return JSONResponse(
-                            status_code=403,
-                            content={
-                                "error": {
-                                    "code": "MODULE_DEPENDENCY_MISSING",
-                                    "message": f"Module '{module.value}' requires '{dep.value}' which is not enabled",
-                                }
-                            },
-                        )
-
         return await call_next(request)

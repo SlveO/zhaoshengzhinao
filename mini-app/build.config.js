@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const TENANT = process.env.TENANT || "gdufs";
+const TENANT = process.env.TENANT || "scnu";
 const configPath = path.resolve(__dirname, "tenants", `${TENANT}.json`);
 
 if (!fs.existsSync(configPath)) {

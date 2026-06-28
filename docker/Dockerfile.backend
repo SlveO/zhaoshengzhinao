@@ -17,7 +17,12 @@ RUN addgroup --system app && adduser --system --ingroup app app \
 
 COPY backend/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
-RUN playwright install chromium --with-deps
+
+# Use Chinese Debian mirror to avoid deb.debian.org connectivity issues
+RUN sed -i 's|deb.debian.org|mirrors.aliyun.com|g' /etc/apt/sources.list.d/debian.sources 2>/dev/null \
+    || sed -i 's|deb.debian.org|mirrors.aliyun.com|g' /etc/apt/sources.list 2>/dev/null \
+    || true
+RUN apt-get update && playwright install chromium --with-deps
 
 COPY backend/ /app/
 COPY scrapers/ /app/scrapers/

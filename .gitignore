@@ -16,7 +16,12 @@ _archive/
 # Runtime data — regenerated via seed scripts
 backend/chroma_data/
 chroma_data/
+backend/chroma_data.bak.384dim/
 data/raw/
+
+# 临时/备份文件（根目录）
+/scnu_ibc_rag_knowledge_base.json
+/scnu-rag-solution.html
 
 # Model cache
 backend/.cache/

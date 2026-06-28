@@ -8,6 +8,7 @@ class EnterRequest(BaseModel):
     session_id: Optional[str] = None
     tenant_slug: str = "scnu"
     scene: str = "miniapp_enter"
+    module_type: str = "recommend"  # "recommend" | "consult"
 
 class MessageBody(BaseModel):
     role: str
@@ -33,6 +34,8 @@ class EnterData(BaseModel):
     has_profile: bool
     chat_history: list[dict] = []
     profile_summary: Optional[dict] = None
+    greeting: Optional[str] = None
+    assistant_name: Optional[str] = None
 
 class ChatMessageData(BaseModel):
     session_id: str

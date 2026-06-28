@@ -1,6 +1,8 @@
 """Profile dashboard — aggregate session_profiles for RIASEC, values, completeness."""
 from datetime import datetime, timezone, timedelta
 from sqlalchemy import text
+
+
 async def get_profile_dashboard(tenant_id: str, days: int = 365) -> dict:
     from models import async_session
     async with async_session() as db:
@@ -67,9 +69,51 @@ async def get_profile_dashboard(tenant_id: str, days: int = 365) -> dict:
             for row in completeness_rows
         ]
 
+        # New stats: monthlyNew, growthRate, todayNewSessions, pendingFollowSessions
+        now = datetime.now(timezone.utc)
+        month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        if month_start.month > 1:
+            last_month_start = month_start.replace(month=month_start.month - 1)
+        else:
+            last_month_start = month_start.replace(year=month_start.year - 1, month=12)
+        today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+
+        monthly_new_result = await db.execute(text("""
+            SELECT COUNT(*) FROM consult_sessions
+            WHERE tenant_slug = (SELECT slug FROM tenants WHERE id = :tid)
+              AND consult_started_at >= :ms
+        """), {"tid": tenant_id, "ms": month_start})
+        monthly_new = monthly_new_result.scalar() or 0
+
+        last_month_new_result = await db.execute(text("""
+            SELECT COUNT(*) FROM consult_sessions
+            WHERE tenant_slug = (SELECT slug FROM tenants WHERE id = :tid)
+              AND consult_started_at >= :lms AND consult_started_at < :ms
+        """), {"tid": tenant_id, "lms": last_month_start, "ms": month_start})
+        last_month_new = last_month_new_result.scalar() or 0
+        growth_rate = round((monthly_new - last_month_new) / last_month_new, 2) if last_month_new else None
+
+        today_new_result = await db.execute(text("""
+            SELECT COUNT(*) FROM consult_sessions
+            WHERE tenant_slug = (SELECT slug FROM tenants WHERE id = :tid)
+              AND consult_started_at >= :ts
+        """), {"tid": tenant_id, "ts": today_start})
+        today_new_sessions = today_new_result.scalar() or 0
+
+        pending_result = await db.execute(text("""
+            SELECT COUNT(*) FROM consult_sessions
+            WHERE tenant_slug = (SELECT slug FROM tenants WHERE id = :tid)
+              AND follow_status = 'pending'
+        """), {"tid": tenant_id})
+        pending_follow_sessions = pending_result.scalar() or 0
+
     return {
         "riasecDistribution": riasec_distribution,
         "valuesDistribution": values_distribution,
         "completenessBreakdown": completeness_breakdown,
         "totalProfiles": total_profiles,
+        "monthlyNew": monthly_new,
+        "growthRate": growth_rate,
+        "todayNewSessions": today_new_sessions,
+        "pendingFollowSessions": pending_follow_sessions,
     }

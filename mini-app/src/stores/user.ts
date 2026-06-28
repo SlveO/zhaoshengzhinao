@@ -40,13 +40,42 @@ export const useUserStore = defineStore("user", () => {
     uni.setStorageSync("userInfo", JSON.stringify(info));
   }
 
-  async function register(data: { username: string; password: string }): Promise<boolean> {
+  /** 清除所有会话存储（咨询 + 推荐），用于账号切换时避免复用旧 session */
+  function clearAllSessions(): void {
     try {
-      const res = await authApi.register({ ...data, region: "", score: 0, subjects: "" });
+      uni.removeStorageSync("scnu_consult_session_id");      // 推荐/chat session
+      uni.removeStorageSync("scnu_consult_module_session_id"); // 咨询 session
+      uni.removeStorageSync("chat_prefill");                   // 残留 prefill
+      uni.removeStorageSync("consult_prefill");                // 残留 prefill
+    } catch {
+      // 静默忽略
+    }
+  }
+
+  async function register(data: {
+    username: string;
+    password: string;
+    region: string;
+    subjects: string;
+    score: number;
+    rank: number;
+  }): Promise<boolean> {
+    try {
+      const res = await authApi.register({
+        username: data.username,
+        password: data.password,
+        region: data.region,
+        score: data.score,
+        subjects: data.subjects,
+        rank: data.rank,
+      });
       const body: any = res as any;
-      if (body.access_token) {
-        setToken(body.access_token);
-        setUserInfo({ user_id: body.user_id, nickname: data.username, phone: data.username });
+      const payload = body?.data ?? body;
+      if (payload?.access_token) {
+        // 新账号必须使用新 session，清除上一个账号的 session 存储
+        clearAllSessions();
+        setToken(payload.access_token);
+        setUserInfo({ user_id: payload.user_id, nickname: data.username, phone: data.username });
         return true;
       }
     } catch (e: any) {
@@ -59,9 +88,12 @@ export const useUserStore = defineStore("user", () => {
     try {
       const res = await authApi.login(data);
       const body: any = res as any;
-      if (body.access_token) {
-        setToken(body.access_token);
-        setUserInfo({ user_id: body.user_id, nickname: body.username, phone: data.username });
+      const payload: any = body?.data ?? body;
+      if (payload?.access_token) {
+        // 切换账号时清除旧 session，确保新登录用户拿到属于自己的新 session
+        clearAllSessions();
+        setToken(payload.access_token);
+        setUserInfo({ user_id: payload.user_id, nickname: payload.username, phone: data.username });
         return true;
       }
     } catch (e: any) {
@@ -75,6 +107,8 @@ export const useUserStore = defineStore("user", () => {
     userInfo.value = null;
     uni.removeStorageSync("token");
     uni.removeStorageSync("userInfo");
+    // 登出必须清会话，否则下次登录/注册会复用旧账号的 session 与聊天记录
+    clearAllSessions();
   }
 
   return {
@@ -84,5 +118,6 @@ export const useUserStore = defineStore("user", () => {
     register,
     login,
     logout,
+    clearAllSessions,
   };
 });

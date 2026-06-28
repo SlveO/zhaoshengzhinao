@@ -666,3 +666,126 @@ table tbody tr.selected { background: #dbeafe; }
   .header-notify { display: none; }
   .search-bar input { flex: 1 1 100%; }
 }
+
+/* === Prompt Management === */
+.settings-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+.settings-tab {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--muted);
+}
+.settings-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  font-weight: 500;
+}
+.prompts-container { padding: 0 0 24px; }
+.prompts-loading { padding: 24px; color: var(--muted); text-align: center; }
+
+.health-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-left: auto;
+}
+.health-badge-loading { background: var(--bg); color: var(--muted); }
+.health-badge-ok { background: #D1FAE5; color: #065F46; }
+.health-badge-warn { background: #FEF3C7; color: #92400E; }
+.health-badge-error { background: #FEE2E2; color: #991B1B; }
+.health-detail {
+  margin-top: 8px;
+  padding: 12px;
+  background: #FFFBEB;
+  border: 1px solid #FCD34D;
+  border-radius: 6px;
+  font-size: 13px;
+  width: 100%;
+}
+.health-detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+.health-refresh-btn {
+  margin-top: 8px;
+  padding: 4px 12px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.prompt-editor {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  background: var(--card-bg, white);
+}
+.prompt-editor-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.prompt-editor-title { margin: 0; font-size: 15px; font-weight: 600; }
+.prompt-editor-desc { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
+.prompt-version {
+  font-size: 12px;
+  padding: 2px 8px;
+  background: var(--bg);
+  border-radius: 4px;
+  color: var(--muted);
+}
+.prompt-editor-textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  resize: vertical;
+  line-height: 1.6;
+  background: var(--card-bg, white);
+  color: var(--fg);
+  box-sizing: border-box;
+}
+.prompt-editor-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.prompt-save-btn {
+  padding: 6px 16px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.prompt-save-btn:disabled { background: var(--muted); cursor: not-allowed; }
+.prompt-reset-btn, .prompt-reload-btn {
+  padding: 6px 12px;
+  background: var(--card-bg, white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--fg);
+}
+.prompt-reset-btn:disabled, .prompt-reload-btn:disabled { cursor: not-allowed; opacity: 0.5; }
+.prompt-dirty-indicator { font-size: 12px; color: var(--muted); margin-left: auto; }
+.prompt-message { margin-top: 12px; padding: 8px 12px; border-radius: 4px; font-size: 13px; }
+.prompt-message-ok { background: #D1FAE5; color: #065F46; }
+.prompt-message-error { background: #FEE2E2; color: #991B1B; }

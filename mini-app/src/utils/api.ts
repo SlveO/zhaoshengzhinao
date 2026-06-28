@@ -141,7 +141,7 @@ export const chatApi = {
 };
 
 export const authApi = {
-  register: async (data: { username: string; password: string; region?: string; score?: number; subjects?: string }) => {
+  register: async (data: { username: string; password: string; region?: string; score?: number; subjects?: string; rank?: number }) => {
     const result = await api.post<{ access_token: string; refresh_token: string; user_id: string; username: string }>("/auth/register", data);
     if (result.data?.access_token && result.data?.refresh_token) {
       saveTokens(result.data.access_token, result.data.refresh_token);

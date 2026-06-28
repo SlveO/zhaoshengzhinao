@@ -1,7 +1,7 @@
 """Add distribution tables: channels, files, tasks, logs, access tokens
 
-Revision ID: 005
-Revises: 004
+Revision ID: 005_dist
+Revises: 005
 Create Date: 2026-06-05
 """
 from typing import Sequence, Union
@@ -9,8 +9,8 @@ from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 
-revision: str = "005"
-down_revision: Union[str, None] = "004"
+revision: str = "005_dist"
+down_revision: Union[str, None] = "005"
 branch_labels = None
 depends_on = None
 

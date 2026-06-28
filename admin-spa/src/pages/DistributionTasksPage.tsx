@@ -28,7 +28,7 @@ export default function DistributionTasksPage() {
 
   // Form modal
   const [formOpen, setFormOpen] = useState(false)
-  const [editingTask, setEditingTask] = useState<Partial<any> | null>(null)
+  const [editingTask, setEditingTask] = useState<Partial<DistributionTask> | null>(null)
   const [files, setFiles] = useState<DistributionFile[]>([])
   const [channels, setChannels] = useState<DistributionChannel[]>([])
 
@@ -115,15 +115,16 @@ export default function DistributionTasksPage() {
     } catch { setMessage('操作失败') }
   }
 
-  const handleSave = async (data: any) => {
+  const handleSave = async (data: Record<string, unknown>) => {
     try {
       await distributionApi.createTask(data)
       setFormOpen(false)
       setEditingTask(null)
       fetchTasks()
       setMessage('任务创建成功')
-    } catch (e: any) {
-      setMessage(e?.response?.data?.detail || '创建失败')
+    } catch (e) {
+      const err = e as { response?: { data?: { detail?: string } } }
+      setMessage(err?.response?.data?.detail || '创建失败')
     }
   }
 

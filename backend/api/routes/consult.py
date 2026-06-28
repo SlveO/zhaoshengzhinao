@@ -91,12 +91,18 @@ async def send_consult_message(body: ConsultMessageRequest, request: Request):
     if tenant_id:
         try:
             await write_event(
-                tenant_id, "consult_message_sent",
+                tenant_id, "chat.message_sent",
                 session_id=session.id,
-                payload={"message_length": len(user_content)},
+                payload={
+                    "stage": "CONSULT",
+                    "turn": 1,
+                    "message_length": len(user_content),
+                    "content": user_content,
+                    "module": "consult",
+                },
             )
         except Exception as e:
-            _logger.warning(f"Event consult_message_sent failed: {e}")
+            _logger.warning(f"Event chat.message_sent failed: {e}")
 
     # 预加载 tenant college_id
     tenant_college_id = None
@@ -175,10 +181,29 @@ async def send_consult_message(body: ConsultMessageRequest, request: Request):
 
         # slots_summary
         existing_profile = build_profile_summary(session) or {}
-        province = existing_profile.get("province") or "未知"
-        subjects = existing_profile.get("subjects") or "未知"
-        score = existing_profile.get("score") or "未知"
-        rank = existing_profile.get("rank") or "未知"
+
+        # 优先从 users 表读取注册信息（与 chat 模块对称），解决首轮 session 快照为空问题
+        user_basic = {}
+        if session.user_id:
+            try:
+                from models.user import User
+                async with async_session() as db:
+                    u_result = await db.execute(select(User).where(User.id == session.user_id))
+                    u = u_result.scalar_one_or_none()
+                    if u:
+                        user_basic = {
+                            "province": u.region or "",
+                            "subjects": u.subjects or "",
+                            "score": u.score or 0,
+                            "rank": u.rank or 0,
+                        }
+            except Exception as e:
+                _logger.warning(f"Failed to read user basic info for consult: {e}")
+
+        province = user_basic.get("province") or existing_profile.get("province") or "未知"
+        subjects = user_basic.get("subjects") or existing_profile.get("subjects") or "未知"
+        score = user_basic.get("score") or existing_profile.get("score") or "未知"
+        rank = user_basic.get("rank") or existing_profile.get("rank") or "未知"
         slots_text = f"省份: {province}, 选科: {subjects}, 分数: {score}, 位次: {rank}"
 
         admission_table = render_admission_table(admission_rows)
@@ -190,11 +215,28 @@ async def send_consult_message(body: ConsultMessageRequest, request: Request):
                 lines.append(f"{i}. {s['text']}")
             knowledge_context = "\n".join(lines)
 
+        # 判定问题类型，用于意图感知的提示词（类似模糊检索：非数据问题允许 RAG 兜底）
+        intent_type = intent.get("intent_type", "chitchat")
+        is_data_query = bool(intent.get("need_admission_data") and admission_rows)
+        has_knowledge = bool(sources)
+
+        # 兼容性检查：DB 中可能存有旧版提示词（缺少 intent_type/is_data_query/has_knowledge 占位符）
+        # 旧版提示词有过严的"数据至上"规则，会导致非数据问题无法回答。检测到旧版时回退到代码默认值。
+        if "{intent_type}" not in system_template or "{is_data_query}" not in system_template:
+            from agents.conversation.prompts_consult import CODE_DEFAULTS
+            fallback = CODE_DEFAULTS.get("consult_system", "")
+            if fallback and "{intent_type}" in fallback:
+                _logger.info("Loaded consult_system prompt is outdated (missing intent_type placeholder), using code default")
+                system_template = fallback
+
         try:
             system_content = system_template.format(
                 slots_summary=slots_text,
                 admission_table=admission_table,
                 knowledge_context=knowledge_context,
+                intent_type=intent_type,
+                is_data_query="是" if is_data_query else "否",
+                has_knowledge="是" if has_knowledge else "否",
             )
         except KeyError as e:
             _logger.warning(f"System prompt template missing placeholder: {e}")

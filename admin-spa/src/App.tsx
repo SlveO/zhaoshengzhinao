@@ -6,19 +6,17 @@ import ProtectedRoute from './components/ProtectedRoute'
 import DashboardLayout from './components/DashboardLayout'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
-import LeadWorkbenchPage from './pages/LeadWorkbenchPage'
 import ConsultationsPage from './pages/ConsultationsPage'
-import ProfileDashboardPage from './pages/ProfileDashboardPage'
+// 画像看板功能暂时隐藏(即将上线,功能待完善)
+// import ProfileDashboardPage from './pages/ProfileDashboardPage'
 import InsightsPage from './pages/InsightsPage'
-import ReportsPage from './pages/ReportsPage'
-import ChannelsPage from './pages/ChannelsPage'
 import KnowledgeSettingsPage from './pages/KnowledgeSettingsPage'
-import BrandSettingsPage from './pages/BrandSettingsPage'
 import AgentSettingsPage from './pages/AgentSettingsPage'
-import ModuleSettingsPage from './pages/ModuleSettingsPage'
 import DistributionTasksPage from './pages/DistributionTasksPage'
 import DistributionChannelsPage from './pages/DistributionChannelsPage'
 import DistributionLogsPage from './pages/DistributionLogsPage'
+import DbAdminPage from './pages/DbAdminPage'
+import RequireDeveloper from './components/RequireDeveloper'
 
 export default function App() {
   useBrandConfig()
@@ -48,19 +46,23 @@ export default function App() {
         >
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="leads" element={<LeadWorkbenchPage />} />
           <Route path="consultations" element={<ConsultationsPage />} />
-          <Route path="profile" element={<ProfileDashboardPage />} />
+          {/* 画像看板功能暂时隐藏(即将上线,功能待完善) */}
+          {/* <Route path="profile" element={<ProfileDashboardPage />} /> */}
           <Route path="insights" element={<InsightsPage />} />
-          <Route path="reports" element={<ReportsPage />} />
-          <Route path="channels" element={<ChannelsPage />} />
           <Route path="knowledge" element={<KnowledgeSettingsPage />} />
-          <Route path="brand" element={<BrandSettingsPage />} />
           <Route path="agent-settings" element={<AgentSettingsPage />} />
-          <Route path="modules" element={<ModuleSettingsPage />} />
           <Route path="distribution/tasks" element={<DistributionTasksPage />} />
           <Route path="distribution/channels" element={<DistributionChannelsPage />} />
           <Route path="distribution/logs" element={<DistributionLogsPage />} />
+          <Route
+            path="db"
+            element={
+              <RequireDeveloper>
+                <DbAdminPage />
+              </RequireDeveloper>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>

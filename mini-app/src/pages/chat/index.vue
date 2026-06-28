@@ -1,21 +1,5 @@
 <template>
-  <view v-if="showEntry" class="entry-overlay">
-    <view class="entry-card">
-      <text class="entry-title">招生智脑</text>
-      <text class="entry-subtitle">AI 智能高考志愿咨询</text>
-      <view class="entry-buttons">
-        <button class="entry-btn entry-btn-primary" @tap="handleRegister">
-          注册 / 登录
-        </button>
-        <button class="entry-btn entry-btn-secondary" @tap="handleGuest">
-          访客模式
-        </button>
-      </view>
-      <text class="entry-hint">注册用户：对话记录保存 30 天 | 访客：保存 1 天</text>
-    </view>
-  </view>
-
-  <view v-else class="chat-page">
+  <view class="chat-page">
     <view class="chat-hero">
       <image
         class="hero-bg"
@@ -28,8 +12,8 @@
 
       <view class="hero-content">
         <text class="school-tag">华南师范大学</text>
-        <text class="hero-title">AI 招生咨询助手</text>
-        <text class="hero-subtitle">招生政策、专业选择、报考建议都可以问我</text>
+        <text class="hero-title">AI 个性化推荐</text>
+        <text class="hero-subtitle">基于咨询画像，提供个性化专业推荐与引导</text>
       </view>
     </view>
 
@@ -39,11 +23,16 @@
       <text class="scnu-watermark">SCNU</text>
       <text class="school-watermark">华南师范大学</text>
 
-      <view v-if="profileSummary" class="profile-indicator" @tap="goProfile">
+      <view v-if="profileSummary" class="profile-indicator" @tap="goRecommendations">
         <text class="profile-indicator-text">
-          已识别: {{ profileSummary.province || '' }} {{ profileSummary.subject_type || '' }} {{ profileSummary.score || '' }}分
+          已识别: {{ profileSummary.province || '' }} {{ profileSummary.subjects || '' }} {{ profileSummary.score || '' }}分
         </text>
-        <text class="profile-indicator-arrow">查看档案 ›</text>
+        <text class="profile-indicator-arrow">查看建议 ›</text>
+      </view>
+
+      <view v-if="hasConsultHistory" class="consult-context-indicator">
+        <text class="consult-context-dot" />
+        <text class="consult-context-text">已结合咨询历史，推荐更精准</text>
       </view>
 
       <scroll-view
@@ -67,22 +56,43 @@
               class="avatar"
               :class="message.role === 'user' ? 'avatar-user' : 'avatar-ai'"
             >
-              <text>{{ message.role === "user" ? "我" : "AI" }}</text>
+              <text>{{ message.role === "user" ? "我" : (message.kind === 'understanding' ? '理解' : 'AI') }}</text>
             </view>
 
             <view
               class="bubble"
-              :class="message.role === 'user' ? 'bubble-user' : 'bubble-ai'"
+              :class="[
+                message.role === 'user' ? 'bubble-user' : 'bubble-ai',
+                message.kind === 'understanding' ? 'bubble-understanding' : ''
+              ]"
             >
+              <text v-if="message.kind === 'understanding'" class="bubble-kind-label">问题理解</text>
               <text class="bubble-text">{{ message.content }}</text>
-              <view v-if="message.role === 'assistant' && sources.length > 0" class="sources-box">
+              <view
+                v-if="message.kind === 'answer' && message.sources && message.sources.length > 0"
+                class="sources-toggle"
+                @tap="toggleSources(message.id)"
+              >
+                <text class="sources-toggle-text">
+                  {{ expandedSources.has(message.id) ? '收起引用 «' : `查看本次引用 ${message.sources.length} 条数据 »` }}
+                </text>
+              </view>
+              <view
+                v-if="message.kind === 'answer' && message.sources && message.sources.length > 0 && expandedSources.has(message.id)"
+                class="sources-box"
+              >
                 <text class="sources-title">参考来源</text>
-                <view v-for="(s, i) in sources" :key="i" class="source-item">
+                <view v-for="(s, i) in message.sources" :key="i" class="source-item">
                   <text class="source-text">{{ s.text }}</text>
                   <text v-if="s.source_title" class="source-label">{{ s.source_title }}</text>
                 </view>
               </view>
             </view>
+          </view>
+
+          <view v-if="isSearching" class="search-status-row">
+            <view class="search-spinner" />
+            <text class="search-status-text">{{ searchStatusText }}</text>
           </view>
 
           <view v-if="isThinking" class="message-row message-row-ai">
@@ -136,26 +146,25 @@
       </view>
     </view>
   </view>
-
-  <LoginModal :visible="showLogin" @close="showLogin = false" @success="onLoginSuccess" />
 </template>
 
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref, watch } from "vue"
-import { onLoad } from "@dcloudio/uni-app"
+import { onLoad, onShow } from "@dcloudio/uni-app"
 import { api, getToken } from "@/utils/api"
 import { getStoredSessionId, saveSessionId, clearStoredSessionId } from "@/utils/session"
+import { getConsultSessionId } from "@/utils/consultSession"
 import { TENANT_SLUG } from "@/utils/config"
-import LoginModal from "@/components/LoginModal.vue"
 
-const welcomeMessage =
-  "你好，我是华南师范大学招生咨询助手。你可以直接问我招生政策、专业介绍、录取参考、校园生活等问题。如果你愿意，也可以告诉我你的省份、科类、分数和意向专业，我会为你生成更适合的本校报考建议。"
+const DEFAULT_WELCOME =
+  "你好，我是华南师范大学个性化推荐助手。\n\n本系统仅提供国际留学项目相关咨询，涵盖 2+2 出国留学培训项目（商科/新媒体方向）与 3+1 SQA-AD 项目（市场营销/人力资源管理/商务会计）的专业选择与报考引导。\n\n基于你的咨询画像与基本信息，我会为你提供更贴合的专业推荐。你可以告诉我分数、位次、选科和意向方向，我会结合你的咨询历史给出更精准的建议。"
 
+// 知识库高频主题（对齐 KB001/003/005-007/011-012/017-019/021-023/030）
 const quickQuestions = [
-  "华师人工智能专业怎么样？",
-  "广东物理类 585 分适合报华师哪些专业？",
-  "软件工程和人工智能哪个更适合我？",
-  "怎么加入华师招生咨询群？"
+  "我适合 2+2 还是 3+1 项目？",
+  "毕业后能申请什么硕士？",
+  "项目的对接院校有哪些？",
+  "学费和奖学金政策？"
 ]
 
 const sessionId = ref<string | null>(null)
@@ -165,101 +174,30 @@ const shouldAutoScroll = ref(true)
 const prevScrollTop = ref(0)
 let scrollTimer: ReturnType<typeof setTimeout> | null = null
 const profileSummary = ref<any>(null)
+const hasConsultHistory = ref<boolean>(Boolean(getConsultSessionId()))
 const isThinking = ref(false)
 const thinkingStatus = ref("")
 const sources = ref<any[]>([])
+const isSearching = ref(false)
+const searchStatusText = ref("")
+const expandedSources = ref<Set<string>>(new Set())
 const messages = ref<any[]>([
-  { id: "welcome", role: "assistant", content: welcomeMessage, timestamp: Date.now() }
+  { id: "welcome", role: "assistant", content: DEFAULT_WELCOME, kind: "answer", timestamp: Date.now() }
 ])
 
 const hasSession = ref(false)
-const showLogin = ref(false)
-const showEntry = ref(true)
 
 onLoad(async () => {
   const token = getToken()
+  if (!token) {
+    uni.reLaunch({ url: "/pages/auth/index" })
+    return
+  }
   const stored = getStoredSessionId()
-  const lastActive = uni.getStorageSync("last_active_at")
-  const withinWindow = lastActive && (Date.now() - Number(lastActive)) < 10 * 60 * 1000
-
-  // Fast path: token valid + within 10min window -> skip entry, restore session
-  if (token && withinWindow) {
-    const headers: Record<string, string> = { "Authorization": `Bearer ${token}` }
-    try {
-      const res = await api.post<any>("/miniapp/enter", {
-        session_id: stored || null,
-        tenant_slug: TENANT_SLUG,
-      }, { headers })
-
-      if (res.data) {
-        sessionId.value = res.data.session_id
-        saveSessionId(res.data.session_id)
-        hasSession.value = true
-        showEntry.value = false
-        uni.setStorageSync("last_active_at", Date.now())
-        if (res.data.profile_summary) {
-          profileSummary.value = res.data.profile_summary
-        }
-        if (res.data.chat_history && res.data.chat_history.length) {
-          messages.value = res.data.chat_history.map((m: any) => ({
-            id: m.message_id || m.id,
-            role: m.role,
-            content: m.content,
-            timestamp: new Date(m.created_at).getTime(),
-          }))
-        }
-        nextTick(() => { scrollToBottom() })
-        return
-      }
-    } catch {
-      // Token may be expired server-side -> fall through to entry gating
-      clearStoredSessionId()
-    }
-  }
-
-  // All other cases -> entry gating: show overlay + auto-pop LoginModal
-  // Includes: no token, expired window, guest with stored session, first visit
-  showEntry.value = true
-  showLogin.value = true
-  handlePrefill()
-})
-
-async function handleRegister(): Promise<void> {
-  showLogin.value = true
-  handlePrefill()
-}
-
-async function handleGuest(): Promise<void> {
+  const headers: Record<string, string> = { "Authorization": `Bearer ${token}` }
   try {
     const res = await api.post<any>("/miniapp/enter", {
-      session_id: null,
-      tenant_slug: TENANT_SLUG,
-    })
-    if (res.data) {
-      sessionId.value = res.data.session_id
-      saveSessionId(res.data.session_id)
-      hasSession.value = true
-      showEntry.value = false
-      uni.setStorageSync("last_active_at", Date.now())
-      if (res.data.profile_summary) {
-        profileSummary.value = res.data.profile_summary
-      }
-    }
-  } catch {
-    showEntry.value = false
-    hasSession.value = true
-  }
-}
-
-async function onLoginSuccess(): Promise<void> {
-  showLogin.value = false
-  const token = getToken()
-  try {
-    const headers: Record<string, string> = {}
-    if (token) headers["Authorization"] = `Bearer ${token}`
-
-    const res = await api.post<any>("/miniapp/enter", {
-      session_id: null,
+      session_id: stored || null,
       tenant_slug: TENANT_SLUG,
     }, { headers })
 
@@ -267,17 +205,86 @@ async function onLoginSuccess(): Promise<void> {
       sessionId.value = res.data.session_id
       saveSessionId(res.data.session_id)
       hasSession.value = true
-      showEntry.value = false
       uni.setStorageSync("last_active_at", Date.now())
       if (res.data.profile_summary) {
         profileSummary.value = res.data.profile_summary
       }
+      if (res.data.chat_history && res.data.chat_history.length) {
+        messages.value = res.data.chat_history.map((m: any) => ({
+          id: m.message_id || m.id,
+          role: m.role,
+          content: m.content,
+          kind: m.role === "assistant" ? "answer" : undefined,
+          sources: [],
+          timestamp: new Date(m.created_at).getTime(),
+        }))
+      } else if (res.data.greeting) {
+        // 新会话且后端配置了开场白：覆盖默认欢迎语
+        messages.value = [{
+          id: "welcome",
+          role: "assistant",
+          content: res.data.greeting,
+          kind: "answer",
+          timestamp: Date.now()
+        }]
+      }
+      nextTick(() => { scrollToBottom() })
     }
   } catch {
-    showEntry.value = false
-    hasSession.value = true
+    clearStoredSessionId()
+    uni.reLaunch({ url: "/pages/auth/index" })
+    return
   }
-}
+  handlePrefill()
+})
+
+// tab 页 onLoad 只触发一次，logout 后切换 tab 需要重新初始化
+onShow(async () => {
+  const token = getToken()
+  if (!token) {
+    uni.reLaunch({ url: "/pages/auth/index" })
+    return
+  }
+  // 检测 session 是否已被清除（logout/register/login 会清存储）
+  const storedId = getStoredSessionId()
+  if (sessionId.value && !storedId) {
+    // 存储已清但内存 ref 还在 → 账号已切换，重新进入会话
+    sessionId.value = null
+    messages.value = [{
+      id: "welcome",
+      role: "assistant",
+      content: DEFAULT_WELCOME,
+      kind: "answer",
+      timestamp: Date.now()
+    }]
+    profileSummary.value = null
+    const headers: Record<string, string> = { "Authorization": `Bearer ${token}` }
+    try {
+      const res = await api.post<any>("/miniapp/enter", {
+        session_id: null,
+        tenant_slug: TENANT_SLUG,
+      }, { headers })
+      if (res.data) {
+        sessionId.value = res.data.session_id
+        saveSessionId(res.data.session_id)
+        if (res.data.profile_summary) {
+          profileSummary.value = res.data.profile_summary
+        }
+        if (res.data.greeting) {
+          messages.value = [{
+            id: "welcome",
+            role: "assistant",
+            content: res.data.greeting,
+            kind: "answer",
+            timestamp: Date.now()
+          }]
+        }
+      }
+    } catch {
+      // 静默失败，保留默认欢迎语
+    }
+  }
+})
 
 const prefillQuestion = ref<string | null>(null)
 
@@ -299,6 +306,16 @@ function trySendPrefill(): void {
 
 watch(sessionId, () => trySendPrefill())
 
+// 流式 token 累积时自动滚动到底（监听最后一条消息内容变化）
+watch(() => messages.value[messages.value.length - 1]?.content, () => {
+  scrollToBottom()
+})
+
+// 消息数量变化时滚动到底
+watch(() => messages.value.length, () => {
+  scrollToBottom()
+})
+
 onMounted(() => {
   uni.$on("chat:prefill", handlePrefill)
 })
@@ -319,15 +336,18 @@ async function sendMessage(): Promise<void> {
 
   messages.value.push({ id: `user-${Date.now()}`, role: "user", content, timestamp: Date.now() })
 
-  const aiId = `ai-${Date.now()}`
-  messages.value.push({ id: aiId, role: "assistant", content: "", timestamp: Date.now() })
+  // 气泡按需创建：理解气泡（understanding）与回答气泡（answer）
+  let understandingId: string | null = null
+  let answerId: string | null = null
   isThinking.value = true
-  thinkingStatus.value = "正在检索数据..."
+  thinkingStatus.value = "正在理解你的问题..."
+  isSearching.value = false
+  searchStatusText.value = ""
   sources.value = []
   shouldAutoScroll.value = true
   scrollToBottom()
 
-  const apiBase = process.env.NODE_ENV === "development"
+  const apiBase = import.meta.env.DEV
     ? "/api/v1"
     : (import.meta.env.VITE_API_BASE_URL as string) || "/api/v1"
 
@@ -356,8 +376,14 @@ async function sendMessage(): Promise<void> {
             abortCtrl.abort()
             isThinking.value = false
             thinkingStatus.value = ""
-            const msg = messages.value.find(m => m.id === aiId)
-            if (msg) msg.content = last.content
+            isSearching.value = false
+            if (!answerId) {
+              answerId = `ai-${Date.now()}`
+              messages.value.push({ id: answerId, role: "assistant", kind: "answer", content: last.content, sources: [], timestamp: Date.now() })
+            } else {
+              const msg = messages.value.find(m => m.id === answerId)
+              if (msg) msg.content = last.content
+            }
             scrollToBottom()
             return
           }
@@ -390,9 +416,10 @@ async function sendMessage(): Promise<void> {
 
     if (!response.ok) {
       isThinking.value = false
+      isSearching.value = false
       clearTimeout(pollTimer)
-      const msg = messages.value.find(m => m.id === aiId)
-      if (msg) msg.content = `请求失败 (${response.status})，请稍后重试`
+      answerId = `ai-${Date.now()}`
+      messages.value.push({ id: answerId, role: "assistant", kind: "answer", content: `请求失败 (${response.status})，请稍后重试`, sources: [], timestamp: Date.now() })
       return
     }
 
@@ -402,24 +429,22 @@ async function sendMessage(): Promise<void> {
       sseReceived = true
       clearTimeout(pollTimer)
       isThinking.value = false
+      isSearching.value = false
       thinkingStatus.value = ""
       try {
         const json = await response.json()
         const data = json.data || json
-        const msg = messages.value.find(m => m.id === aiId)
+        answerId = `ai-${Date.now()}`
         if (json.error) {
-          if (msg) msg.content = json.error.message || "AI 服务暂时不可用"
+          messages.value.push({ id: answerId, role: "assistant", kind: "answer", content: json.error.message || "AI 服务暂时不可用", sources: [], timestamp: Date.now() })
         } else if (data?.assistant_message?.content) {
-          if (msg) {
-            msg.id = data.assistant_message.message_id || aiId
-            msg.content = data.assistant_message.content
-          }
+          messages.value.push({ id: answerId, role: "assistant", kind: "answer", content: data.assistant_message.content, sources: [], timestamp: Date.now() })
         } else {
-          if (msg) msg.content = "AI 服务暂时不可用，请稍后重试"
+          messages.value.push({ id: answerId, role: "assistant", kind: "answer", content: "AI 服务暂时不可用，请稍后重试", sources: [], timestamp: Date.now() })
         }
       } catch {
-        const msg = messages.value.find(m => m.id === aiId)
-        if (msg) msg.content = "AI 服务暂时不可用，请稍后重试"
+        answerId = `ai-${Date.now()}`
+        messages.value.push({ id: answerId, role: "assistant", kind: "answer", content: "AI 服务暂时不可用，请稍后重试", sources: [], timestamp: Date.now() })
       }
       scrollToBottom()
       return
@@ -428,7 +453,8 @@ async function sendMessage(): Promise<void> {
     const reader = response.body!.getReader()
     const decoder = new TextDecoder()
     let buffer = ""
-    let firstToken = true
+    let firstUnderstandingToken = true
+    let firstAnswerToken = true
 
     while (true) {
       const { value, done } = await reader.read()
@@ -443,23 +469,64 @@ async function sendMessage(): Promise<void> {
         if (line.startsWith("data: ")) {
           try {
             const evt = JSON.parse(line.slice(6))
-            if (evt.type === "token") {
-              if (firstToken) {
-                firstToken = false
-                thinkingStatus.value = "正在生成回答..."
-              }
-              const msg = messages.value.find(m => m.id === aiId)
-              if (msg) msg.content += evt.text
-            } else if (evt.type === "thinking") {
+            if (evt.type === "thinking") {
               thinkingStatus.value = evt.message
+            } else if (evt.type === "understanding_start") {
+              // 理解阶段开始 — 保持 typing dots 直到首个 token
+            } else if (evt.type === "understanding") {
+              if (firstUnderstandingToken) {
+                firstUnderstandingToken = false
+                isThinking.value = false
+                thinkingStatus.value = ""
+                understandingId = `understanding-${Date.now()}`
+                messages.value.push({ id: understandingId, role: "assistant", kind: "understanding", content: "", timestamp: Date.now() })
+              }
+              const msg = messages.value.find(m => m.id === understandingId)
+              if (msg) msg.content += evt.text
+            } else if (evt.type === "understanding_end") {
+              // 理解阶段结束 — 若无 token 则隐藏 typing dots
+              if (firstUnderstandingToken) {
+                isThinking.value = false
+                thinkingStatus.value = ""
+              }
+            } else if (evt.type === "search_start") {
+              isSearching.value = true
+              searchStatusText.value = "正在检索知识库..."
+            } else if (evt.type === "source") {
+              sources.value.push(evt.item)
+              const title = evt.item?.source_title || (evt.item?.text || "").slice(0, 30) || "数据片段"
+              searchStatusText.value = `正在检索 (${evt.index + 1}/${evt.total}): ${title}`
+            } else if (evt.type === "search_end") {
+              isSearching.value = false
+              searchStatusText.value = ""
+            } else if (evt.type === "token") {
+              if (firstAnswerToken) {
+                firstAnswerToken = false
+                isThinking.value = false
+                isSearching.value = false
+                thinkingStatus.value = ""
+                answerId = `ai-${Date.now()}`
+                messages.value.push({ id: answerId, role: "assistant", kind: "answer", content: "", sources: [...sources.value], timestamp: Date.now() })
+              }
+              const msg = messages.value.find(m => m.id === answerId)
+              if (msg) msg.content += evt.text
             } else if (evt.type === "sources") {
+              // 兼容旧版一次性 sources 事件
               sources.value = evt.items
+              if (answerId) {
+                const msg = messages.value.find(m => m.id === answerId)
+                if (msg) msg.sources = [...sources.value]
+              }
             } else if (evt.type === "done") {
               isThinking.value = false
+              isSearching.value = false
               thinkingStatus.value = ""
-              if (evt.assistant_message) {
-                const msg = messages.value.find(m => m.id === aiId)
-                if (msg) msg.id = evt.assistant_message.message_id || aiId
+              if (evt.assistant_message && answerId) {
+                const msg = messages.value.find(m => m.id === answerId)
+                if (msg) {
+                  msg.id = evt.assistant_message.message_id || answerId
+                  msg.sources = [...sources.value]
+                }
               }
               if (evt.profile_updated && evt.profile_summary) {
                 profileSummary.value = evt.profile_summary
@@ -471,27 +538,35 @@ async function sendMessage(): Promise<void> {
               }
             } else if (evt.type === "error") {
               isThinking.value = false
+              isSearching.value = false
               thinkingStatus.value = ""
-              const msg = messages.value.find(m => m.id === aiId)
-              if (msg) msg.content = evt.message || "AI 服务暂时不可用"
+              if (!answerId) {
+                answerId = `ai-${Date.now()}`
+                messages.value.push({ id: answerId, role: "assistant", kind: "answer", content: evt.message || "AI 服务暂时不可用", sources: [], timestamp: Date.now() })
+              } else {
+                const msg = messages.value.find(m => m.id === answerId)
+                if (msg) msg.content = evt.message || "AI 服务暂时不可用"
+              }
             }
           } catch { /* skip parse errors */ }
         }
       }
       scrollToBottom()
     }
-    // 流正常结束但未收到 done 事件（如后端返回了非 SSE 数据），确保气泡消失
-    if (isThinking.value) {
+    // 流正常结束但未收到 done 事件，确保状态归位
+    if (isThinking.value || isSearching.value) {
       isThinking.value = false
+      isSearching.value = false
       thinkingStatus.value = ""
     }
   } catch {
     clearTimeout(pollTimer)
     isThinking.value = false
+    isSearching.value = false
     thinkingStatus.value = ""
     if (!sseReceived) {
-      const msg = messages.value.find(m => m.id === aiId)
-      if (msg) msg.content = "AI 服务暂时不可用，请稍后重试"
+      answerId = `ai-${Date.now()}`
+      messages.value.push({ id: answerId, role: "assistant", kind: "answer", content: "AI 服务暂时不可用，请稍后重试", sources: [], timestamp: Date.now() })
     }
   }
 }
@@ -513,14 +588,26 @@ function scrollToBottom(): void {
   if (scrollTimer) return
   scrollTimer = setTimeout(() => {
     scrollTimer = null
+    // 两步法：先重置为 0，下一 tick 再设大值，强制 scroll-view 触发滚动到底
+    scrollTop.value = 0
     nextTick(() => {
       scrollTop.value = Date.now()
     })
   }, 80)
 }
 
-function goProfile(): void {
-  uni.switchTab({ url: "/pages/profile/index" })
+function goRecommendations(): void {
+  uni.switchTab({ url: "/pages/recommendations/index" })
+}
+
+function toggleSources(msgId: string): void {
+  const next = new Set(expandedSources.value)
+  if (next.has(msgId)) {
+    next.delete(msgId)
+  } else {
+    next.add(msgId)
+  }
+  expandedSources.value = next
 }
 </script>
 
@@ -724,7 +811,7 @@ function goProfile(): void {
 }
 
 .message-inner {
-  padding: 30rpx 18rpx 70rpx;
+  padding: 30rpx 18rpx calc(220rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 
@@ -783,6 +870,27 @@ function goProfile(): void {
   border-top-right-radius: 11rpx;
   background: linear-gradient(135deg, #5f8ff7 0%, #2f6bea 58%, #2563eb 100%);
   box-shadow: 0 16rpx 34rpx rgba(37, 99, 235, 0.18);
+}
+
+.bubble-understanding {
+  background: rgba(243, 248, 255, 0.92);
+  border: 1rpx solid rgba(147, 197, 253, 0.45);
+  box-shadow: 0 8rpx 20rpx rgba(37, 99, 235, 0.06);
+}
+
+.bubble-understanding .bubble-text {
+  color: #4b6584;
+  font-size: 26rpx;
+  font-style: italic;
+}
+
+.bubble-kind-label {
+  display: block;
+  font-size: 20rpx;
+  font-weight: 600;
+  color: #93a4c4;
+  margin-bottom: 6rpx;
+  letter-spacing: 1rpx;
 }
 
 .bubble-text {
@@ -963,6 +1071,53 @@ function goProfile(): void {
   margin-top: 4rpx;
 }
 
+.sources-toggle {
+  margin-top: 14rpx;
+  padding-top: 12rpx;
+  border-top: 1rpx solid #eef1f5;
+}
+
+.sources-toggle-text {
+  font-size: 22rpx;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.search-status-row {
+  display: flex;
+  align-items: center;
+  margin: 8rpx 0 16rpx 88rpx;
+  padding: 8rpx 16rpx;
+  background: rgba(243, 248, 255, 0.7);
+  border-radius: 8rpx;
+  border: 1rpx solid rgba(147, 197, 253, 0.3);
+}
+
+.search-spinner {
+  width: 18rpx;
+  height: 18rpx;
+  margin-right: 12rpx;
+  border: 2rpx solid rgba(37, 99, 235, 0.2);
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: search-spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes search-spin {
+  to { transform: rotate(360deg); }
+}
+
+.search-status-text {
+  font-size: 22rpx;
+  color: #5b7299;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
 .bubble-status {
   display: block;
   margin-top: 8rpx;
@@ -974,76 +1129,6 @@ function goProfile(): void {
 @keyframes statusPulse {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
-}
-
-.entry-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 999;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.entry-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 40px 32px;
-  margin: 0 32px;
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-}
-
-.entry-title {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1a1a2e;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.entry-subtitle {
-  font-size: 16px;
-  color: #666;
-  display: block;
-  margin-bottom: 32px;
-}
-
-.entry-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.entry-btn {
-  width: 100%;
-  height: 48px;
-  border-radius: 24px;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 48px;
-  border: none;
-}
-
-.entry-btn-primary {
-  background: #667eea;
-  color: #fff;
-}
-
-.entry-btn-secondary {
-  background: #f0f0f5;
-  color: #333;
-}
-
-.entry-hint {
-  font-size: 12px;
-  color: #999;
-  margin-top: 24px;
-  display: block;
 }
 
 .profile-indicator {
@@ -1068,5 +1153,32 @@ function goProfile(): void {
 .profile-indicator-arrow {
   font-size: 23rpx;
   color: #60a5fa;
+}
+
+.consult-context-indicator {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin: 8rpx 4rpx 0;
+  padding: 10rpx 20rpx;
+  border-radius: 16rpx;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1rpx solid rgba(16, 185, 129, 0.18);
+}
+
+.consult-context-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #10b981;
+  flex-shrink: 0;
+}
+
+.consult-context-text {
+  font-size: 22rpx;
+  color: #047857;
+  font-weight: 600;
 }
 </style>

@@ -7,7 +7,7 @@ export type WsStatus = "disconnected" | "connecting" | "connected" | "reconnecti
 
 function getWsBase(): string {
   if (process.env.NODE_ENV === "development") {
-    return "ws://localhost:8000/api/v1";
+    return "ws://localhost:8002/api/v1";
   }
   const apiBase = (import.meta.env.VITE_API_BASE_URL as string) || "";
   if (apiBase) {

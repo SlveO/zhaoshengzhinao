@@ -7,10 +7,15 @@
     <view class="hero-card">
       <view class="hero-glow" />
       <view class="hero-content">
-        <text class="eyebrow">华南师范大学</text>
-        <text class="page-title">本校专业推荐</text>
+        <view class="hero-top-row">
+          <text class="eyebrow">华南师范大学</text>
+          <view v-if="hasProfile" class="hero-logout-wrap">
+            <text class="hero-logout" @tap="handleLogout">退出登录</text>
+          </view>
+        </view>
+        <text class="page-title">留学项目专业推荐</text>
         <text class="page-subtitle">
-          结合你的分数、科类和兴趣方向，生成华南师范大学专业报考参考
+          结合你的兴趣方向与意向专业，推荐华南师范大学国际商学院出国留学项目
         </text>
       </view>
     </view>
@@ -19,25 +24,30 @@
       <view class="section-header">
         <view>
           <text class="section-title">考生信息</text>
-          <text class="section-subtitle">用于第一阶段演示</text>
+          <text class="section-subtitle">{{ hasProfile ? '基于注册信息与咨询画像' : '请先登录并完善信息' }}</text>
         </view>
-        <text class="student-status">已识别</text>
+        <text class="student-status">{{ hasProfile ? '已识别' : '待完善' }}</text>
       </view>
 
       <view class="student-grid">
         <view class="student-item">
           <text class="item-label">生源地</text>
-          <text class="item-value">{{ studentInfo.province }}</text>
+          <text class="item-value">{{ studentInfo.province || '待填写' }}</text>
         </view>
 
         <view class="student-item">
-          <text class="item-label">科类</text>
-          <text class="item-value">{{ studentInfo.subject_type }}</text>
+          <text class="item-label">选科</text>
+          <text class="item-value">{{ studentInfo.subjects || '待填写' }}</text>
         </view>
 
         <view class="student-item">
           <text class="item-label">分数</text>
-          <text class="item-value score">{{ studentInfo.score }} 分</text>
+          <text class="item-value score">{{ studentInfo.score ? studentInfo.score + ' 分' : '待填写' }}</text>
+        </view>
+
+        <view class="student-item">
+          <text class="item-label">位次</text>
+          <text class="item-value">{{ studentInfo.rank ? Number(studentInfo.rank).toLocaleString() : '待填写' }}</text>
         </view>
 
         <view class="student-item wide">
@@ -60,7 +70,7 @@
     <view class="list-header">
       <view>
         <text class="section-title">专业建议</text>
-        <text class="list-subtitle">共 {{ recommendations.length }} 个本校专业方向</text>
+        <text class="list-subtitle">共 {{ recommendations.length }} 个留学项目专业方向</text>
       </view>
     </view>
 
@@ -72,7 +82,7 @@
       <view class="major-card-header">
         <view class="major-title-wrap">
           <text class="major-name">{{ item.major_name }}</text>
-          <text class="school-name">所属学校：华南师范大学</text>
+          <text class="school-name">所属学院：华南师范大学国际商学院</text>
         </view>
 
         <view class="score-badge">
@@ -85,23 +95,23 @@
         <text class="risk-tag" :class="riskClass(item.risk_level)">
           {{ riskLabel(item.risk_level) }}
         </text>
-        <text class="risk-desc">本校专业报考风险参考</text>
+        <text class="risk-desc">项目匹配度参考</text>
       </view>
 
       <view class="info-grid">
         <view class="info-item">
-          <text class="info-label">参考最低分</text>
-          <text class="info-value">{{ formatOptionalNumber(item.min_score) }}</text>
+          <text class="info-label">项目模式</text>
+          <text class="info-value">{{ item.mode || item.subjects || "待确认" }}</text>
         </view>
 
         <view class="info-item">
-          <text class="info-label">参考最低位次</text>
-          <text class="info-value">{{ formatRank(item.min_rank) }}</text>
+          <text class="info-label">学制</text>
+          <text class="info-value">{{ item.duration || "待确认" }}</text>
         </view>
 
         <view class="info-item wide">
-          <text class="info-label">选科要求</text>
-          <text class="info-value">{{ item.subjects || "待确认" }}</text>
+          <text class="info-label">学分豁免</text>
+          <text class="info-value">{{ item.credits_waiver || "待确认" }}</text>
         </view>
       </view>
 
@@ -118,31 +128,20 @@
         </view>
       </view>
 
-      <button class="analysis-btn" @tap="goAnalysis(item)">
-        查看本校专业分析
+      <button class="analysis-btn" @tap="goAnalysis(item)" style="display:none">
+        查看项目专业详情
       </button>
     </view>
 
-    <view v-if="userStore.isGuest && !hasSession" class="login-prompt glass-card" @tap="showLogin = true">
-      <text class="login-prompt-text">登录后可获取个性化专业推荐</text>
-      <text class="login-prompt-link">点击登录</text>
-    </view>
-
-    <LoginModal :visible="showLogin" @close="showLogin = false" @success="onLoginSuccess" />
-
-    <view class="bottom-tip">
-      <text>后续可由后端结合招生计划、专业组和咨询档案实时生成建议。</text>
-    </view>
   </view>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import { onLoad, onShow } from "@dcloudio/uni-app"
-import { api } from "@/utils/api"
-import { getStoredSessionId } from "@/utils/session"
+import { api, getToken } from "@/utils/api"
+import { getStoredSessionId, clearStoredSessionId } from "@/utils/session"
 import { useUserStore } from "@/stores/user"
-import LoginModal from "@/components/LoginModal.vue"
 
 type RiskLevel = "reach" | "match" | "safe"
 
@@ -152,15 +151,23 @@ interface RiskMeta {
 }
 
 const userStore = useUserStore()
-const showLogin = ref(false)
-const studentInfo = ref<any>({ province: "", subject_type: "", score: 0, intent_majors: [] })
+const studentInfo = ref<any>({ province: "", subjects: "", score: 0, rank: 0, intent_majors: [] })
 const recommendations = ref<any[]>([])
-const disclaimer = ref("以下建议为华南师范大学校内专业报考参考，不代表录取承诺。")
+const disclaimer = ref("以下建议为华南师范大学国际商学院出国留学项目专业推荐参考，自主招生不占高考志愿，最终录取以学校审核为准。")
 
 const sessionId = ref<string | null>(null)
 const hasSession = computed(() => Boolean(sessionId.value))
+const hasProfile = computed(() => {
+  const token = getToken()
+  return Boolean(token && studentInfo.value.province && studentInfo.value.subjects)
+})
 
 async function loadRecommendations(): Promise<void> {
+  const token = getToken()
+  if (!token) {
+    recommendations.value = []
+    return
+  }
   const sid = getStoredSessionId()
   sessionId.value = sid
   if (sid) {
@@ -180,6 +187,11 @@ async function loadRecommendations(): Promise<void> {
 }
 
 async function loadProfile(): Promise<void> {
+  const token = getToken()
+  if (!token) {
+    studentInfo.value = { province: "", subjects: "", score: 0, rank: 0, intent_majors: [] }
+    return
+  }
   const sid = getStoredSessionId()
   if (!sid) return
   try {
@@ -201,17 +213,27 @@ onShow(() => {
   loadRecommendations()
 })
 
-function onLoginSuccess(): void {
-  showLogin.value = false
-  loadRecommendations()
+function handleLogout(): void {
+  userStore.logout()
+  clearStoredSessionId()
+  studentInfo.value = { province: "", subjects: "", score: 0, rank: 0, intent_majors: [] }
+  recommendations.value = []
+  uni.reLaunch({ url: "/pages/auth/index" })
 }
 
-const intentMajorsText = computed(() => (studentInfo.value.intent_majors || []).join(" / "))
+const intentMajorsText = computed(() => {
+  // 未登录时显示空状态
+  if (!hasProfile.value) {
+    return "待填写"
+  }
+  const majors = studentInfo.value.intent_majors || []
+  return majors.length ? majors.join(" / ") : "待识别（可在 AI 咨询中表达意向）"
+})
 
 const riskMap: Record<RiskLevel, RiskMeta> = {
-  reach: { label: "可冲", className: "risk-reach" },
-  match: { label: "较匹配", className: "risk-match" },
-  safe: { label: "较稳妥", className: "risk-safe" },
+  reach: { label: "较匹配", className: "risk-reach" },
+  match: { label: "高度匹配", className: "risk-match" },
+  safe: { label: "可考虑", className: "risk-safe" },
 }
 
 function riskLabel(level?: string): string {
@@ -332,6 +354,28 @@ function goAnalysis(item: any): void {
   z-index: 1;
   display: flex;
   flex-direction: column;
+}
+
+.hero-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-logout-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.hero-logout {
+  color: #ffffff;
+  font-size: 26rpx;
+  padding: 10rpx 20rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.5);
+  border-radius: 999rpx;
+  line-height: 1.35;
+  background: rgba(255, 255, 255, 0.15);
+  font-weight: 600;
 }
 
 .eyebrow {
@@ -671,4 +715,5 @@ function goAnalysis(item: any): void {
   color: #1d4ed8;
   font-weight: 700;
 }
+
 </style>

@@ -8,12 +8,16 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 1440  # 24 hours — avoid kicking users during demo
     refresh_token_expire_days: int = 7
+    # Developer identification (DB admin panel access)
+    dev_admin_username: str = "admin"
     deepseek_api_key: str = ""
     deepseek_base_url: str = "https://api.deepseek.com/v1"
     deepseek_model: str = "deepseek-v4-flash"
     embedding_model: str = "BAAI/bge-large-zh-v1.5"
     chroma_persist_dir: str = "./chroma_data"
     uploads_dir: str = "./uploads"
+    # Consult module
+    consult_max_regeneration_attempts: int = 1  # 后置校验失败时的最大重生成次数
     # File distribution
     file_store_dir: str = "./file_store"
     webhook_encryption_key: str = ""  # Fernet key, must be set in production

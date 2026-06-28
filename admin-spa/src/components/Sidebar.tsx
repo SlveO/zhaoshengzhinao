@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import {
   LayoutDashboard, MessageSquare, User, BarChart3,
-  BookOpen, Bot, ChevronLeft, ChevronRight, LogOut,
+  BookOpen, Bot, LogOut,
   Database,
 } from 'lucide-react'
 import api from '../api/client'
@@ -21,7 +21,8 @@ interface MenuItem {
 const MENU_ITEMS: MenuItem[] = [
   { path: '/dashboard', label: '工作台', icon: <LayoutDashboard size={18} />, module: null, section: '导航' },
   { path: '/consultations', label: '咨询管理', icon: <MessageSquare size={18} />, module: null, section: '导航' },
-  { path: '/profile', label: '画像看板', icon: <User size={18} />, module: 'profile_dashboard', section: '导航' },
+  // 画像看板功能暂时隐藏(即将上线,功能待完善)
+  // { path: '/profile', label: '画像看板', icon: <User size={18} />, module: 'profile_dashboard', section: '导航' },
   { path: '/insights', label: '洞察分析', icon: <BarChart3 size={18} />, module: 'topic_cloud', section: '导航' },
   { path: '/knowledge', label: '知识库', icon: <BookOpen size={18} />, module: null, section: '管理' },
   { path: '/agent-settings', label: 'Agent 设置', icon: <Bot size={18} />, module: null, section: '管理' },
@@ -29,16 +30,27 @@ const MENU_ITEMS: MenuItem[] = [
 
 export default function Sidebar() {
   const [config, setConfig] = useState<TenantConfig | null>(null)
-  const [collapsed, setCollapsed] = useState(false)
   const logout = useAuthStore((s) => s.logout)
   const isDeveloper = useAuthStore((s) => s.user?.is_developer ?? false)
   const sidebarOpen = useMobileStore((s) => s.sidebarOpen)
   const isMobile = useMobileStore((s) => s.isMobile)
+  const collapsed = useMobileStore((s) => s.collapsed)
   const closeSidebar = useMobileStore((s) => s.closeSidebar)
 
   useEffect(() => {
     api.get<TenantConfig>('/admin/tenants/me/config').then((r) => setConfig(r.data)).catch(() => {})
   }, [])
+
+  // 同步 main 区域的 expanded class（桌面端收起时主区域扩展）
+  useEffect(() => {
+    const main = document.getElementById('main')
+    if (!main) return
+    if (collapsed && !isMobile) {
+      main.classList.add('expanded')
+    } else {
+      main.classList.remove('expanded')
+    }
+  }, [collapsed, isMobile])
 
   const visibleItems = MENU_ITEMS.filter((item) => {
     if (!item.module) return true
@@ -92,36 +104,6 @@ export default function Sidebar() {
       </nav>
 
       <div className="sidebar-footer">
-        <button
-          className="collapse-btn"
-          onClick={() => {
-            setCollapsed((v) => !v)
-            document.getElementById('main')?.classList.toggle('expanded')
-          }}
-          title={collapsed ? '展开侧边栏' : '收起侧边栏'}
-          aria-label={collapsed ? '展开侧边栏' : '收起侧边栏'}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 36,
-            height: 36,
-            borderRadius: '50%',
-            background: collapsed ? 'var(--color-brand-800, #1e40af)' : 'var(--color-bg-elevated, #f3f4f6)',
-            color: collapsed ? '#fff' : 'var(--color-text-primary, #1f2937)',
-            border: '1px solid var(--color-border, #e5e7eb)',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
-          }}
-        >
-          {collapsed ? (
-            <ChevronRight size={22} strokeWidth={2.5} />
-          ) : (
-            <ChevronLeft size={22} strokeWidth={2.5} />
-          )}
-        </button>
-        <div style={{ flex: 1 }} />
         <button
           className="collapse-btn"
           onClick={logout}

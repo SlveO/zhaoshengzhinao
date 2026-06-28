@@ -167,8 +167,17 @@ async def trigger_reindex(
     _user=Depends(get_current_tenant_user),
 ):
     from knowledge.indexer import reindex_tenant
+    from knowledge.index_lock import is_running, get_progress
     import asyncio
-    asyncio.create_task(reindex_tenant(tenant.slug))
+
+    # 已有 reindex 在跑 → 返回当前进度，不重复触发
+    if is_running(tenant.slug):
+        return {
+            "status": "already_running",
+            "progress": get_progress(tenant.slug).to_dict(),
+        }
+
+    asyncio.create_task(reindex_tenant(tenant.slug, triggered_by="manual"))
     return {"status": "started"}
 
 
@@ -177,7 +186,9 @@ async def index_status(tenant=Depends(get_current_tenant)):
     from models import async_session
     from sqlalchemy import select, func
     from tenants.models import TenantData
+    from knowledge.index_lock import get_progress
 
+    # DB 层统计（持久化的 indexed_at）
     async with async_session() as db:
         total_result = await db.execute(
             select(func.count()).select_from(TenantData).where(
@@ -194,10 +205,14 @@ async def index_status(tenant=Depends(get_current_tenant)):
         )
         indexed_docs = indexed_result.scalar() or 0
 
+    # 内存层实时进度（当前 reindex 任务）
+    progress = get_progress(tenant.slug).to_dict()
+
     return {
         "total_docs": total_docs,
         "indexed_docs": indexed_docs,
         "pending_docs": total_docs - indexed_docs,
+        "reindex": progress,
     }
 
 

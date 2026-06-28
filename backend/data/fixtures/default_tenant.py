@@ -33,34 +33,7 @@ DEFAULT_TENANT = {
     },
 }
 
-PILOT_TENANTS = [
-    {
-        "id": uuid.UUID("10000000-0000-0000-0000-000000000001"),
-        "name": "广东工业大学",
-        "slug": "gdufs",
-        "subscription_tier": "advanced",
-        "status": "active",
-        "config": {
-            "brand": {
-                "name": "广东工业大学",
-                "short_name": "广工",
-                "primary_color": "#1a56db",
-                "secondary_color": "#f59e0b",
-                "logo_url": "",
-                "welcome_text": "欢迎了解广东工业大学！我是你的专属AI招生顾问，有什么想了解的？",
-            },
-            "modules": {
-                "profile_dashboard": True,
-                "major_heatmap": True,
-                "region_distribution": False,
-                "competitive_analysis": False,
-                "dialogue_quality": True,
-                "annual_report": False,
-                "multi_department": False,
-                "role_management": False,
-            },
-            "knowledge_base": {"doc_count": 0, "last_updated": None},
-            "mini_program": {"app_id": "", "app_secret_encrypted": ""},
-        },
-    },
-]
+# SCNU is the active pilot tenant, created by backend/core/startup_seed.py
+# (id=20000000-0000-0000-0000-000000000002). Other pilot tenants removed
+# during SCNU-only consolidation.
+PILOT_TENANTS = []

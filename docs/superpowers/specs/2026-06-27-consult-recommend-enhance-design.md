@@ -220,7 +220,7 @@ text_sources = await retrieve_for_recommendations(
 在 `B2B_SYSTEM_PROMPT` 加：
 - `## 输出格式（必须严格遵守）` 小节（与 consult 对齐：纯文本、禁 markdown、强调用「」、列举用中文数字）
 - `{knowledge_context}` 占位符（章节 3.2 用）
-- `{consult_context}` 占位符（已有，保留）
+- `{consult_context}` 占位符（**当前缺失**：main.py lifespan 已校验此占位符存在并会发警告，但 prompts_b2b.py 实际没有 — 前序计划遗漏，本 plan 修正）
 
 文件末尾新增：
 ```python
@@ -258,9 +258,22 @@ PROMPT_FILE_MAP = {**_CONSULT_MAP, **_B2B_MAP}
 # 旧：from agents.conversation.prompts_b2b import B2B_SYSTEM_PROMPT
 # 新：
 from services.prompt_service import load_prompt
+from services.consult_context_service import build_consult_context
 
-# 使用处：
+# 使用处（新增 consult_context + knowledge_context 注入）：
 system_template = await load_prompt("b2b_system", tenant_slug)
+# 1. consult_context 注入（当前 chat.py 完全缺失，本 plan 补齐）
+consult_context = ""
+if state_data.get("user_id"):
+    try:
+        consult_context = await build_consult_context(
+            user_id=state_data["user_id"],
+            tenant_slug=tenant_slug,
+        )
+    except Exception:
+        consult_context = ""
+# 2. knowledge_context 注入（Plan 2 实现，Plan 1 先占位为空串）
+knowledge_context = ""
 system_content = system_template.format(
     university_name=uni_name,
     university_short=uni_short or uni_name,
@@ -270,6 +283,8 @@ system_content = system_template.format(
     knowledge_context=knowledge_context,
 )
 ```
+
+注：Plan 1 阶段 `knowledge_context` 先以空串占位，Plan 2 替换为真实 RAG 检索结果。
 
 ### 4.2 前端改造
 

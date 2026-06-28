@@ -6,9 +6,10 @@ export default defineConfig({
   base: process.env.VITE_BASE_PATH || '/',
   plugins: [react(), tailwindcss()],
   server: {
+    port: 3001,
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: 'http://localhost:80',
         changeOrigin: true,
       },
     },

@@ -36,7 +36,7 @@ class TenantUser(Base):
     tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id"), nullable=False, index=True)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     role = Column(
-        Enum("admin", "manager", "viewer", "department_head", name="tenant_user_role"),
+        Enum("admin", "manager", "viewer", "department_head", "developer", name="tenant_user_role"),
         nullable=False,
         default="viewer",
     )

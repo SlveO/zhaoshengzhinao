@@ -36,6 +36,9 @@ RANKING_PROMPT = """你是高考志愿填报专家。下面是真实的候选院
 ## 行业就业数据参考
 {industry_data}
 
+## 学校官方信息参考（学校介绍/招生政策/专业详情）
+{school_context}
+
 ## 严格规则
 1. 从候选列表中选出 Top-10，按综合匹配度排序
 2. college_name, major_name, level, city 必须与候选列表完全一致，一个字都不能改
@@ -184,6 +187,7 @@ async def generate_recommendations(
         profile=profile_text,
         candidates=candidate_text,
         industry_data=industry_text,
+        school_context=school_context,
     )
     if feedback_text:
         prompt = prompt.replace("## 要求", feedback_text + "## 要求")

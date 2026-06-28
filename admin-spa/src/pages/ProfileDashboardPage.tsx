@@ -1,16 +1,27 @@
-import { useEffect, useRef, useState } from 'react'
-import * as echarts from 'echarts'
+import { useEffect, useState } from 'react'
 import api from '../api/client'
 import type { ProfileDashboard } from '../types'
 import StatusCard from '../components/StatusCard'
 import { useMobileStore } from '../stores/mobileStore'
+
+const RIASEC_NAMES: Record<string, string> = {
+  R: '实用型', I: '研究型', A: '艺术型', S: '社会型', E: '企业型', C: '常规型',
+}
+
+const RIASEC_MAJORS: Record<string, string> = {
+  R: '机械/电气/土木',
+  I: '计算机/人工智能/数据科学',
+  A: '设计/传媒/中文',
+  S: '师范/心理学/社会工作',
+  E: '工商管理/市场营销/金融',
+  C: '会计/统计学/档案学',
+}
 
 export default function ProfileDashboardPage() {
   const isMobile = useMobileStore((s) => s.isMobile)
   const [data, setData] = useState<ProfileDashboard | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const radarRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     api.get<ProfileDashboard>('/admin/analytics/profile-dashboard')
@@ -21,49 +32,15 @@ export default function ProfileDashboardPage() {
       .finally(() => setLoading(false))
   }, [])
 
-  useEffect(() => {
-    if (!radarRef.current || !data?.riasecDistribution?.length) return
-    const chart = echarts.init(radarRef.current)
-    const onResize = () => chart.resize()
-    window.addEventListener('resize', onResize)
-    chart.setOption({
-      tooltip: {},
-      legend: { bottom: 0, data: ['本校学生画像', '全国均值'] },
-      radar: {
-        indicator: data.riasecDistribution.map((d) => ({ name: d.dimension, max: 100 })),
-        center: ['50%', '52%'],
-        radius: '65%',
-      },
-      series: [{
-        type: 'radar',
-        data: [
-          {
-            value: data.riasecDistribution.map((d) => d.avgScore),
-            name: '本校学生画像',
-            areaStyle: { color: 'oklch(58% 0.18 255 / 0.12)' },
-            lineStyle: { color: 'oklch(58% 0.18 255)', width: 2 },
-            itemStyle: { color: 'oklch(58% 0.18 255)' },
-          },
-          {
-            value: [50, 55, 52, 54, 53, 50],
-            name: '全国均值',
-            areaStyle: { opacity: 0 },
-            lineStyle: { color: '#ccc', width: 1.5, type: 'dashed' },
-            itemStyle: { color: '#ccc' },
-          },
-        ],
-      }],
-    })
-    return () => {
-      window.removeEventListener('resize', onResize)
-      chart.dispose()
-    }
-  }, [data])
-
   const completenessData = data?.completenessBreakdown
   const fullCount = completenessData?.find((c) => c.level === 'L3')?.count ?? 0
   const partialCount = completenessData?.find((c) => c.level === 'L2')?.count ?? 0
   const initialCount = completenessData?.find((c) => c.level === 'L1')?.count ?? 0
+
+  const top3Riasec = (data?.riasecDistribution || [])
+    .slice()
+    .sort((a, b) => b.avgScore - a.avgScore)
+    .slice(0, 3)
 
   return (
     <div>
@@ -78,20 +55,32 @@ export default function ProfileDashboardPage() {
               <div className="stat-card">
                 <span className="stat-label">完整画像数</span>
                 <span className="stat-value">{fullCount + partialCount}</span>
-                <span style={{ fontSize: 11, color: 'var(--color-success)', fontWeight: 500 }}>+12%</span>
               </div>
               <div className="stat-card">
-                <span className="stat-label">本月新增</span>
-                <span className="stat-value">{Math.floor(data.totalProfiles * 0.15)}</span>
-                <span style={{ fontSize: 11, color: 'var(--color-success)', fontWeight: 500 }}>+8%</span>
+                <span className="stat-label">初始画像数</span>
+                <span className="stat-value">{initialCount}</span>
+              </div>
+            </div>
+
+            {/* Top 3 RIASEC interest cards (replaces radar) */}
+            <div className="card" style={{ marginTop: 16 }}>
+              <div className="card-header"><h3>咨询学生画像 Top 3 兴趣</h3></div>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 12, padding: 16 }}>
+                {top3Riasec.length === 0 ? (
+                  <div style={{ color: '#999', padding: 16 }}>暂无画像数据</div>
+                ) : top3Riasec.map((r) => (
+                  <div key={r.dimension} style={{ padding: 16, background: '#f9fafb', borderRadius: 8, border: '1px solid #f3f4f6' }}>
+                    <div style={{ fontSize: 16, fontWeight: 600, color: '#1a3a6b' }}>
+                      {r.dimension} {RIASEC_NAMES[r.dimension] || ''}
+                    </div>
+                    <div style={{ fontSize: 12, color: '#666', margin: '4px 0' }}>学生数 {r.count}</div>
+                    <div style={{ fontSize: 11, color: '#999' }}>推荐匹配: {RIASEC_MAJORS[r.dimension] || '-'}</div>
+                  </div>
+                ))}
               </div>
             </div>
 
             <div className="chart-grid even">
-              <div className="card">
-                <div className="card-header"><h3>RIASEC 职业兴趣雷达</h3></div>
-                <div ref={radarRef} style={{ height: isMobile ? 260 : 340 }} />
-              </div>
               <div className="card">
                 <div className="card-header"><h3>核心价值观分布</h3></div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 8 }}>

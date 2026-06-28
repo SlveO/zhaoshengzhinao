@@ -45,6 +45,10 @@ export default function ConsultationsPage() {
   const [detailLoading, setDetailLoading] = useState(false)
   const [followNote, setFollowNote] = useState('')
   const [followStatusUpdating, setFollowStatusUpdating] = useState(false)
+  const [noteSaving, setNoteSaving] = useState(false)
+  const [summaryDraft, setSummaryDraft] = useState('')
+  const [summaryEditing, setSummaryEditing] = useState(false)
+  const [summarySaving, setSummarySaving] = useState(false)
   const [regenerating, setRegenerating] = useState(false)
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null)
 
@@ -52,15 +56,15 @@ export default function ConsultationsPage() {
     setLoading(true)
     setError(null)
     try {
-      const params: any = { page: page + 1, page_size: PAGE_SIZE }
+      const params: Record<string, string | number> = { page: page + 1, page_size: PAGE_SIZE }
       if (statusFilter) params.status = statusFilter
       if (period) params.period = period
       if (search) params.search = search
       const res = await api.get('/admin/consultations', { params })
       setRows(res.data?.data || [])
       setTotal(res.data?.total || 0)
-    } catch (e: any) {
-      setError(e?.message || '加载失败')
+    } catch (e) {
+      setError(e instanceof Error ? e.message : '加载失败')
     } finally {
       setLoading(false)
     }
@@ -76,8 +80,10 @@ export default function ConsultationsPage() {
       const res = await api.get(`/admin/consultations/${row.session_id}`)
       setSelected(res.data)
       setFollowNote(res.data?.session?.follow_note || '')
-    } catch (e: any) {
-      setError(e?.message || '加载详情失败')
+      setSummaryDraft(res.data?.session?.consult_summary || '')
+      setSummaryEditing(false)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : '加载详情失败')
     } finally {
       setDetailLoading(false)
     }
@@ -95,8 +101,8 @@ export default function ConsultationsPage() {
       const res = await api.get(`/admin/consultations/${selected.session.session_id}`)
       setSelected(res.data)
       load()  // Refresh list
-    } catch (e: any) {
-      setError(e?.message || '更新失败')
+    } catch (e) {
+      setError(e instanceof Error ? e.message : '更新失败')
     } finally {
       setFollowStatusUpdating(false)
     }
@@ -110,14 +116,52 @@ export default function ConsultationsPage() {
       await api.post(`/admin/consultations/${selected.session.session_id}/regenerate-summary`)
       const res = await api.get(`/admin/consultations/${selected.session.session_id}`)
       setSelected(res.data)
+      setSummaryDraft(res.data?.session?.consult_summary || '')
       setToast({ msg: '咨询摘要已重新生成', type: 'success' })
-    } catch (e: any) {
-      const msg = e?.message || '重新生成摘要失败'
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : '重新生成摘要失败'
       setError(msg)
       setToast({ msg, type: 'error' })
     } finally {
       setRegenerating(false)
       // 自动 3 秒后清掉 toast
+      setTimeout(() => setToast(null), 3000)
+    }
+  }
+
+  async function saveSummary() {
+    if (!selected || summarySaving) return
+    setSummarySaving(true)
+    setToast(null)
+    try {
+      await api.patch(`/admin/consultations/${selected.session.session_id}/summary`, { summary: summaryDraft })
+      const res = await api.get(`/admin/consultations/${selected.session.session_id}`)
+      setSelected(res.data)
+      setSummaryEditing(false)
+      setToast({ msg: '咨询摘要已保存', type: 'success' })
+      load()
+    } catch (e) {
+      setToast({ msg: e instanceof Error ? e.message : '保存摘要失败', type: 'error' })
+    } finally {
+      setSummarySaving(false)
+      setTimeout(() => setToast(null), 3000)
+    }
+  }
+
+  async function saveFollowNote() {
+    if (!selected || noteSaving) return
+    setNoteSaving(true)
+    setToast(null)
+    try {
+      await api.patch(`/admin/consultations/${selected.session.session_id}/follow-note`, { note: followNote })
+      const res = await api.get(`/admin/consultations/${selected.session.session_id}`)
+      setSelected(res.data)
+      setToast({ msg: '跟进备注已保存', type: 'success' })
+      load()
+    } catch (e) {
+      setToast({ msg: e instanceof Error ? e.message : '保存备注失败', type: 'error' })
+    } finally {
+      setNoteSaving(false)
       setTimeout(() => setToast(null), 3000)
     }
   }
@@ -305,41 +349,81 @@ export default function ConsultationsPage() {
                   </div>
                 </div>
 
+                {/* 已保存的跟进备注（顶部展示，方便老师快速查看） */}
+                {selected.session.follow_note && (
+                  <div style={{ marginBottom: 16, padding: 10, background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 8 }}>
+                    <div style={{ fontSize: 11, color: '#92400e', marginBottom: 4, fontWeight: 600 }}>跟进备注</div>
+                    <div style={{ fontSize: 13, color: '#78350f', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
+                      {selected.session.follow_note}
+                    </div>
+                    {selected.session.followed_at && (
+                      <div style={{ fontSize: 11, color: '#a16207', marginTop: 6 }}>
+                        更新于 {formatDateTime(selected.session.followed_at)}
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {/* Consultation summary */}
                 <div style={{ marginBottom: 16 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                     <h4 style={{ margin: 0, fontSize: 14, fontWeight: 600 }}>咨询摘要</h4>
-                    <button
-                      onClick={regenerateSummary}
-                      disabled={regenerating}
-                      style={{
-                        border: '1px solid var(--color-border)',
-                        background: regenerating ? '#f3f4f6' : '#fff',
-                        padding: '4px 12px',
-                        borderRadius: 6,
-                        fontSize: 12,
-                        cursor: regenerating ? 'not-allowed' : 'pointer',
-                        color: regenerating ? '#9ca3af' : 'inherit',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: 6,
-                      }}
-                    >
-                      {regenerating && (
-                        <span
-                          style={{
-                            display: 'inline-block',
-                            width: 12,
-                            height: 12,
-                            border: '2px solid #d1d5db',
-                            borderTopColor: '#2563eb',
-                            borderRadius: '50%',
-                            animation: 'spin 0.8s linear infinite',
-                          }}
-                        />
-                      )}
-                      {regenerating ? '生成中...' : '重新生成'}
-                    </button>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      <button
+                        onClick={() => {
+                          if (summaryEditing) {
+                            setSummaryEditing(false)
+                            setSummaryDraft(selected.session.consult_summary || '')
+                          } else {
+                            setSummaryEditing(true)
+                            setSummaryDraft(selected.session.consult_summary || '')
+                          }
+                        }}
+                        disabled={regenerating || summarySaving}
+                        style={{
+                          border: '1px solid var(--color-border)',
+                          background: summaryEditing ? '#eff6ff' : '#fff',
+                          padding: '4px 12px',
+                          borderRadius: 6,
+                          fontSize: 12,
+                          cursor: (regenerating || summarySaving) ? 'not-allowed' : 'pointer',
+                          color: summaryEditing ? '#2563eb' : 'inherit',
+                        }}
+                      >
+                        {summaryEditing ? '取消编辑' : '编辑'}
+                      </button>
+                      <button
+                        onClick={regenerateSummary}
+                        disabled={regenerating || summaryEditing}
+                        style={{
+                          border: '1px solid var(--color-border)',
+                          background: regenerating ? '#f3f4f6' : '#fff',
+                          padding: '4px 12px',
+                          borderRadius: 6,
+                          fontSize: 12,
+                          cursor: regenerating ? 'not-allowed' : 'pointer',
+                          color: regenerating ? '#9ca3af' : 'inherit',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 6,
+                        }}
+                      >
+                        {regenerating && (
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              width: 12,
+                              height: 12,
+                              border: '2px solid #d1d5db',
+                              borderTopColor: '#2563eb',
+                              borderRadius: '50%',
+                              animation: 'spin 0.8s linear infinite',
+                            }}
+                          />
+                        )}
+                        {regenerating ? '生成中...' : '重新生成'}
+                      </button>
+                    </div>
                   </div>
                   {regenerating && (
                     <div style={{
@@ -362,9 +446,52 @@ export default function ConsultationsPage() {
                       {toast.msg}
                     </div>
                   )}
-                  <div style={{ padding: 12, background: '#f9fafb', borderRadius: 8, fontSize: 13, lineHeight: 1.6, color: '#333' }}>
-                    {selected.session.consult_summary || '（暂无摘要，需对话 4 轮以上自动生成）'}
-                  </div>
+                  {summaryEditing ? (
+                    <div>
+                      <textarea
+                        value={summaryDraft}
+                        onChange={(e) => setSummaryDraft(e.target.value)}
+                        placeholder="可人工编辑咨询摘要…"
+                        style={{
+                          width: '100%', minHeight: 120, padding: 8,
+                          border: '1px solid var(--color-border)', borderRadius: 6,
+                          fontSize: 13, fontFamily: 'inherit', resize: 'vertical',
+                          boxSizing: 'border-box', lineHeight: 1.6,
+                        }}
+                      />
+                      <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                        <button
+                          onClick={saveSummary}
+                          disabled={summarySaving}
+                          style={{
+                            padding: '6px 16px', border: 'none', borderRadius: 6,
+                            background: summarySaving ? '#9ca3af' : '#2563eb',
+                            color: '#fff', fontSize: 12, cursor: summarySaving ? 'not-allowed' : 'pointer',
+                          }}
+                        >
+                          {summarySaving ? '保存中...' : '保存摘要'}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setSummaryEditing(false)
+                            setSummaryDraft(selected.session.consult_summary || '')
+                          }}
+                          disabled={summarySaving}
+                          style={{
+                            padding: '6px 16px', border: '1px solid var(--color-border)',
+                            borderRadius: 6, background: '#fff', color: '#666',
+                            fontSize: 12, cursor: 'pointer',
+                          }}
+                        >
+                          取消
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ padding: 12, background: '#f9fafb', borderRadius: 8, fontSize: 13, lineHeight: 1.6, color: '#333', whiteSpace: 'pre-wrap' }}>
+                      {selected.session.consult_summary || '（暂无摘要，需对话 4 轮以上自动生成，或点击"编辑"手动填写）'}
+                    </div>
+                  )}
                 </div>
 
                 {/* Chat messages */}
@@ -403,10 +530,22 @@ export default function ConsultationsPage() {
                   />
                   <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                     <button
+                      onClick={saveFollowNote}
+                      disabled={noteSaving}
+                      style={{
+                        padding: '8px 14px', border: '1px solid var(--color-border)', borderRadius: 6,
+                        background: noteSaving ? '#f3f4f6' : '#fff', color: '#2563eb',
+                        fontSize: 13, cursor: noteSaving ? 'not-allowed' : 'pointer',
+                      }}
+                    >
+                      {noteSaving ? '保存中...' : '保存备注'}
+                    </button>
+                    <div style={{ flex: 1 }} />
+                    <button
                       onClick={() => updateFollowStatus('processed')}
                       disabled={followStatusUpdating}
                       style={{
-                        flex: 1, padding: '8px 0', border: 'none', borderRadius: 6,
+                        padding: '8px 14px', border: 'none', borderRadius: 6,
                         background: '#16a34a', color: '#fff', fontSize: 13, cursor: 'pointer',
                       }}
                     >标记已处理</button>
@@ -414,7 +553,7 @@ export default function ConsultationsPage() {
                       onClick={() => updateFollowStatus('ignored')}
                       disabled={followStatusUpdating}
                       style={{
-                        flex: 1, padding: '8px 0', border: 'none', borderRadius: 6,
+                        padding: '8px 14px', border: 'none', borderRadius: 6,
                         background: '#f3f4f6', color: '#666', fontSize: 13, cursor: 'pointer',
                       }}
                     >忽略</button>

@@ -92,7 +92,7 @@ async def _auto_import_knowledge():
     """If TenantData is empty and knowledge JSON exists, import it."""
     from pathlib import Path
 
-    knowledge_file = Path("/app/data/approved/scnu_comprehensive_knowledge.json")
+    knowledge_file = Path("/app/data/approved/scnu_ibc_rag_knowledge_base.json")
     if not knowledge_file.exists():
         logger.info("Knowledge data file not found, skipping auto-import.")
         return
@@ -103,8 +103,9 @@ async def _auto_import_knowledge():
 
     async with _as() as db:
         count = await db.execute(select(func.count()).select_from(TenantData))
-        if count.scalar() > 0:
-            logger.info(f"TenantData already has {count.scalar()} rows, skipping auto-import.")
+        rows = count.scalar()
+        if rows and rows > 0:
+            logger.info(f"TenantData already has {rows} rows, skipping auto-import.")
             return
 
     logger.info("TenantData empty — running knowledge auto-import...")
@@ -176,6 +177,25 @@ async def lifespan(app: FastAPI):
     start_scheduler()
     print("Distribution scheduler started.")
 
+    # 提示词启动一致性检查：CODE_DEFAULTS 与 PROMPT_FILE_MAP 一致 + 关键占位符存在
+    try:
+        from services.prompt_service import CODE_DEFAULTS, PROMPT_FILE_MAP
+        missing_keys = set(CODE_DEFAULTS.keys()) - set(PROMPT_FILE_MAP.keys())
+        if missing_keys:
+            logger.warning(f"PROMPT_FILE_MAP missing keys: {missing_keys}")
+        # 验证 B2B prompt 含 consult_context 和 knowledge_context 占位符
+        from agents.conversation.prompts_b2b import B2B_SYSTEM_PROMPT
+        for placeholder in ("{consult_context}", "{knowledge_context}"):
+            if placeholder not in B2B_SYSTEM_PROMPT:
+                logger.warning(f"B2B_SYSTEM_PROMPT missing {placeholder} placeholder")
+        else:
+            logger.info(
+                "Prompt consistency check passed: %d keys, B2B placeholders OK",
+                len(CODE_DEFAULTS),
+            )
+    except Exception as e:
+        logger.warning(f"Prompt consistency check failed: {e}")
+
     yield
 
     shutdown_scheduler()
@@ -204,6 +224,7 @@ app.add_middleware(ModuleGateMiddleware)
 
 # ── Existing Routes (api/routes) ──
 from api.routes import auth, chat, profile, recommendation, college, industry, compare, knowledge, miniapp  # noqa: E402
+from api.routes import consult, prompt_admin  # noqa: E402
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(chat.router, prefix="/api/v1/chat", tags=["chat"])
@@ -217,14 +238,24 @@ app.include_router(knowledge.router, prefix="/api/v1/knowledge", tags=["knowledg
 # ── C端小程序 Routes ──
 app.include_router(miniapp.router)
 
+# ── C端咨询模块 Routes（SSE 流式） ──
+app.include_router(consult.router)
+
 # ── New B2B Routes ──
 from tenants.router import router as tenant_router  # noqa: E402
 from analytics.router import router as analytics_router  # noqa: E402
 from admin.router import router as admin_router  # noqa: E402
+from api.routes import db_admin  # noqa: E402
+from api.routes import consult_workbench  # noqa: E402
 
 app.include_router(tenant_router, prefix="/api/v1/admin/tenants", tags=["tenants"])
 app.include_router(analytics_router, prefix="/api/v1/admin/analytics", tags=["analytics"])
 app.include_router(admin_router, prefix="/api/v1/admin", tags=["admin"])
+app.include_router(db_admin.router, prefix="/api/v1/admin", tags=["db-admin"])
+app.include_router(consult_workbench.router, prefix="/api/v1/admin", tags=["consult-workbench"])
+
+# ── 提示词管理 Routes（admin） ──
+app.include_router(prompt_admin.router, prefix="/api/v1/admin", tags=["prompt-admin"])
 
 # Distribution Routes
 from distribution.router import router as distribution_router  # noqa: E402

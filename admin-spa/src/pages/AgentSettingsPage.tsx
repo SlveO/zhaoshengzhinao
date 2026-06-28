@@ -9,7 +9,7 @@ import { listPrompts } from '../api/prompts'
 type SettingsTab = 'persona' | 'prompts'
 
 const DEFAULT_PERSONA: PersonaConfig = {
-  assistant_name: '小招',
+  assistant_name: '华小狮',
   greeting: '你好，我是华南师范大学招生助手，有什么可以帮你的吗？',
   style: 'casual',
   proactive_recommend: true,
@@ -82,9 +82,6 @@ export default function AgentSettingsPage() {
       ``,
       `主动推荐：${p.proactive_recommend ? '已开启 — AI 会主动推荐匹配专业' : '已关闭'}`,
     ]
-    if (p.custom_prompt) {
-      lines.push(``, `（旧版 custom_prompt 仍保留，将优先生效，建议清空后使用新字段）`)
-    }
     return lines.join('\n')
   }
 
@@ -145,7 +142,7 @@ export default function AgentSettingsPage() {
                     type="text"
                     value={persona.assistant_name}
                     onChange={(e) => updatePersona({ assistant_name: e.target.value })}
-                    placeholder="如：小招、华师招生助手"
+                    placeholder="如：华小狮、华师招生助手"
                     style={{ width: '100%' }}
                   />
                 </div>
@@ -191,20 +188,6 @@ export default function AgentSettingsPage() {
                     </span>
                   </div>
                 </div>
-
-                {persona.custom_prompt && (
-                  <div className="field">
-                    <label>旧版自定义提示词（兼容字段，建议清空）</label>
-                    <textarea
-                      value={persona.custom_prompt}
-                      onChange={(e) => updatePersona({ custom_prompt: e.target.value })}
-                      style={{ minHeight: 100, fontFamily: 'monospace', fontSize: 12 }}
-                    />
-                    <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>
-                      存在旧版 custom_prompt 时后端将优先使用它，建议清空以启用上方的形象配置。
-                    </div>
-                  </div>
-                )}
 
                 <button type="submit" className="btn btn-primary" disabled={saving}>
                   {saving ? '保存中...' : '保存配置'}

@@ -32,6 +32,8 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.backend
+    ports:
+      - "8000:8000"
     environment:
       DATABASE_URL: postgresql+asyncpg://gaokao:gaokao@db:5432/gaokao
       REDIS_URL: redis://redis:6379/0
@@ -55,6 +57,8 @@ services:
       - ./data/approved:/app/data/approved:ro
       - ./scrapers:/app/scrapers:ro
       - ./backend/tests:/app/tests:ro
+      - ./backend/migrations:/app/migrations:ro
+      - ./backend/main.py:/app/main.py:ro
     depends_on:
       db:
         condition: service_healthy

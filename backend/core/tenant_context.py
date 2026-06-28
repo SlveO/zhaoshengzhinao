@@ -6,6 +6,7 @@ from fastapi import HTTPException
 
 _current_tenant: ContextVar[Optional[object]] = ContextVar("tenant", default=None)
 _current_user: ContextVar[Optional[object]] = ContextVar("user", default=None)
+_current_jwt_payload: ContextVar[Optional[dict]] = ContextVar("jwt_payload", default=None)
 
 # Routes that do not require a tenant header
 TENANT_PUBLIC_PATHS = {
@@ -49,3 +50,11 @@ def set_current_tenant(tenant):
 
 def set_current_user(user):
     _current_user.set(user)
+
+
+def get_current_jwt_payload() -> dict | None:
+    return _current_jwt_payload.get()
+
+
+def set_current_jwt_payload(payload: dict | None) -> None:
+    _current_jwt_payload.set(payload)

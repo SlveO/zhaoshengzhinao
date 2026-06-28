@@ -53,8 +53,8 @@
         </view>
 
         <view class="info-item">
-          <text class="item-label">科类</text>
-          <text class="item-value">{{ studentInfo.subject_type }}</text>
+          <text class="item-label">选科</text>
+          <text class="item-value">{{ studentInfo.subjects }}</text>
         </view>
 
         <view class="info-item">
@@ -103,7 +103,7 @@ import LoginModal from "@/components/LoginModal.vue"
 const userStore = useUserStore()
 const showLogin = ref(false)
 
-const studentInfo = ref<any>({ province: "", subject_type: "", score: 0, intent_majors: [], focus_points: ["专业实力", "就业方向", "录取参考"] })
+const studentInfo = ref<any>({ province: "", subjects: "", score: 0, intent_majors: [], focus_points: ["专业实力", "就业方向", "录取参考"] })
 const hasProfile = ref(false)
 
 const sessionId = ref<string | null>(null)
@@ -158,7 +158,7 @@ function goChat(): void {
 function handleLogout(): void {
   userStore.logout()
   clearStoredSessionId()
-  studentInfo.value = { province: "", subject_type: "", score: 0, intent_majors: [], focus_points: [] }
+  studentInfo.value = { province: "", subjects: "", score: 0, intent_majors: [], focus_points: [] }
   hasProfile.value = false
   sessionId.value = null
   uni.switchTab({ url: "/pages/chat/index" })

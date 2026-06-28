@@ -50,10 +50,10 @@
       <view>
         <text class="consult-title">想了解更具体的问题？</text>
         <text class="consult-desc">
-          可以直接向 AI 招生咨询助手提问，例如招生政策、专业方向、录取参考、校园生活等。
+          可以直接向 AI 招生咨询助手提问，例如项目模式、专业方向、费用奖学金、报名流程等。
         </text>
       </view>
-      <button class="consult-btn" @tap="goChat">去 AI 咨询</button>
+      <button class="consult-btn" @tap="goConsult">去 AI 咨询</button>
     </view>
   </view>
 </template>
@@ -65,70 +65,72 @@ interface InfoEntry {
   icon: string
 }
 
+// 8 个入口主题与知识库 KB001/005-007/008-010/011-012/013-014/019-020/021-023/026 对齐
 const infoEntries: InfoEntry[] = [
   {
     title: "学校概况",
-    desc: "了解学校办学特色与基本情况",
+    desc: "华南师范大学与国际商学院简介",
     icon: "校"
   },
   {
-    title: "学院介绍",
-    desc: "查看学院设置与培养方向",
-    icon: "院"
+    title: "项目模式",
+    desc: "2+2 与 3+1 培养模式对比",
+    icon: "项"
   },
   {
-    title: "专业介绍",
-    desc: "了解专业课程、方向与就业",
+    title: "专业设置",
+    desc: "商科、新媒体、市场营销等方向",
     icon: "专"
   },
   {
-    title: "招生政策",
-    desc: "咨询招生规则与录取要求",
-    icon: "策"
+    title: "合作院校",
+    desc: "对接的海外名校列表",
+    icon: "院"
   },
   {
-    title: "招生计划",
-    desc: "了解招生人数与专业计划",
-    icon: "计"
+    title: "师资力量",
+    desc: "雅思团队与专业课教师",
+    icon: "师"
   },
   {
-    title: "招生联系方式",
-    desc: "获取官方咨询渠道",
+    title: "费用奖学金",
+    desc: "学费标准与新生奖学金",
+    icon: "费"
+  },
+  {
+    title: "报名流程",
+    desc: "招生对象、入学考试、报名材料",
+    icon: "报"
+  },
+  {
+    title: "联系方式",
+    desc: "电话、地址、官网与公众号",
     icon: "联"
-  },
-  {
-    title: "招生咨询群",
-    desc: "了解咨询群与答疑安排",
-    icon: "群"
-  },
-  {
-    title: "校园生活",
-    desc: "了解住宿、社团与校园环境",
-    icon: "园"
   }
 ]
 
 const questionMap: Record<string, string> = {
-  "学校概况": "请介绍一下华南师范大学的学校概况和办学特色",
-  "学院介绍": "华南师范大学有哪些学院？请介绍一下各学院的方向",
-  "专业介绍": "请介绍华南师范大学的专业设置和培养方向",
-  "招生政策": "华南师范大学的招生政策是怎样的？有哪些录取要求？",
-  "招生计划": "华南师范大学今年的招生计划是怎样的？各专业招多少人？",
-  "招生联系方式": "华南师范大学的招生联系方式有哪些？怎么联系招办？",
-  "招生咨询群": "怎么加入华南师范大学的招生咨询群？有官方答疑吗？",
-  "校园生活": "华南师范大学的校园生活怎么样？住宿、社团、食堂条件如何？"
+  "学校概况": "请介绍一下华南师范大学和国际商学院的基本情况",
+  "项目模式": "2+2 和 3+1 项目有什么区别？应该怎么选？",
+  "专业设置": "项目有哪些专业方向？各自学什么？",
+  "合作院校": "项目可以对接哪些国外大学？",
+  "师资力量": "项目的师资怎么样？雅思老师有资质吗？",
+  "费用奖学金": "学费多少钱？有奖学金吗？",
+  "报名流程": "怎么报名？需要准备什么材料？",
+  "联系方式": "怎么联系招生办？"
 }
 
 function handleEntryTap(title: string): void {
   const question = questionMap[title] || `请介绍一下${title}`
-  uni.setStorageSync("chat_prefill", question)   // fallback: first visit (chat not mounted)
-  uni.$emit("chat:prefill", question)
-  uni.switchTab({ url: "/pages/chat/index" })
+  // consult 专用 prefill 通道（与 chat:prefill 隔离）
+  uni.setStorageSync("consult_prefill", question)
+  uni.$emit("consult:prefill", question)
+  uni.switchTab({ url: "/pages/consult/index" })
 }
 
-function goChat(): void {
+function goConsult(): void {
   uni.switchTab({
-    url: "/pages/chat/index"
+    url: "/pages/consult/index"
   })
 }
 </script>

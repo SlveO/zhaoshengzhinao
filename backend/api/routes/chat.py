@@ -330,6 +330,7 @@ async def chat_websocket(ws: WebSocket, session_id: str):
                         "message_length": len(user_content),
                         "emotion": emotion,
                         "content": user_content,
+                        "module": "recommend",
                     },
                 )
                 if stage_changed:

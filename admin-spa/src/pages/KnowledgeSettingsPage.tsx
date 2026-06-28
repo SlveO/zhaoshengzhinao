@@ -1,10 +1,30 @@
 import { useEffect, useRef, useState } from 'react'
 import api from '../api/client'
-import type { DocumentItem, IndexStatus } from '../types'
+import type { DocumentItem } from '../types'
 import StatusCard from '../components/StatusCard'
 import Modal from '../components/Modal'
 
 const PAGE_SIZE = 6
+
+interface ReindexProgress {
+  status: 'idle' | 'running' | 'completed' | 'failed'
+  total: number
+  done: number
+  percent: number
+  started_at: string | null
+  finished_at: string | null
+  error: string | null
+  triggered_by: string
+}
+
+interface IndexStatusResp {
+  total_docs: number
+  indexed_docs: number
+  pending_docs: number
+  reindex: ReindexProgress
+}
+
+const POLL_INTERVAL = 1500
 const TYPE_NAMES: Record<string, string> = {
   admission_score: '录取分数', curriculum: '课程信息', employment: '就业数据', campus_life: '校园生活',
 }
@@ -19,7 +39,9 @@ export default function KnowledgeSettingsPage() {
   const [page, setPage] = useState(0)
   const [deleteTarget, setDeleteTarget] = useState<DocumentItem | null>(null)
   const [message, setMessage] = useState('')
-  const [indexStatus, setIndexStatus] = useState<IndexStatus | null>(null)
+  const [reindexProgress, setReindexProgress] = useState<ReindexProgress | null>(null)
+  const [indexing, setIndexing] = useState(false)
+  const pollTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const fetchDocs = () => {
@@ -32,6 +54,40 @@ export default function KnowledgeSettingsPage() {
   }
 
   useEffect(() => { fetchDocs() }, [])
+
+  const pollIndexStatus = () => {
+    api.get<IndexStatusResp>('/admin/knowledge/index-status')
+      .then((r) => {
+        setReindexProgress(r.data.reindex)
+        if (r.data.reindex.status === 'running') {
+          pollTimer.current = setTimeout(pollIndexStatus, POLL_INTERVAL)
+        } else {
+          setIndexing(false)
+          if (r.data.reindex.status === 'completed' || r.data.reindex.status === 'failed') {
+            fetchDocs()
+          }
+        }
+      })
+      .catch(() => {
+        pollTimer.current = setTimeout(pollIndexStatus, POLL_INTERVAL * 2)
+      })
+  }
+
+  // 挂载时检查是否有正在进行的索引
+  useEffect(() => {
+    api.get<IndexStatusResp>('/admin/knowledge/index-status')
+      .then((r) => {
+        setReindexProgress(r.data.reindex)
+        if (r.data.reindex.status === 'running') {
+          setIndexing(true)
+          pollTimer.current = setTimeout(pollIndexStatus, POLL_INTERVAL)
+        }
+      })
+      .catch(() => {})
+    return () => {
+      if (pollTimer.current) clearTimeout(pollTimer.current)
+    }
+  }, [])
 
   const filtered = docs.filter((d) => {
     if (search && !d.title.toLowerCase().includes(search.toLowerCase())) return false
@@ -54,7 +110,8 @@ export default function KnowledgeSettingsPage() {
   }
 
   const handleUploadClick = () => {
-    fileInputRef.current?.click()
+    // 上传功能暂时关闭，引导联系技术人员
+    setMessage('文档上传功能暂时关闭，如需上传请联系技术人员')
   }
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,15 +134,15 @@ export default function KnowledgeSettingsPage() {
   }
 
   const handleReindex = async () => {
+    if (indexing) return
+    setIndexing(true)
     try {
-      setIndexStatus({ indexed_count: 0, total_count: docs.length, is_indexing: true })
       await api.post('/admin/knowledge/reindex')
-      setMessage('重新索引已触发')
-      fetchDocs()
-      setIndexStatus(null)
+      setMessage('重新索引已触发，正在后台处理…')
+      pollTimer.current = setTimeout(pollIndexStatus, POLL_INTERVAL)
     } catch {
       setMessage('重新索引失败')
-      setIndexStatus(null)
+      setIndexing(false)
     }
   }
 
@@ -96,10 +153,14 @@ export default function KnowledgeSettingsPage() {
         <span className="pill green">
           已索引 {docs.filter((d) => d.indexed_at).length} / 共 {docs.length}
         </span>
-        <button className="btn btn-secondary btn-sm" onClick={handleReindex} disabled={indexStatus?.is_indexing}>
-          {indexStatus?.is_indexing ? '索引中…' : '重新索引'}
+        <button className="btn btn-secondary btn-sm" onClick={handleReindex} disabled={indexing}>
+          {indexing ? '索引中…' : '重新索引'}
         </button>
       </div>
+
+      {reindexProgress && reindexProgress.status !== 'idle' && (
+        <ReindexProgressBar progress={reindexProgress} />
+      )}
 
       <div className="search-bar">
         <input type="text" placeholder="搜索文档标题…" value={search} onChange={(e) => { setSearch(e.target.value); setPage(0) }} />
@@ -110,8 +171,8 @@ export default function KnowledgeSettingsPage() {
         <select value={uploadType} onChange={(e) => setUploadType(e.target.value)} style={{ padding: '7px 10px', border: '1px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', background: 'var(--surface)' }}>
           {Object.entries(TYPE_NAMES).map(([k, v]) => <option key={k} value={k}>上传为：{v}</option>)}
         </select>
-        <input ref={fileInputRef} type="file" accept=".json,.csv,.xlsx,.xls,.txt" style={{ display: 'none' }} onChange={handleFileChange} />
-        <button className="btn btn-primary btn-sm" onClick={handleUploadClick}>上传文档</button>
+        <input ref={fileInputRef} type="file" accept=".json,.csv,.xlsx,.xls,.txt" style={{ display: 'none' }} onChange={handleFileChange} disabled />
+        <button className="btn btn-primary btn-sm" onClick={handleUploadClick} title="上传功能暂时关闭，请联系技术人员">上传文档</button>
       </div>
 
       {message && (
@@ -160,6 +221,33 @@ export default function KnowledgeSettingsPage() {
         onConfirm={handleDelete}
         onCancel={() => setDeleteTarget(null)}
       />
+    </div>
+  )
+}
+
+function ReindexProgressBar({ progress }: { progress: ReindexProgress }) {
+  const { status, total, done, percent, error } = progress
+  const bg = status === 'running' ? '#eff6ff' : status === 'completed' ? '#f0fdf4' : status === 'failed' ? '#fef2f2' : '#f9fafb'
+  const color = status === 'running' ? '#2563eb' : status === 'completed' ? '#16a34a' : status === 'failed' ? '#dc2626' : '#666'
+  const label =
+    status === 'running' ? `正在重建索引 (${done}/${total})`
+    : status === 'completed' ? `索引完成 (${total} 条)`
+    : status === 'failed' ? `索引失败: ${error || '未知错误'}`
+    : ''
+  return (
+    <div style={{ marginBottom: 12, padding: '8px 12px', background: bg, border: `1px solid ${color}33`, borderRadius: 4, fontSize: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+        <span style={{ color, fontWeight: 500 }}>
+          {status === 'running' && '⚙ '}{status === 'completed' && '✓ '}{status === 'failed' && '✗ '}
+          {label}
+        </span>
+        {status === 'running' && <span style={{ color }}>{percent}%</span>}
+      </div>
+      {status === 'running' && (
+        <div style={{ background: '#e5e7eb', height: 6, borderRadius: 2, overflow: 'hidden' }}>
+          <div style={{ width: `${percent}%`, height: '100%', background: color, transition: 'width 0.3s ease' }} />
+        </div>
+      )}
     </div>
   )
 }

@@ -38,8 +38,8 @@ export default function FileUpload({ onUploaded, onUploadStart, accept = '.pdf,.
         return
       }
       setUploading(false)
-    } catch (e: any) {
-      setError(e?.message || '上传失败')
+    } catch (e) {
+      setError(e instanceof Error ? e.message : '上传失败')
       setUploading(false)
     }
   }

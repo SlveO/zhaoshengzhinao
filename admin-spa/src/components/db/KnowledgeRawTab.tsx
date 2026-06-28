@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import api from '../../api/client'
 import MonacoEditor from '@monaco-editor/react'
 
@@ -11,6 +11,26 @@ interface RawDoc {
   indexed_at: string | null
 }
 
+interface ReindexProgress {
+  status: 'idle' | 'running' | 'completed' | 'failed'
+  total: number
+  done: number
+  started_at: string | null
+  finished_at: string | null
+  error: string | null
+  triggered_by: string
+  percent: number
+}
+
+interface IndexStatus {
+  total_docs: number
+  indexed_docs: number
+  pending_docs: number
+  reindex: ReindexProgress
+}
+
+const POLL_INTERVAL = 1500 // ms
+
 export default function KnowledgeRawTab() {
   const [docs, setDocs] = useState<RawDoc[]>([])
   const [selected, setSelected] = useState<RawDoc | null>(null)
@@ -19,6 +39,8 @@ export default function KnowledgeRawTab() {
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState('')
   const [search, setSearch] = useState('')
+  const [reindexProgress, setReindexProgress] = useState<ReindexProgress | null>(null)
+  const pollTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const fetchDocs = () => {
     api.get<{ documents: RawDoc[] }>('/admin/db/knowledge/raw')
@@ -26,7 +48,48 @@ export default function KnowledgeRawTab() {
       .catch((e) => setError(e?.message || '加载失败'))
   }
 
-  useEffect(() => { fetchDocs() }, [])
+  // 轮询索引进度
+  const pollIndexStatus = () => {
+    api.get<IndexStatus>('/admin/knowledge/index-status')
+      .then((r) => {
+        setReindexProgress(r.data.reindex)
+        // 仍在运行 → 继续轮询
+        if (r.data.reindex.status === 'running') {
+          pollTimer.current = setTimeout(pollIndexStatus, POLL_INTERVAL)
+        } else {
+          // 完成/失败 → 刷新文档列表以更新 indexed_at 标记
+          if (r.data.reindex.status === 'completed' || r.data.reindex.status === 'failed') {
+            fetchDocs()
+          }
+        }
+      })
+      .catch(() => {
+        // 轮询失败 → 重试一次
+        pollTimer.current = setTimeout(pollIndexStatus, POLL_INTERVAL * 2)
+      })
+  }
+
+  const startPolling = () => {
+    if (pollTimer.current) clearTimeout(pollTimer.current)
+    pollIndexStatus()
+  }
+
+  useEffect(() => {
+    fetchDocs()
+    // 启动时检查是否有正在进行的索引
+    api.get<IndexStatus>('/admin/knowledge/index-status')
+      .then((r) => {
+        if (r.data.reindex.status === 'running') {
+          setReindexProgress(r.data.reindex)
+          startPolling()
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      if (pollTimer.current) clearTimeout(pollTimer.current)
+    }
+  }, [])
 
   const onSelect = (d: RawDoc) => {
     setSelected(d)
@@ -40,20 +103,28 @@ export default function KnowledgeRawTab() {
     setSaving(true)
     setMessage('')
     setError(null)
-    let parsed: Record<string, any>
+    let parsed: Record<string, unknown>
     try {
       parsed = JSON.parse(draft)
-    } catch (e: any) {
-      setError('JSON 解析失败: ' + e.message)
+    } catch (e) {
+      setError('JSON 解析失败: ' + (e instanceof Error ? e.message : ''))
       setSaving(false)
       return
     }
     try {
-      await api.put(`/admin/db/knowledge/raw/${selected.id}`, { content: parsed })
-      setMessage('已保存，ChromaDB 已重新索引')
+      const r = await api.put<{
+        reindex_started: boolean
+        reindex_status: string
+      }>(`/admin/db/knowledge/raw/${selected.id}`, { content: parsed })
+      if (r.data.reindex_started) {
+        setMessage('已保存，正在后台重新索引…')
+        startPolling()
+      } else {
+        setMessage('已保存（已有索引任务在跑，本次编辑将在该任务完成后生效）')
+      }
       fetchDocs()
-    } catch (e: any) {
-      setError('保存失败: ' + (e?.message || ''))
+    } catch (e) {
+      setError('保存失败: ' + (e instanceof Error ? e.message : ''))
     } finally {
       setSaving(false)
     }
@@ -69,13 +140,22 @@ export default function KnowledgeRawTab() {
     )
   })
 
+  const isIndexing = reindexProgress?.status === 'running'
+
   return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 220px)', minHeight: 480 }}>
+      {/* 顶部全局索引进度条（无论是否选中文档都显示） */}
+      {reindexProgress && reindexProgress.status !== 'idle' && (
+        <div style={{ marginBottom: 8 }}>
+          <ReindexProgressBar progress={reindexProgress} />
+        </div>
+      )}
     <div
       style={{
         display: 'flex',
         gap: 16,
-        height: 'calc(100vh - 220px)',
-        minHeight: 480,
+        flex: 1,
+        minHeight: 0,
         alignItems: 'stretch',
       }}
     >
@@ -146,12 +226,27 @@ export default function KnowledgeRawTab() {
           <>
             <div style={{ marginBottom: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h3 style={{ fontSize: 14 }}>{selected.title}</h3>
-              <button onClick={onSave} disabled={saving} style={{ padding: '6px 16px', background: 'var(--color-primary, #1a3a6b)', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer' }}>
+              <button
+                onClick={onSave}
+                disabled={saving}
+                style={{
+                  padding: '6px 16px',
+                  background: 'var(--color-primary, #1a3a6b)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 4,
+                  cursor: saving ? 'not-allowed' : 'pointer',
+                  opacity: saving ? 0.6 : 1,
+                }}
+              >
                 {saving ? '保存中...' : '保存并重新索引'}
               </button>
             </div>
-            {error && <div style={{ color: 'var(--color-danger, #dc2626)', marginBottom: 8 }}>{error}</div>}
-            {message && <div style={{ color: 'var(--color-success, #16a34a)', marginBottom: 8 }}>{message}</div>}
+
+            {/* 错误/成功提示 */}
+            {error && <div style={{ color: 'var(--color-danger, #dc2626)', marginBottom: 8, fontSize: 13 }}>{error}</div>}
+            {message && !isIndexing && <div style={{ color: 'var(--color-success, #16a34a)', marginBottom: 8, fontSize: 13 }}>{message}</div>}
+
             <div style={{ border: '1px solid #e5e7eb', flex: 1, minHeight: 0 }}>
               <MonacoEditor
                 height="100%"
@@ -164,6 +259,66 @@ export default function KnowledgeRawTab() {
           </>
         )}
       </div>
+    </div>
+    </div>
+  )
+}
+
+function ReindexProgressBar({ progress }: { progress: ReindexProgress }) {
+  const { status, total, done, percent, error, triggered_by } = progress
+
+  const bg =
+    status === 'running' ? '#eff6ff'
+    : status === 'completed' ? '#f0fdf4'
+    : status === 'failed' ? '#fef2f2'
+    : '#f9fafb'
+
+  const color =
+    status === 'running' ? '#2563eb'
+    : status === 'completed' ? '#16a34a'
+    : status === 'failed' ? '#dc2626'
+    : '#666'
+
+  const label =
+    status === 'running' ? `正在重建索引 (${done}/${total})`
+    : status === 'completed' ? `索引完成 (${total} 条)`
+    : status === 'failed' ? `索引失败: ${error || '未知错误'}`
+    : ''
+
+  return (
+    <div
+      style={{
+        marginBottom: 8,
+        padding: '8px 12px',
+        background: bg,
+        border: `1px solid ${color}33`,
+        borderRadius: 4,
+        fontSize: 12,
+      }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+        <span style={{ color, fontWeight: 500 }}>
+          {status === 'running' && '⚙ '}
+          {status === 'completed' && '✓ '}
+          {status === 'failed' && '✗ '}
+          {label}
+        </span>
+        <span style={{ color: '#666', fontSize: 11 }}>
+          {triggered_by === 'raw_edit' ? '由编辑触发' : triggered_by === 'startup' ? '启动时触发' : '手动触发'}
+        </span>
+      </div>
+      {status === 'running' && (
+        <div style={{ background: '#e5e7eb', borderRadius: 2, height: 6, overflow: 'hidden' }}>
+          <div
+            style={{
+              width: `${percent}%`,
+              height: '100%',
+              background: color,
+              transition: 'width 0.3s ease',
+            }}
+          />
+        </div>
+      )}
     </div>
   )
 }

@@ -20,7 +20,7 @@ async def extract_leads(tenant_id: uuid.UUID) -> list[dict]:
                 SELECT DISTINCT ON (cs.session_id)
                     cs.session_id,
                     cs.province,
-                    cs.subject_type,
+                    cs.subjects,
                     cs.score,
                     cs.intent_majors,
                     cs.consult_stage,
@@ -42,7 +42,7 @@ async def extract_leads(tenant_id: uuid.UUID) -> list[dict]:
             {
                 "session_id": row.session_id,
                 "province": row.province,
-                "subject_type": row.subject_type,
+                "subjects": row.subjects,
                 "score": row.score,
                 "intent_majors": row.intent_majors,
                 "consult_stage": row.consult_stage,
@@ -74,12 +74,12 @@ class TestLeadExtraction:
 
     @pytest.mark.asyncio
     async def test_extract_leads_includes_profile_fields(self):
-        """Lead records include province, subject_type, score from consult_sessions."""
+        """Lead records include province, subjects, score from consult_sessions."""
         now = datetime.now(timezone.utc)
         mock_row = MagicMock()
         mock_row.session_id = "sess_lead1"
         mock_row.province = "广东"
-        mock_row.subject_type = "物理类"
+        mock_row.subjects = "物化生"
         mock_row.score = 610
         mock_row.intent_majors = ["计算机"]
         mock_row.consult_stage = "focus"
@@ -100,7 +100,7 @@ class TestLeadExtraction:
             assert len(leads) == 1
             lead = leads[0]
             assert lead["province"] == "广东"
-            assert lead["subject_type"] == "物理类"
+            assert lead["subjects"] == "物化生"
             assert lead["score"] == 610
             assert lead["consult_stage"] == "focus"
 
@@ -111,7 +111,7 @@ class TestLeadExtraction:
         mock_row = MagicMock()
         mock_row.session_id = "sess_lead2"
         mock_row.province = ""
-        mock_row.subject_type = ""
+        mock_row.subjects = ""
         mock_row.score = 0
         mock_row.intent_majors = []
         mock_row.consult_stage = "new"
@@ -140,7 +140,7 @@ class TestLeadExtraction:
         mock_row = MagicMock()
         mock_row.session_id = "sess_noevents"
         mock_row.province = "北京"
-        mock_row.subject_type = "历史类"
+        mock_row.subjects = "历政地"
         mock_row.score = 580
         mock_row.intent_majors = []
         mock_row.consult_stage = "open"

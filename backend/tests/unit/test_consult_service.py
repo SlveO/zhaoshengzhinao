@@ -1,6 +1,7 @@
 """Pipeline stage: Student Entry — session create/resume, profile update, chat history."""
 
 import pytest
+import pytest_asyncio
 import uuid
 from datetime import datetime, timedelta, timezone
 from unittest.mock import AsyncMock, MagicMock, patch
@@ -13,6 +14,12 @@ from services.consult_service import (
     save_message,
     build_profile_summary,
 )
+
+
+# 纯单元测试（mock async_session）— 覆盖 conftest.py 的 autouse setup_db，避免连真实 DB
+@pytest_asyncio.fixture(autouse=True)
+async def setup_db():
+    yield
 
 
 class TestGetOrCreateSession:
@@ -61,7 +68,11 @@ class TestGetOrCreateSession:
 
     @pytest.mark.asyncio
     async def test_create_session_with_preset_id_when_not_found(self):
-        """If session_id is provided but not found in DB, create a fresh session_id to avoid UNIQUE conflicts."""
+        """If session_id is provided but not found in DB, create a fresh session_id to avoid UNIQUE conflicts.
+
+        Note: With prefix-based module isolation (Plan 1 Task 13), session_id must match
+        the module prefix. 'sess_old_nonexistent' matches the recommend prefix 'sess_'.
+        """
         mock_db = MagicMock()
         mock_db.execute = AsyncMock(
             return_value=MagicMock(scalar_one_or_none=MagicMock(return_value=None))
@@ -73,11 +84,61 @@ class TestGetOrCreateSession:
         with patch("services.consult_service.async_session") as mock_async_session:
             mock_async_session.return_value.__aenter__.return_value = mock_db
 
-            session, is_new = await get_or_create_session("old_nonexistent_id", "scnu")
+            session, is_new = await get_or_create_session("sess_old_nonexistent", "scnu")
 
             assert is_new is True
-            # Provided ID is reused when not found in DB
-            assert session.session_id == "old_nonexistent_id"
+            # Provided ID is reused when not found in DB AND matches prefix
+            assert session.session_id == "sess_old_nonexistent"
+
+    @pytest.mark.asyncio
+    async def test_create_session_regenerates_id_when_prefix_mismatch(self):
+        """If session_id does not match the module prefix, a new id is generated.
+
+        Example: A 'sess_consult_xxx' id passed to module_type='recommend' must
+        be replaced with a new 'sess_xxx' id (cross-module isolation).
+        """
+        mock_db = MagicMock()
+        mock_db.execute = AsyncMock(
+            return_value=MagicMock(scalar_one_or_none=MagicMock(return_value=None))
+        )
+        mock_db.commit = AsyncMock()
+        mock_db.refresh = AsyncMock()
+        mock_db.add = MagicMock()
+
+        with patch("services.consult_service.async_session") as mock_async_session:
+            mock_async_session.return_value.__aenter__.return_value = mock_db
+
+            # Pass a consult-prefixed id to the recommend module → prefix mismatch
+            session, is_new = await get_or_create_session(
+                "sess_consult_should_be_replaced", "scnu", module_type="recommend"
+            )
+
+            assert is_new is True
+            # New id should follow recommend prefix and NOT be the original
+            assert session.session_id.startswith("sess_")
+            assert session.session_id != "sess_consult_should_be_replaced"
+            assert not session.session_id.startswith("sess_consult_")
+
+    @pytest.mark.asyncio
+    async def test_create_consult_session_uses_consult_prefix(self):
+        """module_type='consult' generates session_id with 'sess_consult_' prefix."""
+        mock_db = MagicMock()
+        mock_db.execute = AsyncMock(
+            return_value=MagicMock(scalar_one_or_none=MagicMock(return_value=None))
+        )
+        mock_db.commit = AsyncMock()
+        mock_db.refresh = AsyncMock()
+        mock_db.add = MagicMock()
+
+        with patch("services.consult_service.async_session") as mock_async_session:
+            mock_async_session.return_value.__aenter__.return_value = mock_db
+
+            session, is_new = await get_or_create_session(
+                None, "scnu", module_type="consult"
+            )
+
+            assert is_new is True
+            assert session.session_id.startswith("sess_consult_")
 
 
 class TestGetSession:
@@ -121,7 +182,7 @@ class TestUpdateSessionProfile:
         session_mock = MagicMock()
         session_mock.province = ""
         session_mock.score = 0
-        session_mock.subject_type = ""
+        session_mock.subjects = ""
         mock_db = MagicMock()
         mock_db.execute = AsyncMock(
             return_value=MagicMock(scalar_one_or_none=MagicMock(return_value=session_mock))
@@ -176,6 +237,10 @@ class TestChatHistoryAndMessages:
     @pytest.mark.asyncio
     async def test_save_message_returns_message_dict(self):
         mock_db = MagicMock()
+        # save_message with role="user" calls db.execute for consult_started_at update
+        mock_db.execute = AsyncMock(
+            return_value=MagicMock(scalar_one_or_none=MagicMock(return_value=None))
+        )
         mock_db.commit = AsyncMock()
         async def _fake_refresh(obj):
             obj.created_at = MagicMock(isoformat=MagicMock(return_value="2026-05-29T00:00:00"))
@@ -226,8 +291,9 @@ class TestBuildProfileSummary:
     def test_build_profile_summary_returns_none_when_empty(self):
         session = MagicMock()
         session.province = ""
-        session.subject_type = ""
+        session.subjects = ""
         session.score = 0
+        session.rank = None
         session.intent_majors = []
         session.focus_points = []
 
@@ -237,15 +303,18 @@ class TestBuildProfileSummary:
     def test_build_profile_summary_returns_dict_with_data(self):
         session = MagicMock()
         session.province = "广东"
-        session.subject_type = "物理类"
+        session.subjects = "物化生"
         session.score = 620
+        session.rank = 5000
         session.intent_majors = ["计算机"]
         session.focus_points = ["就业"]
 
         result = build_profile_summary(session)
         assert result is not None
         assert result["province"] == "广东"
+        assert result["subjects"] == "物化生"
         assert result["score"] == 620
+        assert result["rank"] == 5000
         assert result["intent_majors"] == ["计算机"]
 
 
@@ -304,6 +373,11 @@ class TestSessionTTL:
                     setattr(self, k, v)
 
         mock_db = MagicMock()
+        # Two db.execute calls: (1) recent consult lookup, (2) User info lookup
+        # Both return None to simplify — we only assert TTL behavior here.
+        mock_db.execute = AsyncMock(
+            return_value=MagicMock(scalar_one_or_none=MagicMock(return_value=None))
+        )
         mock_db.commit = AsyncMock()
         mock_db.add = MagicMock()
         mock_db.refresh = AsyncMock()

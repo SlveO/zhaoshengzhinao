@@ -97,7 +97,7 @@ async def test_student_profile_returns_data_after_session(async_client, test_ten
         )
         session = result.scalar_one()
         session.province = "广东"
-        session.subject_type = "物理类"
+        session.subjects = "物化生"
         session.score = 610
         await db.commit()
 
@@ -280,7 +280,7 @@ class TestRecommendationsWithIntent:
             session = ConsultSession(
                 session_id=f"sess_{uuid.uuid4().hex[:12]}",
                 tenant_slug="test", province="广东",
-                subject_type="物理类", score=620,
+                subjects="物化生", score=620,
                 intent_majors=["计算机"],
             )
             db.add(session)

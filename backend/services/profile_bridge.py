@@ -241,14 +241,9 @@ async def bridge_profile_to_session_profiles(
         merged_json = merged_result.to_profile_json()
 
         # --- e. Update consult_sessions basic fields ---
+        # Note: province/subjects/score/rank come from the mini-app form, not from AI extraction.
+        # Only intent_majors (derived from preferred_subjects) is written here.
         consult_updates = {}
-        basic = merged_result.basic
-        if basic.get("province"):
-            consult_updates["province"] = basic["province"]
-        if basic.get("subject_type"):
-            consult_updates["subject_type"] = basic["subject_type"]
-        if basic.get("score"):
-            consult_updates["score"] = basic["score"]
         if merged_result.interests.get("preferred_subjects"):
             consult_updates["intent_majors"] = merged_result.interests.get("preferred_subjects", [])[:10]
         if consult_updates:

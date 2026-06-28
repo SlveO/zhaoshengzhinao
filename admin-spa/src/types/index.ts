@@ -46,12 +46,14 @@ export interface LoginResponse {
   user_id: string
   username: string
   is_developer?: boolean
+  role?: string | null
 }
 
 export interface AuthUser {
   id: string
   username: string
   is_developer?: boolean
+  role?: string | null
 }
 
 export interface TopicCloudItem {

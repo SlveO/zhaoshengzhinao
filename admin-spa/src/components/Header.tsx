@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Menu, LogOut, ChevronDown, UserCircle } from 'lucide-react'
+import { PanelLeftClose, PanelLeftOpen, Menu, X, LogOut, ChevronDown, UserCircle } from 'lucide-react'
 import { useAuthStore } from '../stores/authStore'
 import { useBrandConfig } from '../hooks/useBrandConfig'
 import { useMobileStore } from '../stores/mobileStore'
@@ -40,14 +40,41 @@ export default function Header() {
   }, [menuOpen])
 
   const toggleSidebar = useMobileStore((s) => s.toggleSidebar)
+  const toggleCollapsed = useMobileStore((s) => s.toggleCollapsed)
+  const collapsed = useMobileStore((s) => s.collapsed)
+  const sidebarOpen = useMobileStore((s) => s.sidebarOpen)
+
+  const handleToggle = () => {
+    if (isMobile) {
+      toggleSidebar()
+    } else {
+      toggleCollapsed()
+    }
+  }
+
+  // 当前应显示的图标：
+  // 桌面端：未收起显示 PanelLeftClose（收起），已收起显示 PanelLeftOpen（展开）
+  // 移动端：抽屉关闭显示 Menu，抽屉打开显示 X
+  const ToggleIcon = isMobile
+    ? (sidebarOpen ? X : Menu)
+    : (collapsed ? PanelLeftOpen : PanelLeftClose)
+  const toggleTitle = isMobile
+    ? (sidebarOpen ? '关闭侧边栏' : '打开侧边栏')
+    : (collapsed ? '展开侧边栏' : '收起侧边栏')
 
   const collegeName = brand?.name || '招生院校'
   const roleLabel = user?.is_developer ? '开发者账号' : '院校管理员'
 
   return (
     <header className="header">
-      <button className="hamburger" onClick={toggleSidebar} aria-label="菜单">
-        <Menu size={22} />
+      <button
+        className="hamburger"
+        onClick={handleToggle}
+        aria-label={toggleTitle}
+        title={toggleTitle}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      >
+        <ToggleIcon size={22} />
       </button>
       <div className="header-brand">
         {brand?.logo_url ? (
