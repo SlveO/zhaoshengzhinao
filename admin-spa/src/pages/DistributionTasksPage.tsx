@@ -68,7 +68,7 @@ export default function DistributionTasksPage() {
     })
   }, [])
 
-  useEffect(() => { fetchTasks() }, [fetchTasks]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { fetchTasks() }, [fetchTasks])
   useEffect(() => { if (formOpen) fetchFilesAndChannels() }, [formOpen, fetchFilesAndChannels])
 
   const filtered = tasks.filter((t) => {

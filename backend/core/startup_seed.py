@@ -47,7 +47,7 @@ async def _ensure_tenant_and_admin():
 
     Seeds two accounts:
       - admin / admin123  → developer (tenant_users.role='developer', full menu + DB panel)
-      - scnu / 2026scnu   → college admin (tenant_users.role='admin', restricted menu)
+      - scnu / scnu2026   → college admin (tenant_users.role='admin', restricted menu)
 
     注意:users 表仅存账号+密码(学生表),开发者/院校管理员身份由 tenant_users.role 区分。
     """
@@ -134,7 +134,7 @@ async def _ensure_tenant_and_admin():
             if not scnu_user:
                 salt = os.urandom(16).hex()
                 password_hash = salt + ":" + hashlib.sha256(
-                    (salt + "2026scnu").encode()
+                    (salt + "scnu2026").encode()
                 ).hexdigest()
                 scnu_user = User(
                     username="scnu",
