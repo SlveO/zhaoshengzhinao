@@ -6,7 +6,7 @@
         <text class="modal-close" @tap="$emit('close')">✕</text>
       </view>
 
-      <scroll-view scroll-y class="modal-body">
+      <scroll-view scroll-y class="modal-body" :style="{ height: 'calc(85vh - 56px)' }">
         <text class="modal-desc">
           {{ mode === 'login' ? '登录后即可继续咨询' : '填写基本信息，解锁精准推荐' }}
         </text>
@@ -241,7 +241,7 @@ async function handleSubmit(): Promise<void> {
 .modal-body {
   width: 100%;
   box-sizing: border-box;
-  padding: 20px 20px 8px;
+  padding: 20px 20px 24px;
   flex: 1;
   min-height: 0;
   overflow: hidden;
@@ -321,9 +321,9 @@ async function handleSubmit(): Promise<void> {
 .toggle-mode {
   display: block;
   text-align: center;
-  margin: 16px 0 8px;
-  padding: 12px 8px;
-  font-size: 13px;
+  margin: 20px 0 8px;
+  padding: 14px 8px 4px;
+  font-size: 14px;
   color: var(--brand-primary, #1a56db);
   border-top: 1px solid #f0f0f0;
 }
