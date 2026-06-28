@@ -33,6 +33,12 @@ SCNU_TENANT_CONFIG = {
     },
     "knowledge_base": {"doc_count": 0, "last_updated": None},
     "mini_program": {"app_id": "", "app_secret_encrypted": ""},
+    "ai_persona": {
+        "assistant_name": "华小狮",
+        "greeting": "你好，我是华南师范大学招生助手华小狮~ 有什么可以帮你的吗？",
+        "style": "casual",
+        "proactive_recommend": True,
+    },
 }
 
 
@@ -65,15 +71,27 @@ async def _ensure_tenant_and_admin():
                 )
                 db.add(tenant)
             else:
-                # Merge missing modules into existing tenant config (hotfix for 403 on analytics)
+                # Merge missing modules + ai_persona into existing tenant config
                 existing_config = dict(tenant.config or {})
+                patched = False
+
+                # Patch missing modules (hotfix for 403 on analytics)
                 existing_modules = existing_config.get("modules", {})
                 default_modules = SCNU_TENANT_CONFIG.get("modules", {})
                 if any(k not in existing_modules for k in default_modules):
                     merged = {**default_modules, **existing_modules}
                     existing_config["modules"] = merged
-                    tenant.config = existing_config
+                    patched = True
                     logger.info(f"Patched tenant config: added {[k for k in default_modules if k not in existing_modules]} modules")
+
+                # Patch missing ai_persona (ensures cloud sync with local Docker config)
+                if "ai_persona" not in existing_config:
+                    existing_config["ai_persona"] = SCNU_TENANT_CONFIG["ai_persona"]
+                    patched = True
+                    logger.info("Patched tenant config: added ai_persona (assistant_name=华小狮)")
+
+                if patched:
+                    tenant.config = existing_config
 
             # ── admin 账号（开发者）──
             result = await db.execute(select(User).where(User.username == "admin"))
