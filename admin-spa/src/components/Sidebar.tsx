@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import {
-  LayoutDashboard, MessageSquare, User, BarChart3,
+  LayoutDashboard, MessageSquare, BarChart3,
   BookOpen, Bot, LogOut,
   Database,
 } from 'lucide-react'

@@ -3,7 +3,7 @@ import FileUpload from './FileUpload'
 import type { DistributionFile, DistributionChannel } from '../types'
 import { distributionApi } from '../api/distribution'
 
-interface TaskFormData {
+export interface TaskFormData {
   name: string
   file_id: string
   channel_id: string

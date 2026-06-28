@@ -5,6 +5,7 @@ import StatusCard from '../components/StatusCard'
 import Modal from '../components/Modal'
 import TaskStatusBadge from '../components/TaskStatusBadge'
 import TaskFormModal from '../components/TaskFormModal'
+import type { TaskFormData } from '../components/TaskFormModal'
 import { distributionApi } from '../api/distribution'
 
 const PAGE_SIZE = 8
@@ -115,7 +116,7 @@ export default function DistributionTasksPage() {
     } catch { setMessage('操作失败') }
   }
 
-  const handleSave = async (data: Record<string, unknown>) => {
+  const handleSave = async (data: TaskFormData) => {
     try {
       await distributionApi.createTask(data)
       setFormOpen(false)
@@ -222,7 +223,7 @@ export default function DistributionTasksPage() {
 
       <TaskFormModal
         open={formOpen}
-        initial={editingTask}
+        initial={editingTask as Partial<TaskFormData> | null}
         files={files}
         channels={channels}
         onSave={handleSave}
