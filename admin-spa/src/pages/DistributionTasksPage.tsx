@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import type { DistributionTask, DistributionChannel, DistributionFile } from '../types'
 import { mockTasks, mockChannels, mockFiles } from '../mock/distribution'
 import StatusCard from '../components/StatusCard'
@@ -33,7 +33,7 @@ export default function DistributionTasksPage() {
   const [files, setFiles] = useState<DistributionFile[]>([])
   const [channels, setChannels] = useState<DistributionChannel[]>([])
 
-  const fetchTasks = () => {
+  const fetchTasks = useCallback(() => {
     setLoading(true)
     distributionApi.listTasks(1, 100, statusFilter || undefined)
       .then((r) => {
@@ -45,9 +45,9 @@ export default function DistributionTasksPage() {
         setTasks(mockTasks)
       })
       .finally(() => setLoading(false))
-  }
+  }, [statusFilter])
 
-  const fetchFilesAndChannels = () => {
+  const fetchFilesAndChannels = useCallback(() => {
     Promise.allSettled([
       distributionApi.listFiles(1, 100),
       distributionApi.listChannels(1, 100),
@@ -66,10 +66,10 @@ export default function DistributionTasksPage() {
       setFiles(mockFiles)
       setChannels(mockChannels)
     })
-  }
+  }, [])
 
-  useEffect(() => { fetchTasks() }, [statusFilter])
-  useEffect(() => { if (formOpen) fetchFilesAndChannels() }, [formOpen])
+  useEffect(() => { fetchTasks() }, [fetchTasks]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (formOpen) fetchFilesAndChannels() }, [formOpen, fetchFilesAndChannels])
 
   const filtered = tasks.filter((t) => {
     if (statusFilter && t.status !== statusFilter) return false

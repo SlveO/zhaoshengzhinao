@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   LayoutDashboard, MessageSquare, BarChart3,
   BookOpen, Bot, LogOut,
@@ -60,7 +60,7 @@ export default function Sidebar() {
   const brand = config?.brand
   const brandName = brand?.short_name || brand?.name || '招生智脑'
 
-  let lastSection = ''
+  const lastSectionRef = useRef('')
 
   return (
     <aside className={`sidebar${collapsed && !isMobile ? ' collapsed' : ''}${sidebarOpen ? ' open' : ''}`}>
@@ -74,8 +74,8 @@ export default function Sidebar() {
 
       <nav className="sidebar-nav" onClick={() => isMobile && closeSidebar()}>
         {visibleItems.map((item) => {
-          const showSection = item.section !== lastSection
-          lastSection = item.section
+          const showSection = item.section !== lastSectionRef.current
+          lastSectionRef.current = item.section
           return (
             <div key={item.path}>
               {showSection && <div className="nav-section">{item.section}</div>}
